@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-const is_producation = process.env.NODE_ENV !== 'development';
+const is_producation =
+  (process.env.VERCEL == '1'
+    ? process.env.VERCEL_ENV
+    : process.env.NODE_ENV) === 'production';
 
 async function redirects() {
   const redirects = [];
