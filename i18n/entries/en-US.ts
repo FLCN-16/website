@@ -1,9 +1,15 @@
-import enMessages from "../locales/en_US.json";
+import { createIntl, createIntlCache } from 'react-intl';
+import enMessages from '../locales/en_US.json';
 
-const EnLang = {
-  messages: {
-    ...enMessages,
+const cache = createIntlCache();
+
+const EnLang = createIntl(
+  {
+    locale: 'en-US',
+    messages: {
+      ...enMessages,
+    },
   },
-  locale: "en-US",
-};
+  cache
+);
 export default EnLang;

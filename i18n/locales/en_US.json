@@ -4,5 +4,11 @@
   "navbar.home": "Home",
   "navbar.contact": "Contact",
   "navbar.about": "About",
-  "resume.download": "Download CV"
+  "resume.download": "Download CV",
+  "page.home.title": "The Falcon | Professional Web Developer",
+  "text.company": "Company",
+  "legal.text.privacy-policy": "Privacy Policy",
+  "legal.text.terms": "Terms & Conditions",
+  "text.about": "About",
+  "text.quick-link": "Quick Links"
 }

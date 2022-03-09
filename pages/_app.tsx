@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import React from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 // State
@@ -43,6 +44,11 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         locale={currentAppLocale.locale}
         messages={currentAppLocale.messages}
       >
+        <Head>
+          <title>
+            {currentAppLocale.formatMessage({ id: 'page.home.title' })}
+          </title>
+        </Head>
         <Layout>{children}</Layout>
       </IntlProvider>
     </React.Fragment>

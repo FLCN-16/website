@@ -8,7 +8,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>{i18n.formatMessage({ id: 'legal.brand' })}</title>
+        <title>{i18n.formatMessage({ id: 'page.home.title' })}</title>
       </Head>
     </>
   );
