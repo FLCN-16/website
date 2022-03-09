@@ -1,4 +1,8 @@
 {
   "legal.brand": "The Falcon",
-  "legal.copyright": "The Falcon | All Rights Reserved"
+  "legal.copyright": "The Falcon | All Rights Reserved",
+  "navbar.home": "Home",
+  "navbar.contact": "Contact",
+  "navbar.about": "About",
+  "resume.download": "Download CV"
 }

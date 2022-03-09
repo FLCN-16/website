@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useIntl } from 'react-intl';
 
-const Home: NextPage = () => {
+const Contact: NextPage = () => {
   const i18n = useIntl();
 
   return (
@@ -14,4 +14,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Contact;

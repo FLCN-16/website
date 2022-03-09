@@ -34,8 +34,8 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   }, [dispatch]);
 
   const Layout = isAdmin
-    ? require('../component/Admin/Layout').default
-    : require('../component/Layout').default;
+    ? require('../container/Admin/Layout').default
+    : require('../container/Layout').default;
 
   return (
     <React.Fragment>
