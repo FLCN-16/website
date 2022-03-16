@@ -6,13 +6,15 @@ import Footer from './Footer';
 
 import style from './style';
 
-interface ILayout extends React.HTMLProps<HTMLDivElement> {}
+interface ILayout extends React.HTMLProps<HTMLDivElement> {
+  sticky?: boolean;
+}
 
-const Layout = ({ children }: ILayout) => {
+const Layout = ({ sticky, children }: ILayout) => {
   return (
     <style.Wrapper>
       {/* Header */}
-      <Header />
+      <Header sticky={sticky} />
 
       {/* Content */}
       <div className="content">{children}</div>

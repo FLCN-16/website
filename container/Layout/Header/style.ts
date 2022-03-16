@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.header`
+interface WrapperProps {
+  sticky?: boolean;
+}
+
+export const Wrapper = styled.header<WrapperProps>`
+  position: ${(props) => (props.sticky ? 'fixed' : 'relative')};
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 15px 25px;

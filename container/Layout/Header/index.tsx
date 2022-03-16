@@ -7,7 +7,11 @@ import Link from '../../../component/Link';
 
 import style from './style';
 
-const Header = () => {
+interface IProps {
+  sticky?: boolean;
+}
+
+const Header = ({ sticky }: IProps) => {
   const i18n = useIntl();
 
   const links = [
@@ -31,7 +35,7 @@ const Header = () => {
         <title>{i18n.formatMessage({ id: 'legal.brand' })}</title>
       </Head>
 
-      <style.Wrapper>
+      <style.Wrapper sticky={sticky}>
         <nav className="flex items-center">
           {/* Logo and Branding */}
           <style.Brand>

@@ -34,10 +34,6 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     dispatch(initialize());
   }, [dispatch]);
 
-  const Layout = isAdmin
-    ? require('../container/Admin/Layout').default
-    : require('../container/Layout').default;
-
   return (
     <React.Fragment>
       <IntlProvider
@@ -49,7 +45,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
             {currentAppLocale.formatMessage({ id: 'page.home.title' })}
           </title>
         </Head>
-        <Layout>{children}</Layout>
+        {children}
       </IntlProvider>
     </React.Fragment>
   );

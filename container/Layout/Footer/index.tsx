@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 // Components
 import Link from '../../../component/Link';
@@ -7,6 +7,23 @@ import Link from '../../../component/Link';
 import style from './style';
 
 const Footer = () => {
+  const i18n = useIntl();
+
+  const links = [
+    {
+      title: i18n.formatMessage({ id: 'footer.nav.home' }),
+      to: '/',
+    },
+    {
+      title: i18n.formatMessage({ id: 'footer.nav.contact' }),
+      to: '/contact',
+    },
+    {
+      title: i18n.formatMessage({ id: 'footer.nav.about' }),
+      to: '/about',
+    },
+  ];
+
   return (
     <style.Wrapper>
       <div className="bg-gray-800 pt-24 pb-16">
@@ -16,7 +33,7 @@ const Footer = () => {
               <FormattedMessage id="legal.brand" />
             </h3>
             <span className="block text-sm text-gray-400">
-              We Build, World Use
+              <FormattedMessage id="legal.tagline" />
             </span>
           </div>
           <div className="md:w-1/4 px-2">here</div>
@@ -24,6 +41,16 @@ const Footer = () => {
             <h3 className="block leading-none text-xl font-bold uppercase">
               <FormattedMessage id="text.quick-link" />
             </h3>
+
+            <ul className="flex flex-col mt-3">
+              {links.map((link, index) => (
+                <li key={'link-' + index}>
+                  <Link to={link.to} className="inline-block text-gray-400">
+                    {link.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="md:w-1/4 px-2">
             <h3 className="block leading-none text-xl font-bold uppercase">
