@@ -41,6 +41,10 @@ const Header = ({ sticky }: IProps) => {
       to: '/contact',
     },
     {
+      title: i18n.formatMessage({ id: 'navbar.hire-me' }),
+      to: '/hire-me',
+    },
+    {
       title: i18n.formatMessage({ id: 'navbar.about' }),
       to: '/about',
     },

@@ -19,6 +19,10 @@ const Footer = () => {
       to: '/contact',
     },
     {
+      title: i18n.formatMessage({ id: 'footer.nav.hire-me' }),
+      to: '/hire-me',
+    },
+    {
       title: i18n.formatMessage({ id: 'footer.nav.about' }),
       to: '/about',
     },
