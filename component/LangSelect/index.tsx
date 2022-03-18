@@ -19,7 +19,7 @@ const LangSelect = () => {
       <select onChange={changeLanguage} value={i18n.locale.split('-')[0]}>
         {Object.keys(AppLocale).map((lang) => (
           <option key={lang} value={lang}>
-            {AppLocale[lang].name}
+            {AppLocale['en'].name}
           </option>
         ))}
       </select>
