@@ -24,7 +24,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const isAdmin = !!pathname.match(/^\/admin\/?/);
 
   const shortLocale = locale ? locale.split('-')[0] : 'en';
-  const currentAppLocale = AppLocale['en'];
+  const currentAppLocale = AppLocale['en'].config;
 
   if (!isAdmin) {
     require('../styles/tailwind.css');
@@ -44,6 +44,11 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
           <title>
             {currentAppLocale.formatMessage({ id: 'page.home.title' })}
           </title>
+
+          <meta
+            name="viewpoint"
+            content="width=device-width, initial-scale=1"
+          />
         </Head>
         {children}
       </IntlProvider>

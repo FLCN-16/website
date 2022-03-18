@@ -27,8 +27,8 @@ const Footer = () => {
   return (
     <style.Wrapper>
       <div className="bg-gray-800 pt-24 pb-16">
-        <div className="flex container mx-auto">
-          <div className="md:w-1/4 px-2">
+        <div className="flex container px-5 flex-col md:flex-row mx-auto">
+          <div className="md:w-1/4 px-2 mb-8 md:mb-0">
             <h3 className="block leading-none text-3xl font-bold uppercase">
               <FormattedMessage id="legal.brand" />
             </h3>
@@ -36,8 +36,8 @@ const Footer = () => {
               <FormattedMessage id="legal.tagline" />
             </span>
           </div>
-          <div className="md:w-1/4 px-2">here</div>
-          <div className="md:w-1/4 px-2">
+
+          <div className="md:w-1/4 px-2 mb-8 md:mb-0">
             <h3 className="block leading-none text-xl font-bold uppercase">
               <FormattedMessage id="text.quick-link" />
             </h3>
@@ -52,6 +52,41 @@ const Footer = () => {
               ))}
             </ul>
           </div>
+
+          <div className="md:w-1/4 px-2 mb-8 md:mb-0">
+            <h3 className="block leading-none text-xl font-bold uppercase">
+              <FormattedMessage id="text.find-online" />
+            </h3>
+
+            <ul className="flex flex-col mt-3">
+              <li>
+                <Link to="/legal/terms" className="text-gray-400">
+                  <FormattedMessage id="social.twitter" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/legal/terms" className="text-gray-400">
+                  <FormattedMessage id="social.facebook" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/legal/terms" className="text-gray-400">
+                  <FormattedMessage id="social.instagram" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/legal/terms" className="text-gray-400">
+                  <FormattedMessage id="social.linkedin" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/legal/terms" className="text-gray-400">
+                  <FormattedMessage id="social.github" />
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           <div className="md:w-1/4 px-2">
             <h3 className="block leading-none text-xl font-bold uppercase">
               <FormattedMessage id="text.company" />
