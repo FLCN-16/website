@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 interface WrapperProps {
   sticky?: boolean;
@@ -27,26 +27,6 @@ export const Brand = styled.div`
   display: inline-flex;
 `;
 
-const NavItemInAnim = keyframes`
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 100%;
-  }
-`;
-
-const NavItemOutAnim = keyframes`
-  0% {
-    left: 0;
-    width: 100%;
-  }
-  100% {
-    left: 100%;
-    width: 0;
-  }
-`;
-
 export const Navigation = styled.ul`
   margin-left: auto;
 
@@ -63,10 +43,24 @@ export const Navigation = styled.ul`
   }
 `;
 
-export const MobileNavigation = styled.div``;
+export const MobileNavigation = styled.div`
+  height: 30px;
+`;
 
 export const MobileNavigationToggle = styled.button`
+  flex-direction: column;
+  justify-content: space-around;
   margin-left: 10px;
+  width: 40px;
+  height: 30px;
+  padding: 5px;
+
+  i {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: rgb(75, 85, 99);
+  }
 `;
 
 interface IMobileNavigationMenuProps {

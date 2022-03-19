@@ -124,10 +124,12 @@ const Header = ({ sticky }: IProps) => {
             </style.MobileNavigationMenu>
 
             <style.MobileNavigationToggle
-              className="md:hidden"
+              className="flex md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              Toggle
+              <i></i>
+              <i></i>
+              <i></i>
             </style.MobileNavigationToggle>
           </style.MobileNavigation>
         </nav>

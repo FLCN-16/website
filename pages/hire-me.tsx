@@ -1,9 +1,12 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useIntl } from 'react-intl';
-import Layout from '../container/Layout';
 
-const HireMe: NextPage = () => {
+// Containers
+import Layout from '../container/Layout';
+import HireMe from '../container/HireMe';
+
+const HireMePage: NextPage = () => {
   const i18n = useIntl();
 
   return (
@@ -15,9 +18,11 @@ const HireMe: NextPage = () => {
         </title>
       </Head>
 
-      <Layout>Hire Page</Layout>
+      <Layout>
+        <HireMe />
+      </Layout>
     </>
   );
 };
 
-export default HireMe;
+export default HireMePage;
