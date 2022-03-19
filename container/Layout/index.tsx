@@ -3,6 +3,7 @@ import React from 'react';
 // Components
 import Header from './Header';
 import Footer from './Footer';
+import Loading from '../../component/Loading';
 
 import style from './style';
 
@@ -21,6 +22,9 @@ const Layout = ({ sticky, children }: ILayout) => {
 
       {/* Footer */}
       <Footer />
+
+      {/* Loading */}
+      <Loading />
     </style.Wrapper>
   );
 };

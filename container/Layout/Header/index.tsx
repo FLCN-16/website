@@ -96,8 +96,9 @@ const Header = ({ sticky }: IProps) => {
           <ul className="flex ml-auto md:ml-5">
             <li>
               <Link
-                to="/"
+                to="/assets/files/Resume.pdf"
                 target="_blank"
+                download="Rishabh's-curriculum-vitae"
                 className="inline-block py-1 px-3 rounded text-sm bg-gray-600 text-white hover:bg-gray-700"
               >
                 {i18n.formatMessage({ id: 'resume.download' })}

@@ -44,7 +44,7 @@ const HeroHeader = () => (
         </div>
 
         <div
-          className="absolute brand-logo top-1/2 right-0 -translate-y-1/2 text-gray-600"
+          className="absolute brand-logo top-1/2 right-0 -translate-y-1/2 text-gray-700"
           style={{ height: '75%', width: '100vw' }}
         >
           <style.HeaderLogo />

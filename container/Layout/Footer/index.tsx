@@ -64,27 +64,47 @@ const Footer = () => {
 
             <ul className="flex flex-col mt-3">
               <li>
-                <Link to="/legal/terms" className="text-gray-400">
+                <Link
+                  to="https://twitter.com/flcn_16"
+                  target="_blank"
+                  className="text-gray-400"
+                >
                   <FormattedMessage id="social.twitter" />
                 </Link>
               </li>
               <li>
-                <Link to="/legal/terms" className="text-gray-400">
+                <Link
+                  to="https://www.facebook.com/FLCN16/"
+                  target="_blank"
+                  className="text-gray-400"
+                >
                   <FormattedMessage id="social.facebook" />
                 </Link>
               </li>
               <li>
-                <Link to="/legal/terms" className="text-gray-400">
+                <Link
+                  to="https://www.instagram.com/flcn16/"
+                  target="_blank"
+                  className="text-gray-400"
+                >
                   <FormattedMessage id="social.instagram" />
                 </Link>
               </li>
               <li>
-                <Link to="/legal/terms" className="text-gray-400">
+                <Link
+                  to="https://www.linkedin.com/in/flcn16/"
+                  target="_blank"
+                  className="text-gray-400"
+                >
                   <FormattedMessage id="social.linkedin" />
                 </Link>
               </li>
               <li>
-                <Link to="/legal/terms" className="text-gray-400">
+                <Link
+                  to="https://github.com/FLCN-16"
+                  target="_blank"
+                  className="text-gray-400"
+                >
                   <FormattedMessage id="social.github" />
                 </Link>
               </li>
