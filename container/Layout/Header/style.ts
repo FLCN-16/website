@@ -78,8 +78,11 @@ export const MobileNavigationMenu = styled.ul<IMobileNavigationMenuProps>`
   top: 100%;
   left: 0;
   width: 100%;
-  max-height: ${(props) => (props.isOpen ? '800px' : '0')};
+  background: #ffffff;
+  max-height: ${(props) => (props.isOpen ? '200px' : '0')};
   overflow: hidden;
+  border-bottom: 1px solid #e6e6e6;
+  border-bottom-color: ${(props) => (props.isOpen ? '#e6e6e6' : 'transparent')};
   transition: all 0.3s ease-in-out;
 `;
 

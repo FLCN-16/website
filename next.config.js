@@ -33,6 +33,18 @@ const nextConfig = {
   },
   trailingSlash: true,
   redirects,
+  webpack: (config, { dev }) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: {
+        and: [/\.tsx?$/],
+      },
+
+      use: ['@svgr/webpack'],
+    });
+
+    return config;
+  },
 };
 
 module.exports = nextConfig;

@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import style from './style';
+
 const HeroHeader = () => (
   <section id="hero-header" className="flex min-h-screen overflow-hidden">
     <div className="container relative mx-auto flex items-center">
@@ -15,23 +17,11 @@ const HeroHeader = () => (
       </div>
 
       <div className="absolute hidden md:block top-0 left-0 w-full h-full">
-        <svg
-          viewBox="0 0 200 200"
-          height="600px"
-          className="absolute -bottom-10 -right-36 fill-gray-700"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M34.9,-38.7C50.8,-28.2,73.2,-22.5,78.4,-11.1C83.6,0.2,71.6,17.3,59.7,31.2C47.8,45.1,36,55.7,21.5,62.4C7.1,69,-10,71.7,-24.5,66.7C-39,61.6,-50.9,48.9,-54.8,35.1C-58.8,21.2,-54.7,6.1,-51.8,-8.9C-48.9,-23.9,-47.1,-38.9,-38.6,-50.7C-30.2,-62.5,-15.1,-71.1,-2.8,-67.7C9.5,-64.4,19,-49.2,34.9,-38.7Z"
-            transform="translate(100 100)"
-          />
-        </svg>
-
-        <div className="relative top-1/2 -translate-y-1/2 left-32">
+        <div className="absolute top-1/2 -translate-y-1/2 left-32">
           <svg
             viewBox="0 0 200 200"
             height="600px"
-            className="relative top-0 -left-64 fill-gray-200"
+            className="relative top-0 -left-64 fill-gray-100"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -43,7 +33,7 @@ const HeroHeader = () => (
           <svg
             viewBox="0 0 200 200"
             height="150px"
-            className="absolute top-0 left-64 fill-gray-200"
+            className="absolute top-0 left-64 fill-gray-100"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -51,6 +41,13 @@ const HeroHeader = () => (
               transform="translate(100 100)"
             />
           </svg>
+        </div>
+
+        <div
+          className="absolute brand-logo top-1/2 right-0 -translate-y-1/2 text-gray-600"
+          style={{ height: '75%', width: '100vw' }}
+        >
+          <style.HeaderLogo />
         </div>
       </div>
     </div>
