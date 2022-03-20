@@ -1,12 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { generateKeys, exportKeys } from '../../../lib/encryption';
+import { uuid4 } from './../../../lib/helper';
 
 type Data = {
-  name: string;
+  device_id: string;
 };
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' });
+  const device_id = uuid4();
+  const keys = await generateKeys(device_id);
+
+  res.status(200).json({ device_id });
 }
