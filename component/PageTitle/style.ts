@@ -25,6 +25,10 @@ export const Wrapper = styled.div`
     ),
     linear-gradient(90deg, rgb(33, 33, 33), rgb(33, 33, 33));
 
+  @media (max-width: 768px) {
+    margin-top: 60px;
+  }
+
   h1 {
     text-transform: uppercase;
     color: #fff;
