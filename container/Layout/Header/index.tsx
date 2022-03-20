@@ -53,7 +53,7 @@ const Header = ({ sticky }: IProps) => {
   React.useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset;
-      setIsScrolled(scrollTop > 50);
+      setIsScrolled(scrollTop > 85);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -65,10 +65,6 @@ const Header = ({ sticky }: IProps) => {
 
   return (
     <>
-      <Head>
-        <title>{i18n.formatMessage({ id: 'legal.brand' })}</title>
-      </Head>
-
       <style.Wrapper sticky={sticky} isScrolled={isScrolled}>
         <nav className="flex items-center">
           {/* Logo and Branding */}

@@ -9,9 +9,11 @@ export const Wrapper = styled.header<WrapperProps>`
   position: ${(props) =>
     props.sticky ? 'fixed' : props.isScrolled ? 'fixed' : 'relative'};
   padding: ${(props) => (props.isScrolled ? '15px 25px' : '25px 35px')};
-  background: ${(props) => (props.isScrolled ? '#ffffff' : 'transparent')};
+  background: #ffffff;
   box-shadow: ${(props) =>
     props.isScrolled ? '0px 2px 4px rgba(0, 0, 0, 0.05)' : 'none'};
+  top: 0;
+  left: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -60,6 +62,7 @@ export const MobileNavigationToggle = styled.button`
     width: 100%;
     height: 2px;
     background: rgb(75, 85, 99);
+    border-radius: 2px;
   }
 `;
 

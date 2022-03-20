@@ -113,7 +113,7 @@ const Footer = () => {
 
           <div className="md:w-1/4 px-2">
             <h3 className="block leading-none text-xl font-bold uppercase">
-              <FormattedMessage id="text.company" />
+              <FormattedMessage id="footer.nav.title.legal" />
             </h3>
 
             <ul className="flex flex-col mt-3">
@@ -125,11 +125,6 @@ const Footer = () => {
               <li>
                 <Link to="/legal/privacy-policy" className="text-gray-400">
                   <FormattedMessage id="legal.text.privacy-policy" />
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-gray-400">
-                  <FormattedMessage id="text.about" />
                 </Link>
               </li>
             </ul>

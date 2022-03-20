@@ -15,7 +15,7 @@ const Layout = ({ sticky, children }: ILayout) => {
   return (
     <style.Wrapper>
       {/* Header */}
-      <Header sticky={sticky} />
+      <Header sticky={sticky !== false} />
 
       {/* Content */}
       <div className="content">{children}</div>

@@ -5,7 +5,7 @@ import style from './style';
 
 const HeroHeader = () => (
   <section id="hero-header" className="flex min-h-screen overflow-hidden">
-    <div className="container relative mx-auto flex items-center">
+    <div className="container px-5 md:px-0 relative mx-auto flex items-center">
       <div className="relative w-full z-10">
         <h1 className="text-5xl uppercase font-bold">
           <FormattedMessage id="legal.brand" />

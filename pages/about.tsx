@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 
 // Containers
 import Layout from '../container/Layout';
-import About from '../container/About';
+import About from '../container/page/About';
 
 const AboutPage: NextPage = () => {
   const i18n = useIntl();

@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 
 // Containers
 import Layout from '../container/Layout';
-import Contact from '../container/Contact';
+import Contact from '../container/page/Contact';
 
 const ContactPage: NextPage = () => {
   const i18n = useIntl();
@@ -12,7 +12,7 @@ const ContactPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>{i18n.formatMessage({ id: 'legal.brand' })}</title>
+        <title>{i18n.formatMessage({ id: 'page.contact.title' })}</title>
       </Head>
 
       <Layout>

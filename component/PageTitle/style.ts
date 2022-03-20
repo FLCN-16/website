@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 90px;
   background-image: radial-gradient(
       circle at center center,
       rgba(33, 33, 33, 0),

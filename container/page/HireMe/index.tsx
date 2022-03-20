@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 // Components
-import PageTitle from '../../component/PageTitle';
+import PageTitle from '../../../component/PageTitle';
 
 import style from './style';
 
