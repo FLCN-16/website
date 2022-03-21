@@ -9,7 +9,7 @@ export const Wrapper = styled.header<WrapperProps>`
   position: ${(props) =>
     props.sticky ? 'fixed' : props.isScrolled ? 'fixed' : 'relative'};
   padding: ${(props) => (props.isScrolled ? '15px 25px' : '25px 35px')};
-  background: #ffffff;
+  background: ${(props) => (props.isScrolled ? '#ffffff' : 'transparent')};
   box-shadow: ${(props) =>
     props.isScrolled ? '0px 2px 4px rgba(0, 0, 0, 0.05)' : 'none'};
   top: 0;
@@ -18,7 +18,7 @@ export const Wrapper = styled.header<WrapperProps>`
   display: flex;
   flex-direction: column;
   z-index: 100;
-  transition: all 0.3s ease-in-out;
+  transition: padding 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   @media (max-width: 768px) {
     padding: 15px 25px;

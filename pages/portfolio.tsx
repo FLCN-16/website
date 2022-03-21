@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 
 // Containers
 import Layout from '../container/Layout';
+import Portfolio from '../container/page/Portfolio';
 
 const PortfolioPage: NextPage = () => {
   const i18n = useIntl();
@@ -14,7 +15,9 @@ const PortfolioPage: NextPage = () => {
         <title>{i18n.formatMessage({ id: 'page.home.title' })}</title>
       </Head>
 
-      <Layout></Layout>
+      <Layout>
+        <Portfolio />
+      </Layout>
     </>
   );
 };

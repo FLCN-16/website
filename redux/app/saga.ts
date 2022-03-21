@@ -1,6 +1,6 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 
-import { registerDevice, getDeviceDetails } from '../../models/app';
+import { register } from '../../models/device';
 
 import {
   INITIALIZE,
@@ -23,20 +23,16 @@ function* initializeApp() {
 }
 
 function* deviceDetails() {
-  yield put({ type: LOADING_START }); // Start Loading
-
   try {
-    yield call(registerDevice, { type: 'test' }); // Register Device
+    yield call(register, { type: 'test' }); // Register Device
 
     yield put({ type: GET_DEVICE_DETAILS_SUCCESS }); // Get Device Details Success
   } catch (error) {
     yield put({ type: GET_DEVICE_DETAILS_FAILURE, error }); // Get Device Details Failure
   }
-
-  yield put({ type: LOADING_STOP }); // Stop Loading
 }
 
 export default function* appSaga() {
   yield takeLatest(INITIALIZE, initializeApp);
-  yield takeLatest(INITIALIZE, deviceDetails);
+  yield takeLatest(GET_DEVICE_DETAILS, deviceDetails);
 }

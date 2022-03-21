@@ -45,6 +45,10 @@ const Header = ({ sticky }: IProps) => {
       to: '/hire-me',
     },
     {
+      title: i18n.formatMessage({ id: 'navbar.portfolio' }),
+      to: '/portfolio',
+    },
+    {
       title: i18n.formatMessage({ id: 'navbar.about' }),
       to: '/about',
     },
@@ -103,7 +107,7 @@ const Header = ({ sticky }: IProps) => {
           </ul>
 
           {/* Mobile Navigation */}
-          <style.MobileNavigation>
+          <style.MobileNavigation className="md:hidden">
             <style.MobileNavigationMenu
               className="flex-col"
               isOpen={isMenuOpen}

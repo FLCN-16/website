@@ -16,7 +16,7 @@ const Loading: React.FC<IProps> = ({ loading }) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  loading: state.appReducer.get('loading'),
+  loading: state.appReducer.loading,
 });
 
 export default connect(mapStateToProps)(Loading);

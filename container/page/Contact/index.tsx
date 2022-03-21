@@ -7,18 +7,27 @@ import { AtSymbolIcon, PhoneIcon } from '@heroicons/react/outline';
 import PageTitle from '../../../component/PageTitle';
 
 // Store
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
+import { contactSubmit } from '../../../redux/services/actions';
 
 import style from './style';
 
-type Inputs = {
+interface Inputs {
   name: string;
   email: string;
   phone: string;
   message: string;
-};
+}
 
-const Contact = () => {
+interface IProps {
+  contact: {
+    loading: boolean;
+    success: boolean;
+    error: string;
+  };
+}
+
+const Contact = (props: IProps) => {
   const i18n = useIntl();
   const dispatch = useDispatch();
   const {
@@ -27,7 +36,8 @@ const Contact = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) =>
+    dispatch(contactSubmit(data));
 
   return (
     <style.Wrapper>
@@ -200,10 +210,11 @@ const Contact = () => {
                   </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-6">
-                  <div className="w-full px-3">
+                  <div className="flex justify-end w-full px-3">
                     <button
                       className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded uppercase focus:outline-none focus:shadow-outline"
                       type="submit"
+                      disabled={props.contact.loading}
                     >
                       {i18n.formatMessage({ id: 'text.contact.form.submit' })}
                     </button>
@@ -218,4 +229,8 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+const mapStateToProps = (state: any) => ({
+  contact: state.servicesReducer.contact,
+});
+
+export default connect(mapStateToProps)(Contact);
