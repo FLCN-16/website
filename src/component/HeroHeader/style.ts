@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import LogoImg from '../../public/assets/logo.svg';
+import LogoImg from '../../../public/assets/logo.svg';
 
 const HeaderLogo = styled(LogoImg)`
   max-height: 100%;
