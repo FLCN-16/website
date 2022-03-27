@@ -6,9 +6,9 @@ import { useIntl } from 'react-intl';
 import Layout from '../container/Layout';
 
 // Components
-import HeroHeader from '../component/HeroHeader';
+import Home from '../container/page/Home';
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   const i18n = useIntl();
 
   return (
@@ -18,10 +18,10 @@ const Home: NextPage = () => {
       </Head>
 
       <Layout sticky={true}>
-        <HeroHeader />
+        <Home />
       </Layout>
     </>
   );
 };
 
-export default Home;
+export default HomePage;
