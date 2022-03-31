@@ -22,6 +22,7 @@ specifiers:
   next: 12.1.0
   next-redux-wrapper: ^7.0.5
   nodemailer: ^6.7.3
+  nodemailer-react: ^1.0.2
   postcss: ^8.4.12
   prettier: ^2.6.1
   react: 17.0.2
@@ -51,6 +52,7 @@ dependencies:
   next: 12.1.0_react-dom@17.0.2+react@17.0.2
   next-redux-wrapper: 7.0.5_290b6afad79039c520001383ff3b521a
   nodemailer: 6.7.3
+  nodemailer-react: 1.0.2_4afad201897773dfa3805b662ddbabf0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-hook-form: 7.29.0_react@17.0.2
@@ -3615,6 +3617,19 @@ packages:
   /node-releases/2.0.2:
     resolution: {integrity: sha512-XxYDdcQ6eKqp/YjI+tb2C5WM2LgjnZrfYg4vgQt49EK268b6gYCHsBLrK2qvJo4FmCtqmKezb0WZFK4fkrZNsg==}
     dev: true
+
+  /nodemailer-react/1.0.2_4afad201897773dfa3805b662ddbabf0:
+    resolution: {integrity: sha512-3XJ1lZUQivQDq9arYGSqbDAT8iDZEVMpRvECQ9MW6N6/c2U15ndcX69vjgshvYjm4Sbu8u+YLTy/D+zKIkka6A==}
+    engines: {node: '>=6.0.0'}
+    peerDependencies:
+      nodemailer: '>=5'
+      react: '>= 15'
+      react-dom: '>= 15'
+    dependencies:
+      nodemailer: 6.7.3
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: false
 
   /nodemailer/6.7.3:
     resolution: {integrity: sha512-KUdDsspqx89sD4UUyUKzdlUOper3hRkDVkrKh/89G+d9WKsU5ox51NWS4tB1XR5dPUdR4SP0E3molyEfOvSa3g==}

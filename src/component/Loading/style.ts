@@ -1,10 +1,7 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-interface IWrapperProps {
-  isLoading: boolean;
-}
-
-export const Wrapper = styled.div<IWrapperProps>`
+export const Wrapper = styled(motion.div)`
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -14,10 +11,6 @@ export const Wrapper = styled.div<IWrapperProps>`
   width: 100vw;
   background-color: rgba(255, 255, 255, 1);
   z-index: 1000;
-
-  visibility: ${(props) => (props.isLoading ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.isLoading ? 1 : 0)};
-  transition: all 0.5s ease-in-out;
 `;
 
 export default {

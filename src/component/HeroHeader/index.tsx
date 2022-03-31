@@ -35,7 +35,7 @@ const HeroHeader: React.FC = () => {
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 2,
+                delay: 3,
               }}
             >
               <FormattedMessage id="legal.brand" />
@@ -51,14 +51,14 @@ const HeroHeader: React.FC = () => {
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 2.3,
+                delay: 3.3,
               }}
             >
               <FormattedMessage id="legal.tagline" />
             </motion.h2>
           </div>
 
-          <div className="absolute hidden md:block top-0 left-0 w-full h-full">
+          <div className="absolute top-0 left-0 w-full h-full">
             <div className="absolute top-1/2 -translate-y-1/2 left-32">
               <motion.svg
                 viewBox="0 0 200 200"
@@ -68,7 +68,7 @@ const HeroHeader: React.FC = () => {
                 animate={{ height: 600, y: 0, x: 0 }}
                 transition={{
                   type: 'spring',
-                  delay: 1.3,
+                  delay: 2.3,
                 }}
               >
                 <path
@@ -85,7 +85,7 @@ const HeroHeader: React.FC = () => {
                 animate={{ height: 150, y: 0, x: 0 }}
                 transition={{
                   type: 'spring',
-                  delay: 1.75,
+                  delay: 2.75,
                 }}
               >
                 <path
@@ -96,7 +96,7 @@ const HeroHeader: React.FC = () => {
             </div>
 
             <motion.div
-              className="absolute brand-logo top-1/2 right-0 -translate-y-1/2 text-gray-700"
+              className="absolute hidden md:block brand-logo top-1/2 right-0 -translate-y-1/2 text-gray-700"
               style={{ height: '75%', width: '100vw' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -105,7 +105,7 @@ const HeroHeader: React.FC = () => {
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 1.5,
+                delay: 3.5,
               }}
             >
               <style.HeaderLogo />

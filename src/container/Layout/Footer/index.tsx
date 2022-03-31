@@ -36,7 +36,7 @@ const Footer = () => {
             <h3 className="block leading-none text-3xl font-bold uppercase">
               <FormattedMessage id="legal.brand" />
             </h3>
-            <span className="block text-sm text-gray-400">
+            <span className="block text-sm text-gray-400 hover:text-gray-500">
               <FormattedMessage id="legal.tagline" />
             </span>
           </div>
@@ -49,7 +49,7 @@ const Footer = () => {
             <ul className="flex flex-col mt-3">
               {links.map((link, index) => (
                 <li key={'link-' + index}>
-                  <Link to={link.to} className="inline-block text-gray-400">
+                  <Link to={link.to} className="inline-block text-gray-400 hover:text-gray-500">
                     {link.title}
                   </Link>
                 </li>
@@ -67,7 +67,7 @@ const Footer = () => {
                 <Link
                   to="https://twitter.com/flcn_16"
                   target="_blank"
-                  className="text-gray-400"
+                  className="text-gray-400 hover:text-gray-500"
                 >
                   <FormattedMessage id="social.twitter" />
                 </Link>
@@ -76,7 +76,7 @@ const Footer = () => {
                 <Link
                   to="https://www.facebook.com/FLCN16/"
                   target="_blank"
-                  className="text-gray-400"
+                  className="text-gray-400 hover:text-gray-500"
                 >
                   <FormattedMessage id="social.facebook" />
                 </Link>
@@ -85,7 +85,7 @@ const Footer = () => {
                 <Link
                   to="https://www.instagram.com/flcn16/"
                   target="_blank"
-                  className="text-gray-400"
+                  className="text-gray-400 hover:text-gray-500"
                 >
                   <FormattedMessage id="social.instagram" />
                 </Link>
@@ -94,7 +94,7 @@ const Footer = () => {
                 <Link
                   to="https://www.linkedin.com/in/flcn16/"
                   target="_blank"
-                  className="text-gray-400"
+                  className="text-gray-400 hover:text-gray-500"
                 >
                   <FormattedMessage id="social.linkedin" />
                 </Link>
@@ -103,7 +103,7 @@ const Footer = () => {
                 <Link
                   to="https://github.com/FLCN-16"
                   target="_blank"
-                  className="text-gray-400"
+                  className="text-gray-400 hover:text-gray-500"
                 >
                   <FormattedMessage id="social.github" />
                 </Link>
@@ -118,12 +118,12 @@ const Footer = () => {
 
             <ul className="flex flex-col mt-3">
               <li>
-                <Link to="/legal/terms" className="text-gray-400">
+                <Link to="/legal/terms" className="text-gray-400 hover:text-gray-500">
                   <FormattedMessage id="legal.text.terms" />
                 </Link>
               </li>
               <li>
-                <Link to="/legal/privacy-policy" className="text-gray-400">
+                <Link to="/legal/privacy-policy" className="text-gray-400 hover:text-gray-500">
                   <FormattedMessage id="legal.text.privacy-policy" />
                 </Link>
               </li>

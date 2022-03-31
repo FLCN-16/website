@@ -6,6 +6,7 @@ export const WorkingInSliderSlide = styled(motion.div).attrs({
   className: 'flex p-4',
 })`
   position: relative;
+  cursor: default;
 
   .icon-content-wrapper {
     display: flex;

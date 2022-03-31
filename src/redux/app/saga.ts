@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, delay } from 'redux-saga/effects';
 
 import { register } from '../../models/device';
 
@@ -16,6 +16,8 @@ function* initializeApp() {
   yield put({ type: LOADING_START }); // Start Loading
 
   yield put({ type: GET_DEVICE_DETAILS }); // Get Device Details
+
+  yield delay(2500); // Wait for 2.5 seconds
 
   yield put({ type: INITIALIZED }); // Initialized Application
 

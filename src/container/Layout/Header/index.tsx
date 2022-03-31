@@ -119,6 +119,7 @@ const Header = ({ sticky }: IProps) => {
                   className={`nav-item main-nav-item ${
                     router.route === link.to ? 'active' : ''
                   }`.trim()}
+                  onClick={() => setIsMenuOpen(false)}
                 />
               ))}
             </style.MobileNavigationMenu>
