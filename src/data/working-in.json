@@ -1,0 +1,47 @@
+[
+  {
+    "icon": "typescript",
+    "title": "Typescript",
+    "description": "Typescript is a typed superset of JavaScript that compiles to plain JavaScript."
+  },
+  {
+    "icon": "javascript",
+    "title": "Javascript",
+    "description": "JavaScript is a high-level, interpreted programming language."
+  },
+  {
+    "icon": "react",
+    "title": "React",
+    "description": "React is a JavaScript library for building user interfaces."
+  },
+  {
+    "icon": "redux",
+    "title": "Redux",
+    "description": "Redux is a predictable state container for JavaScript apps."
+  },
+  {
+    "icon": "redux-saga",
+    "title": "Redux Saga",
+    "description": "Redux Saga is a library for easy implementation of asynchronous actions in Redux."
+  },
+  {
+    "icon": "next-js",
+    "title": "Next.JS",
+    "description": "Next.JS is a framework for server-rendered React applications."
+  },
+  {
+    "icon": "sass",
+    "title": "Sass",
+    "description": "Sass is a language extension for CSS."
+  },
+  {
+    "icon": "webpack",
+    "title": "Webpack",
+    "description": "Webpack is a module bundler."
+  },
+  {
+    "icon": "php",
+    "title": "PHP",
+    "description": "PHP is a server-side scripting language designed for web development."
+  }
+]

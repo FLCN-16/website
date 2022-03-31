@@ -27,9 +27,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const shortLocale = locale ? locale.split('-')[0] : 'en';
   const currentAppLocale = AppLocale['en'].config;
 
-  if (!isAdmin) {
-    require('../styles/tailwind.css');
-  }
+  if (!isAdmin) require('../styles/tailwind.css');
 
   React.useEffect(() => {
     dispatch(initialize());
