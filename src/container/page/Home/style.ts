@@ -1,76 +1,50 @@
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 
-const contentInAnim = keyframes`
-  0% {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    visibility: hidden;
-  }
-  45% {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    visibility: hidden;
-  }
-  50% {
-    width: auto;
-    height: auto;
-  }
-  100% {
-    opacity: 1;
-    width: auto;
-    height: auto;
-    visibility: visible;
-  }
-`;
-
-export const WorkingInSliderSlide = styled.div.attrs({
-  className: 'flex flex-col p-4',
+export const WorkingInSliderSlide = styled(motion.div).attrs({
+  className: 'flex p-4',
 })`
   position: relative;
 
   .icon-content-wrapper {
     display: flex;
     position: relative;
-    top: 0;
-    left: 50%;
     transition: all 0.3s ease-in-out;
 
     .image-wrapper {
+      flex: 0 0 6rem;
       transition: all 0.3s ease-in-out;
       .image {
         filter: grayscale(100%);
-        transition: filter 0.3s ease-in-out;
+        transition: filter 0.5s ease-in-out;
       }
     }
 
-    .content-wrapper {
-      opacity: 0;
-      width: 0;
-      height: 0;
-      visibility: hidden;
-      transition: all 0.3s ease-in-out;
-    }
-
     &:hover {
-      left: 0;
-
       .image-wrapper {
-        height: 4rem;
-        width: 4rem;
-        min-width: 4rem;
-
         .image {
           filter: grayscale(0%);
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      .image-wrapper {
+        flex: 0 0 4rem !important;
+
+        .image {
+          filter: grayscale(0%) !important;
         }
       }
 
       .content-wrapper {
         display: flex;
         flex-direction: column;
-        animation: ${contentInAnim} 0.6s ease-in-out forwards;
+        justify-content: center;
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+        margin-left: 25px !important;
       }
     }
   }

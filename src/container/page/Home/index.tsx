@@ -1,5 +1,7 @@
 import React from 'react';
+import { Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { motion } from 'framer-motion';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -9,6 +11,11 @@ import HeroHeader from '../../../component/HeroHeader';
 import Section from './Section';
 
 import { WorkingInSliderSlide } from './style'
+
+const slideImage = {
+  rest: { height: '6rem', width: '6rem', flex: '0 0 6rem' },
+  hover: { height: '3rem', width: '3rem', flex: '0 0 3rem' },
+};
 
 const programmingIcons = [
   {
@@ -60,14 +67,41 @@ const programmingIcons = [
 
 const Home: React.FC = () => {
   const workingInSliderConfig = {
+    modules: [Autoplay],
+    autoplay: {
+      delay: 3000,
+    },
     navigation: true,
-    spaceBetween: 50,
     slidesPerView: 6,
     scrollbar: {
       draggable: true,
     },
+    loop: true,
     pagination: { clickable: true },
     centeredSlides: false,
+    breakpoints: {
+      // when window width is >= 320px
+      320: {
+        slidesPerView: 1,
+        spaceBetween: 10,
+        centeredSlides: true,
+      },
+      // when window width is >= 640px
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 10,
+      },
+      // when window width is >= 1024px
+      1024: {
+        slidesPerView: 4,
+        spaceBetween: 10,
+      },
+      // when window width is >= 1280px
+      1280: {
+        slidesPerView: 6,
+        spaceBetween: 0,
+      },
+    },
   };
 
   return (
@@ -81,21 +115,41 @@ const Home: React.FC = () => {
           <Swiper {...workingInSliderConfig}>
             {programmingIcons.map((icon, index) => (
               <SwiperSlide key={`slide-${index}`}>
-                <WorkingInSliderSlide>
-                  <div className="icon-content-wrapper relative">
-                    <div className="image-wrapper flex items-center w-24 h-24">
+                <WorkingInSliderSlide
+                  initial="rest"
+                  whileHover="hover"
+                  whileFocus="hover"
+                  animate="rest"
+                >
+                  <motion.div className="icon-content-wrapper relative">
+                    <motion.div
+                      className="image-wrapper flex items-center"
+                      variants={slideImage}
+                      transition={{ type: 'linear' }}
+                    >
                       <img
                         src={`/assets/programming-icons/${icon.icon}.svg`}
                         className="image w-full"
                         alt={icon.title}
                       />
-                    </div>
+                    </motion.div>
 
-                    <div className="content-wrapper p-2 pt-1 justify-start">
-                      <h4 className="icon-title font-bold uppercase">{icon.title}</h4>
-                      <p className="icon-description">{icon.description}</p>
-                    </div>
-                  </div>
+                    <motion.div
+                      className="content-wrapper p-2 pt-1 justify-start"
+                      variants={{
+                        rest: { opacity: 0, x: '-10%' },
+                        hover: { opacity: 1, x: '0%' },
+                      }}
+                      transition={{ type: 'spring', delay: 0.5 }}
+                    >
+                      <motion.h4 className="icon-title font-bold uppercase">
+                        {icon.title}
+                      </motion.h4>
+                      <motion.p className="icon-description">
+                        {icon.description}
+                      </motion.p>
+                    </motion.div>
+                  </motion.div>
                 </WorkingInSliderSlide>
               </SwiperSlide>
             ))}

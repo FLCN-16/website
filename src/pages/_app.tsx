@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { AnimatePresence } from 'framer-motion';
 
 // State
 import { useDispatch } from 'react-redux';
@@ -58,10 +59,28 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
 const AppProviderComponent = wrapper.withRedux(AppProvider);
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, router }: AppProps) {
+  React.useEffect(() => {
+    if (
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  });
+
   return (
     <AppProviderComponent>
-      <Component {...pageProps} />
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter={true}
+        onExitComplete={() => window.scrollTo(0, 0)}
+      >
+        <Component {...pageProps} key={router.route} />
+      </AnimatePresence>
     </AppProviderComponent>
   );
 }
