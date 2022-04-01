@@ -8,8 +8,15 @@ interface IProps {
 };
 
 const ContactMail = ({ name, email, phone, message }: IProps) => ({
-  subject: 'Contact Subject',
-  body: <div>body here</div>,
+  subject: 'The Falcon | Contact Mail',
+  body: (
+    <div>
+      <p>Name: {name}</p>
+      <p>Email: {email}</p>
+      <p>Phone: {phone}</p>
+      <p>Message: {message}</p>
+    </div>
+  ),
 });
 
 export default ContactMail;
