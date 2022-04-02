@@ -212,8 +212,8 @@ const Contact = (props: IProps) => {
                 <div className="flex flex-wrap -mx-3 mb-6">
                   <div className="flex justify-end w-full px-3">
                     <button
-                      className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded uppercase focus:outline-none focus:shadow-outline"
                       type="submit"
+                      className="bg-gray-700 hover:bg-gray-800 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded uppercase focus:outline-none focus:shadow-outline"
                       disabled={props.contact.loading}
                     >
                       {i18n.formatMessage({ id: 'text.contact.form.submit' })}
