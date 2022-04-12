@@ -1,6 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+
+// State
+import { connect } from 'react-redux';
 
 import style from './style';
 
@@ -19,7 +22,17 @@ const brandNameVariants = {
   },
 };
 
-const HeroHeader: React.FC = () => {
+interface IProps {
+  loading: boolean;
+}
+
+const HeroHeader: React.FC<IProps> = ({ loading }) => {
+  const transitionDelay = (delay: number) => {
+    let minimumDelay = loading ? 2 : 0;
+
+    return minimumDelay + delay;
+  };
+
   return (
     <AnimatePresence>
       <section id="hero-header" className="flex min-h-screen overflow-hidden">
@@ -35,7 +48,7 @@ const HeroHeader: React.FC = () => {
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 3,
+                delay: transitionDelay(1),
               }}
             >
               <FormattedMessage id="legal.brand" />
@@ -51,7 +64,7 @@ const HeroHeader: React.FC = () => {
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 3.3,
+                delay: transitionDelay(1.3),
               }}
             >
               <FormattedMessage id="legal.tagline" />
@@ -68,7 +81,7 @@ const HeroHeader: React.FC = () => {
                 animate={{ height: 600, y: 0, x: 0 }}
                 transition={{
                   type: 'spring',
-                  delay: 2.3,
+                  delay: transitionDelay(0.3),
                 }}
               >
                 <path
@@ -85,7 +98,7 @@ const HeroHeader: React.FC = () => {
                 animate={{ height: 150, y: 0, x: 0 }}
                 transition={{
                   type: 'spring',
-                  delay: 2.75,
+                  delay: transitionDelay(0.75),
                 }}
               >
                 <path
@@ -105,7 +118,7 @@ const HeroHeader: React.FC = () => {
                 type: 'spring',
                 stiffness: 100,
                 damping: 15,
-                delay: 3.5,
+                delay: transitionDelay(1.5),
               }}
             >
               <style.HeaderLogo />
@@ -117,4 +130,8 @@ const HeroHeader: React.FC = () => {
   );
 };
 
-export default React.memo(HeroHeader);
+const mapStateToProps = (state: any) => ({
+  loading: state.appReducer.loading,
+});
+
+export default connect(mapStateToProps)(HeroHeader);

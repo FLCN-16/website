@@ -41,7 +41,7 @@ const Contact = (props: IProps) => {
 
   return (
     <style.Wrapper>
-      <PageTitle>{i18n.formatMessage({ id: 'text.contact' })}</PageTitle>
+      <PageTitle title={i18n.formatMessage({ id: 'text.contact' })} />
 
       <section className="bg-gray-100">
         <div className="container mx-auto px-4 py-16">

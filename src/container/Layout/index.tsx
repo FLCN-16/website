@@ -20,7 +20,7 @@ interface ILayout extends React.HTMLProps<HTMLDivElement> {
 
 const Layout = ({ sticky, children }: ILayout) => {
   return (
-    <style.Wrapper>
+    <style.Wrapper className="font-sans">
       {/* Header */}
       <Header sticky={sticky !== false} />
 

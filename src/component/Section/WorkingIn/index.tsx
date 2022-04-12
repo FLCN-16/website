@@ -15,8 +15,8 @@ import 'swiper/css/pagination';
 import { WorkingInSliderSlide } from './style';
 
 const slideImage = {
-  rest: { height: '6rem', width: '6rem', flex: '0 0 6rem' },
-  hover: { height: '4rem', width: '4rem', flex: '0 0 4rem' },
+  rest: { height: '6rem', width: '6rem', flex: '0 0 6rem', left: '50%', x: '-50%' },
+  hover: { height: '4rem', width: '4rem', flex: '0 0 4rem', left: '0%', x: '0%' },
 };
 
 const workingInSliderConfig = {
@@ -76,7 +76,7 @@ const Slider: React.FC = () => {
           >
             <div className="icon-content-wrapper relative">
               <motion.div
-                className="image-wrapper flex items-center"
+                className="image-wrapper relative flex items-center"
                 variants={slideImage}
                 transition={{ type: 'linear' }}
               >
@@ -91,9 +91,9 @@ const Slider: React.FC = () => {
                 className="content-wrapper p-2 pt-1 justify-start"
                 variants={{
                   rest: { opacity: 0, x: '10%' },
-                  hover: { opacity: 1, x: '0%' },
+                  hover: { opacity: 1, x: '0%', transition: { delay: 0.55 } },
                 }}
-                transition={{ type: 'spring', delay: 0.5 }}
+                transition={{ type: 'spring' }}
               >
                 <motion.h4 className="icon-title font-bold uppercase">
                   {language.title}

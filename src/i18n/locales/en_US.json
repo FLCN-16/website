@@ -47,5 +47,21 @@
   "social.twitter": "Twitter",
   "social.linkedin": "LinkedIn",
   "social.github": "Github",
-  "social.instagram": "Instagram"
+  "social.instagram": "Instagram",
+  "text.hire-me.title": "Share Project Requirements",
+  "text.hire-me.description": "I am available for freelance projects. If you have any project requirements, please contact me.",
+  "text.hire-me.notice": "Only part-time job requirements.",
+  "text.project.requirements.form.name": "Your Name",
+  "text.project.requirements.form.email": "Your Email",
+  "text.project.requirements.form.phone": "Your Phone",
+  "text.project.requirements.form.company": "Company",
+  "text.project.requirements.form.website": "Website",
+  "text.project.requirements.form.position": "Position",
+  "text.project.requirements.form.project-name": "Project Name",
+  "text.project.requirements.form.project-budget": "Project Budget (in USD)",
+  "text.project.requirements.form.project-timeline": "Project Timeline",
+  "text.project.requirements.form.project-description": "Project Description",
+  "text.project.requirements.form.project-requirements": "Project Requirements",
+  "text.project.requirements.form.project-document": "Project Document",
+  "text.project.requirements.form.submit": "Submit Requirements"
 }

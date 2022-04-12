@@ -74,7 +74,7 @@ const Header = ({ sticky }: IProps) => {
           {/* Logo and Branding */}
           <style.Brand>
             <Link to="/">
-              <span className="text-lg whitespace-nowrap font-semibold uppercase">
+              <span className="text-lg whitespace-nowrap font-bold uppercase">
                 {i18n.formatMessage({ id: 'legal.brand' })}
               </span>
             </Link>

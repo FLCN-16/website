@@ -22,6 +22,7 @@ export const Section = styled.section.attrs({
     white-space: nowrap;
     text-transform: uppercase;
     color: rgba(0, 0, 0, 0.02);
+    z-index: -1;
   }
 `;
 
