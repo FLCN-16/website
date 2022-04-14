@@ -11,7 +11,7 @@ const Portfolio = () => {
 
   return (
     <style.Wrapper>
-      <PageTitle>{i18n.formatMessage({ id: 'text.portfolio' })}</PageTitle>
+      <PageTitle title={i18n.formatMessage({ id: 'text.portfolio' })} />
     </style.Wrapper>
   );
 };

@@ -11,7 +11,7 @@ const About = () => {
 
   return (
     <style.Wrapper>
-      <PageTitle>{i18n.formatMessage({ id: 'text.about' })}</PageTitle>
+      <PageTitle title={i18n.formatMessage({ id: 'text.about' })} />
     </style.Wrapper>
   );
 };
