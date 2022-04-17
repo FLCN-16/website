@@ -33,6 +33,8 @@ export const WorkingInSliderSlide = styled(motion.div).attrs({
     @media (max-width: 768px) {
       .image-wrapper {
         flex: 0 0 4rem !important;
+        left: 0 !important;
+        transform: translateX(0) !important;
 
         .image {
           filter: grayscale(0%) !important;

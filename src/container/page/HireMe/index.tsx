@@ -2,6 +2,11 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
+// Store
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { hireSubmit } from '../../../redux/services/actions';
+
 // Components
 import PageTitle from '../../../component/PageTitle';
 
@@ -22,7 +27,18 @@ interface Inputs {
   project_document: FileList;
 }
 
-const HireMe = () => {
+interface IProps {
+  hire: {
+    loading: boolean;
+    success: boolean;
+    error: string;
+  };
+  action: {
+    hireSubmit: (data: any) => void;
+  }
+}
+
+const HireMe = (props: IProps) => {
   const i18n = useIntl();
   const {
     register,
@@ -34,7 +50,9 @@ const HireMe = () => {
     let formData = {
       ...data,
       project_document: data.project_document[0],
-    }
+    };
+
+    props.action.hireSubmit(formData);
   };
 
   return (
@@ -345,4 +363,17 @@ const HireMe = () => {
   );
 };
 
-export default HireMe;
+const mapStateToProps = (state: any) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  action: bindActionCreators(
+    {
+      hireSubmit,
+    },
+    dispatch
+  ),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HireMe);

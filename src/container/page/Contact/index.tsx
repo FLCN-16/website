@@ -3,12 +3,14 @@ import { useIntl } from 'react-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { AtSymbolIcon, PhoneIcon } from '@heroicons/react/outline';
 
+// Store
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { contactSubmit } from '../../../redux/services/actions';
+
 // Components
 import PageTitle from '../../../component/PageTitle';
-
-// Store
-import { useDispatch, connect } from 'react-redux';
-import { contactSubmit } from '../../../redux/services/actions';
+import Loading from '../../../component/Icon/Loading';
 
 import style from './style';
 
@@ -25,11 +27,13 @@ interface IProps {
     success: boolean;
     error: string;
   };
+  action: {
+    contactSubmit: (data: Inputs) => void;
+  }
 }
 
 const Contact = (props: IProps) => {
   const i18n = useIntl();
-  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -37,7 +41,7 @@ const Contact = (props: IProps) => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) =>
-    dispatch(contactSubmit(data));
+    props.action.contactSubmit(data);
 
   return (
     <style.Wrapper>
@@ -213,9 +217,10 @@ const Contact = (props: IProps) => {
                   <div className="flex justify-end w-full px-3">
                     <button
                       type="submit"
-                      className="bg-gray-700 hover:bg-gray-800 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded uppercase focus:outline-none focus:shadow-outline"
+                      className="inline-flex items-center bg-gray-700 hover:bg-gray-800 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded uppercase focus:outline-none focus:shadow-outline"
                       disabled={props.contact.loading}
                     >
+                      {props.contact.loading && <Loading />}
                       {i18n.formatMessage({ id: 'text.contact.form.submit' })}
                     </button>
                   </div>
@@ -233,4 +238,10 @@ const mapStateToProps = (state: any) => ({
   contact: state.servicesReducer.contact,
 });
 
-export default connect(mapStateToProps)(Contact);
+const mapDispatchToProps = (dispatch: any) => ({
+  action: bindActionCreators({
+    contactSubmit
+  }, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Contact);

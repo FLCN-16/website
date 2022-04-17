@@ -12,7 +12,7 @@ const Home: React.FC = () => {
       <HeroHeader />
 
       {/* Worked On Section */}
-      <WorkedOnSection />
+      {/* <WorkedOnSection /> */}
 
       {/* Languages Section */}
       <WorkingInSection />

@@ -1,10 +1,22 @@
 import produce from 'immer';
 import { AnyAction } from 'redux';
 
-import { CONTACT_SUBMIT, CONTACT_SUCCESS, CONTACT_FAILURE } from './actions';
+import {
+  CONTACT_SUBMIT,
+  CONTACT_SUCCESS,
+  CONTACT_FAILURE,
+  HIRE_SUBMIT,
+  HIRE_SUCCESS,
+  HIRE_FAILURE,
+} from './actions';
 
 export const initialState = {
   contact: {
+    loading: false,
+    success: false,
+    error: null,
+  },
+  hire: {
     loading: false,
     success: false,
     error: null,
@@ -26,6 +38,17 @@ export default (state = initialState, action: AnyAction) =>
         draft.contact.success = false;
         draft.contact.error = action.error;
         break;
+      case HIRE_SUBMIT:
+        draft.hire.loading = true;
+        break;
+      case HIRE_SUCCESS:
+        draft.hire.loading = false;
+        draft.hire.success = true;
+        break;
+      case HIRE_FAILURE:
+        draft.hire.loading = false;
+        draft.hire.success = false;
+        draft.hire.error = action.error;
       default:
         break;
     }

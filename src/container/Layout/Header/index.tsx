@@ -99,7 +99,7 @@ const Header = ({ sticky }: IProps) => {
                 to="/assets/files/Resume.pdf"
                 target="_blank"
                 download="Rishabh's-curriculum-vitae"
-                className="inline-block py-1 px-3 rounded text-sm bg-gray-600 text-white hover:bg-gray-700"
+                className="inline-block py-1 px-3 rounded text-sm font-semibold border border-gray-600 text-gray-600 hover:text-white hover:bg-gray-700"
               >
                 {i18n.formatMessage({ id: 'resume.download' })}
               </Link>

@@ -1,15 +1,27 @@
-import React from "react";
-import Wrapper from '../../Wrapper'
+import React from 'react';
+import Wrapper from '../../Wrapper';
 import Applocale from '../../../i18n';
 
 interface IProps {
   name: string;
   email: string;
   phone: string;
-  message: string;
-};
+  website: string;
+  company: string;
+  position: string;
+  project_name: string;
+  project_budget: string;
+  project_timeline: string;
+  project_description: string;
+  project_requirements: string;
+}
 
-const ContactMail = ({ name, email, phone, message }: IProps) => {
+const HireMail = ({
+  name, email, phone, website,
+  company, position, project_name,
+  project_budget, project_timeline,
+  project_description, project_requirements,
+}: IProps) => {
   let i18n = Applocale.en.config;
 
   return {
@@ -31,12 +43,9 @@ const ContactMail = ({ name, email, phone, message }: IProps) => {
         <p>
           <b>Phone:</b> {phone}
         </p>
-        <p>
-          <b>Message:</b> {message}
-        </p>
       </Wrapper>
     ),
   };
 };
 
-export default ContactMail;
+export default HireMail;

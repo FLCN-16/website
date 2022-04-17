@@ -2,6 +2,7 @@ import { Mailer } from 'nodemailer-react';
 
 // Templates
 import ContactMail from './service/contact';
+import HireMail from './service/hire';
 
 
 const transport = {
@@ -20,6 +21,7 @@ const defaults = {
 
 const templates = {
   ContactMail,
+  HireMail,
 };
 
 export default Mailer({ transport, defaults }, templates);
