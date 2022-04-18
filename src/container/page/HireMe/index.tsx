@@ -364,7 +364,7 @@ const HireMe = (props: IProps) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  user: state.user,
+  hire: state.servicesReducer.hire,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
