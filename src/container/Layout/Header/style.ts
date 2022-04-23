@@ -30,7 +30,8 @@ export const Brand = styled.div`
 `;
 
 export const Navigation = styled.ul`
-  margin: 0 auto;
+  margin-left: 50px;
+  margin-right: auto;
 
   &:hover li.main-nav-item.active:not(:hover)::after {
     background: transparent;
