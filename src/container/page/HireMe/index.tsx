@@ -62,8 +62,8 @@ const HireMe = (props: IProps) => {
       <section className="bg-gray-100">
         <div className="container mx-auto px-4 py-16">
           <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-1/2 px-3"></div>
-            <div className="w-1/2 px-3">
+            <div className="md:w-1/2 px-3"></div>
+            <div className="md:w-1/2 px-3">
               <div className="flex flex-wrap -mx-4">
                 <div className="w-full px-4">
                   <div className="mb-8">

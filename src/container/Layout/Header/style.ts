@@ -7,9 +7,9 @@ interface WrapperProps {
 
 export const Wrapper = styled.header<WrapperProps>`
   position: ${(props) =>
-    props.sticky ? 'fixed' : props.isScrolled ? 'fixed' : 'relative'};
+    props.sticky || props.isScrolled ? 'fixed' : 'relative'};
   padding: ${(props) => (props.isScrolled ? '15px 25px' : '25px 35px')};
-  background: ${(props) => (props.isScrolled ? '#ffffff' : 'transparent')};
+  background: #ffffff;
   box-shadow: ${(props) =>
     props.isScrolled ? '0px 2px 4px rgba(0, 0, 0, 0.05)' : 'none'};
   top: 0;
@@ -30,7 +30,7 @@ export const Brand = styled.div`
 `;
 
 export const Navigation = styled.ul`
-  margin-left: auto;
+  margin: 0 auto;
 
   &:hover li.main-nav-item.active:not(:hover)::after {
     background: transparent;
@@ -38,6 +38,23 @@ export const Navigation = styled.ul`
 
   li.main-nav-item {
     position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0%;
+      height: 3px;
+      background: #000000;
+      border-radius: 2px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    &:hover::after {
+      width: 25%;
+    }
 
     &.active {
       color: rgb(55, 65, 81);
@@ -76,7 +93,7 @@ export const MobileNavigationMenu = styled.ul<IMobileNavigationMenuProps>`
   left: 0;
   width: 100%;
   background: #ffffff;
-  max-height: ${(props) => (props.isOpen ? '200px' : '0')};
+  max-height: ${(props) => (props.isOpen ? '255px' : '0')};
   overflow: hidden;
   border-bottom: 1px solid #e6e6e6;
   border-bottom-color: ${(props) => (props.isOpen ? '#e6e6e6' : 'transparent')};

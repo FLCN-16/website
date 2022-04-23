@@ -2,7 +2,8 @@ import { all } from 'redux-saga/effects';
 
 import appSaga from './app/saga';
 import servicesSaga from './services/saga';
+import walletConnectSaga from './walletConnect/saga';
 
 export default function* rootSaga() {
-  yield all([appSaga(), servicesSaga()]);
+  yield all([appSaga(), servicesSaga(), walletConnectSaga()]);
 }
