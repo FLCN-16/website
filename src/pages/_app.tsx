@@ -14,6 +14,8 @@ import AppLocale from '../i18n';
 
 import { wrapper } from '../redux';
 
+import '../styles/globals.css';
+
 export interface AppProviderProps {
   children: JSX.Element | JSX.Element[];
 }

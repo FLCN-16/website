@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Header from './Header';
 import Footer from './Footer';
 import Loading from '../../component/Loading';
+import Cursor from '../../component/Cursor';
 
 import style from './style';
 
@@ -40,6 +41,9 @@ const Layout = ({ sticky, children }: ILayout) => {
 
       {/* Loading */}
       <Loading />
+
+      {/* Cursor */}
+      <Cursor />
     </style.Wrapper>
   );
 };
