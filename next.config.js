@@ -21,7 +21,7 @@ async function redirects() {
 }
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   pageExtensions: ['tsx', 'ts'],
   compiler: {
     // ssr and displayName are configured by default

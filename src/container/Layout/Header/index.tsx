@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl';
 
 // Components
 import Link from '../../../component/Link';
-import WalletConnect from '../../../component/WalletConnect';
 
 import style from './style';
 
@@ -95,9 +94,6 @@ const Header = ({ sticky }: IProps) => {
 
           <ul className="ml-auto md:ml-5 gap-x-1 hidden md:flex">
             <li>
-              <WalletConnect />
-            </li>
-            <li>
               <Link
                 to="/assets/files/Resume.pdf"
                 target="_blank"
@@ -126,7 +122,6 @@ const Header = ({ sticky }: IProps) => {
                 />
               ))}
               <li className="flex nav-item main-nav-item py-2 pr-4 pl-3 gap-x-1">
-                <WalletConnect />
                 <Link
                   to="/assets/files/Resume.pdf"
                   target="_blank"

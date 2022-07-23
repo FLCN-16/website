@@ -15,11 +15,11 @@ interface IProps {
 }
 
 const HeroHeader: React.FC<IProps> = ({ loading }) => {
-  const transitionDelay = (delay: number) => {
+  const transitionDelay = React.useCallback((delay: number) => {
     let minimumDelay = loading ? 2 : 0;
 
     return minimumDelay + delay;
-  };
+  }, []);
 
   React.useEffect(() => {
     // Initial GSAP animation
@@ -33,7 +33,7 @@ const HeroHeader: React.FC<IProps> = ({ loading }) => {
       scrollTrigger: {
         trigger: '#hero-header',
         start: 'top 0%',
-        end: '+=2000 0%',
+        end: '+=1500 0%',
         scrub: 1.25,
         pin: true,
         id: 'hero-header',
@@ -70,7 +70,7 @@ const HeroHeader: React.FC<IProps> = ({ loading }) => {
       y: '25px',
       opacity: 0,
     });
-  }, []);
+  }, [ transitionDelay ]);
 
   return (
     <section id="hero-header" className="flex min-h-screen overflow-hidden">
