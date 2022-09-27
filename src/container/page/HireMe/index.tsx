@@ -47,10 +47,20 @@ const HireMe = (props: IProps) => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    let formData = {
-      ...data,
-      project_document: data.project_document[0],
-    };
+    let formData = new FormData();
+
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('phone', data.phone);
+    formData.append('website', data.website);
+    formData.append('company', data.company);
+    formData.append('position', data.position);
+    formData.append('project_name', data.project_name);
+    formData.append('project_budget', data.project_budget);
+    formData.append('project_timeline', data.project_timeline);
+    formData.append('project_description', data.project_description);
+    formData.append('project_requirements', data.project_requirements);
+    formData.append('project_document', data.project_document[0]);
 
     props.action.hireSubmit(formData);
   };

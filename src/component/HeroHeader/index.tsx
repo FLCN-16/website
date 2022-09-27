@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 // State
 import { connect } from 'react-redux';
 
-import style from './style';
+import * as style from './style';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,6 +19,7 @@ const HeroHeader: React.FC<IProps> = ({ loading }) => {
     let minimumDelay = loading ? 2 : 0;
 
     return minimumDelay + delay;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {

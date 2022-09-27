@@ -25,14 +25,14 @@ const HireMail = ({
   let i18n = Applocale.en.config;
 
   return {
-    subject: 'The Falcon | Contact Mail',
+    subject: 'The Falcon | Project Requirements Mail',
     body: (
       <Wrapper i18n={i18n}>
         <p style={{ marginBottom: '0.75rem' }}>
           Hi, <b>{i18n.formatMessage({ id: 'legal.brand' })}</b>
         </p>
         <p style={{ marginBottom: '0.5rem' }}>
-          You have a new contact request.
+          You have a new Project Query request.
         </p>
         <p>
           <b>Name:</b> {name}
@@ -42,6 +42,36 @@ const HireMail = ({
         </p>
         <p>
           <b>Phone:</b> {phone}
+        </p>
+        <p>
+          <b>Company:</b> {company}
+        </p>
+        <p>
+          <b>Position:</b> {position}
+        </p>
+        <p>
+          <b>Website:</b> <a href={website}>{website}</a>
+        </p>
+
+        <p style={{ marginTop: '0.75rem', marginBottom: '0.75rem' }}>
+          <b>Project Details</b>
+        </p>
+        <p>
+          <b>Project Name:</b> {project_name}
+        </p>
+        <p>
+          <b>Project Budget:</b> {project_budget} USD
+        </p>
+        <p>
+          <b>Project Timeline:</b> {project_timeline}
+        </p>
+        <p>
+          <b>Project Description:</b>
+          <p>{project_description}</p>
+        </p>
+        <p>
+          <b>Project Requirements:</b>
+          <p>{project_requirements}</p>
         </p>
       </Wrapper>
     ),

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default () => (
+const LoadingIcon = () => (
   <svg
     className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
     xmlns="http://www.w3.org/2000/svg"
@@ -13,7 +13,7 @@ export default () => (
       cy="12"
       r="10"
       stroke="currentColor"
-      stroke-width="4"
+      strokeWidth="4"
     ></circle>
     <path
       className="opacity-75"
@@ -22,3 +22,5 @@ export default () => (
     ></path>
   </svg>
 );
+
+export default LoadingIcon;

@@ -14,14 +14,14 @@ export default async function handler(
 
   const { name, email, phone, message } = req.body;
 
+  const mailReciever = process.env.CONTACT_MAIL_RECIEVER;
+
   try {
     // Send Mail
     await mailer.send(
       'ContactMail',
       { name, email, phone, message },
-      {
-        to: process.env.CONTACT_MAIL_RECIEVER,
-      }
+      { to: mailReciever }
     );
 
     res.status(200).json({ status: true, message: 'Contact mail sent!' });
