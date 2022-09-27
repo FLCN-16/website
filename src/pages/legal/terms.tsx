@@ -3,23 +3,22 @@ import Head from 'next/head';
 import { useIntl } from 'react-intl';
 
 // Containers
-import Layout from '../container/Layout';
-import About from '../container/page/About';
+import Layout from '../../container/Layout';
 
-const AboutPage: NextPage = () => {
+const TermsPage: NextPage = () => {
   const i18n = useIntl();
 
   return (
     <>
       <Head>
-        <title>{i18n.formatMessage({ id: 'legal.brand' })}</title>
+        <title>{i18n.formatMessage({ id: 'page.terms.title' })}</title>
       </Head>
 
       <Layout>
-        <About />
+
       </Layout>
     </>
   );
-};
+}
 
-export default AboutPage;
+export default TermsPage;

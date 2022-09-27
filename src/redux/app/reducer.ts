@@ -8,7 +8,7 @@ export const initialState = {
   loading: true,
 };
 
-export default (state = initialState, action: AnyAction) =>
+const appReducer = (state = initialState, action: AnyAction) =>
   produce(state, (draft) => {
     switch (action.type) {
       case INITIALIZED:
@@ -24,3 +24,5 @@ export default (state = initialState, action: AnyAction) =>
         break;
     }
   });
+
+export default appReducer

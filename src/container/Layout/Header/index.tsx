@@ -32,7 +32,7 @@ const Header = ({ sticky }: IProps) => {
 
   const links = [
     {
-      title: i18n.formatMessage({ id: 'navbar.home' }),
+      title: i18n.formatMessage({ id: 'navbar.about' }),
       to: '/',
     },
     {
@@ -46,10 +46,6 @@ const Header = ({ sticky }: IProps) => {
     {
       title: i18n.formatMessage({ id: 'navbar.portfolio' }),
       to: '/portfolio',
-    },
-    {
-      title: i18n.formatMessage({ id: 'navbar.about' }),
-      to: '/about',
     },
   ];
 
@@ -98,7 +94,7 @@ const Header = ({ sticky }: IProps) => {
                 to="/assets/files/Resume.pdf"
                 target="_blank"
                 download="Rishabh's-curriculum-vitae"
-                className="inline-block py-2 px-4 rounded text-sm font-semibold bg-gray-600 text-white drop-shadow-xl hover:drop-shadow-none transition-all duration-300"
+                className="inline-block py-2 px-4 rounded text-sm font-semibold text-gray-600 border border-gray-200 drop-shadow-xl transition-all duration-300"
               >
                 {i18n.formatMessage({ id: 'resume.download' })}
               </Link>

@@ -11,8 +11,8 @@ const Footer = () => {
 
   const links = [
     {
-      title: i18n.formatMessage({ id: 'footer.nav.home' }),
-      to: '/',
+      title: i18n.formatMessage({ id: 'footer.nav.portfolio' }),
+      to: '/portfolio',
     },
     {
       title: i18n.formatMessage({ id: 'footer.nav.contact' }),
@@ -24,7 +24,7 @@ const Footer = () => {
     },
     {
       title: i18n.formatMessage({ id: 'footer.nav.about' }),
-      to: '/about',
+      to: '/',
     },
   ];
 

@@ -53,7 +53,8 @@ export const Navigation = styled.ul`
       transition: all 0.3s ease-in-out;
     }
 
-    &:hover::after {
+    &:hover::after,
+    &.active::after {
       width: 25%;
     }
 

@@ -4,6 +4,7 @@ import React from 'react';
 import HeroHeader from '../../../component/HeroHeader';
 import WorkedOnSection from '../../../component/Section/WorkedOn';
 import WorkingInSection from '../../../component/Section/WorkingIn';
+import AchievementsSection from '../../../component/Section/Achievements';
 
 const Home: React.FC = () => {
   return (
@@ -16,6 +17,9 @@ const Home: React.FC = () => {
 
       {/* Languages Section */}
       <WorkingInSection />
+
+      {/* Achievements Section */}
+      <AchievementsSection />
     </React.Fragment>
   );
 }
