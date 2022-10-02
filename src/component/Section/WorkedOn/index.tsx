@@ -86,7 +86,7 @@ const WorkedOnSection: React.FC = () => {
                   <a
                     href={selectedProject.link}
                     className="text-white bg-gray-500 rounded px-4 py-1"
-                    target="_blank"
+                    target="_blank" rel="noreferrer"
                   >
                     Visit
                   </a>

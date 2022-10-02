@@ -7,8 +7,3 @@ export const Wrapper = styled.footer`
 `;
 
 export const BottomBar = styled.div``;
-
-export default {
-  Wrapper,
-  BottomBar,
-};

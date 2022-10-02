@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 // Components
 import Link from '../../../component/Link';
 
-import style from './style';
+import * as style from './style';
 
 interface IProps {
   sticky?: boolean;

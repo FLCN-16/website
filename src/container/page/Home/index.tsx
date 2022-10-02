@@ -5,6 +5,7 @@ import HeroHeader from '../../../component/HeroHeader';
 import WorkedOnSection from '../../../component/Section/WorkedOn';
 import WorkingInSection from '../../../component/Section/WorkingIn';
 import AchievementsSection from '../../../component/Section/Achievements';
+import ExperienceSection from '../../../component/Section/Experience';
 
 const Home: React.FC = () => {
   return (

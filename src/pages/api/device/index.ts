@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Cookies from 'cookies';
 
-import { uuid4 } from './../../../lib/helper';
+import { uuid4 } from '../../../lib/helper';
 
 type Data = {
   device_id: string;

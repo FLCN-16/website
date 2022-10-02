@@ -9,7 +9,7 @@ export const Wrapper = styled.header<WrapperProps>`
   position: ${(props) =>
     props.sticky || props.isScrolled ? 'fixed' : 'relative'};
   padding: ${(props) => (props.isScrolled ? '15px 25px' : '25px 35px')};
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.35);
   box-shadow: ${(props) =>
     props.isScrolled ? '0px 2px 4px rgba(0, 0, 0, 0.05)' : 'none'};
   top: 0;
@@ -18,6 +18,7 @@ export const Wrapper = styled.header<WrapperProps>`
   display: flex;
   flex-direction: column;
   z-index: 100;
+  backdrop-filter: ${(props) => (props.isScrolled ? 'blur(7px)' : 'blur(0px)')};
   transition: padding 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
   @media (max-width: 768px) {
@@ -101,12 +102,3 @@ export const MobileNavigationMenu = styled.ul<IMobileNavigationMenuProps>`
   border-bottom-color: ${(props) => (props.isOpen ? '#e6e6e6' : 'transparent')};
   transition: all 0.3s ease-in-out;
 `;
-
-export default {
-  Wrapper,
-  Brand,
-  Navigation,
-  MobileNavigation,
-  MobileNavigationToggle,
-  MobileNavigationMenu,
-};

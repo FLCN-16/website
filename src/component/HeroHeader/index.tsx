@@ -16,7 +16,7 @@ interface IProps {
 
 const HeroHeader: React.FC<IProps> = ({ loading }) => {
   const transitionDelay = React.useCallback((delay: number) => {
-    let minimumDelay = loading ? 2 : 0;
+    let minimumDelay = loading ? 3.5 : 0;
 
     return minimumDelay + delay;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,7 +26,7 @@ const HeroHeader: React.FC<IProps> = ({ loading }) => {
     // Initial GSAP animation
     gsap.from('#hero-header', {
       opacity: 0,
-      delay: transitionDelay(2),
+      delay: transitionDelay(0.5),
     });
 
     // GSAP scroll trigger

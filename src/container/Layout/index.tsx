@@ -6,7 +6,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Loading from '../../component/Loading';
 
-import style from './style';
+import * as style from './style';
 
 const variants = {
   hidden: { opacity: 0, x: 0, y: 0 },
