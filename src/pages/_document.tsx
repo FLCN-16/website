@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
+import Script from 'next/script';
 // Import styled components ServerStyleSheet
 import { ServerStyleSheet } from 'styled-components';
 
