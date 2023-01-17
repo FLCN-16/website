@@ -48,7 +48,7 @@ class MyDocument extends Document {
           <noscript>
             <iframe
               src="https://www.googletagmanager.com/ns.html?id=GTM-TLRRVXK"
-              height="0" width="0" style="display:none;visibility:hidden"
+              height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}
             ></iframe>
           </noscript>
           {/* <!-- End Google Tag Manager (noscript) --> */}
