@@ -1,13 +1,15 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, delay } from 'redux-saga/effects';
 import { AnyAction } from 'redux';
 
 import {
   CONTACT_SUBMIT,
   CONTACT_SUCCESS,
   CONTACT_FAILURE,
+  CONTACT_RESET,
   HIRE_SUBMIT,
   HIRE_SUCCESS,
   HIRE_FAILURE,
+  HIRE_RESET,
 } from './actions';
 
 import { contact, projectRequirements } from '../../models/services';
@@ -20,6 +22,9 @@ function* contactFormHandle({ payload }: AnyAction) {
   } catch (error) {
     yield put({ type: CONTACT_FAILURE, error });
   }
+
+  yield delay(2500);
+  yield put({ type: CONTACT_RESET });
 }
 
 function* hireFormHandle({ payload }: AnyAction) {
@@ -30,6 +35,9 @@ function* hireFormHandle({ payload }: AnyAction) {
   } catch (error) {
     yield put({ type: HIRE_FAILURE, error });
   }
+
+  yield delay(2500);
+  yield put({ type: HIRE_RESET });
 }
 
 export default function* serviceSaga() {

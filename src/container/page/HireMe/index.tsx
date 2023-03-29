@@ -35,10 +35,10 @@ interface IProps {
   };
   action: {
     hireSubmit: (data: any) => void;
-  }
+  };
 }
 
-const HireMe = (props: IProps) => {
+const HireMe = ({ action, hire }: IProps) => {
   const i18n = useIntl();
   const {
     register,
@@ -62,7 +62,7 @@ const HireMe = (props: IProps) => {
     formData.append('project_requirements', data.project_requirements);
     formData.append('project_document', data.project_document[0]);
 
-    props.action.hireSubmit(formData);
+    action.hireSubmit(formData);
   };
 
   return (
@@ -91,7 +91,11 @@ const HireMe = (props: IProps) => {
                 </div>
 
                 <div className="w-full px-4">
-                  <form method="post" encType='multipart/form-data' onSubmit={handleSubmit(onSubmit)}>
+                  <form
+                    method="post"
+                    encType="multipart/form-data"
+                    onSubmit={handleSubmit(onSubmit)}
+                  >
                     <div className="flex flex-wrap -mx-3 mb-6">
                       <div className="w-1/2 px-3">
                         <label
@@ -111,6 +115,13 @@ const HireMe = (props: IProps) => {
                             minLength: 3,
                           })}
                         />
+                        {errors.name && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.name',
+                            })}
+                          </p>
+                        )}
                       </div>
 
                       <div className="w-1/2 px-3">
@@ -131,6 +142,13 @@ const HireMe = (props: IProps) => {
                             minLength: 3,
                           })}
                         />
+                        {errors.email && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.email',
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -153,6 +171,13 @@ const HireMe = (props: IProps) => {
                             minLength: 10,
                           })}
                         />
+                        {errors.phone && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.phone',
+                            })}
+                          </p>
+                        )}
                       </div>
 
                       <div className="w-1/2 px-3">
@@ -171,9 +196,16 @@ const HireMe = (props: IProps) => {
                           {...register('website', {
                             required: false,
                             pattern:
-                              /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/,
+                              /^(https?:\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/,
                           })}
                         />
+                        {errors.website && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.website',
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -196,6 +228,13 @@ const HireMe = (props: IProps) => {
                             minLength: 3,
                           })}
                         />
+                        {errors.company && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.company',
+                            })}
+                          </p>
+                        )}
                       </div>
 
                       <div className="w-1/2 px-3">
@@ -213,9 +252,15 @@ const HireMe = (props: IProps) => {
                           placeholder="Position"
                           {...register('position', {
                             required: false,
-                            minLength: 3,
                           })}
                         />
+                        {errors.position && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.position',
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -238,6 +283,13 @@ const HireMe = (props: IProps) => {
                             minLength: 6,
                           })}
                         />
+                        {errors.project_name && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.project-name',
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -262,6 +314,13 @@ const HireMe = (props: IProps) => {
                               /^([1-9][0-9]{,2}(,[0-9]{3})*|[0-9]+)(\.[0-9]{1,9})?$/,
                           })}
                         />
+                        {errors.project_budget && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.project-budget',
+                            })}
+                          </p>
+                        )}
                       </div>
 
                       <div className="w-1/2 px-3">
@@ -282,6 +341,13 @@ const HireMe = (props: IProps) => {
                             minLength: 3,
                           })}
                         />
+                        {errors.project_timeline && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.project-timeline',
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -304,6 +370,13 @@ const HireMe = (props: IProps) => {
                             minLength: 100,
                           })}
                         />
+                        {errors.project_description && (
+                          <p className="text-red-500 text-xs italic">
+                            {i18n.formatMessage({
+                              id: 'text.project.requirements.form.error.project-description',
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -327,6 +400,13 @@ const HireMe = (props: IProps) => {
                           })}
                         />
                       </div>
+                      {errors.project_requirements && (
+                        <p className="text-red-500 text-xs italic">
+                          {i18n.formatMessage({
+                            id: 'text.project.requirements.form.error.project-requirements',
+                          })}
+                        </p>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap -mx-3 mb-6">
@@ -349,7 +429,25 @@ const HireMe = (props: IProps) => {
                     </div>
 
                     <div className="flex flex-wrap -mx-3 mb-6">
-                      <div className="w-full px-3">
+                      <div className="flex items-center w-full px-3">
+                        <div className="mr-5">
+                          {hire.success && (
+                            <p className="text-green-500 text-sm">
+                              {i18n.formatMessage({
+                                id: 'text.hire.form.success',
+                              })}
+                            </p>
+                          )}
+
+                          {hire.error && (
+                            <p className="text-red-500 text-sm">
+                              {i18n.formatMessage({
+                                id: 'text.hire.form.error',
+                              })}
+                            </p>
+                          )}
+                        </div>
+
                         <div className="flex justify-end w-full px-3">
                           <button
                             type="submit"

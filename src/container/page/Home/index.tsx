@@ -21,6 +21,9 @@ const Home: React.FC = () => {
 
       {/* Achievements Section */}
       <AchievementsSection />
+
+      {/* Experience Section */}
+      {/* <ExperienceSection /> */}
     </React.Fragment>
   );
 }

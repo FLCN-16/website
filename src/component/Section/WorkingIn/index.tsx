@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import { Pagination } from 'swiper';
+import { Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { motion } from 'framer-motion';
 
@@ -21,11 +21,16 @@ const slideImage = {
 };
 
 const workingInSliderConfig = {
-  modules: [Pagination],
+  modules: [Pagination, Autoplay],
   navigation: true,
   slidesPerView: 6,
   scrollbar: {
     draggable: true,
+  },
+  autoplay: {
+    delay: 2500,
+    pauseOnMouseEnter: true,
+    disableOnInteraction: false,
   },
   loop: true,
   pagination: { clickable: true, dynamicBullets: true, dynamicMainBullets: 5 },

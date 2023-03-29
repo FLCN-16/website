@@ -5,9 +5,11 @@ import {
   CONTACT_SUBMIT,
   CONTACT_SUCCESS,
   CONTACT_FAILURE,
+  CONTACT_RESET,
   HIRE_SUBMIT,
   HIRE_SUCCESS,
   HIRE_FAILURE,
+  HIRE_RESET,
 } from './actions';
 
 export const initialState = {
@@ -23,7 +25,7 @@ export const initialState = {
   },
 };
 
-export default (state = initialState, action: AnyAction) =>
+const serviceReducer = (state = initialState, action: AnyAction) =>
   produce(state, (draft) => {
     switch (action.type) {
       case CONTACT_SUBMIT:
@@ -38,6 +40,9 @@ export default (state = initialState, action: AnyAction) =>
         draft.contact.success = false;
         draft.contact.error = action.error;
         break;
+      case CONTACT_RESET:
+        draft.contact = initialState.contact;
+        break;
       case HIRE_SUBMIT:
         draft.hire.loading = true;
         break;
@@ -49,7 +54,13 @@ export default (state = initialState, action: AnyAction) =>
         draft.hire.loading = false;
         draft.hire.success = false;
         draft.hire.error = action.error;
+        break;
+      case HIRE_RESET:
+        draft.hire = initialState.hire;
+        break;
       default:
         break;
     }
   });
+
+export default serviceReducer;

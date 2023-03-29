@@ -32,7 +32,7 @@ interface IProps {
   }
 }
 
-const Contact = (props: IProps) => {
+const Contact = ({ contact, action }: IProps) => {
   const i18n = useIntl();
   const {
     register,
@@ -40,8 +40,7 @@ const Contact = (props: IProps) => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) =>
-    props.action.contactSubmit(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => action.contactSubmit(data);
 
   return (
     <style.Wrapper>
@@ -214,13 +213,31 @@ const Contact = (props: IProps) => {
                   </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-6">
-                  <div className="flex justify-end w-full px-3">
+                  <div className="flex items-center w-full px-3">
+                    <div className='mr-5'>
+                      {contact.success && (
+                        <p className="text-green-500 text-sm">
+                          {i18n.formatMessage({
+                            id: 'text.contact.form.success',
+                          })}
+                        </p>
+                      )}
+
+                      {contact.error && (
+                        <p className="text-red-500 text-sm">
+                          {i18n.formatMessage({
+                            id: 'text.contact.form.error',
+                          })}
+                        </p>
+                      )}
+                    </div>
+
                     <button
                       type="submit"
-                      className="inline-flex items-center bg-gray-700 hover:bg-gray-800 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded uppercase focus:outline-none focus:shadow-outline"
-                      disabled={props.contact.loading}
+                      className="inline-flex items-center bg-gray-700 hover:bg-gray-800 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded uppercase ml-auto focus:outline-none focus:shadow-outline"
+                      disabled={contact.loading}
                     >
-                      {props.contact.loading && <Loading />}
+                      {contact.loading && <Loading />}
                       {i18n.formatMessage({ id: 'text.contact.form.submit' })}
                     </button>
                   </div>
