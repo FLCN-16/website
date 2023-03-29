@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 
 // Containers
 import Layout from '../../container/Layout';
+import TermsAndConditions from '../../container/page/TermsAndConditions';
 
 const TermsPage: NextPage = () => {
   const i18n = useIntl();
@@ -15,7 +16,7 @@ const TermsPage: NextPage = () => {
       </Head>
 
       <Layout>
-
+        <TermsAndConditions />
       </Layout>
     </>
   );

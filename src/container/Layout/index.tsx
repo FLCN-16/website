@@ -21,19 +21,21 @@ interface ILayout extends React.HTMLProps<HTMLDivElement> {
 const Layout = ({ sticky, children }: ILayout) => {
   return (
     <style.Wrapper className="font-sans">
-      {/* Header */}
-      <Header sticky={sticky !== false} />
+      <style.ContentWrapper>
+        {/* Header */}
+        <Header sticky={sticky !== false} />
 
-      {/* Content */}
-      <motion.main
-        variants={variants} // Pass the variant object into Framer Motion
-        initial="hidden" // Set the initial state to variants.hidden
-        animate="enter" // Animated state to variants.enter
-        exit="exit" // Exit state (used later) to variants.exit
-        transition={{ type: 'linear', delay: 0.25 }} // Set the transition to linear
-      >
-        <div className="content">{children}</div>
-      </motion.main>
+        {/* Content */}
+        <motion.main
+          variants={variants} // Pass the variant object into Framer Motion
+          initial="hidden" // Set the initial state to variants.hidden
+          animate="enter" // Animated state to variants.enter
+          exit="exit" // Exit state (used later) to variants.exit
+          transition={{ type: 'linear', delay: 0.25 }} // Set the transition to linear
+        >
+          <div className="content">{children}</div>
+        </motion.main>
+      </style.ContentWrapper>
 
       {/* Footer */}
       <Footer />

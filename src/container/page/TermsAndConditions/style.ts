@@ -5,6 +5,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-export const ContentWrapper = styled.div`
-  min-height: 100vh;
-`;
+export default {
+  Wrapper,
+};
