@@ -44,6 +44,7 @@ const HireMe = ({ action, hire }: IProps) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset: resetForm,
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -64,6 +65,13 @@ const HireMe = ({ action, hire }: IProps) => {
 
     action.hireSubmit(formData);
   };
+
+  // Reset Form On Success
+  React.useEffect(() => {
+    if (hire.success) {
+      resetForm();
+    }
+  }, [hire.success]);
 
   return (
     <style.Wrapper>

@@ -46,6 +46,8 @@
   "text.contact.form.error.email": "Please enter a valid email address.",
   "text.contact.form.error.phone": "Please enter a valid phone number.",
   "text.contact.form.error.message": "Please enter a message.",
+  "text.hire.form.success": "We have successfully Recieved your Project Requirements. Will Connect with you soon.",
+  "text.hire.form.error": "There was an error sending your Project Requirements. Please try again later.",
   "social.facebook": "Facebook",
   "social.twitter": "Twitter",
   "social.linkedin": "LinkedIn",
