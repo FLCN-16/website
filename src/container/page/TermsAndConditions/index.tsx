@@ -16,15 +16,15 @@ const TermsAndConditions = () => {
         <section className="flex flex-col gap-4">
           <h2 className="font-bold text-2xl">AGREEMENT TO OUR LEGAL TERMS</h2>
           <p>
-            We are The Falcon ( '<b>Company</b>', '<b>we</b>', '<b>us</b>', or '
-            <b>our</b>' ) , a company registered in India at Chandigarh,
+            We are The Falcon ( &apos;<b>Company</b>&apos;, &apos;<b>we</b>&apos;, &apos;<b>us</b>&apos;, or &apos;
+            <b>our</b>&apos; ) , a company registered in India at Chandigarh,
             Chandigarh, Punjab 160017.
           </p>
           <p>
-            We operate the website https://thefalcon.dev (the '<b>Site</b>' ) ,
+            We operate the website https://thefalcon.dev (the &apos;<b>Site</b>&apos; ) ,
             as well as any other related products and services that refer or
-            link to these legal terms (the '<b>Legal Terms</b>' ) (collectively,
-            the '<b>Services</b>' ).
+            link to these legal terms (the &apos;<b>Legal Terms</b>&apos; ) (collectively,
+            the &apos;<b>Services</b>&apos; ).
           </p>
           <p>[Website Description Here]</p>
           <p>
@@ -34,8 +34,8 @@ const TermsAndConditions = () => {
           </p>
           <p>
             These Legal Terms constitute a legally binding agreement made
-            between you, whether personally or on behalf of an entity ( '
-            <b>you</b>' ), and The Falcon , concerning your access to and use of
+            between you, whether personally or on behalf of an entity ( &apos;
+            <b>you</b>&apos; ), and The Falcon , concerning your access to and use of
             the Services. You agree that by accessing the Services, you have
             read, understood, and agreed to be bound by all of these Legal
             Terms. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL TERMS, THEN YOU
@@ -174,8 +174,8 @@ const TermsAndConditions = () => {
             in our Services, including all source code, databases,
             functionality, software, website designs, audio, video, text,
             photographs, and graphics in the Services (collectively, the
-            'Content'), as well as the trademarks, service marks, and logos
-            contained therein (the 'Marks').
+            &apos;Content&apos;), as well as the trademarks, service marks, and logos
+            contained therein (the &apos;Marks&apos;).
           </p>
           <p>
             Our Content and Marks are protected by copyright and trademark laws
@@ -184,15 +184,15 @@ const TermsAndConditions = () => {
             world.
           </p>
           <p>
-            The Content and Marks are provided in or through the Services 'AS
-            IS' for your personal, non-commercial use or internal business
+            The Content and Marks are provided in or through the Services &apos;AS
+            IS&apos; for your personal, non-commercial use or internal business
             purpose only.
           </p>
 
           <h4>Your use of our Services</h4>
           <p>
-            Subject to your compliance with these Legal Terms, including the '
-            <a href="#prohibited-activities">PROHIBITED ACTIVITIES</a>' section
+            Subject to your compliance with these Legal Terms, including the &apos;
+            <a href="#prohibited-activities">PROHIBITED ACTIVITIES</a>&apos; section
             below, we grant you a non-exclusive, non-transferable, revocable
             licence to:
           </p>
@@ -242,8 +242,8 @@ const TermsAndConditions = () => {
           <h4>Your submissions</h4>
 
           <p>
-            Please review this section and the '
-            <a href="#prohibited-activities">PROHIBITED ACTIVITIES</a>' section
+            Please review this section and the &apos;
+            <a href="#prohibited-activities">PROHIBITED ACTIVITIES</a>&apos; section
             carefully prior to using our Services to understand the (a) rights
             you give us and (b) obligations you have when you post or upload any
             content through the Services.
@@ -251,7 +251,7 @@ const TermsAndConditions = () => {
           <p>
             <b>Submissions</b>: By directly sending us any question, comment,
             suggestion, idea, feedback, or other information about the Services
-            ('Submissions'), you agree to assign to us all intellectual property
+            (&apos;Submissions&apos;), you agree to assign to us all intellectual property
             rights in such Submission. You agree that we shall own this
             Submission and be entitled to its unrestricted use and dissemination
             for any lawful purpose, commercial or otherwise, without
@@ -264,8 +264,8 @@ const TermsAndConditions = () => {
 
           <ul className="list-disc pl-4">
             <li>
-              confirm that you have read and agree with our '
-              <a href="#prohibited-activities">PROHIBITED ACTIVITIES</a>' and
+              confirm that you have read and agree with our &apos;
+              <a href="#prohibited-activities">PROHIBITED ACTIVITIES</a>&apos; and
               will not post, send, publish, upload, or transmit through the
               Services any Submission that is illegal, harassing, hateful,
               harmful, defamatory, obscene, bullying, abusive, discriminatory,
@@ -391,9 +391,9 @@ const TermsAndConditions = () => {
               Upload or transmit (or attempt to upload or to transmit) any
               material that acts as a passive or active information collection
               or transmission mechanism, including without limitation, clear
-              graphics interchange formats ('gifs'), 1×1 pixels, web bugs,
+              graphics interchange formats (&apos;gifs&apos;), 1×1 pixels, web bugs,
               cookies, or other similar devices (sometimes referred to as
-              'spyware' or 'passive collection mechanisms' or 'pcms').
+              &apos;spyware&apos; or &apos;passive collection mechanisms&apos; or &apos;pcms&apos;).
             </li>
             <li>
               Interfere with, disrupt, or create an undue burden on the Services
@@ -409,7 +409,7 @@ const TermsAndConditions = () => {
               Services.
             </li>
             <li>
-              Copy or adapt the Services' software, including but not limited to
+              Copy or adapt the Services&apos; software, including but not limited to
               Flash, PHP, HTML, JavaScript, or other code.
             </li>
             <li>
@@ -459,10 +459,10 @@ const TermsAndConditions = () => {
             materials to us or on the Services, including but not limited to
             text, writings, video, audio, photographs, graphics, comments,
             suggestions, or personal information or other material
-            (collectively, 'Contributions'). Contributions may be viewable by
+            (collectively, &apos;Contributions&apos;). Contributions may be viewable by
             other users of the Services and through third-party websites. As
             such, any Contributions you transmit may be treated in accordance
-            with the Services' Privacy Policy. When you create or make available
+            with the Services&apos; Privacy Policy. When you create or make available
             any Contributions, you thereby represent and warrant that:
           </p>
           <ul className="list-disc pl-4">
@@ -574,11 +574,11 @@ const TermsAndConditions = () => {
 
           <p>
             The Services may contain (or you may be sent via the Site) links to
-            other websites ('Third-Party Websites') as well as articles,
+            other websites (&apos;Third-Party Websites&apos;) as well as articles,
             photographs, text, graphics, pictures, designs, music, sound, video,
             information, applications, software, and other content or items
-            belonging to or originating from third parties ('Third-Party
-            Content'). Such Third-Party Websites and Third-Party Content are not
+            belonging to or originating from third parties (&apos;Third-Party
+            Content&apos;). Such Third-Party Websites and Third-Party Content are not
             investigated, monitored, or checked for accuracy, appropriateness,
             or completeness by us, and we are not responsible for any
             Third-Party Websites accessed through the Services or any
@@ -736,9 +736,9 @@ const TermsAndConditions = () => {
           <h4>Informal Negotiations</h4>
           <p>
             To expedite resolution and control the cost of any dispute,
-            controversy, or claim related to these Legal Terms (each a 'Dispute'
-            and collectively, the 'Disputes') brought by either you or us
-            (individually, a 'Party' and collectively, the 'Parties'), the
+            controversy, or claim related to these Legal Terms (each a &apos;Dispute&apos;
+            and collectively, the &apos;Disputes&apos;) brought by either you or us
+            (individually, a &apos;Party&apos; and collectively, the &apos;Parties&apos;), the
             Parties agree to first attempt to negotiate any Dispute (except
             those Disputes expressly provided below) informally for at least
             thirty (30) days before initiating arbitration. Such informal
@@ -815,7 +815,7 @@ const TermsAndConditions = () => {
             THEREOF, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
             MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
             NON-INFRINGEMENT. WE MAKE NO WARRANTIES OR REPRESENTATIONS ABOUT THE
-            ACCURACY OR COMPLETENESS OF THE SERVICES' CONTENT OR THE CONTENT OF
+            ACCURACY OR COMPLETENESS OF THE SERVICES&apos; CONTENT OR THE CONTENT OF
             ANY WEBSITES OR MOBILE APPLICATIONS LINKED TO THE SERVICES AND WE
             WILL ASSUME NO LIABILITY OR RESPONSIBILITY FOR ANY (1) ERRORS,
             MISTAKES, OR INACCURACIES OF CONTENT AND MATERIALS, (2) PERSONAL
