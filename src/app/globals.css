@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+/* ============================================================
+   @theme — Design Tokens → Tailwind Utilities
+   ============================================================ */
+@theme {
+  /* Font Families */
+  --font-headline: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-mono: var(--font-space-grotesk), monospace;
+
+  --font-space-grotesk: var(--font-space-grotesk), sans-serif;
+
+  /* Font Sizes */
+  --text-display-lg: 3.5rem; /* Space Grotesk / Display LG  */
+  --text-display-lg--line-height: 1.05;
+
+  --text-display-md: 2.5rem;
+  --text-display-md--line-height: 1;
+
+  --text-title-md: 1.125rem; /* Space Grotesk / Title MD    */
+  --text-title-md--line-height: 1.35;
+
+  --text-body-md: 0.875rem; /* Inter / Body MD             */
+  --text-body-md--line-height: 1.6;
+
+  --text-label-sm: 0.75rem; /* Inter / Label SM            */
+  --text-label-sm--line-height: 1.4;
+  --text-label-sm--letter-spacing: 0.1em;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Letter Spacing */
+  --tracking-label: 0.1em;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0em;
+
+  /* Primary Scale */
+  --color-primary: #000000; /* Primary            */
+  --color-primary-container: #3e3e3e; /* Primary Container  */
+  --color-on-primary: #ffffff; /* On Primary         */
+
+  /* Surface Scale */
+  --color-surface-highest: #e3e3e2; /* Surface Highest    */
+  --color-surface-container: #eeeeee; /* Surface Container  */
+  --color-surface-low: #f3f3f4; /* Surface Low        */
+  --color-surface: #f8f8f8; /* Base Surface       */
+  --color-on-surface: #000000; /* On Surface         */
+
+  /* Outline / Border */
+  --color-outline: #000000; /* Outline            */
+  --color-outline-variant: #c4c4c4; /* Outline Variant    */
+
+  /* Semantic Aliases (maps to Tailwind utilities) */
+  --color-background: var(--color-surface);
+  --color-foreground: var(--color-primary);
+
+  --color-nav-link: #64748b;
+  --color-nav-link-active: #2b4c7e;
+
+  --color-light-blue: #2b4c7e;
+  --color-dark-blue: #1e293b;
+
+  --spacing-px: 1px;
+  --spacing-0: 0px;
+  --spacing-02: 0.5rem; /* SPACING_02  →  8px  */
+  --spacing-04: 1rem; /* SPACING_04  → 16px  */
+  --spacing-06: 1.5rem; /* SPACING_06  → 24px  */
+  --spacing-08: 2rem; /* SPACING_08  → 32px  */
+  --spacing-10: 2.5rem; /* SPACING_10  → 40px  */
+  --spacing-12: 3rem; /* SPACING_12  → 48px  */
+  --spacing-16: 4rem; /* SPACING_16  → 64px  */
+  --spacing-20: 5rem; /* SPACING_20  → 80px  */
+  --spacing-24: 6rem; /* SPACING_24  → 96px  */
+
+  --radius-none: 0rem;
+  --radius-xs: 0.0625rem; /* 1px  */
+  --radius-sm: 0.125rem; /* 2px  */
+  --radius-md: 0.25rem; /* 4px  */
+
+  --border-width-DEFAULT: 1px;
+  --border-width-2: 2px;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.06);
+  --shadow-DEFAULT: 0 1px 4px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 12px 0 rgb(0 0 0 / 0.12);
+
+  --blur-glass: 20px;
+  --blur-none: 0px;
+  --blur-sm: 4px;
+  --blur-md: 8px;
+
+  --opacity-glass: 0.7; /* Glassmorphism anchor overlay */
+  --opacity-disabled: 0.38;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --z-index-base: 0;
+  --z-index-raised: 10;
+  --z-index-nav: 100; /* LAYER_01_NAV          */
+  --z-index-glass: 200; /* Glassmorphism Anchor  */
+  --z-index-overlay: 300;
+  --z-index-modal: 400;
+
+  --ease-structural: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 250ms;
+}
+
+/* ============================================================
+   BASE LAYER — Global Resets & Typography Defaults
+   ============================================================ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: 1.6;
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+  }
+}
+
+/* ============================================================
+   UTILITY LAYER — Custom one-off helpers
+   ============================================================ */
+@layer utilities {
+  /* Typography utilities */
+  .font-headline {
+    font-family: var(--font-headline);
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+  .text-display-lg {
+    font-family: var(--font-headline);
+    font-size: var(--text-display-lg);
+    line-height: var(--text-display-lg--line-height);
+    letter-spacing: var(--tracking-tight);
+    font-weight: var(--font-weight-bold);
+  }
+  .text-title-md {
+    font-family: var(--font-headline);
+    font-size: var(--text-title-md);
+    line-height: var(--text-title-md--line-height);
+    font-weight: var(--font-weight-bold);
+  }
+  .text-body-md {
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    font-weight: var(--font-weight-regular);
+  }
+  .text-label-sm {
+    font-family: var(--font-body);
+    font-size: var(--text-label-sm);
+    letter-spacing: var(--text-label-sm--letter-spacing);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+  }
+
+  /* Glassmorphism utility */
+  .backdrop-blur-glass {
+    backdrop-filter: blur(var(--blur-glass));
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+  }
+
+  /* Spacing scale helpers */
+  .gap-grid {
+    gap: var(--spacing-04);
+  }
+  .grid-8px {
+    gap: 0.5rem;
+  } /* 8px base unit */
+
+  /* Structural border */
+  .border-structural {
+    border: var(--border-width-DEFAULT) solid var(--color-outline);
+  }
+  .border-structural-2 {
+    border: var(--border-width-2) solid var(--color-outline);
+  }
+}
