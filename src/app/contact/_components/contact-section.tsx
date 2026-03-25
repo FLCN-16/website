@@ -82,11 +82,7 @@ export default function ContactSection() {
 
           {/* Stats */}
           <div className="flex flex-col gap-08">
-            <StatRow
-              icon={<SignalIcon />}
-              label="AVAILABILITY"
-              value={"2 / 2 Project Slots Filled for Q2. Waitlist open for Q3."}
-            />
+            <StatRow icon={<SignalIcon />} label="AVAILABILITY" value="Open for Exiting Opportunity." />
             <StatRow icon={<TargetIcon />} label="DEPLOYMENT_BASE" value="Punjab, India / Remote [UTC+5.5]" />
           </div>
 
