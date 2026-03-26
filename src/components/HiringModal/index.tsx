@@ -7,7 +7,7 @@ import { Loader2, Paperclip, X } from "lucide-react";
 
 import { type HiringState, sendHiringEmail } from "@/actions/hiring";
 
-const MODAL_DELAY_MS = 5000;
+const MODAL_DELAY_MS = 15000;
 const STORAGE_KEY = "@falcon/hiring-modal-seen";
 
 function SuccessMessage() {

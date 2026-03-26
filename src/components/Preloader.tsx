@@ -87,10 +87,11 @@ export default function Preloader() {
         .to(
           logoWrap,
           {
-            y: -18,
+            y: -24,
             opacity: 0,
-            scale: 1.02,
-            duration: 0.5,
+            scale: 1.5,
+            duration: 0.6,
+            ease: "power2.in",
           },
           "+=0.2",
         )
@@ -137,24 +138,27 @@ export default function Preloader() {
 
       <div
         ref={logoWrapRef}
-        className="max-w-preloader-logo relative flex w-full flex-col items-center gap-06 px-06"
+        className="max-w-preloader-logo relative flex w-full flex-col items-center gap-06 px-06 opacity-0"
       >
         <Logo className="text-primary" pathClassName="fill-current" />
         <div className="flex flex-col items-center gap-03">
           <p className="font-headline text-title-md font-bold tracking-tight text-primary uppercase sm:text-title-lg">
             The Falcon
           </p>
-          <p ref={captionRef} className="font-mono text-label-sm tracking-label text-nav-link">
+          <p
+            ref={captionRef}
+            className="font-mono text-label-sm tracking-label text-nav-link opacity-0"
+          >
             Preparing interface
           </p>
           <div
             ref={progressTrackRef}
-            className="w-preloader-progress mt-02 flex items-center gap-03"
+            className="w-preloader-progress mt-02 flex items-center gap-03 opacity-0"
           >
             <div className="relative h-px flex-1 overflow-hidden bg-outline-variant">
               <div
                 ref={progressFillRef}
-                className="absolute inset-y-0 left-0 w-full bg-primary-accent"
+                className="absolute inset-y-0 left-0 w-full origin-left scale-x-0 bg-primary-accent"
               />
             </div>
             <span className="font-mono text-label-sm tracking-label text-outline">Boot</span>
