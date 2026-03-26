@@ -38,7 +38,7 @@ export async function sendHiringEmail(
 
   const { error } = await resend.emails.send({
     from: "Hiring Alert <noreply@thefalcon.dev>",
-    to: "hello@thefalcon.dev",
+    to: process.env.EMAIL_TO!,
     replyTo: email,
     subject: `🔴 [HIGH PRIORITY] Hiring opportunity from ${email}`,
     react: HiringEmail({
@@ -57,7 +57,10 @@ export async function sendHiringEmail(
     }),
   });
 
-  if (error) return { error: "Failed to send. Please try again." };
+  if (error) {
+    console.error("Resend Error (Hiring):", error);
+    return { error: error.message || "Failed to send. Please try again." };
+  }
 
   return { success: true };
 }

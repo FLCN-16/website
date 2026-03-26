@@ -16,12 +16,14 @@ import {
 interface ContactEmailProps {
   name: string;
   email: string;
+  inquiry?: string;
   message: string;
 }
 
 export const previewProps: ContactEmailProps = {
   name: "Alex Rivera",
   email: "alex.rivera@example.com",
+  inquiry: "System Architecture Design",
   message:
     "Hey, I came across your portfolio and I'm really impressed with the work you've done on the Falcon platform. I'm building something similar and would love to chat about potential collaboration. Are you available for a quick call next week?",
 };
@@ -59,7 +61,7 @@ const tailwindConfig = {
   },
 };
 
-function ContactEmail({ name, email, message }: ContactEmailProps) {
+function ContactEmail({ name, email, inquiry, message }: ContactEmailProps) {
   return (
     <Html lang="en">
       <Head>
@@ -119,7 +121,7 @@ function ContactEmail({ name, email, message }: ContactEmailProps) {
                       </Text>
                     </Column>
                   </Row>
-                  <Row>
+                  <Row className="mb-2.5">
                     <Column className="w-18">
                       <Text className="m-0 font-mono text-label-sm tracking-label text-outline uppercase">
                         Email
@@ -128,6 +130,18 @@ function ContactEmail({ name, email, message }: ContactEmailProps) {
                     <Column>
                       <Text className="m-0 font-headline text-label-md font-medium text-primary-accent">
                         {email}
+                      </Text>
+                    </Column>
+                  </Row>
+                  <Row>
+                    <Column className="w-18">
+                      <Text className="m-0 font-mono text-label-sm tracking-label text-outline uppercase">
+                        Inquiry
+                      </Text>
+                    </Column>
+                    <Column>
+                      <Text className="m-0 font-headline text-label-md font-medium text-on-surface">
+                        {inquiry || "Not specified"}
                       </Text>
                     </Column>
                   </Row>

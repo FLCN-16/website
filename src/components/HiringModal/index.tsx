@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 
 import { gsap } from "gsap";
 import { Loader2, Paperclip, X } from "lucide-react";
@@ -172,12 +172,25 @@ export default function HiringModal() {
                 Hiring or have an opportunity?
               </h2>
               <p className="mt-2 font-body text-body-md text-primary-muted">
-                If you're building something that demands precision and are looking for a Front-End
-                Technical Lead, I'd love to hear about it.
+                If you're building something that demands precision and are looking for a full-time
+                Front-End Technical Lead, I'd love to hear about it.
+                <span className="mt-2 block text-sm text-primary-muted/80">
+                  <span className="font-semibold">Please note:</span> I am only open to considering
+                  full-time opportunities (no freelance or contract work).
+                </span>
               </p>
             </div>
 
-            <form action={formAction} className="flex flex-col gap-4">
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                startTransition(() => {
+                  formAction(formData);
+                });
+              }}
+            >
               {/* Error State */}
               {state?.error && (
                 <div className="border border-red-200 bg-red-50 p-3 text-sm text-red-600">

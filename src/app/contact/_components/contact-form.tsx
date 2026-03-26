@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { startTransition, useActionState, useEffect, useRef } from "react";
 
 import { Send } from "lucide-react";
 
@@ -42,10 +42,25 @@ const inquiryOptions = [
 /* ── Form ── */
 
 export default function ContactForm() {
-  const [, action, pending] = useActionState(sendContactEmail, {});
+  const [state, action, pending] = useActionState(sendContactEmail, {});
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state?.success) {
+      formRef.current?.reset();
+    }
+  }, [state]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    startTransition(() => {
+      action(formData);
+    });
+  };
 
   return (
-    <form className="flex flex-col gap-08" action={action} method="POST">
+    <form ref={formRef} className="flex flex-col gap-08" onSubmit={handleSubmit}>
       {/* Row — Name + Email */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <FieldWrapper label="INPUT.NAME">
@@ -59,6 +74,7 @@ export default function ContactForm() {
               "placeholder:text-outline",
               "focus:outline-none",
             )}
+            required
           />
         </FieldWrapper>
 
@@ -73,6 +89,7 @@ export default function ContactForm() {
               "placeholder:text-outline",
               "focus:outline-none",
             )}
+            required
           />
         </FieldWrapper>
       </div>
@@ -99,7 +116,7 @@ export default function ContactForm() {
       {/* Textarea — Project Brief */}
       <FieldWrapper label="TEXT.PROJECT_BRIEF">
         <textarea
-          name="brief"
+          name="message"
           rows={7}
           placeholder="Detailed structural challenges..."
           className={cn(
@@ -108,6 +125,7 @@ export default function ContactForm() {
             "placeholder:text-outline",
             "focus:outline-none",
           )}
+          required
         />
       </FieldWrapper>
 
@@ -127,10 +145,20 @@ export default function ContactForm() {
           <Send size={16} style={{ transform: "rotate(-18deg)" }} />
         </button>
 
-        {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
-        <span className="font-mono text-label-sm tracking-label text-nav-link">
-          // VERIFY_DATA_INTEGRITY
-        </span>
+        {state?.error ? (
+          <span className="font-mono text-label-sm tracking-label text-[#ef4444]">
+            ERR // {state.error.toUpperCase()}
+          </span>
+        ) : state?.success ? (
+          <span className="font-mono text-label-sm tracking-label text-[#10b981]">
+            SYS // TRANSMISSION_SUCCESSFUL
+          </span>
+        ) : (
+          /* eslint-disable-next-line react/jsx-no-comment-textnodes */
+          <span className="font-mono text-label-sm tracking-label text-nav-link">
+            // VERIFY_DATA_INTEGRITY
+          </span>
+        )}
       </div>
     </form>
   );

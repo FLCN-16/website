@@ -1,14 +1,15 @@
-/* eslint-disable @next/next/no-img-element */
+import type { LucideIcon } from "lucide-react";
+
 import SectionEyebrow from "./section-eyebrow";
 import { infrastructureItems } from "./stack-content";
 
 function InfrastructureCard({
-  icon,
+  icon: Icon,
   title,
   description,
   level,
 }: Readonly<{
-  icon: string;
+  icon: LucideIcon;
   title: string;
   description: string;
   level: number;
@@ -16,13 +17,13 @@ function InfrastructureCard({
   return (
     <article className="flex flex-col gap-04">
       <div className="flex items-center gap-03">
-        <img src={icon} alt="" aria-hidden="true" className="size-4.5 shrink-0 object-contain" />
+        <Icon className="size-5 shrink-0 text-primary-accent" strokeWidth={2} />
         <h3 className="font-headline text-title-md font-semibold text-primary">{title}</h3>
       </div>
       <p className="max-w-stack-card font-body text-body-md text-primary-container">
         {description}
       </p>
-      <div className="h-1 w-full rounded-full bg-surface-low">
+      <div className="h-1 w-full rounded-full bg-surface-highest">
         <div className="h-full rounded-full bg-primary" style={{ width: `${level}%` }} />
       </div>
     </article>

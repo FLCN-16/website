@@ -11,6 +11,7 @@ import { resend } from "@/lib/resend";
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.email("Invalid email"),
+  inquiry: z.string().optional(),
   message: z.string().min(10, "Message too short"),
 });
 
@@ -22,12 +23,13 @@ export async function sendContactEmail(_prev: State, formData: FormData): Promis
   const parsed = schema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
+    inquiry: formData.get("inquiry"),
     message: formData.get("message"),
   });
 
   if (!parsed.success) return { error: parsed.error.message };
 
-  const { name, email, message } = parsed.data;
+  const { name, email, inquiry, message } = parsed.data;
 
   // Read CV — non-blocking; attach if available
   let resumeBuffer: Buffer | undefined;
@@ -41,10 +43,10 @@ export async function sendContactEmail(_prev: State, formData: FormData): Promis
     // To me — new message notification + CV attached
     resend.emails.send({
       from: "Contact <noreply@thefalcon.dev>",
-      to: "hello@thefalcon.dev",
+      to: process.env.EMAIL_TO!,
       replyTo: email,
       subject: `New message from ${name}`,
-      react: ContactEmail({ name, email, message }),
+      react: ContactEmail({ name, email, inquiry, message }),
       ...(resumeBuffer && {
         attachments: [
           {

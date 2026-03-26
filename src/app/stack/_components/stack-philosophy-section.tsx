@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
+import { Compass } from "lucide-react";
+
 import SectionEyebrow from "./section-eyebrow";
-import { PHILOSOPHY_ICON } from "./stack-content";
 
 export default function StackPhilosophySection() {
   return (
@@ -14,12 +14,7 @@ export default function StackPhilosophySection() {
         </div>
       </div>
       <div className="flex flex-col gap-08">
-        <img
-          src={PHILOSOPHY_ICON}
-          alt=""
-          aria-hidden="true"
-          className="icon-philosophy object-contain"
-        />
+        <Compass size={32} strokeWidth={1.5} className="text-primary-accent" aria-hidden="true" />
         <p className="max-w-stack-prose font-body text-body-lg font-light text-primary lg:text-title-md">
           Architecture should be boring. Use proven technologies that scale predictably and maintain
           technical integrity through rigid type safety and automated testing.

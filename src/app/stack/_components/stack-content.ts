@@ -1,44 +1,45 @@
-export const PHILOSOPHY_ICON =
-  "https://www.figma.com/api/mcp/asset/78c865c2-5443-48b9-bfd9-e5f3c4c043fe";
-export const GO_ICON = "https://www.figma.com/api/mcp/asset/93e83df4-47b8-4e23-936e-3470b4af38f2";
-export const KUBERNETES_ICON =
-  "https://www.figma.com/api/mcp/asset/57071037-2d61-48da-bdc3-db5eba403a75";
-export const AWS_ICON = "https://www.figma.com/api/mcp/asset/2af90c96-0978-4a4e-b853-f809be4a1f3a";
-export const POSTGRES_ICON =
-  "https://www.figma.com/api/mcp/asset/24c27afa-8839-41b1-ba9f-cd8bddeefa99";
+import { Box, Cloud, FileCode2, type LucideIcon, Server } from "lucide-react";
+
 export const SYSTEM_DIAGRAM_IMAGE =
   "https://www.figma.com/api/mcp/asset/0d5e536f-556d-47a1-9bc1-159bc94857e1";
 
-export const infrastructureItems = [
+type InfrastructureItem = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  level: number;
+};
+
+export const infrastructureItems: InfrastructureItem[] = [
   {
-    icon: GO_ICON,
+    icon: Server,
     title: "Node.js / Express",
     description:
       "API development, backend services, and production-ready integrations supporting responsive web products.",
     level: 92,
   },
   {
-    icon: KUBERNETES_ICON,
+    icon: Cloud,
     title: "AWS / GCP / Linux",
     description:
       "Cloud deployment environments, systems administration, and delivery support across modern web stacks.",
     level: 88,
   },
   {
-    icon: AWS_ICON,
+    icon: Box,
     title: "Docker / CI-CD",
     description:
       "Delivery automation, deployment acceleration, and collaboration with DevOps pipelines using Jenkins and Docker.",
     level: 86,
   },
   {
-    icon: POSTGRES_ICON,
+    icon: FileCode2,
     title: "Python / PHP",
     description:
       "Platform and service development across Django, Laravel, and related full-stack implementations.",
     level: 84,
   },
-] as const;
+];
 
 export const frontendItems = [
   {
