@@ -1,32 +1,36 @@
-import { cn } from "@/lib/utils";
+import { cn, getCareerYears, getExperienceLabel } from "@/lib/utils";
 
 function ContactPageHeader() {
   return (
-    <section className="relative w-full bg-surface flex flex-col justify-between mx-auto max-w-screen-xl px-8 py-12 overflow-hidden">
+    <section className="relative mx-auto flex w-full max-w-screen-xl flex-col justify-between overflow-hidden bg-surface px-6 py-10 sm:px-8 sm:py-12">
       {/* ── Headline ── */}
       <div>
         <h1
           className={cn(
-            "font-headline font-black uppercase tracking-tighter leading-none",
-            "text-dark-blue text-7xl md:text-8xl lg:text-9xl",
+            "font-headline leading-none font-black tracking-tighter uppercase",
+            "text-primary",
           )}
+          style={{ fontSize: "clamp(3rem, 10vw, 8rem)" }}
         >
           TECHNICAL
           <br />
-          <span className="text-transparent [-webkit-text-stroke:2px_#1E293B]">BLUEPRINT</span>.
+          <span className="text-stroke-primary text-transparent">BLUEPRINT</span>.
         </h1>
       </div>
 
       {/* ── Body ── */}
-      <p className="font-body text-body-md text-primary-container max-w-sm mt-12">
-        Engineering rigorous software architectures and technical leadership strategies. Every line of code, every
-        architectural decision, documented and executed with precision.
+      <p className="mt-8 max-w-xl font-body text-body-lg text-primary-container sm:mt-12">
+        Front-End Technical Lead with {getExperienceLabel()} delivering high-performance
+        applications, guiding cross-functional teams, and turning complex product requirements into
+        reliable, scalable execution.
       </p>
 
-      {/* ── Metadata stamp (bottom-right) ── */}
-      <div className="absolute bottom-08 right-08 text-right">
-        <p className="font-mono text-label-sm tracking-label text-outline-variant">COORD: 52.5200° N, 13.4050° E</p>
-        <p className="font-mono text-label-sm tracking-label text-outline-variant">SHEET NO: A-101</p>
+      {/* ── Metadata stamp ── */}
+      <div className="mt-8 flex items-end justify-between sm:mt-0 lg:absolute lg:right-08 lg:bottom-08 lg:text-right">
+        <p className="font-mono text-label-sm tracking-label text-nav-link">
+          BASE: Jalandhar, Punjab, India
+        </p>
+        <p className="font-mono text-label-sm tracking-label text-nav-link">EXP: {getCareerYears()}+ YEARS</p>
       </div>
     </section>
   );

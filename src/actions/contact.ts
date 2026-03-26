@@ -1,9 +1,10 @@
-// actions/send-email.ts
 "use server";
 
 import { z } from "zod";
-import { resend } from "@/lib/resend";
+
+import ConfirmationEmail from "@/emails/confirmation";
 import ContactEmail from "@/emails/contact";
+import { resend } from "@/lib/resend";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -13,10 +14,7 @@ const schema = z.object({
 
 type State = { success?: boolean; error?: string };
 
-export async function sendContactEmail(
-  _prev: State,
-  formData: FormData,
-): Promise<State> {
+export async function sendContactEmail(_prev: State, formData: FormData): Promise<State> {
   const parsed = schema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -27,14 +25,27 @@ export async function sendContactEmail(
 
   const { name, email, message } = parsed.data;
 
-  const { error } = await resend.emails.send({
-    from: "Contact <noreply@yourdomain.com>",
-    to: "you@yourcompany.com",
-    replyTo: email,
-    subject: `New message from ${name}`,
-    react: ContactEmail({ name, email, message }),
-  });
+  const [notification, confirmation] = await Promise.all([
+    // To me — new message notification
+    resend.emails.send({
+      from: "Contact <noreply@thefalcon.dev>",
+      to: "hello@thefalcon.dev",
+      replyTo: email,
+      subject: `New message from ${name}`,
+      react: ContactEmail({ name, email, message }),
+    }),
+    // To sender — confirmation receipt
+    resend.emails.send({
+      from: "The Falcon <noreply@thefalcon.dev>",
+      to: email,
+      subject: "Got your message",
+      react: ConfirmationEmail({ name, message }),
+    }),
+  ]);
 
-  if (error) return { error: "Failed to send. Please try again." };
+  if (notification.error || confirmation.error) {
+    return { error: "Failed to send. Please try again." };
+  }
+
   return { success: true };
 }
