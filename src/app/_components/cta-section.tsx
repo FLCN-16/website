@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 
 export default function CtaSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -67,6 +67,14 @@ export default function CtaSection() {
               View my work
               <ArrowRight size={16} />
             </Link>
+            <a
+              href="/files/Rishabh Kumar's Resume.pdf"
+              download="Rishabh_Kumar_Resume.pdf"
+              className="duration-base inline-flex items-center gap-3 border border-outline px-8 py-4 font-headline text-label-md font-bold tracking-tight text-primary-container transition-colors hover:bg-surface-highest"
+            >
+              Download Résumé
+              <Download size={16} />
+            </a>
           </div>
         </div>
       </div>

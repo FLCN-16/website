@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 import { createMetadata } from "@/lib/metadata";
 
-import StackCtaSection from "./_components/stack-cta-section";
-import StackFrontendSection from "./_components/stack-frontend-section";
-import StackInfrastructureSection from "./_components/stack-infrastructure-section";
-import StackMatrixSection from "./_components/stack-matrix-section";
 import StackPageHeader from "./_components/stack-page-header";
-import StackPhilosophySection from "./_components/stack-philosophy-section";
-import StackVisualizationSection from "./_components/stack-visualization-section";
+
+const StackPhilosophySection = dynamic(() => import("./_components/stack-philosophy-section"));
+const StackInfrastructureSection = dynamic(
+  () => import("./_components/stack-infrastructure-section"),
+);
+const StackFrontendSection = dynamic(() => import("./_components/stack-frontend-section"));
+const StackVisualizationSection = dynamic(
+  () => import("./_components/stack-visualization-section"),
+);
+const StackMatrixSection = dynamic(() => import("./_components/stack-matrix-section"));
+const StackCtaSection = dynamic(() => import("./_components/stack-cta-section"));
 
 export const metadata: Metadata = createMetadata({
   title: "Stack",

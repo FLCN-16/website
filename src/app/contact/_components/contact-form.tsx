@@ -112,7 +112,7 @@ export default function ContactForm() {
       </FieldWrapper>
 
       {/* Submit row */}
-      <div className="flex items-center gap-06">
+      <div className="flex flex-col items-center gap-06 md:flex-row">
         <button
           type="submit"
           className={cn(

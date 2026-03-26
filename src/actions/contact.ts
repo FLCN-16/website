@@ -1,5 +1,7 @@
 "use server";
 
+import fs from "fs/promises";
+import path from "path";
 import { z } from "zod";
 
 import ConfirmationEmail from "@/emails/confirmation";
@@ -14,6 +16,8 @@ const schema = z.object({
 
 type State = { success?: boolean; error?: string };
 
+const RESUME_PATH = path.join(process.cwd(), "public", "files", "Rishabh Kumar's Resume.pdf");
+
 export async function sendContactEmail(_prev: State, formData: FormData): Promise<State> {
   const parsed = schema.safeParse({
     name: formData.get("name"),
@@ -25,14 +29,30 @@ export async function sendContactEmail(_prev: State, formData: FormData): Promis
 
   const { name, email, message } = parsed.data;
 
+  // Read CV — non-blocking; attach if available
+  let resumeBuffer: Buffer | undefined;
+  try {
+    resumeBuffer = await fs.readFile(RESUME_PATH);
+  } catch {
+    // File not found or unreadable — send without attachment
+  }
+
   const [notification, confirmation] = await Promise.all([
-    // To me — new message notification
+    // To me — new message notification + CV attached
     resend.emails.send({
       from: "Contact <noreply@thefalcon.dev>",
       to: "hello@thefalcon.dev",
       replyTo: email,
       subject: `New message from ${name}`,
       react: ContactEmail({ name, email, message }),
+      ...(resumeBuffer && {
+        attachments: [
+          {
+            filename: "Rishabh_Kumar_Resume.pdf",
+            content: resumeBuffer,
+          },
+        ],
+      }),
     }),
     // To sender — confirmation receipt
     resend.emails.send({

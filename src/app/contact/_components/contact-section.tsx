@@ -1,4 +1,4 @@
-import { Activity, ExternalLink, MapPin } from "lucide-react";
+import { Activity, Download, ExternalLink, MapPin } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -85,6 +85,14 @@ export default function ContactSection() {
               className="duration-base font-headline text-title-md font-bold break-all text-light-blue transition-opacity hover:opacity-70"
             >
               me@thefalcon.dev
+            </a>
+            <a
+              href="/files/Rishabh Kumar's Resume.pdf"
+              download="Rishabh_Kumar_Resume.pdf"
+              className="duration-base mt-02 inline-flex items-center gap-02 font-mono text-label-sm tracking-label text-nav-link transition-opacity hover:opacity-70"
+            >
+              <Download size={12} />
+              DOWNLOAD_RESUME
             </a>
           </div>
 

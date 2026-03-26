@@ -26,11 +26,13 @@ function ContactPageHeader() {
       </p>
 
       {/* ── Metadata stamp ── */}
-      <div className="mt-8 flex items-end justify-between sm:mt-0 lg:absolute lg:right-08 lg:bottom-08 lg:text-right">
+      <div className="mt-8 flex items-end justify-between gap-x-6 sm:mt-0 lg:absolute lg:right-08 lg:bottom-08 lg:text-right">
         <p className="font-mono text-label-sm tracking-label text-nav-link">
           BASE: Jalandhar, Punjab, India
         </p>
-        <p className="font-mono text-label-sm tracking-label text-nav-link">EXP: {getCareerYears()}+ YEARS</p>
+        <p className="font-mono text-label-sm tracking-label text-nav-link">
+          EXP: {getCareerYears()}+ YEARS
+        </p>
       </div>
     </section>
   );

@@ -14,10 +14,9 @@ function Footer() {
   return (
     <footer className="w-full border-t border-outline-variant bg-surface">
       <div className="mx-auto max-w-screen-xl px-6 lg:px-8">
-        {/* ── Main row ── */}
         <div className="flex flex-col gap-3 py-5 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:py-0">
           <p className="font-mono text-label-sm tracking-label text-outline">
-            © 2026 THEFALCON.DEV&nbsp;&nbsp;//&nbsp;&nbsp;ALL_SPECIFICATIONS_RESERVED.
+            © 2026 THEFALCON.DEV
           </p>
           <ul className="flex items-center gap-6">
             {socialLinks.map(({ label, href }) => (

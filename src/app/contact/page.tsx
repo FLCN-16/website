@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 import { createMetadata } from "@/lib/metadata";
 
 import ContactPageHeader from "./_components/contact-page-header";
-import ContactSection from "./_components/contact-section";
+
+const ContactSection = dynamic(() => import("./_components/contact-section"));
 
 export const metadata: Metadata = createMetadata({
   title: "Contact",
