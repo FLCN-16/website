@@ -19,10 +19,9 @@ export default function NavItem({ id, label, href }: NavItemProps) {
     <Link
       href={href}
       className={cn(
-        "text-label-md tracking-label text-nav-link border-b-1",
-        "pb-px transition-colors duration-base border-transparent",
+        "duration-base border-b border-transparent pb-px text-label-md text-nav-link transition-colors",
         "hover:text-nav-link-active",
-        isActive && "border-nav-link-active text-nav-link-active font-semibold",
+        isActive && "border-nav-link-active font-semibold text-nav-link-active",
       )}
     >
       {id}.&nbsp;{label}

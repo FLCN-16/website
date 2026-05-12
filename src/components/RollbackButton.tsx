@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+
 import { cn } from "@/lib/utils";
 
 export default function RollbackButton() {
@@ -10,8 +11,8 @@ export default function RollbackButton() {
       onClick={() => router.back()}
       className={cn(
         "px-08 py-04 font-mono text-label-sm tracking-label",
-        "border border-outline text-primary bg-transparent",
-        "transition-colors duration-base hover:bg-surface-highest"
+        "border border-outline bg-transparent text-primary",
+        "duration-base transition-colors hover:bg-surface-highest",
       )}
     >
       ROLLBACK_TRANSACTION
