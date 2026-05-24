@@ -129,7 +129,7 @@ export default function Preloader() {
   return (
     <div
       ref={rootRef}
-      className="z-preloader pointer-events-none fixed inset-0 flex items-center justify-center overflow-hidden bg-surface text-primary"
+      className="z-preloader pointer-events-none fixed inset-0 flex select-none items-center justify-center overflow-hidden bg-surface text-primary"
     >
       <div className="bg-preloader-glow absolute inset-0" />
       <div className="bg-tech-grid absolute inset-0 opacity-40" />

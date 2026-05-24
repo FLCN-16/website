@@ -5,7 +5,7 @@
     "domain": "EDTECH",
     "title": "STUDY.IQ",
     "tags": ["NEXT.JS", "REACT", "CCAVENUE", "PAYTM"],
-    "image": "https://www.figma.com/api/mcp/asset/58be9b3f-dd79-4f7f-9f7d-f35b35127113",
+    "image": "/work/study-iq.svg",
     "icon": "payment",
     "briefing": {
       "badge": "TECHNICAL BRIEFING",
@@ -30,7 +30,7 @@
     "domain": "GAMING",
     "title": "GUARDIAN SERVICES",
     "tags": ["WORDPRESS", "GOOGLE CLOUD", "WooCommerce"],
-    "image": "https://www.figma.com/api/mcp/asset/20c6ec84-abcc-410d-805f-e9c2dc9824f8",
+    "image": "/work/guardian-services.svg",
     "icon": "infrastructure",
     "briefing": {
       "badge": "TECHNICAL BRIEFING",
@@ -55,7 +55,7 @@
     "domain": "MANUFACTURING",
     "title": "AEGIS AV CABINETS",
     "tags": ["WORDPRESS", "DIVI", "VISUAL BUILDER"],
-    "image": "https://www.figma.com/api/mcp/asset/f6ec2b88-8154-4fad-a96d-97eb1b7f2d0d",
+    "image": "/work/aegis-av-cabinets.svg",
     "icon": "ai",
     "briefing": {
       "badge": "TECHNICAL BRIEFING",

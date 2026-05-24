@@ -18,7 +18,7 @@ export default function StackCtaSection() {
         href="/contact"
         className="duration-base mt-08 inline-flex bg-surface-highest px-08 py-04 font-mono text-label-sm text-primary uppercase transition-colors hover:bg-white lg:mt-0"
       >
-        View Technical Blog
+        Get In Touch
       </Link>
     </section>
   );
