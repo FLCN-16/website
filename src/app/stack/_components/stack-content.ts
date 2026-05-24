@@ -1,7 +1,6 @@
 import { Box, Cloud, FileCode2, type LucideIcon, Server } from "lucide-react";
 
-export const SYSTEM_DIAGRAM_IMAGE =
-  "https://www.figma.com/api/mcp/asset/0d5e536f-556d-47a1-9bc1-159bc94857e1";
+export const SYSTEM_DIAGRAM_IMAGE = "/stack/system-diagram.svg";
 
 type InfrastructureItem = {
   icon: LucideIcon;

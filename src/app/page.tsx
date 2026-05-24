@@ -10,6 +10,9 @@ const StatsSection = dynamic(() => import("./_components/stats-section"));
 const PhilosophySection = dynamic(() => import("./_components/philosophy-section"));
 const JourneySection = dynamic(() => import("./_components/journey-section"));
 const SelectedWorkSection = dynamic(() => import("./_components/selected-work-section"));
+const AwardsSection = dynamic(() => import("./_components/awards-section"));
+const CertificationsSection = dynamic(() => import("./_components/certifications-section"));
+const EducationSection = dynamic(() => import("./_components/education-section"));
 const CtaSection = dynamic(() => import("./_components/cta-section"));
 const HiringModal = dynamic(() => import("@/components/HiringModal"));
 
@@ -26,6 +29,9 @@ function AboutPage() {
       <PhilosophySection />
       <JourneySection />
       <SelectedWorkSection />
+      <AwardsSection />
+      <CertificationsSection />
+      <EducationSection />
       <CtaSection />
       <HiringModal />
     </>

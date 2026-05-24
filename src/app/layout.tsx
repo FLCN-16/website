@@ -47,7 +47,7 @@ export default function RootLayout({
       {process.env.NEXT_PUBLIC_GTM_ID && (
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
       )}
-      <body className="flex min-h-full flex-col bg-surface font-body text-on-surface select-none">
+      <body className="flex min-h-full flex-col bg-surface font-body text-on-surface">
         <Preloader />
         <Header />
         <main className="flex min-h-screen flex-col">{children}</main>

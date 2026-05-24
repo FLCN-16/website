@@ -204,7 +204,7 @@ function HeroHeader() {
             />
             <div
               ref={pixelMaskRef}
-              className="pointer-events-none absolute inset-0 grid grid-cols-8 grid-rows-9 overflow-hidden"
+              className="pointer-events-none absolute inset-0 grid select-none grid-cols-8 grid-rows-9 overflow-hidden"
               aria-hidden="true"
             >
               {pixelCells.map((_, index) => (

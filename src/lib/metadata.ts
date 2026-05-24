@@ -5,8 +5,7 @@ import { getExperienceLabel } from "./utils";
 const BASE_URL = "https://thefalcon.dev";
 const SITE_NAME = "The Falcon";
 const DEFAULT_DESCRIPTION = `Front-End Technical Lead with ${getExperienceLabel()} building high-performance applications. Open to new roles and open source collaboration.`;
-const DEFAULT_OG_IMAGE = "/og-image.png";
-const TWITTER_HANDLE = "@flcn-16";
+const DEFAULT_OG_IMAGE = "/opengraph-image.png";
 
 interface CreateMetadataOptions {
   /** Page title — appended to site name via the root template "%s | The Falcon" */
@@ -64,7 +63,6 @@ export function createMetadata({
       card: "summary_large_image",
       title: title ? `${title} | ${SITE_NAME}` : SITE_NAME,
       description,
-      creator: TWITTER_HANDLE,
       images: [ogImageUrl],
     },
     robots: noIndex

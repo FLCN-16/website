@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <rect width="800" height="500" fill="#0f1923"/>
+  <!-- Grid -->
+  <line x1="0" y1="125" x2="800" y2="125" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="0" y1="250" x2="800" y2="250" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="0" y1="375" x2="800" y2="375" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="200" y1="0" x2="200" y2="500" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="500" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="500" stroke="#1e2a3a" stroke-width="1"/>
+  <!-- Cabinet wireframe -->
+  <rect x="200" y="80" width="400" height="300" fill="none" stroke="#3d5166" stroke-width="1.5"/>
+  <rect x="220" y="100" width="360" height="260" fill="none" stroke="#2d3f52" stroke-width="1"/>
+  <!-- Panel divisions -->
+  <line x1="200" y1="200" x2="600" y2="200" stroke="#2d3f52" stroke-width="1"/>
+  <line x1="200" y1="280" x2="600" y2="280" stroke="#2d3f52" stroke-width="1"/>
+  <line x1="400" y1="80" x2="400" y2="380" stroke="#2d3f52" stroke-width="1"/>
+  <!-- Grid dots -->
+  <circle cx="300" cy="150" r="2" fill="#3d5166"/>
+  <circle cx="500" cy="150" r="2" fill="#3d5166"/>
+  <circle cx="300" cy="240" r="2" fill="#3d5166"/>
+  <circle cx="500" cy="240" r="2" fill="#3d5166"/>
+  <circle cx="300" cy="330" r="2" fill="#3d5166"/>
+  <circle cx="500" cy="330" r="2" fill="#3d5166"/>
+  <!-- Stats -->
+  <text x="80" y="430" font-family="monospace" font-size="11" fill="#3d5166" letter-spacing="3">AEGIS AV CABINETS · MANUFACTURING · DIVI / WORDPRESS</text>
+  <text x="80" y="60" font-family="monospace" font-size="28" font-weight="bold" fill="#c5d5de" letter-spacing="-1">25%</text>
+  <text x="80" y="80" font-family="monospace" font-size="10" fill="#4a6275" letter-spacing="2">DESIGN PRECISION BOOST</text>
+</svg>
