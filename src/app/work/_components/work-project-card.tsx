@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { ArrowRight, BarChart2, CreditCard, ScanLine } from "lucide-react";
+import { ArrowRight, BarChart2, CreditCard, LayoutGrid, ScanLine, ShieldCheck, Smartphone } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -13,6 +13,9 @@ const iconMap = {
   payment: CreditCard,
   infrastructure: ScanLine,
   ai: BarChart2,
+  extension: LayoutGrid,
+  mobile: Smartphone,
+  security: ShieldCheck,
 };
 
 export default function WorkProjectCard({ project }: Readonly<{ project: WorkProject }>) {

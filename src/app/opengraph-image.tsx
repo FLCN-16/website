@@ -1,7 +1,9 @@
 import { ImageResponse } from "next/og";
 
+import { getExperienceLabel } from "@/lib/utils";
+
 export const runtime = "edge";
-export const alt = "The Falcon — Rishabh Kumar, Front-End Technical Lead";
+export const alt = "The Falcon — Rishabh Kumar, Technical Lead — Full Stack";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -46,7 +48,7 @@ export default function OgImage() {
               letterSpacing: "4px",
             }}
           >
-            FRONTEND TECHNICAL LEAD // PRODUCT, PLATFORM, DELIVERY
+            TECHNICAL LEAD // FULL-STACK · AGENTS · DELIVERY
           </span>
           <div
             style={{
@@ -70,8 +72,8 @@ export default function OgImage() {
               maxWidth: "680px",
             }}
           >
-            Rishabh Kumar — 8+ years orchestrating cross-functional teams to deliver
-            high-performance applications.
+            Rishabh Kumar — {getExperienceLabel()} shipping production web, mobile, and browser
+            apps. Agentic AI builder and merged Next.js contributor.
           </div>
         </div>
 

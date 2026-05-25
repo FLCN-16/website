@@ -20,7 +20,8 @@ export interface WorkProject {
   title: string;
   tags: string[];
   image: string;
-  icon: "payment" | "infrastructure" | "ai";
+  icon: "payment" | "infrastructure" | "ai" | "extension" | "mobile" | "security";
+  externalUrl?: string;
   briefing: WorkBriefing;
 }
 

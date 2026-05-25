@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, BarChart2, CreditCard, ScanLine } from "lucide-react";
+import { ArrowRight, BarChart2, CreditCard, LayoutGrid, ScanLine, ShieldCheck, Smartphone } from "lucide-react";
 
 import { workProjects } from "@/app/work/_components/work-content";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,9 @@ const iconMap = {
   payment: CreditCard,
   infrastructure: ScanLine,
   ai: BarChart2,
+  extension: LayoutGrid,
+  mobile: Smartphone,
+  security: ShieldCheck,
 };
 
 export default function SelectedWorkSection() {

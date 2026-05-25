@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <rect width="800" height="500" fill="#0f1923"/>
+  <!-- Grid lines -->
+  <line x1="0" y1="125" x2="800" y2="125" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="0" y1="250" x2="800" y2="250" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="0" y1="375" x2="800" y2="375" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="200" y1="0" x2="200" y2="500" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="500" stroke="#1e2a3a" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="500" stroke="#1e2a3a" stroke-width="1"/>
+  <!-- Phone outline 1 -->
+  <rect x="100" y="80" width="100" height="180" fill="#1e2a3a" rx="10" stroke="#3d5166" stroke-width="2"/>
+  <rect x="110" y="95" width="80" height="130" fill="#2d3f52" rx="2"/>
+  <rect x="140" y="235" width="20" height="5" fill="#3d5166" rx="2"/>
+  <!-- Phone screen content -->
+  <rect x="118" y="103" width="64" height="10" fill="#4a6275" rx="1"/>
+  <rect x="118" y="118" width="40" height="8" fill="#3d5166" rx="1"/>
+  <rect x="118" y="130" width="55" height="8" fill="#3d5166" rx="1"/>
+  <rect x="118" y="145" width="64" height="25" fill="#2d3f52" rx="2" stroke="#3d5166" stroke-width="1"/>
+  <!-- Phone outline 2 -->
+  <rect x="240" y="80" width="100" height="180" fill="#1e2a3a" rx="10" stroke="#3d5166" stroke-width="2"/>
+  <rect x="250" y="95" width="80" height="130" fill="#2d3f52" rx="2"/>
+  <rect x="280" y="235" width="20" height="5" fill="#3d5166" rx="2"/>
+  <!-- Phone screen content 2 -->
+  <rect x="258" y="103" width="64" height="10" fill="#5a7385" rx="1"/>
+  <rect x="258" y="118" width="50" height="8" fill="#3d5166" rx="1"/>
+  <rect x="258" y="130" width="64" height="50" fill="#2d3f52" rx="2" stroke="#3d5166" stroke-width="1"/>
+  <!-- App count labels -->
+  <text x="500" y="130" font-family="monospace" font-size="28" font-weight="bold" fill="#c5d5de" letter-spacing="-1">4+</text>
+  <text x="500" y="152" font-family="monospace" font-size="10" fill="#4a6275" letter-spacing="2">APPS SHIPPED</text>
+  <text x="500" y="190" font-family="monospace" font-size="28" font-weight="bold" fill="#c5d5de" letter-spacing="-1">2</text>
+  <text x="500" y="212" font-family="monospace" font-size="10" fill="#4a6275" letter-spacing="2">PLATFORMS</text>
+  <!-- Labels -->
+  <text x="400" y="470" font-family="monospace" font-size="11" fill="#3d5166" text-anchor="middle" letter-spacing="4">FLUTTER APPS · MOBILE · GOOGLE PLAY</text>
+</svg>
