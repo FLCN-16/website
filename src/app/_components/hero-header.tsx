@@ -151,7 +151,7 @@ function HeroHeader() {
             data-hero-label
             className="font-mono text-label-sm tracking-label text-primary-container"
           >
-            FRONTEND TECHNICAL LEAD // PRODUCT, PLATFORM, DELIVERY
+            TECHNICAL LEAD // FULL-STACK · AGENTS · DELIVERY
           </p>
 
           {/* Headline */}
@@ -178,9 +178,10 @@ function HeroHeader() {
             data-hero-body
             className="my-4 max-w-lg font-body text-body-md text-primary-container lg:my-6"
           >
-            Front-End Technical Lead with {getExperienceLabel()} orchestrating cross-functional
-            teams to deliver high-performance applications, optimize operations, and improve user
-            engagement through transformative solutions. Open to new roles and open source
+            Full-Stack Technical Lead with {getExperienceLabel()} shipping production web, mobile,
+            and browser apps end-to-end — React/Next.js on the front, Node/Nest/Python/PHP on the
+            back, Docker and CI/CD in delivery. Builder of agentic AI systems with LangChain and
+            Mastra AI, and a merged contributor to Next.js. Open to new roles and open source
             collaboration.
           </p>
         </div>

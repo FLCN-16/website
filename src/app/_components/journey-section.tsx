@@ -30,23 +30,23 @@ const journeyItems: JourneyItem[] = [
     company: "DigiMantra Innovations Pvt. Ltd.",
     period: "Feb 2022 — Present",
     description:
-      "Spearheaded strategic partnerships and technical solutions that improved ROI by 25%, boosted product performance by 40%, reduced costs by 20%, and accelerated feature delivery by 35% while leading Agile execution across multiple client engagements.",
+      "Lead full-stack architecture and delivery across 2–3 concurrent client engagements spanning React/Next.js, Node/Nest, and Python services with containerized deployments. Technically lead a team of 6 engineers, review 6–8 PRs weekly, and have ramped up 4–6 hires while mentoring 10+ junior and mid-level engineers across frontend, backend, and DevOps. Introduced LangChain-based internal tooling to accelerate code review and documentation.",
     tags: [
       { label: "LEADERSHIP", featured: true },
-      { label: "ROI", featured: false },
-      { label: "DELIVERY", featured: false },
+      { label: "MENTORING", featured: false },
+      { label: "AI TOOLING", featured: false },
     ],
   },
   {
     role: "Senior Full Stack Web Developer",
     company: "Erosteps Pvt. Ltd.",
-    period: "March 2017 — 2022",
+    period: "March 2017 — Feb 2022",
     description:
-      "Implemented RESTful services, built responsive products with Vue.js and Lumen, integrated third-party APIs, and partnered with DevOps on Jenkins and Docker pipelines to achieve 40% faster deployments and stronger system responsiveness.",
+      "Shipped 8–10 production full-stack apps on Vue.js with Lumen and Node.js APIs — designed RESTful services, schemas, and server-side business logic. Integrated Stripe, PayPal, Razorpay, and WooCommerce for payments and commerce. Built Jenkins + Docker pipelines for auto-deploys, and shipped 2 cross-platform Flutter apps to the Google Play Store.",
     tags: [
       { label: "FULL STACK", featured: true },
-      { label: "CI/CD", featured: false },
-      { label: "APIs", featured: false },
+      { label: "PAYMENTS", featured: false },
+      { label: "MOBILE", featured: false },
     ],
   },
 ];

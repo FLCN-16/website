@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const socialLinks = [
   { label: "LINKED_IN", href: "https://linkedin.com/in/rishabh-kumar-flcn16" },
+  { label: "GITHUB", href: "https://github.com/FLCN-16" },
   { label: "PORTFOLIO", href: "https://thefalcon.dev" },
 ];
 

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     default: "The Falcon",
     template: "%s | The Falcon",
   },
-  description: `Front-End Technical Lead with ${getExperienceLabel()} building high-performance applications. Open to new roles and open source collaboration.`,
+  description: `Full-Stack Technical Lead with ${getExperienceLabel()} shipping production web, mobile, and browser apps end-to-end. Builder of agentic AI systems and merged Next.js contributor. Open to new roles.`,
   metadataBase: new URL("https://thefalcon.dev"),
 };
 

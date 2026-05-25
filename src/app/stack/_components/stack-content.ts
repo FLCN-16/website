@@ -1,4 +1,4 @@
-import { Box, Cloud, FileCode2, type LucideIcon, Server } from "lucide-react";
+import { Bot, Box, Cloud, FileCode2, type LucideIcon, Server, Smartphone } from "lucide-react";
 
 export const SYSTEM_DIAGRAM_IMAGE = "/stack/system-diagram.svg";
 
@@ -12,9 +12,9 @@ type InfrastructureItem = {
 export const infrastructureItems: InfrastructureItem[] = [
   {
     icon: Server,
-    title: "Node.js / Express",
+    title: "Node.js / Nest.js",
     description:
-      "API development, backend services, and production-ready integrations supporting responsive web products.",
+      "API development, backend services, and production-ready integrations — Express for flexibility, Nest.js for structured enterprise services.",
     level: 92,
   },
   {
@@ -28,15 +28,29 @@ export const infrastructureItems: InfrastructureItem[] = [
     icon: Box,
     title: "Docker / CI-CD",
     description:
-      "Delivery automation, deployment acceleration, and collaboration with DevOps pipelines using Jenkins and Docker.",
+      "Delivery automation and deployment acceleration using Jenkins and Docker pipelines for continuous integration and deployment.",
     level: 86,
   },
   {
     icon: FileCode2,
     title: "Python / PHP",
     description:
-      "Platform and service development across Django, Laravel, and related full-stack implementations.",
+      "Platform and service development across Flask, Django, Laravel, Lumen, and related full-stack implementations.",
     level: 84,
+  },
+  {
+    icon: Bot,
+    title: "LangChain / Mastra AI",
+    description:
+      "Agentic systems, tool-calling pipelines, and LLM integration — building AI-powered workflows and internal tooling.",
+    level: 82,
+  },
+  {
+    icon: Smartphone,
+    title: "Flutter / Dart",
+    description:
+      "Cross-platform mobile apps shipped to the Google Play Store — finance, commerce, and productivity applications.",
+    level: 78,
   },
 ];
 
@@ -57,6 +71,11 @@ export const frontendItems = [
     level: "MODERN",
     badgeClassName: "bg-surface-highest text-primary",
   },
+  {
+    label: "Vue.js",
+    level: "PROFICIENT",
+    badgeClassName: "bg-surface-container text-primary-container",
+  },
 ] as const;
 
 export const matrixRows = [
@@ -72,7 +91,22 @@ export const matrixRows = [
   },
   {
     discipline: "Delivery",
-    tooling: "Linux, AWS, GCP, Docker, CI/CD, Jira, Confluence, Trello",
+    tooling: "Linux, AWS, GCP, Docker, Jenkins, CI/CD, Jira, Confluence",
+    filledDots: 4,
+  },
+  {
+    discipline: "Databases",
+    tooling: "MongoDB, PostgreSQL, MySQL",
+    filledDots: 4,
+  },
+  {
+    discipline: "Mobile",
+    tooling: "Flutter, Dart",
+    filledDots: 4,
+  },
+  {
+    discipline: "AI & Agents",
+    tooling: "LangChain, Mastra AI, LLM Integration",
     filledDots: 4,
   },
 ] as const;
