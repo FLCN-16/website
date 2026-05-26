@@ -68,7 +68,7 @@ export default function CtaSection() {
               <ArrowRight size={16} />
             </Link>
             <a
-              href="/files/Rishabh Kumar's Resume.pdf"
+              href="/files/rishabh-kumar-resume.pdf"
               download="Rishabh_Kumar_Resume.pdf"
               className="duration-base inline-flex items-center gap-3 border border-outline px-8 py-4 font-headline text-label-md font-bold tracking-tight text-primary-container transition-colors hover:bg-surface-highest"
             >

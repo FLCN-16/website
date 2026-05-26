@@ -3,9 +3,13 @@ import { cn, getCareerYears, getExperienceLabel } from "@/lib/utils";
 function ContactPageHeader() {
   return (
     <section className="relative mx-auto flex w-full max-w-screen-xl flex-col justify-between overflow-hidden bg-surface px-6 py-10 sm:px-8 sm:py-12">
+      {/* ── Semantic H1 for crawlers + screen readers ── */}
+      <h1 className="sr-only">Contact Rishabh Kumar — Full-Stack Technical Lead</h1>
+
       {/* ── Headline ── */}
       <div>
-        <h1
+        <p
+          aria-hidden="true"
           className={cn(
             "font-headline leading-none font-black tracking-tighter uppercase",
             "text-primary",
@@ -15,7 +19,7 @@ function ContactPageHeader() {
           TECHNICAL
           <br />
           <span className="text-stroke-primary text-transparent">BLUEPRINT</span>.
-        </h1>
+        </p>
       </div>
 
       {/* ── Body ── */}

@@ -47,7 +47,7 @@ function Header() {
 
         {/* ── Desktop resume CTA ── */}
         <a
-          href="/files/Rishabh Kumar's Resume.pdf"
+          href="/files/rishabh-kumar-resume.pdf"
           download="Rishabh_Kumar_Resume.pdf"
           className="duration-base hidden border border-primary px-04 py-02 font-mono text-label-sm tracking-label text-primary transition-colors hover:bg-primary hover:text-on-primary lg:inline-flex"
         >
@@ -78,7 +78,7 @@ function Header() {
             </ul>
             <div className="mt-4 border-t border-outline-variant pt-4">
               <a
-                href="/files/Rishabh Kumar's Resume.pdf"
+                href="/files/rishabh-kumar-resume.pdf"
                 download="Rishabh_Kumar_Resume.pdf"
                 className="duration-base inline-flex border border-primary px-4 py-2 font-mono text-label-sm tracking-label text-primary transition-colors hover:bg-primary hover:text-on-primary"
                 onClick={() => setOpen(false)}

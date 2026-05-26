@@ -1,4 +1,4 @@
-import { Activity, Download, ExternalLink, MapPin } from "lucide-react";
+import { Activity, Clock, Download, ExternalLink, MapPin } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -72,13 +72,18 @@ export default function ContactSection() {
               label="DEPLOYMENT_BASE"
               value="Punjab, India / Remote [UTC+5.5]"
             />
+            <StatRow
+              icon={<Clock size={16} />}
+              label="RESPONSE_TIME"
+              value="Typically within 24h during UTC+5:30 working hours."
+            />
           </div>
 
           {/* Divider */}
           <div className="h-px w-full bg-outline-variant" />
 
           {/* Comm link */}
-          <div className="flex flex-col gap-02">
+          <address className="flex flex-col gap-02 not-italic">
             <span className="font-mono text-label-sm tracking-label text-nav-link">COMM_LINK</span>
             <a
               href="mailto:me@thefalcon.dev"
@@ -87,14 +92,14 @@ export default function ContactSection() {
               me@thefalcon.dev
             </a>
             <a
-              href="/files/Rishabh Kumar's Resume.pdf"
+              href="/files/rishabh-kumar-resume.pdf"
               download="Rishabh_Kumar_Resume.pdf"
               className="duration-base mt-02 inline-flex items-center gap-02 font-mono text-label-sm tracking-label text-nav-link transition-opacity hover:opacity-70"
             >
               <Download size={12} />
               DOWNLOAD_RESUME
             </a>
-          </div>
+          </address>
 
           {/* Social index */}
           <div className="flex flex-col gap-04">
@@ -105,7 +110,7 @@ export default function ContactSection() {
               label="LINKEDIN_PROTOCOLS"
               href="https://linkedin.com/in/rishabh-kumar-flcn16"
             />
-            <SocialLink label="PORTFOLIO_SITE" href="https://thefalcon.dev" />
+            <SocialLink label="GITHUB_REPOS" href="https://github.com/FLCN-16" />
           </div>
 
           {/* Metadata footer */}

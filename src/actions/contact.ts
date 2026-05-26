@@ -13,11 +13,12 @@ const schema = z.object({
   email: z.email("Invalid email"),
   inquiry: z.string().optional(),
   message: z.string().min(10, "Message too short"),
+  company: z.string().optional(),
 });
 
 type State = { success?: boolean; error?: string };
 
-const RESUME_PATH = path.join(process.cwd(), "public", "files", "Rishabh Kumar's Resume.pdf");
+const RESUME_PATH = path.join(process.cwd(), "public", "files", "rishabh-kumar-resume.pdf");
 
 export async function sendContactEmail(_prev: State, formData: FormData): Promise<State> {
   const parsed = schema.safeParse({
@@ -25,11 +26,13 @@ export async function sendContactEmail(_prev: State, formData: FormData): Promis
     email: formData.get("email"),
     inquiry: formData.get("inquiry"),
     message: formData.get("message"),
+    company: formData.get("company"),
   });
 
   if (!parsed.success) return { error: parsed.error.message };
 
-  const { name, email, inquiry, message } = parsed.data;
+  const { name, email, inquiry, message, company } = parsed.data;
+  if (company) return { success: true };
 
   // Read CV — non-blocking; attach if available
   let resumeBuffer: Buffer | undefined;
