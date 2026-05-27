@@ -6,17 +6,11 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Download01Icon } from "@hugeicons/core-free-icons"
 import { Separator } from "@/components/ui/separator"
 import { ThemeToggle } from "@/components/site/theme-toggle"
-
-const navLinks = [
-  { num: "01", label: "ABOUT", href: "/" },
-  { num: "02", label: "WORK", href: "/work" },
-  { num: "03", label: "STACK", href: "/stack" },
-  { num: "04", label: "WRITING", href: "/writing" },
-  { num: "05", label: "CONTACT", href: "/contact" },
-]
+import { NAV_LINKS } from "@/lib/navigation"
 
 export function Rail() {
   const pathname = usePathname()
+  const year = new Date().getFullYear()
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-[200px] border-r border-border bg-background hidden md:flex flex-col p-6 gap-4">
@@ -40,7 +34,7 @@ export function Rail() {
 
       {/* Nav links */}
       <nav className="flex flex-col gap-1 flex-1">
-        {navLinks.map(({ num, label, href }) => {
+        {NAV_LINKS.map(({ num, label, href }) => {
           const isActive = pathname === href
 
           return (
@@ -89,7 +83,7 @@ export function Rail() {
           JALANDHAR · UTC+5.5
         </span>
         <span className="font-mono text-xs text-muted-foreground">
-          © {new Date().getFullYear()} THEFALCON.DEV
+          © {year} THEFALCON.DEV
         </span>
       </div>
     </aside>

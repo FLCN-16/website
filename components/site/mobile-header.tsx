@@ -12,21 +12,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/site/theme-toggle"
-
-const navLinks = [
-  { num: "01", label: "ABOUT", href: "/" },
-  { num: "02", label: "WORK", href: "/work" },
-  { num: "03", label: "STACK", href: "/stack" },
-  { num: "04", label: "WRITING", href: "/writing" },
-  { num: "05", label: "CONTACT", href: "/contact" },
-]
+import { NAV_LINKS } from "@/lib/navigation"
 
 export function MobileHeader() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border bg-background flex md:hidden">
+    <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border bg-background md:hidden">
       <span className="font-mono font-semibold text-sm text-foreground">
         FLCN
       </span>
@@ -56,7 +49,7 @@ export function MobileHeader() {
 
           {/* Nav links */}
           <nav className="flex flex-col gap-1 flex-1">
-            {navLinks.map(({ num, label, href }) => {
+            {NAV_LINKS.map(({ num, label, href }) => {
               const isActive = pathname === href
 
               return (
