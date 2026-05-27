@@ -1,146 +1,156 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-
-interface Post {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt?: string;
-  tags?: Array<{ tag: string }>;
-  publishedAt?: string;
-  readingTime?: number;
-}
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { Input } from "@/components/ui/input"
+import { BentoCard, type Post } from "@/components/writing/bento-card"
+import { FilterPanel, type ReadingTime } from "@/components/writing/filter-panel"
+import { FilterDrawer } from "@/components/writing/filter-drawer"
 
 interface WritingListClientProps {
-  initialPosts: Post[];
-  allTags: string[];
+  initialPosts: Post[]
+  allTags: string[]
+  allYears: string[]
 }
 
-async function fetchPosts(search: string, tag: string): Promise<Post[]> {
-  const params = new URLSearchParams();
-  params.set("where[status][equals]", "published");
-  params.set("limit", "50");
-  params.set("sort", "-publishedAt");
-  if (search) params.set("where[title][contains]", search);
-  if (tag) params.set("where[tags.tag][equals]", tag);
+async function fetchPosts(search: string, singleTag: string): Promise<Post[]> {
+  const qs = new URLSearchParams()
+  qs.set("where[status][equals]", "published")
+  qs.set("limit", "50")
+  qs.set("sort", "-publishedAt")
+  if (search) qs.set("where[title][contains]", search)
+  if (singleTag) qs.set("where[tags.tag][equals]", singleTag)
 
-  const res = await fetch(`/api/posts?${params.toString()}`);
-  if (!res.ok) throw new Error("Failed to fetch posts");
-  const data = await res.json();
-  return data.docs as Post[];
+  const res = await fetch(`/api/posts?${qs.toString()}`)
+  if (!res.ok) throw new Error("Failed to fetch posts")
+  const data = await res.json()
+  return data.docs as Post[]
 }
 
-export function WritingListClient({ initialPosts, allTags }: WritingListClientProps) {
-  const [search, setSearch] = useState("");
-  const [activeTag, setActiveTag] = useState("");
+function applyLocalFilters(
+  posts: Post[],
+  tags: string[],
+  year: string | null,
+  readingTime: ReadingTime | null,
+): Post[] {
+  return posts.filter((post) => {
+    if (tags.length > 1) {
+      const postTags = post.tags?.map((t) => t.tag) ?? []
+      if (!tags.some((tag) => postTags.includes(tag))) return false
+    }
 
-  const isFiltering = search.length > 0 || activeTag.length > 0;
+    if (year) {
+      if (!post.publishedAt) return false
+      if (new Date(post.publishedAt).getFullYear().toString() !== year) return false
+    }
 
-  const { data: filteredPosts } = useQuery({
-    queryKey: ["posts", search, activeTag],
-    queryFn: () => fetchPosts(search, activeTag),
-    enabled: isFiltering,
+    if (readingTime && post.readingTime !== undefined) {
+      const rt = post.readingTime
+      if (readingTime === "short" && rt > 5) return false
+      if (readingTime === "medium" && (rt <= 5 || rt > 15)) return false
+      if (readingTime === "long" && rt <= 15) return false
+    }
+
+    return true
+  })
+}
+
+export function WritingListClient({ initialPosts, allTags, allYears }: WritingListClientProps) {
+  const [search, setSearch] = useState("")
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [selectedYear, setSelectedYear] = useState<string | null>(null)
+  const [selectedReadingTime, setSelectedReadingTime] = useState<ReadingTime | null>(null)
+
+  const serverTag = selectedTags.length === 1 ? selectedTags[0] : ""
+  const isServerFiltering = search.length > 0 || serverTag.length > 0
+
+  const { data: serverPosts } = useQuery({
+    queryKey: ["posts", search, serverTag],
+    queryFn: () => fetchPosts(search, serverTag),
+    enabled: isServerFiltering,
     placeholderData: initialPosts,
-  });
+  })
 
-  const posts = isFiltering ? (filteredPosts ?? initialPosts) : initialPosts;
+  const rawPosts = isServerFiltering ? (serverPosts ?? initialPosts) : initialPosts
+  const posts = applyLocalFilters(rawPosts, selectedTags, selectedYear, selectedReadingTime)
+
+  const activeFilterCount =
+    selectedTags.length + (selectedYear ? 1 : 0) + (selectedReadingTime ? 1 : 0)
+
+  function toggleTag(tag: string) {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
+    )
+  }
+
+  function clearAll() {
+    setSelectedTags([])
+    setSelectedYear(null)
+    setSelectedReadingTime(null)
+  }
+
+  const filterProps = {
+    allTags,
+    allYears,
+    selectedTags,
+    selectedYear,
+    selectedReadingTime,
+    activeFilterCount,
+    onTagToggle: toggleTag,
+    onYearSelect: setSelectedYear,
+    onReadingTimeSelect: setSelectedReadingTime,
+    onClearAll: clearAll,
+  }
+
+  const [heroPost, ...restPosts] = posts
 
   return (
     <div>
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-8">
-        <Input
-          placeholder="Search articles…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="sm:max-w-xs font-mono text-sm"
-        />
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setActiveTag("")}
-            className={cn(
-              "text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full border transition-colors",
-              activeTag === ""
-                ? "bg-foreground text-background border-foreground"
-                : "border-border text-muted-foreground hover:text-foreground",
-            )}
-          >
-            All
-          </button>
-          {allTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => setActiveTag(tag === activeTag ? "" : tag)}
-              className={cn(
-                "text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded-full border transition-colors",
-                activeTag === tag
-                  ? "bg-foreground text-background border-foreground"
-                  : "border-border text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+      {/* Search */}
+      <Input
+        placeholder="Search articles…"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="font-mono text-sm"
+      />
+
+      {/* Mobile filter trigger */}
+      <div className="flex justify-end mt-3 md:hidden">
+        <FilterDrawer {...filterProps} />
       </div>
 
-      {/* Post list */}
-      {posts.length === 0 ? (
-        <p className="font-mono text-sm text-muted-foreground">No articles found.</p>
-      ) : (
-        <ul className="divide-y divide-border">
-          {posts.map((post) => (
-            <li key={post.id}>
-              <Link
-                href={`/writing/${post.slug}`}
-                className="group flex flex-col gap-1.5 py-6 hover:bg-muted/30 -mx-4 px-4 rounded-lg transition-colors"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <h2 className="text-base font-semibold group-hover:text-primary transition-colors">
-                    {post.title}
-                  </h2>
-                  <span className="shrink-0 font-mono text-xs text-muted-foreground">
-                    {post.publishedAt
-                      ? new Date(post.publishedAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })
-                      : "—"}
-                  </span>
-                </div>
+      {/* Two-zone layout */}
+      <div className="flex gap-10 items-start mt-8">
+        {/* Bento masonry */}
+        <div className="flex-1 min-w-0">
+          {posts.length === 0 ? (
+            <p className="font-mono text-sm text-muted-foreground">
+              No articles match your filters.
+            </p>
+          ) : (
+            <>
+              {/* Hero card */}
+              {heroPost && <BentoCard post={heroPost} variant="hero" />}
 
-                {post.excerpt && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
-                )}
-
-                <div className="flex items-center gap-3 mt-1">
-                  {post.readingTime && (
-                    <span className="font-mono text-xs text-muted-foreground">
-                      {post.readingTime} min read
-                    </span>
-                  )}
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="flex gap-1.5 flex-wrap">
-                      {post.tags.map(({ tag }) => (
-                        <Badge key={tag} variant="secondary" className="font-mono text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
+              {/* Masonry grid */}
+              {restPosts.length > 0 && (
+                <div className="mt-4 columns-1 sm:columns-2 gap-4">
+                  {restPosts.map((post) => (
+                    <div key={post.id} className="break-inside-avoid mb-4">
+                      <BentoCard post={post} />
                     </div>
-                  )}
+                  ))}
                 </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Desktop filter sidebar */}
+        <aside className="hidden md:block sticky top-6 w-52 shrink-0">
+          <FilterPanel {...filterProps} />
+        </aside>
+      </div>
     </div>
-  );
+  )
 }
