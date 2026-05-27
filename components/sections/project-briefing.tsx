@@ -1,18 +1,16 @@
 import Link from "next/link"
-import { type Project, projects } from "@/content/work"
+import { type WorkEntry } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { MaskReveal } from "@/components/anim/mask-reveal"
 
 interface ProjectBriefingProps {
-  project: Project
+  project: WorkEntry
+  prevProject?: Pick<WorkEntry, "slug" | "title"> | null
+  nextProject?: Pick<WorkEntry, "slug" | "title"> | null
 }
 
-export function ProjectBriefing({ project }: ProjectBriefingProps) {
-  const currentIndex = projects.findIndex((p) => p.slug === project.slug)
-  const prevProject = currentIndex > 0 ? projects[currentIndex - 1] : null
-  const nextProject = currentIndex < projects.length - 1 ? projects[currentIndex + 1] : null
-
+export function ProjectBriefing({ project, prevProject, nextProject }: ProjectBriefingProps) {
   return (
     <FadeRise>
       {/* Back nav */}
