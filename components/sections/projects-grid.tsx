@@ -1,6 +1,5 @@
 // components/sections/projects-grid.tsx
 import Link from "next/link"
-import { ExternalLink, Github } from "lucide-react"
 import { type ProjectEntry } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { FadeRise } from "@/components/anim/fade-rise"
@@ -92,8 +91,7 @@ export function ProjectsGrid({
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      <ExternalLink size={12} />
-                      Live
+                      Live ↗
                     </a>
                   )}
                   {project.repoUrl && (
@@ -103,8 +101,7 @@ export function ProjectsGrid({
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      <Github size={12} />
-                      Code
+                      Code ↗
                     </a>
                   )}
                 </div>
