@@ -23,18 +23,14 @@ export default async function Home() {
   let featuredProjects: ProjectEntry[] = []
   let timelineItems: TimelineEntry[] = []
 
-  try {
-    const [workResult, projectsResult, timelineResult] = await Promise.allSettled([
-      fetchWork(),
-      fetchFeaturedProjects(),
-      fetchTimeline(),
-    ])
-    if (workResult.status === "fulfilled") workEntries = workResult.value
-    if (projectsResult.status === "fulfilled") featuredProjects = projectsResult.value
-    if (timelineResult.status === "fulfilled") timelineItems = timelineResult.value
-  } catch {
-    // Payload not available — show empty state
-  }
+  const [workResult, projectsResult, timelineResult] = await Promise.allSettled([
+    fetchWork(),
+    fetchFeaturedProjects(),
+    fetchTimeline(),
+  ])
+  if (workResult.status === "fulfilled") workEntries = workResult.value
+  if (projectsResult.status === "fulfilled") featuredProjects = projectsResult.value
+  if (timelineResult.status === "fulfilled") timelineItems = timelineResult.value
 
   return (
     <>
