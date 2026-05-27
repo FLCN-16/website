@@ -34,13 +34,14 @@ export default async function WorkDetail({ params }: WorkDetailProps) {
   try {
     const all = await fetchWorkEntries()
     const idx = all.findIndex((p) => p.slug === slug)
-    if (idx === -1) notFound()
-    project = all[idx]
-    prevProject = idx > 0 ? { slug: all[idx - 1].slug, title: all[idx - 1].title } : null
-    nextProject =
-      idx < all.length - 1 ? { slug: all[idx + 1].slug, title: all[idx + 1].title } : null
+    if (idx !== -1) {
+      project = all[idx]
+      prevProject = idx > 0 ? { slug: all[idx - 1].slug, title: all[idx - 1].title } : null
+      nextProject =
+        idx < all.length - 1 ? { slug: all[idx + 1].slug, title: all[idx + 1].title } : null
+    }
   } catch {
-    notFound()
+    // Payload not available
   }
 
   if (!project) notFound()
