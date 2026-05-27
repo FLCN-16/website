@@ -13,7 +13,7 @@ export function Rail() {
   const year = new Date().getFullYear()
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[200px] border-r border-border bg-background hidden md:flex flex-col p-6 gap-4">
+    <aside className="fixed left-0 top-0 h-screen w-[240px] border-r border-border bg-background hidden md:flex flex-col p-6 gap-4">
       {/* Identity block */}
       <div className="flex flex-col gap-1">
         <span className="font-sans font-semibold text-sm text-foreground">

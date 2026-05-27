@@ -117,6 +117,43 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@property --input-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes input-border-spin {
+  to { --input-angle: 360deg; }
+}
+
+.gradient-border {
+  padding: 1px;
+  background: var(--input);
+}
+
+.gradient-border:focus-within {
+  animation: input-border-spin 2.5s linear infinite;
+  background: conic-gradient(
+    from var(--input-angle),
+    transparent,
+    var(--primary) 25%,
+    transparent 50%,
+    transparent
+  );
+}
+
+.gradient-border:has([aria-invalid="true"]) {
+  background: var(--destructive) !important;
+  animation: none !important;
+}
+
+.gradient-border:has(:disabled) {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

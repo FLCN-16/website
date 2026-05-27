@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@payload-config": ["./payload.config.ts"],
+      "@payload-types": ["./payload-types.ts"]
     }
   },
   "include": [
@@ -28,7 +30,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "payload-types.ts"
   ],
   "exclude": ["node_modules"]
 }
