@@ -1,17 +1,28 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "About",
-};
+interface PostProps {
+  params: Promise<{ slug: string }>;
+}
 
-export default function Home() {
+export async function generateMetadata(
+  { params }: PostProps
+): Promise<Metadata> {
+  const { slug } = await params;
+  return {
+    title: slug,
+  };
+}
+
+export default async function Post({ params }: PostProps) {
+  const { slug } = await params;
+
   return (
     <div className="max-w-3xl">
       <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4">
-        Frontend Technical Lead
+        Article
       </p>
       <h1 className="font-sans text-4xl font-semibold tracking-tight mb-6">
-        Rishabh Kumar
+        Post: {slug}
       </h1>
       <p className="text-muted-foreground">
         Coming soon.

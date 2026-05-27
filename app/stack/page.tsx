@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "Stack",
 };
 
-export default function Home() {
+export default function Stack() {
   return (
     <div className="max-w-3xl">
       <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4">
-        Frontend Technical Lead
+        Technical Foundations
       </p>
       <h1 className="font-sans text-4xl font-semibold tracking-tight mb-6">
-        Rishabh Kumar
+        The Tech Stack
       </h1>
       <p className="text-muted-foreground">
         Coming soon.
