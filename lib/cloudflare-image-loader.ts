@@ -13,5 +13,7 @@ export function buildCloudflareUrl(
 }
 
 export default function cloudflareLoader({ src, width, quality }: ImageLoaderProps): string {
-  return buildCloudflareUrl(src, width, quality, process.env.NEXT_PUBLIC_MEDIA_URL ?? '')
+  const baseUrl = process.env.NEXT_PUBLIC_MEDIA_URL
+  if (!baseUrl) throw new Error('NEXT_PUBLIC_MEDIA_URL is not set')
+  return buildCloudflareUrl(src, width, quality, baseUrl)
 }
