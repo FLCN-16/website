@@ -1,10 +1,10 @@
-import { type JourneyItem } from "@/content/journey"
+import { type TimelineEntry } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { cn } from "@/lib/utils"
 
 interface JourneyProps {
-  items: JourneyItem[]
+  items: TimelineEntry[]
 }
 
 export function Journey({ items }: JourneyProps) {

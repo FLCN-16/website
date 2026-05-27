@@ -1,11 +1,11 @@
 import Link from "next/link"
-import { type Project } from "@/content/work"
+import { type WorkEntry } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { cn } from "@/lib/utils"
 
 interface SelectedWorkProps {
-  projects: Project[]
+  projects: WorkEntry[]
   showViewAll?: boolean
   variant?: "grid" | "list"
   showSectionHeader?: boolean
@@ -53,7 +53,7 @@ export function SelectedWork({
   )
 }
 
-function GridLayout({ projects }: { projects: Project[] }) {
+function GridLayout({ projects }: { projects: WorkEntry[] }) {
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
       {projects.map((project) => (
@@ -91,7 +91,7 @@ function GridLayout({ projects }: { projects: Project[] }) {
   )
 }
 
-function ListLayout({ projects }: { projects: Project[] }) {
+function ListLayout({ projects }: { projects: WorkEntry[] }) {
   return (
     <div className="divide-y divide-border border-t border-border">
       {projects.map((project) => (
