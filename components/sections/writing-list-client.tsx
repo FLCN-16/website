@@ -101,7 +101,7 @@ export function WritingListClient({ initialPosts, allTags }: WritingListClientPr
                 href={`/writing/${post.slug}`}
                 className="group flex flex-col gap-1.5 py-6 hover:bg-muted/30 -mx-4 px-4 rounded-lg transition-colors"
               >
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-start justify-between gap-4">
                   <h2 className="text-base font-semibold group-hover:text-primary transition-colors">
                     {post.title}
                   </h2>

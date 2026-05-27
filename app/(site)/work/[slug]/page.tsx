@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { ProjectBriefing } from "@/components/sections/project-briefing"
 import { projects } from "@/content/work"
+import { createMetadata } from "@/lib/metadata"
 
 interface WorkDetailProps {
   params: Promise<{ slug: string }>
@@ -15,10 +16,7 @@ export async function generateMetadata({ params }: WorkDetailProps): Promise<Met
   const { slug } = await params
   const project = projects.find((p) => p.slug === slug)
   if (!project) return {}
-  return {
-    title: project.title,
-    description: project.description,
-  }
+  return createMetadata({ title: project.title, description: project.description })
 }
 
 export default async function WorkDetail({ params }: WorkDetailProps) {

@@ -55,7 +55,7 @@ export function SelectedWork({
 
 function GridLayout({ projects }: { projects: Project[] }) {
   return (
-    <div className="grid md:grid-cols-3 gap-6">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
       {projects.map((project) => (
         <Link
           key={project.slug}

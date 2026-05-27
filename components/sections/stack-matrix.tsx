@@ -32,7 +32,8 @@ function MaturityDots({ maturity }: { maturity: "expert" | "proficient" | "learn
 export function StackMatrix({ disciplines }: StackMatrixProps) {
   return (
     <div className="py-8">
-      <table className="w-full border-collapse">
+      <div className="overflow-x-auto">
+      <table className="w-full border-collapse min-w-[480px]">
         <thead>
           <tr className="border-b border-border">
             <th className="font-mono text-xs uppercase tracking-widest text-muted-foreground py-3 px-4 text-left">
@@ -71,6 +72,7 @@ export function StackMatrix({ disciplines }: StackMatrixProps) {
           )}
         </tbody>
       </table>
+      </div>
     </div>
   )
 }

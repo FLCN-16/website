@@ -7,12 +7,12 @@ import { site } from "@/content/site"
 import { journey } from "@/content/journey"
 import { philosophy } from "@/content/philosophy"
 import { projects } from "@/content/work"
-import type { Metadata } from "next"
+import { createMetadata } from "@/lib/metadata"
 
-export const metadata: Metadata = {
+export const metadata = createMetadata({
   title: "About",
   description: site.subheadline,
-}
+})
 
 export default function Home() {
   return (

@@ -17,7 +17,7 @@ export function Philosophy({ eyebrow, heading, pillars }: PhilosophyProps) {
         <h2 className="text-3xl font-semibold tracking-tight">{heading}</h2>
 
         {/* Pillars grid */}
-        <div className="mt-12 grid md:grid-cols-3 gap-8">
+        <div className="mt-12 grid sm:grid-cols-3 gap-8">
           {pillars.map((pillar) => (
             <div key={pillar.num}>
               <p className="font-mono text-4xl text-primary font-bold">

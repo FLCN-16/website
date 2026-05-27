@@ -1,11 +1,11 @@
-import type { Metadata } from "next"
 import { SelectedWork } from "@/components/sections/selected-work"
 import { projects } from "@/content/work"
+import { createMetadata } from "@/lib/metadata"
 
-export const metadata: Metadata = {
+export const metadata = createMetadata({
   title: "Work",
   description: "Selected projects from 9+ years of frontend engineering.",
-}
+})
 
 export default function WorkIndex() {
   return (

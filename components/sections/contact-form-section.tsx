@@ -78,7 +78,7 @@ export function ContactFormSection() {
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-2">
           Get In Touch
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight mb-10">
+        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mb-10">
           Let&apos;s talk.
         </h1>
 
@@ -181,7 +181,7 @@ export function ContactFormSection() {
           </form>
 
           {/* NODE_STATS panel — cut-corner border matching button aesthetic */}
-          <aside className="relative font-mono text-sm sticky top-8" aria-label="Contact details">
+          <aside className="relative font-mono text-sm md:sticky md:top-8" aria-label="Contact details">
             {/* SVG border: top, left, right, bottom edges + diagonal cut at bottom-right */}
             <svg
               className="absolute inset-0 w-full h-full text-border pointer-events-none"

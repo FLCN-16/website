@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPayloadClient } from "@/lib/payload";
 import { WritingPost } from "@/components/sections/writing-post";
+import { createMetadata } from "@/lib/metadata";
 
 interface PostProps {
   params: Promise<{ slug: string }>;
@@ -12,10 +13,10 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
   try {
     const post = await fetchPost(slug);
     if (!post) return { title: "Not Found" };
-    return {
-      title: post.seo?.title ?? `${post.title} — Rishabh Kumar`,
+    return createMetadata({
+      title: post.seo?.title ?? post.title,
       description: post.seo?.description ?? post.excerpt ?? undefined,
-    };
+    });
   } catch {
     return { title: slug };
   }

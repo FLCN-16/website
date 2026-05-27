@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
 import { getPayloadClient } from "@/lib/payload";
 import { WritingList } from "@/components/sections/writing-list";
+import { createMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Writing — Rishabh Kumar",
+export const metadata = createMetadata({
+  title: "Writing",
   description: "Articles and thoughts on frontend engineering, architecture, and building at scale.",
-};
+});
 
 export const revalidate = 60;
 

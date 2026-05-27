@@ -16,6 +16,7 @@ export interface Stat {
 
 export interface Site {
   name: string;
+  url: string;
   handle: string;
   role: string;
   location: string;
@@ -32,6 +33,7 @@ export interface Site {
 
 export const site: Site = {
   name: "Rishabh Kumar",
+  url: "https://thefalcon.dev",
   handle: "thefalcon",
   role: "Frontend Technical Lead",
   location: "Jalandhar, India",

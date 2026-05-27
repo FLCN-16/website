@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
+import { site } from "@/content/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,12 +20,31 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: {
-    default: "Rishabh Kumar — Frontend Technical Lead",
-    template: "%s — Rishabh Kumar",
+    default: `${site.name} — ${site.role}`,
+    template: `%s — ${site.name}`,
   },
-  description:
-    "Frontend Technical Lead with 9+ years building high-performance applications. Open to new roles and open source collaboration.",
+  description: site.subheadline,
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: site.name,
+    title: `${site.name} — ${site.role}`,
+    description: site.subheadline,
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: `@${site.handle}`,
+    title: `${site.name} — ${site.role}`,
+    description: site.subheadline,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {

@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+import { createMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createMetadata({
   title: "Terms of Use",
-};
+});
 
 export default function TermsOfUse() {
   return (
