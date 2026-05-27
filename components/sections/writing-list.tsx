@@ -1,15 +1,6 @@
 import { FadeRise } from "@/components/anim/fade-rise"
 import { WritingListClient } from "./writing-list-client"
-
-interface Post {
-  id: string
-  title: string
-  slug: string
-  excerpt?: string
-  tags?: Array<{ tag: string }>
-  publishedAt?: string
-  readingTime?: number
-}
+import type { Post } from "@/components/writing/bento-card"
 
 interface WritingListProps {
   posts: Post[]
