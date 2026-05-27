@@ -29,13 +29,14 @@ function formatDate(iso?: string) {
 
 export function BentoCard({ post, variant = "standard" }: BentoCardProps) {
   const isHero = variant === "hero"
-  const visibleTags = isHero ? post.tags : post.tags?.slice(0, 2)
+  const visibleTags = post.tags?.slice(0, isHero ? undefined : 2)
 
   return (
     <Link
       href={`/writing/${post.slug}`}
+      aria-label={post.title}
       className={cn(
-        "group flex flex-col gap-3 rounded-xl border p-5 transition-all duration-200 hover:shadow-md",
+        "group flex flex-col gap-3 rounded-xl border p-5 transition-all duration-200 hover:shadow-md dark:hover:shadow-none",
         isHero
           ? "bg-primary/5 border-primary/20"
           : "bg-background border-border",
@@ -43,7 +44,7 @@ export function BentoCard({ post, variant = "standard" }: BentoCardProps) {
     >
       <h2
         className={cn(
-          "font-semibold tracking-tight group-hover:text-primary transition-colors",
+          "font-semibold tracking-tight group-hover:text-primary transition-colors duration-200",
           isHero ? "text-2xl" : "text-lg",
         )}
       >
@@ -65,7 +66,7 @@ export function BentoCard({ post, variant = "standard" }: BentoCardProps) {
         <span className="font-mono text-xs text-muted-foreground">
           {formatDate(post.publishedAt)}
         </span>
-        {post.readingTime !== undefined && (
+        {post.readingTime && (
           <span className="font-mono text-xs text-muted-foreground">
             {post.readingTime} min read
           </span>
