@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Input } from "@/components/ui/input"
 import { BentoCard, type Post } from "@/components/writing/bento-card"
@@ -44,7 +44,8 @@ function applyLocalFilters(
       if (new Date(post.publishedAt).getFullYear().toString() !== year) return false
     }
 
-    if (readingTime && post.readingTime !== undefined) {
+    if (readingTime) {
+      if (post.readingTime === undefined) return false
       const rt = post.readingTime
       if (readingTime === "short" && rt > 5) return false
       if (readingTime === "medium" && (rt <= 5 || rt > 15)) return false
@@ -77,17 +78,17 @@ export function WritingListClient({ initialPosts, allTags, allYears }: WritingLi
   const activeFilterCount =
     selectedTags.length + (selectedYear ? 1 : 0) + (selectedReadingTime ? 1 : 0)
 
-  function toggleTag(tag: string) {
+  const toggleTag = useCallback((tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     )
-  }
+  }, [])
 
-  function clearAll() {
+  const clearAll = useCallback(() => {
     setSelectedTags([])
     setSelectedYear(null)
     setSelectedReadingTime(null)
-  }
+  }, [])
 
   const filterProps = {
     allTags,
@@ -111,7 +112,7 @@ export function WritingListClient({ initialPosts, allTags, allYears }: WritingLi
         placeholder="Search articles…"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="font-mono text-sm"
+        className="w-full font-mono text-sm"
       />
 
       {/* Mobile filter trigger */}
