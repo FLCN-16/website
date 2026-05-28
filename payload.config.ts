@@ -53,6 +53,8 @@ export default buildConfig({
             return `${process.env.R2_PUBLIC_URL}/${key}`
           },
         },
+        exports: {},
+        imports: {},
       },
       bucket: process.env.R2_BUCKET_NAME || "",
       config: {
