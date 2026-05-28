@@ -1,6 +1,8 @@
 "use server"
 
 import { Resend } from "resend"
+import { getPayload } from "payload"
+import config from "@payload-config"
 import { contactSchema } from "@/lib/schemas/contact"
 import { ContactNotification } from "@/emails/contact-notification"
 import { ContactConfirmation } from "@/emails/contact-confirmation"
@@ -20,12 +22,15 @@ export async function submitContact(data: unknown): Promise<ContactResult> {
   // Silently succeed to fool bots
   if (_honeypot) return { ok: true }
 
-  // TODO (Phase 6): Insert into Payload Submissions collection
-  // const payload = await getPayload({ config: payloadConfig })
-  // await payload.create({
-  //   collection: "submissions",
-  //   data: { name, email, inquiry, message, submittedAt: new Date().toISOString() },
-  // })
+  try {
+    const payload = await getPayload({ config })
+    await payload.create({
+      collection: "submissions",
+      data: { name, email, inquiry, message, submittedAt: new Date().toISOString() },
+    })
+  } catch (err) {
+    console.error("[contact] Failed to save submission to Payload:", err)
+  }
 
   if (!process.env.RESEND_API_KEY) {
     console.warn("[contact] RESEND_API_KEY not configured — skipping email send")
