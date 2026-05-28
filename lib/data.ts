@@ -84,7 +84,7 @@ export async function getCachedRelatedPosts(
       const recent = await _fetchRecentPosts(postSlug, existing)
       return [...docs.map(mapPayloadPost), ...recent].slice(0, 3)
     },
-    ['related-posts', postSlug],
+    ['related-posts', postSlug, ...tags.slice().sort()],
     { tags: [CACHE_TAGS.posts], revalidate: false }
   )()
 }
