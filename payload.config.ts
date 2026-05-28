@@ -90,6 +90,18 @@ export default buildConfig({
       },
     }),
     formBuilderPlugin({
+      formOverrides: {
+        fields: ({ defaultFields }) => [
+          ...defaultFields,
+          {
+            name: "enabled",
+            type: "checkbox",
+            defaultValue: true,
+            label: "Enable Submissions (DB write)",
+            admin: { position: "sidebar" },
+          },
+        ],
+      },
       fields: {
         text: true,
         textarea: true,
