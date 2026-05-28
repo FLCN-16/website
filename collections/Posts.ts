@@ -5,7 +5,7 @@ export const Posts: CollectionConfig = {
   slug: "posts",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "status", "publishedAt"],
+    defaultColumns: ["title", "status", "featured", "publishedAt"],
   },
   access: {
     read: ({ req }) => {
