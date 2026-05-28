@@ -28,7 +28,9 @@ export function extractHeadings(body: any): Heading[] {
     if (node.tag !== "h2" && node.tag !== "h3") continue
     const text = textContent(node.children)
     if (!text) continue
-    headings.push({ id: slugify(text), text, level: node.tag === "h2" ? 2 : 3 })
+    const id = slugify(text)
+    if (!id) continue
+    headings.push({ id, text, level: node.tag === "h2" ? 2 : 3 })
   }
   return headings
 }

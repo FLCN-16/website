@@ -71,6 +71,25 @@ describe("extractHeadings", () => {
     ]);
   });
 
+  it("trims leading and trailing dashes from heading with surrounding whitespace", () => {
+    const body = makeDoc([
+      { type: "heading", tag: "h2", children: [{ text: "  Hello  " }] },
+    ]);
+    expect(extractHeadings(body)).toEqual([
+      { id: "hello", text: "  Hello  ", level: 2 },
+    ]);
+  });
+
+  it("skips headings whose text slugifies to empty string", () => {
+    const body = makeDoc([
+      { type: "heading", tag: "h2", children: [{ text: "!!!" }] },
+      { type: "heading", tag: "h2", children: [{ text: "Real" }] },
+    ]);
+    expect(extractHeadings(body)).toEqual([
+      { id: "real", text: "Real", level: 2 },
+    ]);
+  });
+
   it("returns mixed h2 and h3 in document order", () => {
     const body = makeDoc([
       { type: "heading", tag: "h2", children: [{ text: "Alpha" }] },
