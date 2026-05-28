@@ -2,6 +2,7 @@ import { getPayloadClient } from "@/lib/payload";
 import { WritingList } from "@/components/sections/writing-list";
 import { createMetadata } from "@/lib/metadata";
 import type { Post } from "@/lib/types";
+import { mapPayloadPost } from "@/lib/posts";
 
 export const metadata = createMetadata({
   title: "Writing",
@@ -41,29 +42,5 @@ async function fetchPosts(): Promise<Post[]> {
     limit: 50,
     depth: 1,
   });
-  return result.docs.map((doc) => {
-    const cover = doc.cover as
-      | { url?: string; width?: number; height?: number; alt?: string }
-      | null
-      | undefined;
-    return {
-      id: String(doc.id),
-      title: doc.title,
-      slug: doc.slug,
-      excerpt: doc.excerpt ?? null,
-      cover:
-        cover && typeof cover === "object" && cover.url
-          ? {
-              url: cover.url,
-              width: cover.width ?? 800,
-              height: cover.height ?? 450,
-              alt: cover.alt ?? null,
-            }
-          : null,
-      tags: doc.tags ?? null,
-      publishedAt: doc.publishedAt ?? null,
-      readingTime: doc.readingTime ?? null,
-      featured: doc.featured ?? undefined,
-    };
-  });
+  return result.docs.map(mapPayloadPost);
 }
