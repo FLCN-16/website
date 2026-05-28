@@ -33,7 +33,6 @@ export const Education: CollectionConfig = {
       ({ doc }) => {
         try {
           revalidateTag(CACHE_TAGS.education, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }
@@ -44,7 +43,6 @@ export const Education: CollectionConfig = {
       () => {
         try {
           revalidateTag(CACHE_TAGS.education, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }

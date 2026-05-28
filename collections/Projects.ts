@@ -54,7 +54,6 @@ export const Projects: CollectionConfig = {
       ({ doc }) => {
         try {
           revalidateTag(CACHE_TAGS.projects, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }
@@ -65,7 +64,6 @@ export const Projects: CollectionConfig = {
       ({ doc }) => {
         try {
           revalidateTag(CACHE_TAGS.projects, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }

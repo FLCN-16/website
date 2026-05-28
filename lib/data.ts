@@ -152,7 +152,7 @@ export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
       }))
     },
     ['work-entries'],
-    { tags: [CACHE_TAGS.work, CACHE_TAGS.home], revalidate: false }
+    { tags: [CACHE_TAGS.work], revalidate: false }
   )()
 }
 
@@ -188,7 +188,7 @@ export async function getCachedProjects(): Promise<ProjectEntry[]> {
       }))
     },
     ['projects-list'],
-    { tags: [CACHE_TAGS.projects, CACHE_TAGS.home], revalidate: false }
+    { tags: [CACHE_TAGS.projects], revalidate: false }
   )()
 }
 
@@ -217,7 +217,7 @@ export async function getCachedTimeline(): Promise<TimelineEntry[]> {
       }))
     },
     ['timeline'],
-    { tags: [CACHE_TAGS.timeline, CACHE_TAGS.home], revalidate: false }
+    { tags: [CACHE_TAGS.timeline], revalidate: false }
   )()
 }
 
@@ -246,7 +246,7 @@ export async function getCachedEducation(): Promise<EducationEntry[]> {
       }))
     },
     ['education'],
-    { tags: [CACHE_TAGS.education, CACHE_TAGS.home], revalidate: false }
+    { tags: [CACHE_TAGS.education], revalidate: false }
   )()
 }
 
@@ -272,7 +272,7 @@ export async function getCachedCertifications(): Promise<CertificationEntry[]> {
       }))
     },
     ['certifications'],
-    { tags: [CACHE_TAGS.certifications, CACHE_TAGS.home], revalidate: false }
+    { tags: [CACHE_TAGS.certifications], revalidate: false }
   )()
 }
 

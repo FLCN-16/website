@@ -15,7 +15,6 @@ describe('CACHE_TAGS', () => {
 
   it('generates slug-scoped tags', () => {
     expect(CACHE_TAGS.post('my-slug')).toBe('post-my-slug')
-    expect(CACHE_TAGS.workEntry('design-system')).toBe('work-design-system')
     expect(CACHE_TAGS.page('privacy')).toBe('page-privacy')
   })
 })

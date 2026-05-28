@@ -23,7 +23,6 @@ export const Timeline: CollectionConfig = {
       ({ doc }) => {
         try {
           revalidateTag(CACHE_TAGS.timeline, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }
@@ -34,7 +33,6 @@ export const Timeline: CollectionConfig = {
       () => {
         try {
           revalidateTag(CACHE_TAGS.timeline, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }

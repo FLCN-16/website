@@ -21,7 +21,6 @@ export const Certifications: CollectionConfig = {
       ({ doc }) => {
         try {
           revalidateTag(CACHE_TAGS.certifications, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }
@@ -32,7 +31,6 @@ export const Certifications: CollectionConfig = {
       () => {
         try {
           revalidateTag(CACHE_TAGS.certifications, 'max')
-          revalidateTag(CACHE_TAGS.home, 'max')
         } catch {
           // not in Next.js request context
         }
