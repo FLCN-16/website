@@ -4,6 +4,7 @@ import { Resend } from "resend"
 import { getPayload } from "payload"
 import config from "@payload-config"
 import { site } from "@/content/site"
+import { TalentInquiryNotification } from "@/emails/talent-inquiry-notification"
 
 export type TalentInquiryResult = { ok: boolean; error?: string }
 
@@ -27,7 +28,7 @@ export async function submitTalentInquiry(formData: FormData): Promise<TalentInq
     const form = await payload.findByID({
       collection: "forms",
       id: formId,
-    }) as { enabled?: boolean | null }
+    }) as { id: string; enabled?: boolean | null }
 
     // Conditionally write DB entry
     if (form.enabled !== false) {
@@ -63,11 +64,11 @@ export async function submitTalentInquiry(formData: FormData): Promise<TalentInq
       from,
       to,
       subject: "[thefalcon.dev] New talent inquiry",
-      html: `
-        <p><strong>Email:</strong> ${email}</p>
-        ${pitchText ? `<p><strong>Pitch / JD:</strong></p><p style="white-space:pre-wrap">${pitchText}</p>` : ""}
-        ${file ? `<p><em>JD file attached: ${file.name}</em></p>` : ""}
-      `,
+      react: TalentInquiryNotification({
+        email,
+        pitchText,
+        fileName: file?.name ?? null,
+      }),
       attachments,
     })
 
