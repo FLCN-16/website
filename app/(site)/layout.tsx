@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { GoogleTagManager } from "@next/third-parties/google";
+import { redirect } from "next/navigation";
+import { getPayload } from "payload";
+import config from "@payload-config";
 import "../globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
@@ -47,13 +51,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  try {
+    const payload = await getPayload({ config });
+    const settings = await payload.findGlobal({ slug: "site-settings" });
+    const mm = settings.maintenanceMode as { enabled?: boolean | null } | null | undefined;
+    if (mm?.enabled) {
+      redirect("/maintenance");
+    }
+  } catch {
+    // If CMS is unreachable, proceed normally — don't block the site
+  }
+
   return (
     <html
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      {process.env.NEXT_PUBLIC_GTM_ID && (
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+      )}
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeProvider
           attribute="class"
