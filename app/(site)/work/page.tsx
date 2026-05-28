@@ -31,7 +31,7 @@ export default async function WorkIndex() {
         </h1>
         <p className="text-muted-foreground mt-4 max-w-2xl leading-relaxed">
           Three in-depth case studies spanning platform architecture, design systems,
-          and data visualisation — each one a lesson in trade-offs, leadership, and craft.
+          and data visualisation: each one a lesson in trade-offs, leadership, and craft.
         </p>
       </div>
 
