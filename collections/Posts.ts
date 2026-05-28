@@ -93,15 +93,6 @@ export const Posts: CollectionConfig = {
       type: "richText",
       editor: lexicalEditor(),
     },
-    {
-      name: "seo",
-      type: "group",
-      fields: [
-        { name: "title", type: "text" },
-        { name: "description", type: "textarea" },
-        { name: "ogImage", type: "upload", relationTo: "media" },
-      ],
-    },
   ],
   hooks: {
     beforeChange: [

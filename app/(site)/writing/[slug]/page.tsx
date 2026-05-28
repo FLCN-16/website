@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     const post = await fetchPost(slug);
     if (!post) return { title: "Not Found" };
     return createMetadata({
-      title: post.seo?.title ?? post.title,
-      description: post.seo?.description ?? post.excerpt ?? undefined,
+      title: (post.meta as { title?: string })?.title ?? post.title,
+      description: (post.meta as { description?: string })?.description ?? post.excerpt ?? undefined,
     });
   } catch {
     return { title: slug };
