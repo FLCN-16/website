@@ -56,7 +56,7 @@ export const SiteSettings: GlobalConfig = {
         const oldFilename = (media as { filename?: string }).filename ?? "";
         if (!oldFilename || oldFilename === RESUME_FILENAME) return data;
 
-        // Copy to fixed key, then delete old object
+        // Copy to fixed key, then delete old object and update media record in parallel
         const client = buildS3Client();
         const bucket = process.env.R2_BUCKET_NAME!;
 
@@ -69,23 +69,23 @@ export const SiteSettings: GlobalConfig = {
           })
         );
 
-        await client.send(
-          new DeleteObjectCommand({
-            Bucket: bucket,
-            Key: oldFilename,
-          })
-        );
-
-        // Update the media document to reflect the new filename and URL
-        await req.payload.update({
-          collection: "media",
-          id: resumeId,
-          data: {
-            filename: RESUME_FILENAME,
-            url: `${process.env.R2_PUBLIC_URL}/${RESUME_FILENAME}`,
-          },
-          overrideAccess: true,
-        });
+        await Promise.all([
+          client.send(
+            new DeleteObjectCommand({
+              Bucket: bucket,
+              Key: oldFilename,
+            })
+          ),
+          req.payload.update({
+            collection: "media",
+            id: resumeId,
+            data: {
+              filename: RESUME_FILENAME,
+              url: `${process.env.R2_PUBLIC_URL}/${RESUME_FILENAME}`,
+            },
+            overrideAccess: true,
+          }),
+        ]);
 
         return data;
       },

@@ -63,8 +63,8 @@ export function ProjectsGrid({
 
               {project.highlights.length > 0 && (
                 <ul className="mt-3 space-y-1.5">
-                  {project.highlights.slice(0, 2).map((point, i) => (
-                    <li key={i} className="text-sm text-muted-foreground leading-relaxed flex gap-2">
+                  {project.highlights.slice(0, 2).map((point) => (
+                    <li key={point} className="text-sm text-muted-foreground leading-relaxed flex gap-2">
                       <span className="text-muted-foreground/40 shrink-0 pt-px">–</span>
                       <span>{point}</span>
                     </li>

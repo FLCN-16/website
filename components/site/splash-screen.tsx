@@ -57,10 +57,10 @@ export function SplashScreen() {
       className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center gap-4"
     >
       <div className="flex items-center gap-[0.6em]">
-        {WORDS.map((word, wi) => (
-          <div key={wi} className="flex">
-            {word.split("").map((letter, li) => (
-              <span key={li} className="overflow-hidden inline-block">
+        {WORDS.map((word) => (
+          <div key={word} className="flex">
+            {word.split("").map((letter) => (
+              <span key={letter} className="overflow-hidden inline-block">
                 <span className="splash-letter inline-block font-mono font-bold text-4xl md:text-5xl text-foreground">
                   {letter}
                 </span>

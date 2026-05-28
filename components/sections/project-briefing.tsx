@@ -65,7 +65,7 @@ export function ProjectBriefing({ project, prevProject, nextProject }: ProjectBr
           <SectionLabel>Approach</SectionLabel>
           <ol className="mt-4 space-y-4">
             {project.briefing.approach.map((item, i) => (
-              <li key={i} className="flex gap-4">
+              <li key={item} className="flex gap-4">
                 <span className="font-mono text-xs text-muted-foreground/50 shrink-0 pt-1 tabular-nums">
                   {String(i + 1).padStart(2, "0")}
                 </span>

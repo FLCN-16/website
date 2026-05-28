@@ -120,7 +120,7 @@ export function ContactConfirmation({ name }: ContactConfirmationProps) {
             <Text
               style={{
                 fontFamily: "monospace",
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "#aaaaaa",
                 margin: 0,
               }}

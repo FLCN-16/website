@@ -78,8 +78,8 @@ export function Hero({
             as="h1"
             className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.1]"
           >
-            {headline.split("\n").map((line, i) => (
-              <span key={i} className="block overflow-hidden">
+            {headline.split("\n").map((line) => (
+              <span key={line} className="block overflow-hidden">
                 <span className="mask-line block">{line}</span>
               </span>
             ))}
