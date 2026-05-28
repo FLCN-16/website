@@ -7,10 +7,11 @@ export interface Post {
   id: string
   title: string
   slug: string
-  excerpt?: string
-  tags?: Array<{ tag: string }>
-  publishedAt?: string
-  readingTime?: number
+  excerpt?: string | null
+  tags?: Array<{ tag: string }> | null
+  publishedAt?: string | null
+  readingTime?: number | null
+  featured?: boolean
 }
 
 interface BentoCardProps {
@@ -18,7 +19,7 @@ interface BentoCardProps {
   variant?: "hero" | "standard"
 }
 
-function formatDate(iso?: string) {
+function formatDate(iso?: string | null) {
   if (!iso) return "—"
   return new Date(iso).toLocaleDateString("en-US", {
     month: "short",

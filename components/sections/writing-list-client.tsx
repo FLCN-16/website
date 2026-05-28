@@ -45,7 +45,7 @@ function applyLocalFilters(
     }
 
     if (readingTime) {
-      if (post.readingTime === undefined) return false
+      if (post.readingTime == null) return false
       const rt = post.readingTime
       if (readingTime === "short" && rt > 5) return false
       if (readingTime === "medium" && (rt <= 5 || rt > 15)) return false
