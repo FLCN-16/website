@@ -37,7 +37,7 @@ function applyLocalFilters(
   readingTime: ReadingTime | null,
 ): Post[] {
   return posts.filter((post) => {
-    if (tags.length > 1) {
+    if (tags.length > 0) {
       const postTags = post.tags?.map((t) => t.tag) ?? []
       if (!tags.some((tag) => postTags.includes(tag))) return false
     }
@@ -72,7 +72,11 @@ function groupByYear(posts: Post[]): Array<{ year: string; posts: Post[] }> {
   }
   // Descending year order
   return Array.from(map.entries())
-    .sort((a, b) => b[0].localeCompare(a[0]))
+    .sort(([a], [b]) => {
+      if (a === "Unknown") return 1
+      if (b === "Unknown") return -1
+      return b.localeCompare(a)
+    })
     .map(([year, posts]) => ({ year, posts }))
 }
 
@@ -140,7 +144,7 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
       />
 
       {/* Featured hero — only when not actively filtering */}
-      {!isFiltering && heroPost && (
+      {!isFiltering && sort === "newest" && heroPost && (
         <div className="mt-8">
           <FeaturedCard post={heroPost} />
         </div>
