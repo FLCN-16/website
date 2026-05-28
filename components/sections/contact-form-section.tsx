@@ -48,7 +48,6 @@ export function ContactFormSection() {
     reset,
     formState: { errors },
   } = useForm<ContactFormData>({
-    // @ts-expect-error — hookform/resolvers types lag behind zod v4 minor releases
     resolver: zodResolver(contactSchema),
   })
 

@@ -375,7 +375,7 @@ const EDUCATION = [
     start: "",
     end: "2027",
     gpa: "CGPA 8.31 / 10",
-    status: "expected",
+    status: "expected" as const,
     order: 1,
   },
   {
@@ -385,7 +385,7 @@ const EDUCATION = [
     start: "2016",
     end: "2017",
     gpa: "",
-    status: "completed",
+    status: "completed" as const,
     order: 2,
   },
 ]

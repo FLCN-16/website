@@ -66,7 +66,7 @@ async function fetchWorkEntries(): Promise<WorkEntry[]> {
     title: doc.title,
     category: doc.category ?? "",
     ord: doc.ord ?? "",
-    tags: doc.tags?.map((t: { tag?: string }) => t.tag ?? "") ?? [],
+    tags: doc.tags?.map((t) => t.tag ?? "") ?? [],
     description: doc.description ?? "",
     briefing: {
       problem: (doc.briefing as { problem?: string } | null)?.problem ?? "",
