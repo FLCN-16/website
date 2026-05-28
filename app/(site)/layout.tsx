@@ -10,7 +10,9 @@ import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
 import { SplashScreen } from "@/components/site/splash-screen";
+import { TalentInquiryDialog } from "@/components/site/talent-inquiry-dialog";
 import { site } from "@/content/site";
+import type { Form } from "@payloadcms/plugin-form-builder/types";
 
 export const dynamic = "force-dynamic";
 
@@ -55,16 +57,27 @@ export const metadata: Metadata = {
 };
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  let talentForm: Form | null = null
+
   try {
-    const payload = await getPayload({ config });
-    const settings = await payload.findGlobal({ slug: "site-settings" });
-    const mm = settings.maintenanceMode as { enabled?: boolean | null } | null | undefined;
+    const payload = await getPayload({ config })
+
+    const settings = await payload.findGlobal({ slug: "site-settings" })
+    const mm = settings.maintenanceMode as { enabled?: boolean | null } | null | undefined
     if (mm?.enabled) {
-      redirect("/maintenance");
+      redirect("/maintenance")
     }
+
+    const formsResult = await payload.find({
+      collection: "forms",
+      where: { slug: { equals: "talent-inquiry" } },
+      limit: 1,
+      depth: 0,
+    })
+    talentForm = (formsResult.docs[0] as unknown as Form) ?? null
   } catch (err) {
-    unstable_rethrow(err);
-    // If CMS is unreachable, proceed normally — don't block the site
+    unstable_rethrow(err)
+    // CMS unreachable — proceed without dialog
   }
 
   return (
@@ -84,6 +97,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           disableTransitionOnChange
         >
           <SplashScreen />
+          {talentForm && <TalentInquiryDialog form={talentForm} />}
           <QueryProvider>
             <SiteFrame>{children}</SiteFrame>
           </QueryProvider>
@@ -91,5 +105,5 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
