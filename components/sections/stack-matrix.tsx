@@ -38,13 +38,13 @@ export function StackMatrix({ disciplines }: StackMatrixProps) {
             key={discipline.name}
             className="bg-card border border-border rounded-lg p-4"
           >
-            <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-3">
               {discipline.name}
-            </h3>
+            </p>
             <div>
               {discipline.tools.map((tool, toolIndex) => (
                 <div
-                  key={tool.name}
+                  key={`${discipline.name}-${tool.name}`}
                   className={cn(
                     "flex items-center justify-between py-2",
                     toolIndex !== discipline.tools.length - 1 && "border-b border-border"
