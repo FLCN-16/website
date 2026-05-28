@@ -52,12 +52,12 @@ async function fetchProjects(): Promise<ProjectEntry[]> {
     subtitle: doc.subtitle ?? undefined,
     description: doc.description ?? undefined,
     category: doc.category ?? undefined,
-    tags: doc.tags?.map((t: { tag?: string }) => t.tag ?? "") ?? [],
+    tags: doc.tags?.map((t) => t.tag ?? "") ?? [],
     liveUrl: doc.liveUrl ?? undefined,
     repoUrl: doc.repoUrl ?? undefined,
     startDate: doc.startDate ?? undefined,
     endDate: doc.endDate ?? undefined,
-    highlights: doc.highlights?.map((h: { point?: string }) => h.point ?? "") ?? [],
+    highlights: doc.highlights?.map((h) => h.point ?? "") ?? [],
     featured: doc.featured ?? false,
   }))
 }

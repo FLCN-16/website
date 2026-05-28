@@ -91,7 +91,7 @@ async function fetchWork(): Promise<WorkEntry[]> {
     title: doc.title,
     category: doc.category ?? "",
     ord: doc.ord ?? "",
-    tags: doc.tags?.map((t: { tag?: string }) => t.tag ?? "") ?? [],
+    tags: doc.tags?.map((t) => t.tag ?? "") ?? [],
     description: doc.description ?? "",
     briefing: {
       problem: (doc.briefing as { problem?: string } | null)?.problem ?? "",
@@ -125,12 +125,12 @@ async function fetchFeaturedProjects(): Promise<ProjectEntry[]> {
     subtitle: doc.subtitle ?? undefined,
     description: doc.description ?? undefined,
     category: doc.category ?? undefined,
-    tags: doc.tags?.map((t: { tag?: string }) => t.tag ?? "") ?? [],
+    tags: doc.tags?.map((t) => t.tag ?? "") ?? [],
     liveUrl: doc.liveUrl ?? undefined,
     repoUrl: doc.repoUrl ?? undefined,
     startDate: doc.startDate ?? undefined,
     endDate: doc.endDate ?? undefined,
-    highlights: doc.highlights?.map((h: { point?: string }) => h.point ?? "") ?? [],
+    highlights: doc.highlights?.map((h) => h.point ?? "") ?? [],
     featured: doc.featured ?? false,
   }))
 }
@@ -150,7 +150,7 @@ async function fetchTimeline(): Promise<TimelineEntry[]> {
     start: doc.start,
     end: doc.end ?? null,
     summary: doc.summary ?? undefined,
-    tags: doc.tags?.map((t: { tag?: string }) => t.tag ?? "") ?? [],
+    tags: doc.tags?.map((t) => t.tag ?? "") ?? [],
     order: doc.order ?? undefined,
   }))
 }
