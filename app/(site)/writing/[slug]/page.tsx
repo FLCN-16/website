@@ -45,7 +45,7 @@ export default async function PostPage({ params }: PostPageProps) {
       title={post.title}
       publishedAt={post.publishedAt ?? undefined}
       readingTime={post.readingTime ?? undefined}
-      tags={post.tags?.map((t) => ({ tag: t.tag ?? "" }))}
+      tags={post.tags?.map((t: { tag?: string | null }) => ({ tag: t.tag ?? "" }))}
       body={post.body}
       cover={coverResolved}
       related={relatedPosts}
