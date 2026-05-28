@@ -276,6 +276,83 @@ export async function getCachedCertifications(): Promise<CertificationEntry[]> {
   )()
 }
 
+// ─── Sitemap fetchers ─────────────────────────────────────────────────────────
+
+export async function getSitemapPosts(): Promise<
+  { slug: string; publishedAt: string | null; updatedAt: string }[]
+> {
+  return unstable_cache(
+    async () => {
+      const payload = await getPayloadClient()
+      const result = await payload.find({
+        collection: 'posts',
+        where: { status: { equals: 'published' } },
+        sort: '-publishedAt',
+        pagination: false,
+        depth: 0,
+      })
+      return result.docs.map((doc) => ({
+        slug: String(doc.slug),
+        publishedAt: doc.publishedAt ? String(doc.publishedAt) : null,
+        updatedAt: String(doc.updatedAt),
+      }))
+    },
+    ['sitemap-posts'],
+    { tags: [CACHE_TAGS.posts], revalidate: false }
+  )()
+}
+
+export async function getSitemapWork(): Promise<
+  { slug: string; updatedAt: string }[]
+> {
+  return unstable_cache(
+    async () => {
+      const payload = await getPayloadClient()
+      const result = await payload.find({
+        collection: 'work',
+        where: { status: { equals: 'published' } },
+        sort: 'ord',
+        pagination: false,
+        depth: 0,
+      })
+      return result.docs.map((doc) => ({
+        slug: String(doc.slug),
+        updatedAt: String(doc.updatedAt),
+      }))
+    },
+    ['sitemap-work'],
+    { tags: [CACHE_TAGS.work], revalidate: false }
+  )()
+}
+
+export async function getSitemapPages(): Promise<
+  {
+    slug: string
+    template: 'legal' | 'basic'
+    lastUpdated: string | null
+    updatedAt: string
+  }[]
+> {
+  return unstable_cache(
+    async () => {
+      const payload = await getPayloadClient()
+      const result = await payload.find({
+        collection: 'pages',
+        pagination: false,
+        depth: 0,
+      })
+      return result.docs.map((doc) => ({
+        slug: String(doc.slug),
+        template: doc.template as 'legal' | 'basic',
+        lastUpdated: doc.lastUpdated ? String(doc.lastUpdated) : null,
+        updatedAt: String(doc.updatedAt),
+      }))
+    },
+    ['sitemap-pages'],
+    { tags: [CACHE_TAGS.pages], revalidate: false }
+  )()
+}
+
 // ─── Pages ────────────────────────────────────────────────────────────────────
 
 export async function getCachedBasicPage(slug: string) {
