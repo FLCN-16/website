@@ -94,6 +94,14 @@ export default buildConfig({
         fields: ({ defaultFields }) => [
           ...defaultFields,
           {
+            name: "slug",
+            type: "text",
+            required: true,
+            unique: true,
+            index: true,
+            admin: { position: "sidebar" },
+          },
+          {
             name: "enabled",
             type: "checkbox",
             defaultValue: true,

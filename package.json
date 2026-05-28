@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "seed:content": "tsx scripts/seed-content.ts",
+    "seed:talent-form": "tsx scripts/seed-talent-form.ts",
     "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
