@@ -36,6 +36,7 @@ export default buildConfig({
   globals: [SiteSettings],
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || "",
+    transactionOptions: false,
     connectOptions: {
       maxPoolSize: 1,
     },
