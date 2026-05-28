@@ -4,6 +4,12 @@ import { buildConfig } from "payload";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { s3Storage } from "@payloadcms/storage-s3";
+import { resendAdapter } from "@payloadcms/email-resend";
+import { seoPlugin } from "@payloadcms/plugin-seo";
+import { searchPlugin } from "@payloadcms/plugin-search";
+import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
+import { importExportPlugin } from "@payloadcms/plugin-import-export";
+import { mcpPlugin } from "@payloadcms/plugin-mcp";
 import { Users } from "./collections/Users";
 import { Posts } from "./collections/Posts";
 import { Media } from "./collections/Media";
@@ -13,6 +19,8 @@ import { Projects } from "./collections/Projects";
 import { Timeline } from "./collections/Timeline";
 import { Education } from "./collections/Education";
 import { Certifications } from "./collections/Certifications";
+import { Pages } from "./collections/Pages";
+import { SiteSettings } from "./globals/SiteSettings";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -24,11 +32,17 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Posts, Media, Submissions, Work, Projects, Timeline, Education, Certifications],
+  collections: [Users, Posts, Media, Submissions, Work, Projects, Timeline, Education, Certifications, Pages],
+  globals: [SiteSettings],
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || "",
   }),
   editor: lexicalEditor(),
+  email: resendAdapter({
+    defaultFromAddress: process.env.RESEND_FROM_ADDRESS || "hello@thefalcon.dev",
+    defaultFromName: process.env.RESEND_FROM_NAME || "The Falcon",
+    apiKey: process.env.RESEND_API_KEY || "",
+  }),
   plugins: [
     s3Storage({
       collections: {
@@ -49,6 +63,58 @@ export default buildConfig({
         region: "auto",
         endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
         forcePathStyle: true,
+      },
+    }),
+    seoPlugin({
+      collections: ["posts", "work", "projects"],
+      uploadsCollection: "media",
+      tabbedUI: true,
+      generateTitle: ({ doc }) => (doc as { title?: string })?.title ?? "",
+      generateDescription: ({ doc }) => {
+        const d = doc as { excerpt?: string; description?: string };
+        return d?.excerpt ?? d?.description ?? "";
+      },
+    }),
+    searchPlugin({
+      collections: ["posts", "work", "projects"],
+      defaultPriorities: {
+        posts: 20,
+        work: 10,
+        projects: 10,
+      },
+    }),
+    formBuilderPlugin({
+      fields: {
+        text: true,
+        textarea: true,
+        select: true,
+        email: true,
+        checkbox: true,
+        number: true,
+        message: true,
+        date: false,
+        payment: false,
+      },
+      defaultToEmail: "hello@thefalcon.dev",
+    }),
+    importExportPlugin({
+      collections: [
+        { slug: "posts", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "work", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "projects", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "timeline", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "education", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "certifications", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+      ],
+    }),
+    mcpPlugin({
+      collections: {
+        posts: { enabled: true },
+        work: { enabled: true },
+        projects: { enabled: true },
+        timeline: { enabled: true },
+        education: { enabled: true },
+        certifications: { enabled: true },
       },
     }),
   ],
