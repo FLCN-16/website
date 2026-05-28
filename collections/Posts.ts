@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { updateTag } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { CACHE_TAGS } from '@/lib/cache-tags'
 
@@ -110,8 +110,8 @@ export const Posts: CollectionConfig = {
     afterChange: [
       ({ doc }) => {
         try {
-          updateTag(CACHE_TAGS.posts)
-          if (doc.slug) updateTag(CACHE_TAGS.post(String(doc.slug)))
+          revalidateTag(CACHE_TAGS.posts, 'default')
+          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)), 'default')
         } catch {
           // not in Next.js request context
         }
@@ -121,8 +121,8 @@ export const Posts: CollectionConfig = {
     afterDelete: [
       ({ doc }) => {
         try {
-          updateTag(CACHE_TAGS.posts)
-          if (doc.slug) updateTag(CACHE_TAGS.post(String(doc.slug)))
+          revalidateTag(CACHE_TAGS.posts, 'default')
+          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)), 'default')
         } catch {
           // not in Next.js request context
         }
