@@ -57,5 +57,5 @@ export interface Post {
   tags?: Array<{ tag: string }> | null
   publishedAt?: string | null
   readingTime?: number | null
-  featured?: boolean | null
+  featured?: boolean
 }
