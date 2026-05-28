@@ -5,8 +5,8 @@
  * Reads env vars from .env.local automatically (MONGODB_URI, PAYLOAD_SECRET required).
  * env must be loaded before payload.config is imported (buildConfig reads process.env).
  *
- * Collections cleaned: posts, work, projects, timeline, education, certifications, submissions, search
- * Collections seeded:  timeline, work, projects, education, certifications
+ * Collections cleaned: posts, work, projects, timeline, education, certifications, submissions, search, pages
+ * Collections seeded:  timeline, work, projects, education, certifications, pages
  * Skipped:             users (admin account), media (files live in R2 cloud)
  */
 

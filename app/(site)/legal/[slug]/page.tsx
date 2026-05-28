@@ -10,14 +10,25 @@ interface LegalPageProps {
 
 export async function generateMetadata({ params }: LegalPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = await fetchLegalPage(slug);
-  if (!page) return { title: "Not Found" };
-  return createMetadata({ title: page.title });
+  try {
+    const page = await fetchLegalPage(slug);
+    if (!page) return { title: "Not Found" };
+    return createMetadata({ title: page.title });
+  } catch {
+    return { title: slug };
+  }
 }
 
 export default async function LegalPage({ params }: LegalPageProps) {
   const { slug } = await params;
-  const page = await fetchLegalPage(slug);
+
+  let page: Awaited<ReturnType<typeof fetchLegalPage>>;
+  try {
+    page = await fetchLegalPage(slug);
+  } catch {
+    notFound();
+  }
+
   if (!page) notFound();
 
   const lastUpdated = page.lastUpdated

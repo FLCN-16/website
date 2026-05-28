@@ -10,14 +10,25 @@ interface BasicPageProps {
 
 export async function generateMetadata({ params }: BasicPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = await fetchBasicPage(slug);
-  if (!page) return { title: "Not Found" };
-  return createMetadata({ title: page.title });
+  try {
+    const page = await fetchBasicPage(slug);
+    if (!page) return { title: "Not Found" };
+    return createMetadata({ title: page.title });
+  } catch {
+    return { title: slug };
+  }
 }
 
 export default async function BasicPage({ params }: BasicPageProps) {
   const { slug } = await params;
-  const page = await fetchBasicPage(slug);
+
+  let page: Awaited<ReturnType<typeof fetchBasicPage>>;
+  try {
+    page = await fetchBasicPage(slug);
+  } catch {
+    notFound();
+  }
+
   if (!page) notFound();
 
   return (
