@@ -66,8 +66,7 @@ export async function GET() {
     ...stack.disciplines.map(
       (d) =>
         `- ${d.name}: ${d.tools
-          .filter((t) => t.maturity === "expert" || t.maturity === "proficient")
-          .map((t) => t.name)
+          .flatMap((t) => (t.maturity === "expert" || t.maturity === "proficient") ? [t.name] : [])
           .join(", ")}`
     ),
   ]
