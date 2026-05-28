@@ -61,6 +61,15 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: "featured",
+      type: "checkbox",
+      defaultValue: false,
+      admin: {
+        position: "sidebar",
+        description: "Pin this post as the featured article on the Writing index.",
+      },
+    },
+    {
       name: "publishedAt",
       type: "date",
       admin: {
