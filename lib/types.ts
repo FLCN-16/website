@@ -40,3 +40,22 @@ export interface TimelineEntry {
   tags: string[]
   order?: number
 }
+
+export interface PostCover {
+  url: string
+  width: number
+  height: number
+  alt?: string | null
+}
+
+export interface Post {
+  id: string
+  title: string
+  slug: string
+  excerpt?: string | null
+  cover?: PostCover | null
+  tags?: Array<{ tag: string }> | null
+  publishedAt?: string | null
+  readingTime?: number | null
+  featured?: boolean | null
+}
