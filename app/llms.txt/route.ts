@@ -23,7 +23,7 @@ export async function GET() {
       title: doc.title,
       category: doc.category ?? "",
       ord: doc.ord ?? "",
-      tags: doc.tags?.map((t) => t.tag ?? "") ?? [],
+      tags: doc.tags?.map((t: { tag?: string | null }) => t.tag ?? "") ?? [],
       description: doc.description ?? "",
       briefing: {
         problem: (doc.briefing as { problem?: string } | null)?.problem ?? "",
