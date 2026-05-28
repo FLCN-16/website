@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import "../globals.css";
@@ -10,6 +10,8 @@ import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
 import { site } from "@/content/site";
+
+export const dynamic = "force-dynamic";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -59,7 +61,8 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     if (mm?.enabled) {
       redirect("/maintenance");
     }
-  } catch {
+  } catch (err) {
+    unstable_rethrow(err);
     // If CMS is unreachable, proceed normally — don't block the site
   }
 
