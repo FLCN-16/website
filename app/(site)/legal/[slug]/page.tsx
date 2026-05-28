@@ -22,11 +22,11 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
 export default async function LegalPage({ params }: LegalPageProps) {
   const { slug } = await params;
 
-  let page: Awaited<ReturnType<typeof fetchLegalPage>>;
+  let page: Awaited<ReturnType<typeof fetchLegalPage>> | undefined;
   try {
     page = await fetchLegalPage(slug);
   } catch {
-    notFound();
+    // Payload unavailable — fall through to notFound below
   }
 
   if (!page) notFound();

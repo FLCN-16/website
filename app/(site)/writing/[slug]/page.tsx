@@ -27,11 +27,11 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
 
-  let post: Awaited<ReturnType<typeof fetchPost>>;
+  let post: Awaited<ReturnType<typeof fetchPost>> | undefined;
   try {
     post = await fetchPost(slug);
   } catch {
-    notFound();
+    // Payload unavailable — fall through to notFound below
   }
 
   if (!post) notFound();

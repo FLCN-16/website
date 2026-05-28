@@ -22,11 +22,11 @@ export async function generateMetadata({ params }: BasicPageProps): Promise<Meta
 export default async function BasicPage({ params }: BasicPageProps) {
   const { slug } = await params;
 
-  let page: Awaited<ReturnType<typeof fetchBasicPage>>;
+  let page: Awaited<ReturnType<typeof fetchBasicPage>> | undefined;
   try {
     page = await fetchBasicPage(slug);
   } catch {
-    notFound();
+    // Payload unavailable — fall through to notFound below
   }
 
   if (!page) notFound();
