@@ -1,0 +1,129 @@
+<h2>Overall layout shape</h2>
+<p class="subtitle">This sets the global frame — header, navigation, and how content flows on every page. Pick one. We can refine after.</p>
+
+<style>
+  .wf { background: var(--bg-elevated, #fff); border: 1px solid var(--border, #e5e5e5); border-radius: 10px; padding: 0; overflow: hidden; height: 320px; display: flex; flex-direction: column; }
+  .wf-top { height: 36px; border-bottom: 1px solid var(--border, #e5e5e5); display: flex; align-items: center; padding: 0 14px; gap: 14px; font-size: 11px; color: var(--muted, #666); letter-spacing: 0.08em; }
+  .wf-top .logo { font-weight: 600; color: var(--fg, #111); }
+  .wf-top .nav { display: flex; gap: 12px; }
+  .wf-top .spacer { flex: 1; }
+  .wf-body { flex: 1; display: flex; }
+  .wf-side { width: 180px; border-right: 1px solid var(--border, #e5e5e5); padding: 16px 14px; display: flex; flex-direction: column; gap: 8px; font-size: 11px; color: var(--muted, #666); }
+  .wf-side .me { font-size: 13px; color: var(--fg, #111); font-weight: 600; margin-bottom: 4px; }
+  .wf-side .nav-i { padding: 4px 0; }
+  .wf-main { flex: 1; padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+  .wf-eyebrow { font-size: 10px; letter-spacing: 0.12em; color: var(--muted, #666); }
+  .wf-h { font-size: 20px; font-weight: 600; line-height: 1.1; color: var(--fg, #111); max-width: 90%; }
+  .wf-p { font-size: 11px; color: var(--muted, #666); max-width: 80%; line-height: 1.5; }
+  .wf-row { display: flex; gap: 10px; margin-top: auto; }
+  .wf-chip { font-size: 10px; padding: 4px 8px; border: 1px solid var(--border, #e5e5e5); border-radius: 999px; color: var(--muted, #666); }
+  .wf-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 6px; }
+  .wf-cell { height: 36px; background: var(--bg-muted, #f5f5f5); border-radius: 6px; }
+  .wf-split-l { flex: 0 0 38%; border-right: 1px solid var(--border, #e5e5e5); padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .wf-split-r { flex: 1; padding: 22px; overflow: hidden; }
+  .wf-asym-hero { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+  .wf-asym-meta { font-size: 10px; color: var(--muted, #666); display: flex; flex-direction: column; gap: 6px; }
+  .wf-asym-meta .k { letter-spacing: 0.1em; }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: transparent;">
+      <div class="wf">
+        <div class="wf-top">
+          <span class="logo">FLCN</span>
+          <span class="spacer"></span>
+          <span class="nav">ABOUT &nbsp; WORK &nbsp; STACK &nbsp; WRITING &nbsp; CONTACT</span>
+        </div>
+        <div class="wf-body">
+          <div class="wf-main" style="padding: 30px 60px;">
+            <div class="wf-eyebrow">FRONTEND TECHNICAL LEAD</div>
+            <div class="wf-h">Leading teams at scale, shipping with precision.</div>
+            <div class="wf-p">9+ years orchestrating cross-functional teams to deliver high-performance applications. Open to new roles.</div>
+            <div class="wf-row">
+              <span class="wf-chip">Get in touch</span>
+              <span class="wf-chip">View work</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A · Classic top-nav</h3>
+      <p>Top header with horizontal nav. Single centered content column, generous whitespace. The Vercel / Linear / shadcn-docs feel. Safest minimal-modern path.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: transparent;">
+      <div class="wf">
+        <div class="wf-body" style="height: 100%;">
+          <div class="wf-side">
+            <div class="me">Rishabh Kumar</div>
+            <div style="font-size: 10px; color: var(--muted, #666); margin-bottom: 8px;">Frontend Technical Lead</div>
+            <div class="nav-i">01 · ABOUT</div>
+            <div class="nav-i">02 · WORK</div>
+            <div class="nav-i">03 · STACK</div>
+            <div class="nav-i">04 · WRITING</div>
+            <div class="nav-i">05 · CONTACT</div>
+            <div style="margin-top: auto; font-size: 10px;">JALANDHAR · UTC+5.5</div>
+          </div>
+          <div class="wf-main">
+            <div class="wf-eyebrow">FRONTEND TECHNICAL LEAD</div>
+            <div class="wf-h">Leading teams at scale, shipping with precision.</div>
+            <div class="wf-p">9+ years orchestrating cross-functional teams to deliver high-performance applications.</div>
+            <div class="wf-row">
+              <span class="wf-chip">Get in touch</span>
+              <span class="wf-chip">Résumé</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B · Sticky left rail (recommended)</h3>
+      <p>Persistent left sidebar with identity + numbered nav. Content scrolls on the right. Feels editorial and engineered — matches a Technical Lead identity. Sidebar collapses to a top bar on mobile.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: transparent;">
+      <div class="wf">
+        <div class="wf-top">
+          <span class="logo">FLCN</span>
+          <span style="font-size: 10px;">REV. 2026.08</span>
+          <span class="spacer"></span>
+          <span class="nav">01 ABOUT &nbsp; 02 WORK &nbsp; 03 STACK &nbsp; 04 WRITING &nbsp; 05 CONTACT</span>
+          <span class="wf-chip" style="font-size: 9px;">RÉSUMÉ.PDF</span>
+        </div>
+        <div class="wf-body">
+          <div class="wf-main">
+            <div class="wf-asym-hero">
+              <div>
+                <div class="wf-eyebrow">FRONTEND TECHNICAL LEAD // PRODUCT, PLATFORM, DELIVERY</div>
+                <div class="wf-h" style="margin-top: 6px;">Leading teams at scale, shipping with precision.</div>
+                <div class="wf-p" style="margin-top: 8px;">9+ years orchestrating cross-functional teams to deliver high-performance applications.</div>
+              </div>
+              <div class="wf-asym-meta">
+                <div><span class="k">STATUS</span><br/>OPEN TO ROLES</div>
+                <div><span class="k">BASE</span><br/>JALANDHAR · UTC+5.5</div>
+                <div><span class="k">EXP</span><br/>9+ YRS</div>
+              </div>
+            </div>
+            <div class="wf-grid">
+              <div class="wf-cell"></div>
+              <div class="wf-cell"></div>
+              <div class="wf-cell"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C · Asymmetric editorial (closer to current)</h3>
+      <p>Top nav with numbered items, asymmetric grids inside sections, metadata blocks on the right. Heavily type-driven, "technical document" feel. Keeps the engineering flavor of the current site without copying its visual style.</p>
+    </div>
+  </div>
+
+</div>

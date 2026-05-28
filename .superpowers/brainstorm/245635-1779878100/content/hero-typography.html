@@ -1,0 +1,166 @@
+<h2>Hero treatment + typography</h2>
+<p class="subtitle">Same layout (left rail + content). Three different personalities for the hero and the type system that runs across the site.</p>
+
+<style>
+  .wf2 { background: var(--bg-elevated, #fff); border: 1px solid var(--border, #e5e5e5); border-radius: 10px; overflow: hidden; height: 360px; display: flex; }
+  .wf2 .rail { width: 168px; border-right: 1px solid var(--border, #e5e5e5); padding: 16px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 10px; color: var(--muted, #666); }
+  .wf2 .rail .me { color: var(--fg, #111); font-weight: 600; font-size: 12px; }
+  .wf2 .rail .role { font-size: 10px; color: var(--muted, #666); margin-bottom: 12px; }
+  .wf2 .rail .ni { padding: 2px 0; }
+  .wf2 .rail .meta { margin-top: auto; font-size: 9px; line-height: 1.5; }
+  .wf2 .main { flex: 1; padding: 30px 36px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .wf2 .eyebrow { font-size: 10px; letter-spacing: 0.12em; color: var(--muted, #666); }
+  .wf2 .pill { display: inline-block; padding: 3px 8px; border: 1px solid var(--border, #e5e5e5); border-radius: 999px; font-size: 9px; letter-spacing: 0.08em; color: var(--muted, #666); }
+  .wf2 .chip { font-size: 10px; padding: 5px 10px; border: 1px solid var(--border, #e5e5e5); border-radius: 6px; color: var(--fg, #111); }
+  .wf2 .chip.solid { background: var(--fg, #111); color: var(--bg, #fff); border-color: var(--fg, #111); }
+  .wf2 .row { display: flex; gap: 8px; }
+  .wf2 .p { font-size: 11px; line-height: 1.55; color: var(--muted, #555); max-width: 92%; }
+  .wf2 .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border, #e5e5e5); }
+  .wf2 .stat .n { font-weight: 600; color: var(--fg, #111); }
+  .wf2 .stat .l { font-size: 9px; color: var(--muted, #666); letter-spacing: 0.06em; }
+
+  /* A: mono-led, technical document */
+  .feel-a, .feel-a * { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace !important; }
+  .feel-a .h { font-size: 22px; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; color: var(--fg, #111); }
+  .feel-a .eyebrow, .feel-a .pill, .feel-a .l { text-transform: uppercase; }
+  .feel-a .stat .n { font-size: 22px; }
+
+  /* B: sans hero, mono accents */
+  .feel-b .h { font-family: 'Inter', system-ui, sans-serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; color: var(--fg, #111); }
+  .feel-b .eyebrow, .feel-b .pill, .feel-b .l, .feel-b .rail { font-family: ui-monospace, Menlo, monospace; }
+  .feel-b .eyebrow, .feel-b .pill, .feel-b .l { text-transform: uppercase; }
+  .feel-b .p, .feel-b .chip { font-family: 'Inter', system-ui, sans-serif; }
+  .feel-b .stat .n { font-family: 'Inter', system-ui, sans-serif; font-size: 26px; }
+
+  /* C: editorial serif headline */
+  .feel-c .h { font-family: 'Fraunces', 'Source Serif Pro', Georgia, serif; font-size: 32px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.0; color: var(--fg, #111); }
+  .feel-c .h em { font-style: italic; font-weight: 300; }
+  .feel-c .eyebrow, .feel-c .pill, .feel-c .l, .feel-c .rail { font-family: ui-monospace, Menlo, monospace; font-size: 10px; }
+  .feel-c .eyebrow, .feel-c .pill, .feel-c .l { text-transform: uppercase; }
+  .feel-c .p, .feel-c .chip { font-family: 'Inter', system-ui, sans-serif; }
+  .feel-c .stat .n { font-family: 'Fraunces', Georgia, serif; font-size: 28px; font-weight: 400; }
+</style>
+
+<div class="cards">
+
+  <!-- A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: transparent;">
+      <div class="wf2 feel-a">
+        <div class="rail">
+          <div class="me">RISHABH KUMAR</div>
+          <div class="role">FRONTEND TL</div>
+          <div class="ni">01 / ABOUT</div>
+          <div class="ni">02 / WORK</div>
+          <div class="ni">03 / STACK</div>
+          <div class="ni">04 / WRITING</div>
+          <div class="ni">05 / CONTACT</div>
+          <div class="meta">JALANDHAR<br/>UTC+5.5<br/>REV. 2026.08</div>
+        </div>
+        <div class="main">
+          <div class="row" style="justify-content: space-between; align-items: center;">
+            <div class="eyebrow">FRONTEND TECHNICAL LEAD</div>
+            <span class="pill">● OPEN TO ROLES</span>
+          </div>
+          <div class="h">Leading teams at scale,<br/>shipping with precision.</div>
+          <div class="p">9+ years orchestrating cross-functional teams to deliver high-performance applications, optimize operations, and improve user engagement.</div>
+          <div class="row">
+            <span class="chip solid">GET IN TOUCH →</span>
+            <span class="chip">RÉSUMÉ.PDF</span>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="n">9+</div><div class="l">YEARS</div></div>
+            <div class="stat"><div class="n">40%</div><div class="l">PERF GAIN</div></div>
+            <div class="stat"><div class="n">35%</div><div class="l">FASTER</div></div>
+            <div class="stat"><div class="n">20%</div><div class="l">COST CUT</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A · Mono everywhere — technical document</h3>
+      <p>JetBrains Mono / Geist Mono throughout. Uppercase labels, numbered nav, terminal-pill status. Loud engineering identity. Closest to your current site's voice.</p>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: transparent;">
+      <div class="wf2 feel-b">
+        <div class="rail">
+          <div class="me">Rishabh Kumar</div>
+          <div class="role">Frontend Technical Lead</div>
+          <div class="ni">01 / ABOUT</div>
+          <div class="ni">02 / WORK</div>
+          <div class="ni">03 / STACK</div>
+          <div class="ni">04 / WRITING</div>
+          <div class="ni">05 / CONTACT</div>
+          <div class="meta">JALANDHAR · UTC+5.5</div>
+        </div>
+        <div class="main">
+          <div class="row" style="justify-content: space-between; align-items: center;">
+            <div class="eyebrow">FRONTEND TECHNICAL LEAD</div>
+            <span class="pill">● OPEN TO ROLES</span>
+          </div>
+          <div class="h">Leading teams at scale,<br/>shipping with precision.</div>
+          <div class="p">9+ years orchestrating cross-functional teams to deliver high-performance applications, optimize operations, and improve user engagement through transformative solutions.</div>
+          <div class="row">
+            <span class="chip solid">Get in touch →</span>
+            <span class="chip">Résumé.pdf</span>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="n">9+</div><div class="l">YEARS</div></div>
+            <div class="stat"><div class="n">40%</div><div class="l">PERF GAIN</div></div>
+            <div class="stat"><div class="n">35%</div><div class="l">FASTER</div></div>
+            <div class="stat"><div class="n">20%</div><div class="l">COST CUT</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B · Sans hero, mono accents (recommended)</h3>
+      <p>Inter/Geist Sans for the headline and body; mono only for labels, nav numbers, code, and status. Best of both — calm and modern, but keeps the engineering personality. The Linear / Vercel / Resend playbook.</p>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: transparent;">
+      <div class="wf2 feel-c">
+        <div class="rail">
+          <div class="me">Rishabh Kumar</div>
+          <div class="role">Frontend TL</div>
+          <div class="ni">01 / ABOUT</div>
+          <div class="ni">02 / WORK</div>
+          <div class="ni">03 / STACK</div>
+          <div class="ni">04 / WRITING</div>
+          <div class="ni">05 / CONTACT</div>
+          <div class="meta">JALANDHAR · UTC+5.5</div>
+        </div>
+        <div class="main">
+          <div class="row" style="justify-content: space-between; align-items: center;">
+            <div class="eyebrow">FRONTEND TECHNICAL LEAD</div>
+            <span class="pill">● OPEN TO ROLES</span>
+          </div>
+          <div class="h">Leading teams at scale,<br/>shipping <em>with precision</em>.</div>
+          <div class="p">9+ years orchestrating cross-functional teams to deliver high-performance applications, optimize operations, and improve user engagement.</div>
+          <div class="row">
+            <span class="chip solid">Get in touch →</span>
+            <span class="chip">Résumé.pdf</span>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="n">9+</div><div class="l">YEARS</div></div>
+            <div class="stat"><div class="n">40%</div><div class="l">PERF GAIN</div></div>
+            <div class="stat"><div class="n">35%</div><div class="l">FASTER</div></div>
+            <div class="stat"><div class="n">20%</div><div class="l">COST CUT</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C · Serif headline, editorial</h3>
+      <p>Fraunces/Source Serif for headlines (italic accent), sans body, mono labels. Warm and editorial — feels more "essayist" than "engineer." Distinctive but a softer personality.</p>
+    </div>
+  </div>
+
+</div>

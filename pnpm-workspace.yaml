@@ -1,0 +1,14 @@
+overrides:
+  dompurify: "^3.4.7"
+  postcss: "^8.5.15"
+
+allowBuilds:
+  esbuild: true
+  msw: true
+  sharp: true
+  unrs-resolver: true
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver
+minimumReleaseAgeExclude:
+  - dompurify@3.4.7
