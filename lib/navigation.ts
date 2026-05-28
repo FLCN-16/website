@@ -5,3 +5,8 @@ export const NAV_LINKS = [
   { num: "04", label: "WRITING", href: "/writing" },
   { num: "05", label: "CONTACT", href: "/contact" },
 ] as const;
+
+export function isNavLinkActive(href: string, pathname: string): boolean {
+  if (href === "/") return pathname === "/"
+  return pathname === href || pathname.startsWith(href + "/")
+}

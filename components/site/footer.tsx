@@ -2,6 +2,7 @@ import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Linkedin01Icon, Github01Icon } from "@hugeicons/core-free-icons"
 import { site } from "@/content/site"
+import { BackToTop } from "@/components/site/back-to-top"
 
 const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
 const copyrightDomain = site.url.replace("https://", "").toUpperCase()
@@ -15,6 +16,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border px-6 py-6 md:px-12">
       <div className="flex flex-col gap-2">
+        {/* Top row: copyright + location */}
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
           <span className="font-mono text-xs uppercase text-muted-foreground">
             © {year} {copyrightDomain}
@@ -23,31 +25,38 @@ export function Footer() {
             {locationLine}
           </span>
         </div>
+
+        {/* Bottom row: legal links + social icons */}
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
           <div className="flex items-center gap-4">
             <Link
               href="/legal/privacy"
-              className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
             >
               Privacy Policy
             </Link>
             <Link
               href="/legal/terms"
-              className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
             >
               Terms
             </Link>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {linkedin && (
               <a
                 href={linkedin.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="group text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
               >
-                <HugeiconsIcon icon={Linkedin01Icon} size={14} strokeWidth={1.5} className="size-3.5" />
+                <HugeiconsIcon
+                  icon={Linkedin01Icon}
+                  size={14}
+                  strokeWidth={1.5}
+                  className="size-3.5 motion-safe:transition-transform motion-safe:group-hover:-translate-y-0.5"
+                />
               </a>
             )}
             {github && (
@@ -56,11 +65,17 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="group text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
               >
-                <HugeiconsIcon icon={Github01Icon} size={14} strokeWidth={1.5} className="size-3.5" />
+                <HugeiconsIcon
+                  icon={Github01Icon}
+                  size={14}
+                  strokeWidth={1.5}
+                  className="size-3.5 motion-safe:transition-transform motion-safe:group-hover:-translate-y-0.5"
+                />
               </a>
             )}
+            <BackToTop />
           </div>
         </div>
       </div>

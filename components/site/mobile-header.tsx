@@ -1,8 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Menu01Icon, Download01Icon } from "@hugeicons/core-free-icons"
 import { Button } from "@/components/ui/button"
@@ -12,12 +10,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/site/theme-toggle"
-import { NAV_LINKS } from "@/lib/navigation"
+import { NavLinks } from "@/components/site/nav-links"
 import { site } from "@/content/site"
 
 export function MobileHeader() {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname()
 
   return (
     <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border bg-background md:hidden">
@@ -44,44 +41,11 @@ export function MobileHeader() {
 
           {/* Status pill */}
           <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
-            <span className="text-primary text-xs leading-none">●</span>
+            <span className="text-primary text-xs leading-none motion-safe:animate-pulse">●</span>
             <span className="font-mono text-xs text-muted-foreground">{site.status.label}</span>
           </div>
 
-          {/* Nav links */}
-          <nav className="flex flex-col gap-1 flex-1">
-            {NAV_LINKS.map(({ num, label, href }) => {
-              const isActive = pathname === href
-
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setOpen(false)}
-                  className={[
-                    "flex items-center gap-2 py-1.5 transition-colors",
-                    isActive
-                      ? "border-l-2 border-primary pl-2"
-                      : "pl-0",
-                  ].join(" ")}
-                >
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {num}
-                  </span>
-                  <span
-                    className={[
-                      "font-mono text-xs",
-                      isActive
-                        ? "text-foreground font-medium"
-                        : "text-muted-foreground",
-                    ].join(" ")}
-                  >
-                    {label}
-                  </span>
-                </Link>
-              )
-            })}
-          </nav>
+          <NavLinks onNavigate={() => setOpen(false)} />
 
           {/* Bottom */}
           <div className="mt-auto flex flex-col gap-3">
@@ -90,9 +54,14 @@ export function MobileHeader() {
               <a
                 href={site.resumeUrl}
                 download
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
               >
-                <HugeiconsIcon icon={Download01Icon} size={12} strokeWidth={1.5} />
+                <HugeiconsIcon
+                  icon={Download01Icon}
+                  size={12}
+                  strokeWidth={1.5}
+                  className="motion-safe:transition-transform motion-safe:group-hover:translate-y-0.5"
+                />
                 RÉSUMÉ.PDF
               </a>
             </div>
