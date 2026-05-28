@@ -18,7 +18,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
       <div className="grid md:grid-cols-3 gap-6">
         {posts.map((post) => (
           <div key={post.id} className="border border-border rounded-xl overflow-hidden">
-            <PostRow post={post} className="px-4 py-4 border-b-0" />
+            <PostRow post={post} className="p-4 border-b-0" />
           </div>
         ))}
       </div>

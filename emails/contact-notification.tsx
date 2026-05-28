@@ -64,7 +64,7 @@ export function ContactNotification({
                 textTransform: "uppercase",
               }}
             >
-              THEFALCON.DEV — NEW INQUIRY
+              THEFALCON.DEV: NEW INQUIRY
             </Heading>
           </Section>
 
