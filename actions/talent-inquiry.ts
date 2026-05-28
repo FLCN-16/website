@@ -10,6 +10,7 @@ export type TalentInquiryResult = { ok: boolean; error?: string }
 
 export async function submitTalentInquiry(formData: FormData): Promise<TalentInquiryResult> {
   const formId = formData.get("formId")
+  // Field names must match the Payload admin form exactly: "email" and "pitch"
   const email = formData.get("email")
   const pitch = formData.get("pitch")
   const jdFile = formData.get("jdFile")

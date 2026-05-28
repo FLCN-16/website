@@ -49,20 +49,22 @@ export function TalentInquiryDialog({ form }: Props) {
     setError(null)
     setIsPending(true)
 
-    const fd = new FormData(e.currentTarget)
-    fd.set("formId", form.id)
+    try {
+      const fd = new FormData(e.currentTarget)
+      fd.set("formId", form.id)
 
-    const result = await submitTalentInquiry(fd)
+      const result = await submitTalentInquiry(fd)
 
-    if (result.ok) {
-      localStorage.setItem(STORAGE_KEY, "1")
-      setOpen(false)
-      toast.success("Details sent.")
-    } else {
-      setError(result.error ?? "Something went wrong. Please try again.")
+      if (result.ok) {
+        localStorage.setItem(STORAGE_KEY, "1")
+        setOpen(false)
+        toast.success("Details sent.")
+      } else {
+        setError(result.error ?? "Something went wrong. Please try again.")
+      }
+    } finally {
+      setIsPending(false)
     }
-
-    setIsPending(false)
   }
 
   return (
@@ -150,7 +152,16 @@ export function TalentInquiryDialog({ form }: Props) {
                 name="jdFile"
                 accept=".pdf,.doc,.docx"
                 className="hidden"
-                onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
+                onChange={(e) => {
+                  const f = e.target.files?.[0]
+                  if (f && f.size > 5 * 1024 * 1024) {
+                    setError("File must be under 5 MB.")
+                    e.target.value = ""
+                    return
+                  }
+                  setError(null)
+                  setFileName(f?.name ?? null)
+                }}
               />
               <Button
                 type="button"
