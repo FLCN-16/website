@@ -44,4 +44,3 @@ next-env.d.ts
 # Payload generated
 payload-types.ts
 .superpowers/
-pnpm-lock.yaml
