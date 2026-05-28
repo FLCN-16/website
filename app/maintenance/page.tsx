@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { site } from "@/content/site";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Under Maintenance",
+  description: `${site.name}'s site is temporarily under maintenance. Check back soon.`,
+  robots: { index: false, follow: false },
+};
 
 async function getMessage(): Promise<string> {
   try {

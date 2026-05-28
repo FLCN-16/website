@@ -17,7 +17,7 @@ export function ContactConfirmation({ name }: ContactConfirmationProps) {
   return (
     <Html>
       <Head />
-      <Preview>Got your message — Rishabh Kumar</Preview>
+      <Preview>Got your message, Rishabh Kumar</Preview>
       <Body
         style={{
           fontFamily: "system-ui, -apple-system, sans-serif",
@@ -79,7 +79,7 @@ export function ContactConfirmation({ name }: ContactConfirmationProps) {
               }}
             >
               Thanks for reaching out. I read every message and will get back to
-              you within a day or two — usually sooner.
+              you within a day or two (usually sooner).
             </Text>
             <Text
               style={{
@@ -107,7 +107,7 @@ export function ContactConfirmation({ name }: ContactConfirmationProps) {
                 margin: 0,
               }}
             >
-              — Rishabh
+              Rishabh
             </Text>
           </Section>
 
