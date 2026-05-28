@@ -12,6 +12,7 @@ export function PostToc({ headings }: PostTocProps) {
   const [activeId, setActiveId] = useState<string>("")
 
   useEffect(() => {
+    if (headings.length < 3) return
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
