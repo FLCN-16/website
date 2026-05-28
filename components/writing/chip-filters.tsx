@@ -72,6 +72,7 @@ export function ChipFilters({
 
         {activeFilterCount > 0 && (
           <button
+            type="button"
             onClick={onClearAll}
             className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
@@ -80,53 +81,53 @@ export function ChipFilters({
         )}
       </div>
 
-      {/* Chips row */}
-      {(allTags.length > 0 || true) && (
-        <div className="flex flex-wrap gap-2 items-center">
-          {/* Tag chips */}
-          {allTags.map((tag) => {
-            const active = selectedTags.includes(tag)
-            return (
-              <button
-                key={tag}
-                onClick={() => onTagToggle(tag)}
-                className={cn(
-                  "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",
-                  active
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {tag}
-              </button>
-            )
-          })}
+      {/* Chips row — always rendered so reading-time chips are always visible */}
+      <div className="flex flex-wrap gap-2 items-center">
+        {/* Tag chips */}
+        {allTags.map((tag) => {
+          const active = selectedTags.includes(tag)
+          return (
+            <button
+              type="button"
+              key={tag}
+              onClick={() => onTagToggle(tag)}
+              className={cn(
+                "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",
+                active
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {tag}
+            </button>
+          )
+        })}
 
-          {/* Divider between tags and reading time */}
-          {allTags.length > 0 && (
-            <span className="text-border select-none">|</span>
-          )}
+        {/* Divider between tags and reading time */}
+        {allTags.length > 0 && (
+          <span className="text-border select-none">|</span>
+        )}
 
-          {/* Reading time chips */}
-          {READING_TIME_OPTIONS.map(({ value, label }) => {
-            const active = selectedReadingTime === value
-            return (
-              <button
-                key={value}
-                onClick={() => onReadingTimeSelect(active ? null : value)}
-                className={cn(
-                  "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",
-                  active
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {label}
-              </button>
-            )
-          })}
-        </div>
-      )}
+        {/* Reading time chips */}
+        {READING_TIME_OPTIONS.map(({ value, label }) => {
+          const active = selectedReadingTime === value
+          return (
+            <button
+              type="button"
+              key={value}
+              onClick={() => onReadingTimeSelect(active ? null : value)}
+              className={cn(
+                "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",
+                active
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {label}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }
