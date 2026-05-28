@@ -10,9 +10,7 @@ interface ErrorProps {
 
 export default function SiteError({ error, reset }: ErrorProps) {
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.error("[SiteError]", error.digest ?? error.message);
-    }
+    console.error("[SiteError]", error.digest ?? error.message);
   }, [error]);
 
   return (
@@ -36,7 +34,7 @@ export default function SiteError({ error, reset }: ErrorProps) {
           onClick={reset}
           className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          Try again ↺
+          Try again <span aria-hidden="true">↺</span>
         </button>
         <span className="text-border text-xs">·</span>
         <Link

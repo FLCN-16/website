@@ -54,6 +54,11 @@ export default function NotFound() {
                 <span className="font-mono text-xs text-muted-foreground">404 NOT FOUND</span>
               </div>
 
+              {/* Heading */}
+              <h1 className="font-sans font-semibold text-sm text-foreground">
+                Page not found
+              </h1>
+
               {/* Message */}
               <p className="font-sans text-sm text-muted-foreground leading-relaxed">
                 The page you&apos;re looking for doesn&apos;t exist.
