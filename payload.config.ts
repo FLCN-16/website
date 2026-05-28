@@ -11,6 +11,8 @@ import { Submissions } from "./collections/Submissions";
 import { Work } from "./collections/Work";
 import { Projects } from "./collections/Projects";
 import { Timeline } from "./collections/Timeline";
+import { Education } from "./collections/Education";
+import { Certifications } from "./collections/Certifications";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -22,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Posts, Media, Submissions, Work, Projects, Timeline],
+  collections: [Users, Posts, Media, Submissions, Work, Projects, Timeline, Education, Certifications],
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || "",
   }),

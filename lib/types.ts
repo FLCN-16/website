@@ -41,6 +41,27 @@ export interface TimelineEntry {
   order?: number
 }
 
+export interface EducationEntry {
+  id: string
+  institution: string
+  degree: string
+  location?: string
+  start?: string
+  end?: string
+  gpa?: string
+  status?: "completed" | "ongoing" | "expected"
+  order?: number
+}
+
+export interface CertificationEntry {
+  id: string
+  name: string
+  issuer: string
+  year: string
+  credentialUrl?: string
+  order?: number
+}
+
 export interface PostCover {
   url: string
   width: number

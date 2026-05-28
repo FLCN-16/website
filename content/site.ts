@@ -1,5 +1,5 @@
 export interface Social {
-  platform: "github" | "linkedin" | "x";
+  platform: "github" | "linkedin";
   url: string;
   label: string;
 }
@@ -35,10 +35,10 @@ export const site: Site = {
   name: "Rishabh Kumar",
   url: "https://thefalcon.dev",
   handle: "thefalcon",
-  role: "Frontend Technical Lead",
-  location: "Jalandhar, India",
+  role: "Technical Lead — Full Stack",
+  location: "Jalandhar, Punjab, India",
   timezone: "UTC+5:30",
-  email: "hello@thefalcon.dev",
+  email: "me@thefalcon.dev",
   status: {
     available: true,
     label: "OPEN TO ROLES",
@@ -46,29 +46,24 @@ export const site: Site = {
   socials: [
     {
       platform: "github",
-      url: "https://github.com/riskybusiness",
+      url: "https://github.com/FLCN-16",
       label: "GitHub",
     },
     {
       platform: "linkedin",
-      url: "https://linkedin.com/in/rishabh-kumar",
+      url: "https://linkedin.com/in/rishabh-kumar-flcn16",
       label: "LinkedIn",
-    },
-    {
-      platform: "x",
-      url: "https://x.com/thefalcon",
-      label: "X / Twitter",
     },
   ],
   resumeUrl: "/files/rishabh-kumar-resume.pdf",
-  headline: "Leading teams at scale,\nshipping with precision.",
+  headline: "Leading teams across the stack,\nshipping production systems.",
   subheadline:
-    "I architect and build high-performance web applications — from design systems to micro-frontends, from zero-to-one products to platforms serving millions.",
+    "Full-Stack Technical Lead with 9+ years building and shipping production web, mobile, and browser-based applications. Open-source contributor to Next.js (vercel/next.js), builder of agentic AI systems with LangChain and Mastra AI, and author of apps live on the Chrome Web Store and Google Play.",
   stats: [
-    { value: "9+", label: "Years in Frontend" },
-    { value: "4", label: "Eng Teams Led" },
-    { value: "12+", label: "Products Shipped" },
-    { value: "3", label: "Open Source Libs" },
+    { value: "9+", label: "Years Shipping" },
+    { value: "1M+", label: "Users Reached" },
+    { value: "OSS", label: "Next.js Contributor" },
+    { value: "2", label: "Apps on Play Store" },
   ],
-  eyebrow: "Frontend Technical Lead · Jalandhar, India",
+  eyebrow: "Technical Lead — Full Stack · Jalandhar, India",
 };

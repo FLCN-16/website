@@ -7,6 +7,10 @@ import { Download01Icon } from "@hugeicons/core-free-icons"
 import { Separator } from "@/components/ui/separator"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NAV_LINKS } from "@/lib/navigation"
+import { site } from "@/content/site"
+
+const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
+const copyrightDomain = site.url.replace("https://", "").toUpperCase()
 
 export function Rail() {
   const pathname = usePathname()
@@ -17,10 +21,10 @@ export function Rail() {
       {/* Identity block */}
       <div className="flex flex-col gap-1">
         <span className="font-sans font-semibold text-sm text-foreground">
-          Rishabh Kumar
+          {site.name}
         </span>
         <span className="font-mono text-xs text-muted-foreground">
-          Frontend Technical Lead
+          {site.role}
         </span>
       </div>
 
@@ -29,7 +33,7 @@ export function Rail() {
       {/* Status pill */}
       <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
         <span className="text-primary text-xs leading-none">●</span>
-        <span className="font-mono text-xs text-muted-foreground">OPEN TO ROLES</span>
+        <span className="font-mono text-xs text-muted-foreground">{site.status.label}</span>
       </div>
 
       {/* Nav links */}
@@ -71,7 +75,7 @@ export function Rail() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <a
-            href="/files/rishabh-kumar-resume.pdf"
+            href={site.resumeUrl}
             download
             className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -80,10 +84,10 @@ export function Rail() {
           </a>
         </div>
         <span className="font-mono text-xs text-muted-foreground">
-          JALANDHAR · UTC+5.5
+          {locationLine}
         </span>
         <span className="font-mono text-xs text-muted-foreground">
-          © {year} THEFALCON.DEV
+          © {year} {copyrightDomain}
         </span>
       </div>
     </aside>
