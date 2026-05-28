@@ -10,7 +10,7 @@ import { site } from "@/content/site"
 const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
 const copyrightDomain = site.url.replace("https://", "").toUpperCase()
 
-export function Rail() {
+export function Rail({ resumeUrl }: { resumeUrl: string }) {
   const year = new Date().getFullYear()
 
   return (
@@ -40,7 +40,7 @@ export function Rail() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <a
-            href={site.resumeUrl}
+            href={resumeUrl}
             download
             className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
           >

@@ -13,7 +13,7 @@ import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NavLinks } from "@/components/site/nav-links"
 import { site } from "@/content/site"
 
-export function MobileHeader() {
+export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -52,7 +52,7 @@ export function MobileHeader() {
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <a
-                href={site.resumeUrl}
+                href={resumeUrl}
                 download
                 className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
               >
