@@ -110,8 +110,8 @@ export const Posts: CollectionConfig = {
     afterChange: [
       ({ doc }) => {
         try {
-          revalidateTag(CACHE_TAGS.posts)
-          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)))
+          revalidateTag(CACHE_TAGS.posts, 'max')
+          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)), 'max')
         } catch {
           // not in Next.js request context
         }
@@ -121,8 +121,8 @@ export const Posts: CollectionConfig = {
     afterDelete: [
       ({ doc }) => {
         try {
-          revalidateTag(CACHE_TAGS.posts)
-          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)))
+          revalidateTag(CACHE_TAGS.posts, 'max')
+          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)), 'max')
         } catch {
           // not in Next.js request context
         }
