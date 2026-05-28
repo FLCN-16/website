@@ -23,7 +23,7 @@ export default function NotFound() {
 
         {/* Status pill */}
         <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
-          <span className="text-destructive text-xs leading-none">●</span>
+          <span className="text-destructive text-xs leading-none motion-safe:animate-pulse">●</span>
           <span className="font-mono text-xs text-muted-foreground">404 NOT FOUND</span>
         </div>
 
