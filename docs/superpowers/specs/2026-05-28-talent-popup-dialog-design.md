@@ -1,143 +1,172 @@
 # Talent Popup Dialog — Design Spec
 
-**Date:** 2026-05-28
-**Status:** Approved
+**Date:** 2026-05-28  
+**Status:** Approved (revised)
 
 ---
 
 ## Overview
 
-A one-time popup dialog shown to site visitors 15 seconds after they land on the website. It surfaces a "Looking for Talent?" form aimed at recruiters or hiring managers who want to pitch a full-time Front-End Technical Lead opportunity. Submissions are stored in a dedicated Payload CMS collection and trigger an email notification to the site owner.
+A one-time popup dialog shown to site visitors 15 seconds after landing on the website. It surfaces a "Looking for Talent?" form aimed at recruiters or hiring managers pitching a full-time Front-End Technical Lead opportunity. The form is managed entirely via Payload CMS Form Builder — fields, labels, and copy are editable in the admin without touching code.
 
 ---
 
 ## Goals
 
 - Surface talent opportunity leads passively (no navigation required)
-- Collect email + pitch text and/or a JD file attachment
-- Show exactly once per browser (never again after dismissal or submission)
-- Integrate cleanly with existing Payload CMS, Resend email, and react-hook-form patterns
+- Collect email + pitch text and/or a JD file attached to the notification email
+- Show exactly once per browser (localStorage, persists across sessions)
+- CMS-driven form definition — editable from Payload admin
+- Toggle in Payload admin to disable DB writes without hiding the popup
 
 ---
 
 ## Data Layer
 
-### New Payload Collection: `TalentInquiries`
+### Payload Form Builder — No custom collection
 
-**File:** `collections/TalentInquiries.ts`
+Uses the form builder plugin's built-in `forms` and `form-submissions` collections. No new collection is created.
 
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `email` | email | Yes | Indexed |
-| `pitch` | textarea | No | Written pitch or JD copy-paste |
-| `jdFile` | relationship → Media | No | Uploaded PDF/DOC via Payload Media |
-| `submittedAt` | date | Auto | Set via `beforeChange` hook |
-| `ip` | text | Auto | Set via `afterOperation` hook; hidden in admin |
+**Form slug:** `talent-inquiry`
 
-**Validation rule (collection-level):** At least one of `pitch` or `jdFile` must be present (enforced in Zod on the client; server action also validates before writing).
+**Fields defined in Payload admin:**
+| Field type | Label | Required |
+|---|---|---|
+| `email` | EMAIL ADDRESS | Yes |
+| `textarea` | JOB DESCRIPTION / PITCH | No |
 
-**Access:**
-- `create`: public
-- `read / update / delete`: authenticated only
+**Custom field added via `formOverrides`:**
+| Field | Type | Default | Position | Purpose |
+|---|---|---|---|---|
+| `enabled` | checkbox | `true` | sidebar | Controls whether DB entries are created on submit |
 
-**Hook:** `afterChange` — send Resend email to site owner with submission summary (email, pitch excerpt, JD file link if present).
+**Behaviour of `enabled` flag:**
+- `enabled = true`: submission creates a `form-submissions` DB entry AND sends notification email
+- `enabled = false`: popup still shows and submits, email still sent, but NO `form-submissions` DB entry is created
+
+### Payload config change (`payload.config.ts`)
+
+Add `formOverrides` to the existing `formBuilderPlugin()` call:
+
+```ts
+formBuilderPlugin({
+  formOverrides: {
+    fields: [
+      {
+        name: 'enabled',
+        type: 'checkbox',
+        defaultValue: true,
+        label: 'Enable Submissions (DB write)',
+        admin: { position: 'sidebar' },
+      },
+    ],
+  },
+  fields: { /* existing */ },
+  defaultToEmail: 'hello@thefalcon.dev',
+})
+```
 
 ---
 
 ## Server Action
 
-**File:** `actions/talent.ts`
+**File:** `actions/talent-inquiry.ts`
 
-**Zod schema** (`lib/schemas/talent.ts`):
-```
-email: z.string().email()
-pitch: z.string().optional()
-jdFileId: z.string().optional()   // Media document ID, resolved before validation
-```
-
-Constraint: `pitch` or `jdFileId` must be present (`.refine()`).
+**Input:** `FormData` containing `formId`, `email`, `pitch` (optional), `jdFile` (optional `File`)
 
 **Steps:**
-1. Validate FormData with Zod schema.
-2. If file present: `POST /api/media` (multipart) to upload to Payload → Cloudflare R2. Extract returned document `id`.
-3. Create `TalentInquiries` document via Payload local API (`getPayload().create()`).
-4. Send owner notification email via Resend (inline, same pattern as `actions/contact.ts`).
-5. Return `{ success: true }` or `{ success: false, error: string }`.
+1. Fetch the form document by ID to read the `enabled` flag.
+2. If `enabled === true`: create a `form-submissions` entry via `payload.create({ collection: 'form-submissions', data: { form: formId, submissionData: [...] } })`.
+3. If `enabled === false`: skip DB write.
+4. Always: send Resend notification email to owner. If `jdFile` is present, attach it as a binary attachment. Email includes email address + pitch text.
+5. Return `{ ok: true }` or `{ ok: false, error: string }`.
+
+**File handling:** The JD file is never stored — it is read into a `Buffer` server-side, attached to the Resend email, and discarded. No upload to S3/R2.
 
 ---
 
-## Component
+## Frontend Component
 
-**File:** `components/site/talent-dialog.tsx`
+**File:** `components/site/talent-inquiry-dialog.tsx`  
+**Type:** `"use client"`
 
-**Type:** Client component (`"use client"`)
+### Data Fetching
+
+On mount: fetch the form by slug `talent-inquiry` from the Payload REST API:
+```
+GET /api/forms?where[slug][equals]=talent-inquiry&depth=0&limit=1
+```
+Fetch happens immediately on mount (not waiting for the 15s timer) so the form is ready when the dialog opens.
 
 ### Show-once Logic
 
 ```
 const STORAGE_KEY = "talent_popup_seen"
 
-On mount (useEffect):
-  if localStorage.getItem(STORAGE_KEY) → return early, never set timer
+On mount (after form fetch):
+  if localStorage.getItem(STORAGE_KEY) → return, skip timer
   timer = setTimeout(() => setOpen(true), 15_000)
-  return () => clearTimeout(timer)
+  cleanup: clearTimeout(timer)
 
-On dismiss (onOpenChange false) or successful submit:
+On dialog close (any path — X button, overlay click, Escape, successful submit):
   localStorage.setItem(STORAGE_KEY, "1")
 ```
 
-### Form
+### Form Rendering
 
-- Library: `react-hook-form` with Zod resolver
-- Fields:
-  - `email` — `<Input type="email" />` (required, labeled "EMAIL ADDRESS *")
-  - `pitch` — `<Textarea />` (optional, labeled "JOB DESCRIPTION / PITCH", auto-resize)
-  - `jdFile` — hidden `<input type="file" accept=".pdf,.doc,.docx" />` triggered by a styled "BROWSE FILES" button; shows selected filename inline
-- "OR" visual separator between textarea and file input areas
-- Submit button: "SEND DETAILS" — shows loading spinner during submission (`useTransition` or `isPending` from `useFormStatus`)
+Fields are rendered dynamically from the fetched form definition:
+- `email` field type → `<Input type="email" />`
+- `textarea` field type → `<Textarea />`
+- Unknown field types → skip
+
+Hardcoded static elements (not CMS-driven):
+- "OR ATTACH JD FILE" separator
+- Hidden `<input type="file" accept=".pdf,.doc,.docx" />` triggered by styled "BROWSE FILES" button
+- Selected filename shown inline after selection
 
 ### States
 
 | State | Behaviour |
 |---|---|
-| Idle (timer running) | Dialog closed, no render cost |
-| Open | Dialog visible, form empty |
-| Submitting | Button disabled + spinner |
-| Success | Dialog auto-closes; localStorage flag set; Sonner toast "Details sent!" |
-| Error | Inline error message below submit button; dialog stays open |
+| Loading form | Dialog stays closed; timer starts only after form loads successfully |
+| Timer running | Dialog closed, no render cost |
+| Open | Dialog visible, form ready |
+| Submitting | Submit button disabled + spinner |
+| Success | Toast "Details sent." → dialog closes → localStorage flag set |
+| Error | Inline error below submit; dialog stays open |
+| Form not found | Timer never fires; silent fail (no dialog shown) |
 
-### Styling Notes
+### Styling
 
 - Uses existing `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription` from `components/ui/dialog.tsx`
-- Dialog max-width: `sm` (already the default)
-- Title: uppercase, tracking-widest — matches site typography style
-- File browse area: dashed border, subtle background, matches existing UI patterns
-- Close button (X) shown via the default `DialogContent` behaviour — `onOpenChange(false)` fires on X click, overlay click, or Escape; all paths set the localStorage flag
+- Title: "LOOKING FOR TALENT?" — `font-mono uppercase tracking-widest`
+- Subtitle: "Hiring or have an opportunity?" — `text-muted-foreground`
+- Description copy — static, hardcoded in component
+- File browse area: dashed border, muted background
+- Submit button label comes from form definition (`submitButtonLabel` field)
 
 ---
 
 ## Mount Point
 
-`app/(site)/layout.tsx` — `<TalentDialog />` added alongside `<SplashScreen />` and `<Toaster />`. No props. Fully self-contained.
+`app/(site)/layout.tsx` — `<TalentInquiryDialog />` added alongside `<SplashScreen />`. No props. Fully self-contained.
 
 ---
 
 ## Files to Create / Modify
 
-| Action | Path |
-|---|---|
-| Create | `collections/TalentInquiries.ts` |
-| Create | `lib/schemas/talent.ts` |
-| Create | `actions/talent.ts` |
-| Create | `components/site/talent-dialog.tsx` |
-| Modify | `payload.config.ts` — add `TalentInquiries` to `collections` array |
-| Modify | `app/(site)/layout.tsx` — mount `<TalentDialog />` |
+| Action | Path | Notes |
+|---|---|---|
+| Modify | `payload.config.ts` | Add `formOverrides` with `enabled` field to `formBuilderPlugin` |
+| Create | `actions/talent-inquiry.ts` | Server action: conditional DB write + Resend email with attachment |
+| Create | `components/site/talent-inquiry-dialog.tsx` | Client component: fetch form, 15s timer, dialog + form renderer |
+| Modify | `app/(site)/layout.tsx` | Mount `<TalentInquiryDialog />` |
 
 ---
 
 ## Out of Scope
 
-- Admin UI customisation for TalentInquiries beyond default Payload admin
 - Showing the dialog on specific pages only (fires site-wide)
-- Rate limiting (Payload access control is sufficient for this use case)
-- Analytics event tracking on dialog open/submit
+- Rate limiting
+- Analytics tracking on dialog open/submit
+- Admin UI customisation beyond default form builder
