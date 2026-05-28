@@ -1,386 +1,105 @@
-# Talent Popup Dialog — Implementation Plan
+# Talent Popup Dialog Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a "Looking for Talent?" dialog that shows once per browser (15-second delay) with a form that saves submissions to a new Payload CMS `TalentInquiries` collection and emails the site owner.
+**Goal:** Add a one-time "Looking for Talent?" popup dialog that shows 15 seconds after any page visit, renders a CMS-managed form (email + pitch), accepts an optional JD file attached to a Resend notification email, and writes a `form-submissions` DB entry only when the form's `enabled` toggle is true.
 
-**Architecture:** New `TalentInquiries` Payload collection stores email + pitch + optional JD file (via Media upload). A Next.js server action handles validation, file upload, document creation, and Resend notification. A client-side `TalentDialog` component controls show-once behaviour via `localStorage` with a 15-second `setTimeout`, mounted in the site layout.
+**Architecture:** The form definition is fetched server-side in the site layout using the Payload local API and passed as a prop to a client component — no client-side fetch needed. The client component owns the 15-second timer and `localStorage` show-once logic. A server action handles submission: conditional `form-submissions` DB write (gated on `enabled`) + Resend email with optional JD file attachment. The JD file is transient — used only for the email attachment, never stored.
 
-**Tech Stack:** Payload CMS v3 (MongoDB + Cloudflare R2 via S3 plugin), react-hook-form v7 + Zod v4, Resend + React Email, shadcn/ui Dialog, Next.js 16 App Router server actions, Vitest.
+**Tech Stack:** Next.js 16 (App Router), Payload CMS 3 + form builder plugin, React 19, shadcn dialog, Resend, TypeScript
 
 ---
 
 ## File Map
 
-| Action | Path | Responsibility |
-|---|---|---|
-| Create | `collections/TalentInquiries.ts` | Payload collection: fields, access, admin config |
-| Modify | `payload.config.ts` | Register `TalentInquiries` collection |
-| Create | `lib/schemas/talent.ts` | Zod schema for email + pitch fields |
-| Create | `lib/__tests__/talent.test.ts` | Vitest unit tests for the Zod schema |
-| Create | `emails/talent-notification.tsx` | React Email template for owner notification |
-| Create | `actions/talent.ts` | Server action: validate → upload → create doc → send email |
-| Create | `components/site/talent-dialog.tsx` | Client component: Dialog, form, show-once logic |
-| Modify | `app/(site)/layout.tsx` | Mount `<TalentDialog />` inside `<ThemeProvider>` |
+| Action | File | Responsibility |
+|--------|------|----------------|
+| Modify | `payload.config.ts` | Add `formOverrides` with `enabled` checkbox to form builder |
+| Create | `actions/talent-inquiry.ts` | Server action: conditional DB write + Resend email with attachment |
+| Create | `components/site/talent-inquiry-dialog.tsx` | Client component: 15s timer, localStorage, form renderer, file input |
+| Modify | `app/(site)/layout.tsx` | Fetch form server-side, pass to dialog component |
 
 ---
 
-## Task 1: Payload Collection — `TalentInquiries`
+## Task 1: Add `enabled` field to form builder plugin
 
 **Files:**
-- Create: `collections/TalentInquiries.ts`
 - Modify: `payload.config.ts`
 
-- [ ] **Step 1: Create the collection file**
+- [ ] **Step 1: Add `formOverrides` to the existing `formBuilderPlugin()` call**
 
-Create `collections/TalentInquiries.ts` with this exact content:
+Open `payload.config.ts`. The current call looks like:
 
 ```ts
-import type { CollectionConfig } from "payload";
+formBuilderPlugin({
+  fields: { ... },
+  defaultToEmail: "hello@thefalcon.dev",
+}),
+```
 
-export const TalentInquiries: CollectionConfig = {
-  slug: "talent-inquiries",
-  admin: {
-    useAsTitle: "email",
-    defaultColumns: ["email", "submittedAt"],
+Replace it with:
+
+```ts
+formBuilderPlugin({
+  formOverrides: {
+    fields: [
+      {
+        name: "enabled",
+        type: "checkbox",
+        defaultValue: true,
+        label: "Enable Submissions (DB write)",
+        admin: { position: "sidebar" },
+      },
+    ],
   },
-  access: {
-    create: () => true,
-    read: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
-    delete: ({ req }) => Boolean(req.user),
+  fields: {
+    text: true,
+    textarea: true,
+    select: true,
+    email: true,
+    checkbox: true,
+    number: true,
+    message: true,
+    date: false,
+    payment: false,
   },
-  fields: [
-    { name: "email", type: "email", required: true },
-    { name: "pitch", type: "textarea" },
-    {
-      name: "jdFile",
-      type: "upload",
-      relationTo: "media",
-    },
-    {
-      name: "submittedAt",
-      type: "date",
-      admin: { position: "sidebar" },
-    },
-    {
-      name: "ip",
-      type: "text",
-      admin: { position: "sidebar", readOnly: true },
-    },
-  ],
-};
+  defaultToEmail: "hello@thefalcon.dev",
+}),
 ```
 
-- [ ] **Step 2: Register the collection in `payload.config.ts`**
-
-In `payload.config.ts`, add the import after the `Pages` import:
-
-```ts
-import { TalentInquiries } from "./collections/TalentInquiries";
-```
-
-Then add `TalentInquiries` to the `collections` array on line 35:
-
-```ts
-collections: [Users, Posts, Media, Submissions, Work, Projects, Timeline, Education, Certifications, Pages, TalentInquiries],
-```
-
-- [ ] **Step 3: Verify TypeScript compiles**
+- [ ] **Step 2: Regenerate Payload types**
 
 ```bash
-cd /root/Work/flcn-website && pnpm tsc --noEmit 2>&1 | head -20
+pnpm payload generate:types
 ```
 
-Expected: no errors related to `TalentInquiries`.
+Expected: `payload-types.ts` updates. Confirm the `Form` interface now includes `enabled?: boolean | null`.
+
+- [ ] **Step 3: Verify dev server starts without error**
+
+```bash
+pnpm dev
+```
+
+Expected: server starts, no TypeScript or config errors. Stop with Ctrl+C.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add collections/TalentInquiries.ts payload.config.ts
-git commit -m "feat(cms): add TalentInquiries collection"
+git add payload.config.ts payload-types.ts
+git commit -m "feat(forms): add enabled toggle to form builder via formOverrides"
 ```
 
 ---
 
-## Task 2: Zod Schema + Tests (TDD)
+## Task 2: Create the `submitTalentInquiry` server action
 
 **Files:**
-- Create: `lib/__tests__/talent.test.ts`
-- Create: `lib/schemas/talent.ts`
+- Create: `actions/talent-inquiry.ts`
 
-- [ ] **Step 1: Write the failing test**
+This action receives `FormData`, conditionally writes a `form-submissions` entry (based on `enabled`), and always sends a Resend notification email with the JD file attached if present.
 
-Create `lib/__tests__/talent.test.ts`:
-
-```ts
-import { describe, it, expect } from 'vitest'
-import { talentSchema } from '../schemas/talent'
-
-describe('talentSchema', () => {
-  it('accepts a valid email with pitch', () => {
-    const result = talentSchema.safeParse({
-      email: 'recruiter@example.com',
-      pitch: 'We are hiring a Front-End Lead',
-    })
-    expect(result.success).toBe(true)
-  })
-
-  it('accepts a valid email without pitch', () => {
-    const result = talentSchema.safeParse({ email: 'recruiter@example.com' })
-    expect(result.success).toBe(true)
-  })
-
-  it('accepts empty string pitch as undefined (stripped)', () => {
-    const result = talentSchema.safeParse({ email: 'recruiter@example.com', pitch: '' })
-    expect(result.success).toBe(true)
-    if (result.success) expect(result.data.pitch).toBeUndefined()
-  })
-
-  it('rejects an invalid email', () => {
-    const result = talentSchema.safeParse({ email: 'not-an-email', pitch: 'Pitch text' })
-    expect(result.success).toBe(false)
-  })
-
-  it('rejects a missing email', () => {
-    const result = talentSchema.safeParse({ pitch: 'Some pitch' })
-    expect(result.success).toBe(false)
-  })
-
-  it('rejects an empty email string', () => {
-    const result = talentSchema.safeParse({ email: '' })
-    expect(result.success).toBe(false)
-  })
-})
-```
-
-- [ ] **Step 2: Run test to verify it fails**
-
-```bash
-cd /root/Work/flcn-website && pnpm test lib/__tests__/talent.test.ts 2>&1 | tail -15
-```
-
-Expected: FAIL with `Cannot find module '../schemas/talent'`
-
-- [ ] **Step 3: Create the schema**
-
-Create `lib/schemas/talent.ts`:
-
-```ts
-import { z } from "zod"
-
-export const talentSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  pitch: z.string().transform((v) => (v.trim() === "" ? undefined : v)).optional(),
-})
-
-export type TalentFormData = z.infer<typeof talentSchema>
-```
-
-- [ ] **Step 4: Run test to verify it passes**
-
-```bash
-cd /root/Work/flcn-website && pnpm test lib/__tests__/talent.test.ts 2>&1 | tail -15
-```
-
-Expected: 6 tests PASS.
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add lib/schemas/talent.ts lib/__tests__/talent.test.ts
-git commit -m "feat(schema): add talentSchema with tests"
-```
-
----
-
-## Task 3: Email Notification Template
-
-**Files:**
-- Create: `emails/talent-notification.tsx`
-
-- [ ] **Step 1: Create the template**
-
-Create `emails/talent-notification.tsx` (mirrors the structure of `emails/contact-notification.tsx`):
-
-```tsx
-import {
-  Body,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Link,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components"
-
-interface TalentNotificationProps {
-  email: string
-  pitch?: string
-  jdFileUrl?: string
-}
-
-export function TalentNotification({ email, pitch, jdFileUrl }: TalentNotificationProps) {
-  return (
-    <Html>
-      <Head />
-      <Preview>New talent inquiry from {email}</Preview>
-      <Body
-        style={{
-          fontFamily: "system-ui, -apple-system, sans-serif",
-          backgroundColor: "#f5f5f5",
-          margin: 0,
-          padding: "24px 0",
-        }}
-      >
-        <Container
-          style={{
-            maxWidth: "600px",
-            margin: "0 auto",
-            backgroundColor: "#ffffff",
-            borderRadius: "4px",
-            border: "1px solid #e5e5e5",
-            overflow: "hidden",
-          }}
-        >
-          <Section style={{ backgroundColor: "#111111", padding: "20px 28px" }}>
-            <Heading
-              style={{
-                color: "#ffffff",
-                fontFamily: "monospace",
-                fontSize: "13px",
-                fontWeight: "600",
-                margin: 0,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-              }}
-            >
-              THEFALCON.DEV: TALENT INQUIRY
-            </Heading>
-          </Section>
-
-          <Section style={{ padding: "28px" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <tbody>
-                <tr>
-                  <td
-                    style={{
-                      fontFamily: "monospace",
-                      fontSize: "12px",
-                      color: "#888888",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      paddingBottom: "12px",
-                      width: "80px",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    FROM
-                  </td>
-                  <td
-                    style={{
-                      fontFamily: "monospace",
-                      fontSize: "13px",
-                      color: "#111111",
-                      paddingBottom: "12px",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    {email}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            {pitch && (
-              <>
-                <Hr style={{ borderColor: "#e5e5e5", margin: "4px 0 20px" }} />
-                <Text
-                  style={{
-                    fontFamily: "monospace",
-                    fontSize: "12px",
-                    color: "#888888",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    margin: "0 0 8px",
-                  }}
-                >
-                  PITCH
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "system-ui, -apple-system, sans-serif",
-                    fontSize: "14px",
-                    color: "#333333",
-                    lineHeight: "1.6",
-                    margin: 0,
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {pitch}
-                </Text>
-              </>
-            )}
-
-            {jdFileUrl && (
-              <>
-                <Hr style={{ borderColor: "#e5e5e5", margin: "20px 0" }} />
-                <Text
-                  style={{
-                    fontFamily: "monospace",
-                    fontSize: "12px",
-                    color: "#888888",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    margin: "0 0 8px",
-                  }}
-                >
-                  ATTACHED JD
-                </Text>
-                <Link
-                  href={jdFileUrl}
-                  style={{ fontFamily: "monospace", fontSize: "13px", color: "#0070f3" }}
-                >
-                  View File →
-                </Link>
-              </>
-            )}
-          </Section>
-        </Container>
-      </Body>
-    </Html>
-  )
-}
-```
-
-- [ ] **Step 2: Verify TypeScript compiles**
-
-```bash
-cd /root/Work/flcn-website && pnpm tsc --noEmit 2>&1 | grep "talent-notification" | head -5
-```
-
-Expected: no output (no errors).
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add emails/talent-notification.tsx
-git commit -m "feat(email): add TalentNotification email template"
-```
-
----
-
-## Task 4: Server Action
-
-**Files:**
-- Create: `actions/talent.ts`
-
-- [ ] **Step 1: Create the server action**
-
-Create `actions/talent.ts`:
+- [ ] **Step 1: Create `actions/talent-inquiry.ts`**
 
 ```ts
 "use server"
@@ -388,94 +107,79 @@ Create `actions/talent.ts`:
 import { Resend } from "resend"
 import { getPayload } from "payload"
 import config from "@payload-config"
-import { talentSchema } from "@/lib/schemas/talent"
-import { TalentNotification } from "@/emails/talent-notification"
 import { site } from "@/content/site"
+import type { Form } from "@/payload-types"
 
-export type TalentResult = { ok: boolean; error?: string }
+export type TalentInquiryResult = { ok: boolean; error?: string }
 
-export async function submitTalentInquiry(formData: FormData): Promise<TalentResult> {
+export async function submitTalentInquiry(formData: FormData): Promise<TalentInquiryResult> {
+  const formId = formData.get("formId")
   const email = formData.get("email")
   const pitch = formData.get("pitch")
   const jdFile = formData.get("jdFile")
 
-  const parsed = talentSchema.safeParse({
-    email: typeof email === "string" ? email : "",
-    pitch: typeof pitch === "string" ? pitch : undefined,
-  })
-
-  if (!parsed.success) {
-    return { ok: false, error: "Invalid form data. Please check your inputs." }
+  if (typeof formId !== "string" || typeof email !== "string" || !email) {
+    return { ok: false, error: "Invalid submission data." }
   }
 
-  const hasContent = parsed.data.pitch || (jdFile instanceof File && jdFile.size > 0)
-  if (!hasContent) {
-    return { ok: false, error: "Please provide a pitch or attach a JD file." }
-  }
+  const pitchText = typeof pitch === "string" ? pitch.trim() : ""
+  const file = jdFile instanceof File && jdFile.size > 0 ? jdFile : null
 
-  const payload = await getPayload({ config })
-  let jdFileId: string | undefined
-  let jdFileUrl: string | undefined
+  try {
+    const payload = await getPayload({ config })
 
-  if (jdFile instanceof File && jdFile.size > 0) {
-    try {
-      const buffer = Buffer.from(await jdFile.arrayBuffer())
-      const mediaDoc = await payload.create({
-        collection: "media",
-        data: { alt: jdFile.name },
-        file: {
-          data: buffer,
-          mimetype: jdFile.type,
-          name: jdFile.name,
-          size: jdFile.size,
+    // Fetch form to read enabled flag
+    const form = await payload.findByID({
+      collection: "forms",
+      id: formId,
+    }) as Form & { enabled?: boolean | null }
+
+    // Conditionally write DB entry
+    if (form.enabled !== false) {
+      await payload.create({
+        collection: "form-submissions",
+        data: {
+          form: formId,
+          submissionData: [
+            { field: "email", value: email },
+            { field: "pitch", value: pitchText },
+          ],
         },
       })
-      jdFileId = String(mediaDoc.id)
-      jdFileUrl = (mediaDoc as { url?: string | null }).url ?? undefined
-    } catch (err) {
-      console.error("[talent] Failed to upload JD file:", err)
-      return { ok: false, error: "Failed to upload the JD file. Please try again." }
     }
-  }
 
-  try {
-    await payload.create({
-      collection: "talent-inquiries",
-      data: {
-        email: parsed.data.email,
-        pitch: parsed.data.pitch,
-        jdFile: jdFileId,
-        submittedAt: new Date().toISOString(),
-      },
-    })
-  } catch (err) {
-    console.error("[talent] Failed to save to Payload:", err)
-  }
+    // Always send email
+    if (!process.env.RESEND_API_KEY) {
+      console.warn("[talent-inquiry] RESEND_API_KEY not set — skipping email")
+      return { ok: true }
+    }
 
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("[talent] RESEND_API_KEY not configured — skipping email send")
-    return { ok: true }
-  }
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    const from = process.env.RESEND_FROM ?? `Rishabh Kumar <hello@thefalcon.dev>`
+    const to = process.env.RESEND_TO ?? site.email
 
-  const resend = new Resend(process.env.RESEND_API_KEY)
-  const from = process.env.RESEND_FROM ?? `Rishabh Kumar <hello@thefalcon.dev>`
-  const ownerEmail = process.env.RESEND_TO ?? site.email
+    let attachments: { filename: string; content: Buffer }[] | undefined
+    if (file) {
+      const buffer = Buffer.from(await file.arrayBuffer())
+      attachments = [{ filename: file.name, content: buffer }]
+    }
 
-  try {
     await resend.emails.send({
       from,
-      to: ownerEmail,
-      subject: `[thefalcon.dev] New talent inquiry from ${parsed.data.email}`,
-      react: TalentNotification({
-        email: parsed.data.email,
-        pitch: parsed.data.pitch,
-        jdFileUrl,
-      }),
+      to,
+      subject: "[thefalcon.dev] New talent inquiry",
+      html: `
+        <p><strong>Email:</strong> ${email}</p>
+        ${pitchText ? `<p><strong>Pitch / JD:</strong></p><p style="white-space:pre-wrap">${pitchText}</p>` : ""}
+        ${file ? `<p><em>JD file attached: ${file.name}</em></p>` : ""}
+      `,
+      attachments,
     })
+
     return { ok: true }
   } catch (err) {
-    console.error("[talent] Resend error:", err)
-    return { ok: false, error: "Failed to send. Please try again or email me directly." }
+    console.error("[talent-inquiry] Error:", err)
+    return { ok: false, error: "Failed to send. Please email me directly." }
   }
 }
 ```
@@ -483,7 +187,7 @@ export async function submitTalentInquiry(formData: FormData): Promise<TalentRes
 - [ ] **Step 2: Verify TypeScript compiles**
 
 ```bash
-cd /root/Work/flcn-website && pnpm tsc --noEmit 2>&1 | grep "talent" | head -10
+pnpm tsc --noEmit
 ```
 
 Expected: no errors.
@@ -491,214 +195,212 @@ Expected: no errors.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add actions/talent.ts
-git commit -m "feat(action): add submitTalentInquiry server action"
+git add actions/talent-inquiry.ts
+git commit -m "feat(talent): add submitTalentInquiry server action"
 ```
 
 ---
 
-## Task 5: Dialog Component
+## Task 3: Create `TalentInquiryDialog` client component
 
 **Files:**
-- Create: `components/site/talent-dialog.tsx`
+- Create: `components/site/talent-inquiry-dialog.tsx`
 
-- [ ] **Step 1: Create the component**
+The component receives the form definition as a prop (fetched server-side), manages the 15s timer, `localStorage` show-once logic, renders CMS-driven fields dynamically, and includes a hardcoded file input.
 
-Create `components/site/talent-dialog.tsx`:
+- [ ] **Step 1: Check if `Spinner` component exists**
+
+```bash
+cat components/ui/spinner.tsx
+```
+
+If the file exists and exports a `Spinner` component, use the import in Step 2 as written. If it does not exist, replace `<Spinner className="mr-2 h-3 w-3" />` in the component with nothing — the button text alone is sufficient.
+
+- [ ] **Step 2: Create `components/site/talent-inquiry-dialog.tsx`**
 
 ```tsx
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
-
-import { talentSchema, type TalentFormData } from "@/lib/schemas/talent"
-import { submitTalentInquiry } from "@/actions/talent"
-
+import { submitTalentInquiry } from "@/actions/talent-inquiry"
+import type { Form } from "@/payload-types"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 
 const STORAGE_KEY = "talent_popup_seen"
+const DELAY_MS = 15_000
 
-function FieldError({ message }: { message?: string }) {
-  if (!message) return null
-  return <p className="mt-1 font-mono text-[10px] text-destructive">{message}</p>
+interface Props {
+  form: Form
 }
 
-export function TalentDialog() {
+export function TalentInquiryDialog({ form }: Props) {
   const [open, setOpen] = useState(false)
   const [isPending, setIsPending] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [formError, setFormError] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<TalentFormData>({
-    resolver: zodResolver(talentSchema),
-  })
+  const [fileName, setFileName] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (localStorage.getItem(STORAGE_KEY)) return
-    const timer = setTimeout(() => setOpen(true), 15_000)
+    const timer = setTimeout(() => setOpen(true), DELAY_MS)
     return () => clearTimeout(timer)
   }, [])
 
-  function handleOpenChange(isOpen: boolean) {
-    if (!isOpen) localStorage.setItem(STORAGE_KEY, "1")
-    setOpen(isOpen)
+  function handleOpenChange(next: boolean) {
+    if (!next) {
+      localStorage.setItem(STORAGE_KEY, "1")
+    }
+    setOpen(next)
   }
 
-  async function onSubmit(data: TalentFormData) {
-    if (!data.pitch && !selectedFile) {
-      setFormError("Please provide a pitch or attach a JD file.")
-      return
-    }
-    setFormError(null)
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError(null)
     setIsPending(true)
 
-    const formData = new FormData()
-    formData.append("email", data.email)
-    if (data.pitch) formData.append("pitch", data.pitch)
-    if (selectedFile) formData.append("jdFile", selectedFile)
+    const fd = new FormData(e.currentTarget)
+    fd.set("formId", form.id)
 
-    try {
-      const result = await submitTalentInquiry(formData)
-      if (result.ok) {
-        toast.success("Details sent! I'll review your opportunity soon.")
-        handleOpenChange(false)
-        reset()
-        setSelectedFile(null)
-      } else {
-        setFormError(result.error ?? "Something went wrong. Please try again.")
-      }
-    } catch {
-      setFormError("Network error. Please check your connection and try again.")
-    } finally {
-      setIsPending(false)
+    const result = await submitTalentInquiry(fd)
+
+    if (result.ok) {
+      localStorage.setItem(STORAGE_KEY, "1")
+      setOpen(false)
+      toast.success("Details sent.")
+    } else {
+      setError(result.error ?? "Something went wrong. Please try again.")
     }
+
+    setIsPending(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+            Opportunity
+          </p>
+          <DialogTitle className="font-mono text-base uppercase tracking-widest">
             Looking for Talent?
-          </p>
-          <DialogTitle className="text-sm font-semibold tracking-tight">
-            Hiring or have an opportunity?
           </DialogTitle>
-          <DialogDescription className="text-xs/relaxed">
-            If you&apos;re building something that demands precision and are looking for a
-            full-time Front-End Technical Lead, I&apos;d love to hear about it.
+          <DialogDescription>
+            Hiring or have an opportunity?
           </DialogDescription>
-          <p className="font-mono text-[10px] text-muted-foreground/70">
-            Please note: I am only open to considering full-time opportunities (no freelance or
-            contract work).
-          </p>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-          {/* Email */}
-          <div>
-            <Label
-              htmlFor="talent-email"
-              className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block"
-            >
-              Email Address <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="talent-email"
-              type="email"
-              placeholder="you@company.com"
-              autoComplete="email"
-              aria-invalid={!!errors.email}
-              {...register("email")}
-            />
-            <FieldError message={errors.email?.message} />
-          </div>
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          If you&apos;re building something that demands precision and are looking
+          for a full-time Front-End Technical Lead, I&apos;d love to hear about it.
+          <br />
+          <span className="font-medium text-foreground">
+            Please note: I am only open to full-time opportunities (no freelance or contract work).
+          </span>
+        </p>
 
-          {/* Pitch */}
-          <div>
-            <Label
-              htmlFor="talent-pitch"
-              className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block"
-            >
-              Job Description / Pitch
-            </Label>
-            <Textarea
-              id="talent-pitch"
-              placeholder="Tell me about the role and what you're building…"
-              rows={4}
-              {...register("pitch")}
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* CMS-driven fields */}
+          {form.fields?.map((field) => {
+            if (field.blockType === "email") {
+              return (
+                <div key={field.id ?? field.name}>
+                  <Label
+                    htmlFor={`talent-${field.name}`}
+                    className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1.5 block"
+                  >
+                    {field.label ?? "Email Address"}
+                    {field.required && " *"}
+                  </Label>
+                  <Input
+                    id={`talent-${field.name}`}
+                    type="email"
+                    name={field.name}
+                    required={field.required ?? false}
+                    placeholder="you@company.com"
+                    autoComplete="email"
+                    className="h-10 px-3 text-sm"
+                  />
+                </div>
+              )
+            }
 
-          {/* OR divider */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 border-t border-border" />
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Or
-            </span>
-            <div className="flex-1 border-t border-border" />
-          </div>
+            if (field.blockType === "textarea") {
+              return (
+                <div key={field.id ?? field.name}>
+                  <Label
+                    htmlFor={`talent-${field.name}`}
+                    className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1.5 block"
+                  >
+                    {field.label ?? "Message"}
+                  </Label>
+                  <Textarea
+                    id={`talent-${field.name}`}
+                    name={field.name}
+                    required={field.required ?? false}
+                    rows={4}
+                    className="px-3 py-2 text-sm resize-none"
+                  />
+                </div>
+              )
+            }
 
-          {/* File upload */}
+            return null
+          })}
+
+          {/* Static file input */}
           <div>
-            <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5 block">
-              Attach JD File
-            </Label>
-            <div className="border border-dashed border-border p-3 flex items-center gap-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1.5">
+              Or Attach JD File
+            </p>
+            <div className="flex items-center gap-3">
               <input
-                ref={fileInputRef}
+                ref={fileRef}
                 type="file"
-                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                className="sr-only"
-                onChange={(e) => {
-                  setSelectedFile(e.target.files?.[0] ?? null)
-                  setFormError(null)
-                }}
+                name="jdFile"
+                accept=".pdf,.doc,.docx"
+                className="hidden"
+                onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
               />
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="shrink-0 font-mono text-[10px] uppercase tracking-widest"
-                onClick={() => fileInputRef.current?.click()}
+                className="font-mono text-xs uppercase tracking-widest"
+                onClick={() => fileRef.current?.click()}
               >
                 Browse Files
               </Button>
-              <span className="font-mono text-[10px] text-muted-foreground truncate">
-                {selectedFile ? selectedFile.name : "PDF, DOC, or DOCX"}
-              </span>
+              {fileName && (
+                <span className="text-xs text-muted-foreground truncate max-w-[180px]">
+                  {fileName}
+                </span>
+              )}
             </div>
           </div>
 
-          {formError && (
-            <p className="font-mono text-[10px] text-destructive">{formError}</p>
+          {error && (
+            <p className="text-xs text-destructive font-mono">{error}</p>
           )}
 
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full font-mono text-[10px] uppercase tracking-widest"
+            className="w-full font-mono uppercase tracking-widest text-xs"
           >
-            {isPending ? "Sending…" : "Send Details"}
+            {isPending ? <Spinner className="mr-2 h-3 w-3" /> : null}
+            {isPending ? "Sending…" : (form.submitButtonLabel ?? "Send Details")}
           </Button>
         </form>
       </DialogContent>
@@ -707,84 +409,172 @@ export function TalentDialog() {
 }
 ```
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [ ] **Step 3: Verify TypeScript compiles**
 
 ```bash
-cd /root/Work/flcn-website && pnpm tsc --noEmit 2>&1 | grep "talent-dialog" | head -5
-```
-
-Expected: no output.
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add components/site/talent-dialog.tsx
-git commit -m "feat(ui): add TalentDialog component"
-```
-
----
-
-## Task 6: Mount in Layout
-
-**Files:**
-- Modify: `app/(site)/layout.tsx`
-
-- [ ] **Step 1: Add import**
-
-In `app/(site)/layout.tsx`, add the import after the `SplashScreen` import on line 12:
-
-```ts
-import { TalentDialog } from "@/components/site/talent-dialog";
-```
-
-- [ ] **Step 2: Mount the component**
-
-In `app/(site)/layout.tsx`, add `<TalentDialog />` immediately after `<SplashScreen />` on line 86:
-
-```tsx
-<SplashScreen />
-<TalentDialog />
-```
-
-The full `<body>` block should look like:
-
-```tsx
-<body className="min-h-full flex flex-col bg-background text-foreground">
-  <ThemeProvider
-    attribute="class"
-    defaultTheme="system"
-    enableSystem
-    disableTransitionOnChange
-  >
-    <SplashScreen />
-    <TalentDialog />
-    <QueryProvider>
-      <SiteFrame>{children}</SiteFrame>
-    </QueryProvider>
-    <Toaster position="bottom-right" />
-  </ThemeProvider>
-</body>
-```
-
-- [ ] **Step 3: Run full test suite**
-
-```bash
-cd /root/Work/flcn-website && pnpm test 2>&1 | tail -20
-```
-
-Expected: all tests PASS (including the 6 new talent schema tests).
-
-- [ ] **Step 4: TypeScript final check**
-
-```bash
-cd /root/Work/flcn-website && pnpm tsc --noEmit 2>&1 | head -20
+pnpm tsc --noEmit
 ```
 
 Expected: no errors.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add 'app/(site)/layout.tsx'
-git commit -m "feat: mount TalentDialog in site layout"
+git add components/site/talent-inquiry-dialog.tsx
+git commit -m "feat(talent): add TalentInquiryDialog client component"
 ```
+
+---
+
+## Task 4: Fetch form server-side and mount dialog in layout
+
+**Files:**
+- Modify: `app/(site)/layout.tsx`
+
+The site layout is already a server component that calls `getPayload`. We add a form fetch alongside the existing maintenance mode check and mount the dialog.
+
+- [ ] **Step 1: Add imports to `app/(site)/layout.tsx`**
+
+Add these two imports alongside the existing imports at the top of the file:
+
+```tsx
+import { TalentInquiryDialog } from "@/components/site/talent-inquiry-dialog"
+import type { Form } from "@/payload-types"
+```
+
+- [ ] **Step 2: Update `SiteLayout` to fetch the form and mount the dialog**
+
+Replace the entire `SiteLayout` function body with:
+
+```tsx
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  let talentForm: Form | null = null
+
+  try {
+    const payload = await getPayload({ config })
+
+    const settings = await payload.findGlobal({ slug: "site-settings" })
+    const mm = settings.maintenanceMode as { enabled?: boolean | null } | null | undefined
+    if (mm?.enabled) {
+      redirect("/maintenance")
+    }
+
+    const formsResult = await payload.find({
+      collection: "forms",
+      where: { slug: { equals: "talent-inquiry" } },
+      limit: 1,
+      depth: 0,
+    })
+    talentForm = (formsResult.docs[0] as Form) ?? null
+  } catch (err) {
+    unstable_rethrow(err)
+    // CMS unreachable — proceed without dialog
+  }
+
+  return (
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      {process.env.NEXT_PUBLIC_GTM_ID && (
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+      )}
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SplashScreen />
+          {talentForm && <TalentInquiryDialog form={talentForm} />}
+          <QueryProvider>
+            <SiteFrame>{children}</SiteFrame>
+          </QueryProvider>
+          <Toaster position="bottom-right" />
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+- [ ] **Step 3: Verify TypeScript compiles**
+
+```bash
+pnpm tsc --noEmit
+```
+
+Expected: no errors.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add "app/(site)/layout.tsx"
+git commit -m "feat(talent): mount TalentInquiryDialog in site layout"
+```
+
+---
+
+## Task 5: Create the form in Payload admin
+
+This task has no code — it is a manual step to create the `talent-inquiry` form in the Payload CMS admin so the dialog has something to render.
+
+- [ ] **Step 1: Open Payload admin**
+
+Navigate to `/admin/collections/forms/create`.
+
+- [ ] **Step 2: Fill in the form document**
+
+| Field | Value |
+|-------|-------|
+| Title | `Talent Inquiry` |
+| Slug | `talent-inquiry` |
+| Submit Button Label | `SEND DETAILS` |
+| Enable Submissions (DB write) | ✅ checked |
+
+Add two fields using the field builder UI:
+
+**Field 1:**
+- Type: `Email`
+- Label: `EMAIL ADDRESS`
+- Name: `email`
+- Required: ✅
+
+**Field 2:**
+- Type: `Textarea`
+- Label: `JOB DESCRIPTION / PITCH`
+- Name: `pitch`
+- Required: ❌
+
+- [ ] **Step 3: Save the form document**
+
+Click Save. The dialog will now render on the live site after 15 seconds.
+
+- [ ] **Step 4: Smoke-test in dev**
+
+Start the dev server:
+
+```bash
+pnpm dev
+```
+
+Open `http://localhost:3000`. To test without waiting 15s, temporarily change `DELAY_MS` to `1000` in `components/site/talent-inquiry-dialog.tsx`, save, and reload.
+
+Verify:
+1. Dialog opens with title "Looking for Talent?", email field, textarea field, file browse button
+2. File input accepts `.pdf/.doc/.docx` and shows filename
+3. Submitting with a valid email shows "Details sent." toast and closes dialog
+4. Refreshing and waiting does NOT re-show the dialog (localStorage key `talent_popup_seen` is set)
+5. Run `localStorage.removeItem('talent_popup_seen')` in browser console → dialog reappears after delay
+6. Revert `DELAY_MS` to `15_000` and commit nothing (dev-only change)
+
+---
+
+## Notes
+
+- **`enabled` toggle:** Controls only whether a `form-submissions` DB entry is written. The popup still shows and the email still sends regardless of this toggle.
+- **Suppressing the popup entirely:** Delete or unpublish the form document in Payload admin — the layout will get `null` for `talentForm` and skip rendering the component.
+- **JD file storage:** The file is never written to S3/R2. It is read into a `Buffer` in the server action, attached to the Resend email, then garbage-collected.
+- **Show-once:** Uses `localStorage` (persistent across sessions). Clearing site data in the browser will reset it.
