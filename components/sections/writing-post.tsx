@@ -21,6 +21,8 @@ interface WritingPostProps {
   related?: Post[];
 }
 
+const EMPTY_RELATED: Post[] = [];
+
 function formatDate(iso?: string) {
   if (!iso) return "—";
   return new Date(iso).toLocaleDateString("en-US", {
@@ -46,7 +48,7 @@ export function WritingPost({
   tags,
   body,
   cover,
-  related = [],
+  related = EMPTY_RELATED,
 }: WritingPostProps) {
   const headings = extractHeadings(body);
   const showToc = headings.length >= 3;
