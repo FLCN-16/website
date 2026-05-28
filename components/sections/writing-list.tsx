@@ -23,12 +23,18 @@ export function WritingList({ posts, heroPost }: WritingListProps) {
   return (
     <section className="py-20 md:py-28">
       <FadeRise>
-        <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-2">
-          Writing
-        </p>
-        <h1 className="font-sans text-4xl font-semibold tracking-tight mb-8">
-          Articles & Thoughts
-        </h1>
+        <div className="pb-10 border-b border-border">
+          <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-3">
+            Writing
+          </p>
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight leading-tight">
+            Articles & Thoughts.
+          </h1>
+          <p className="text-muted-foreground mt-4 max-w-2xl leading-relaxed">
+            Essays on frontend engineering, system design, and the craft of building software
+            that lasts.
+          </p>
+        </div>
         <WritingListClient initialPosts={posts} heroPost={heroPost} allTags={allTags} />
       </FadeRise>
     </section>
