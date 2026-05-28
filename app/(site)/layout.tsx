@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
+import { SplashScreen } from "@/components/site/splash-screen";
 import { site } from "@/content/site";
 
 export const dynamic = "force-dynamic";
@@ -82,6 +83,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           enableSystem
           disableTransitionOnChange
         >
+          <SplashScreen />
           <QueryProvider>
             <SiteFrame>{children}</SiteFrame>
           </QueryProvider>
