@@ -130,7 +130,7 @@ async function fetchFeaturedProjects(): Promise<ProjectEntry[]> {
     repoUrl: doc.repoUrl ?? undefined,
     startDate: doc.startDate ?? undefined,
     endDate: doc.endDate ?? undefined,
-    highlights: doc.highlights?.map((h) => h.point ?? "") ?? [],
+    highlights: doc.highlights?.map((h: { point?: string | null }) => h.point ?? "") ?? [],
     featured: doc.featured ?? false,
   }))
 }
