@@ -1,58 +1,68 @@
-import type { CollectionConfig } from "payload";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import type { CollectionConfig } from 'payload'
+import { revalidateTag } from 'next/cache'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { CACHE_TAGS } from '@/lib/cache-tags'
 
 export const Pages: CollectionConfig = {
-  slug: "pages",
+  slug: 'pages',
   admin: {
-    useAsTitle: "title",
-    defaultColumns: ["title", "template", "slug"],
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'template', 'slug'],
   },
   access: {
     read: () => true,
   },
   fields: [
+    { name: 'title', type: 'text', required: true },
     {
-      name: "title",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "slug",
-      type: "text",
+      name: 'slug',
+      type: 'text',
       required: true,
       unique: true,
-      admin: {
-        description: "URL-friendly identifier, e.g. privacy, terms, about",
-      },
+      admin: { description: 'URL-friendly identifier, e.g. privacy, terms, about' },
     },
     {
-      name: "template",
-      type: "select",
+      name: 'template',
+      type: 'select',
       required: true,
       options: [
-        { label: "Legal", value: "legal" },
-        { label: "Basic", value: "basic" },
+        { label: 'Legal', value: 'legal' },
+        { label: 'Basic', value: 'basic' },
       ],
-      admin: {
-        position: "sidebar",
-      },
+      admin: { position: 'sidebar' },
     },
     {
-      name: "lastUpdated",
-      type: "date",
+      name: 'lastUpdated',
+      type: 'date',
       admin: {
-        position: "sidebar",
-        condition: (data) => data.template === "legal",
-        date: {
-          pickerAppearance: "dayOnly",
-        },
+        position: 'sidebar',
+        condition: (data) => data.template === 'legal',
+        date: { pickerAppearance: 'dayOnly' },
       },
     },
-    {
-      name: "body",
-      type: "richText",
-      required: true,
-      editor: lexicalEditor(),
-    },
+    { name: 'body', type: 'richText', required: true, editor: lexicalEditor() },
   ],
-};
+  hooks: {
+    afterChange: [
+      ({ doc }) => {
+        try {
+          revalidateTag(CACHE_TAGS.pages, 'max')
+          if (doc.slug) revalidateTag(CACHE_TAGS.page(String(doc.slug)), 'max')
+        } catch {
+          // not in Next.js request context
+        }
+        return doc
+      },
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        try {
+          revalidateTag(CACHE_TAGS.pages, 'max')
+          if (doc.slug) revalidateTag(CACHE_TAGS.page(String(doc.slug)), 'max')
+        } catch {
+          // not in Next.js request context
+        }
+      },
+    ],
+  },
+}

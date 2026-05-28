@@ -1,35 +1,35 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { RichText } from "@payloadcms/richtext-lexical/react";
-import { getPayloadClient } from "@/lib/payload";
-import { createMetadata } from "@/lib/metadata";
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import { getCachedBasicPage } from '@/lib/data'
+import { createMetadata } from '@/lib/metadata'
 
 interface BasicPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: BasicPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = await params
   try {
-    const page = await fetchBasicPage(slug);
-    if (!page) return { title: "Not Found" };
-    return createMetadata({ title: page.title });
+    const page = await getCachedBasicPage(slug)
+    if (!page) return { title: 'Not Found' }
+    return createMetadata({ title: page.title })
   } catch {
-    return { title: slug };
+    return { title: slug }
   }
 }
 
 export default async function BasicPage({ params }: BasicPageProps) {
-  const { slug } = await params;
+  const { slug } = await params
 
-  let page: Awaited<ReturnType<typeof fetchBasicPage>> | undefined;
+  let page: Awaited<ReturnType<typeof getCachedBasicPage>> | undefined
   try {
-    page = await fetchBasicPage(slug);
+    page = await getCachedBasicPage(slug)
   } catch {
     // Payload unavailable — fall through to notFound below
   }
 
-  if (!page) notFound();
+  if (!page) notFound()
 
   return (
     <div className="max-w-3xl">
@@ -40,20 +40,5 @@ export default async function BasicPage({ params }: BasicPageProps) {
         <RichText data={page.body} />
       </div>
     </div>
-  );
-}
-
-async function fetchBasicPage(slug: string) {
-  const payload = await getPayloadClient();
-  const result = await payload.find({
-    collection: "pages",
-    where: {
-      and: [
-        { slug: { equals: slug } },
-        { template: { equals: "basic" } },
-      ],
-    },
-    limit: 1,
-  });
-  return result.docs[0] ?? null;
+  )
 }
