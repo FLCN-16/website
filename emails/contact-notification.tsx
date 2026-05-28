@@ -80,7 +80,7 @@ export function ContactNotification({
                     <td
                       style={{
                         fontFamily: "monospace",
-                        fontSize: "11px",
+                        fontSize: "12px",
                         color: "#888888",
                         letterSpacing: "0.08em",
                         textTransform: "uppercase",
@@ -112,7 +112,7 @@ export function ContactNotification({
             <Text
               style={{
                 fontFamily: "monospace",
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "#888888",
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
