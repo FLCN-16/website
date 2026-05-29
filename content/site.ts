@@ -55,7 +55,7 @@ export const site: Site = {
       label: "LinkedIn",
     },
   ],
-  resumeUrl: "/files/rishabh-kumar-resume.pdf",
+  resumeUrl: "https://media.thefalcon.dev/rishabh-kumar-resume.pdf",
   headline: "Leading teams across the stack,\nshipping production systems.",
   subheadline:
     "Full-Stack Technical Lead with 9+ years building and shipping production web, mobile, and browser-based applications. Open-source contributor to Next.js (vercel/next.js), builder of agentic AI systems with LangChain and Mastra AI, and author of apps live on the Chrome Web Store and Google Play.",
