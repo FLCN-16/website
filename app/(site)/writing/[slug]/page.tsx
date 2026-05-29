@@ -28,8 +28,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params
+  const { isEnabled: draft } = await draftMode()
   try {
-    const post = await getCachedPost(slug)
+    const post = draft ? await getPreviewPost(slug) : await getCachedPost(slug)
     if (!post) return { title: 'Not Found' }
     return createMetadata({
       title: post.meta?.title || post.title,
@@ -62,7 +63,7 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <>
       {draft && (
-        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL!} />
+        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}
       <WritingPost
         title={post.title}

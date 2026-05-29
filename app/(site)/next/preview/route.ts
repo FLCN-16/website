@@ -10,7 +10,7 @@ export async function GET(request: Request): Promise<Response> {
     return new Response('Invalid preview secret', { status: 401 })
   }
 
-  if (!path || !path.startsWith('/')) {
+  if (!path || !path.startsWith('/') || path.startsWith('//')) {
     return new Response('Missing or invalid path', { status: 400 })
   }
 

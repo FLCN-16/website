@@ -29,8 +29,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: LegalPageProps): Promise<Metadata> {
   const { slug } = await params
+  const { isEnabled: draft } = await draftMode()
   try {
-    const page = await getCachedLegalPage(slug)
+    const page = draft ? await getPreviewPage(slug, 'legal') : await getCachedLegalPage(slug)
     if (!page) return { title: 'Not Found' }
     return createMetadata({
       title: page.meta?.title || (page.title ?? slug),
@@ -66,7 +67,7 @@ export default async function LegalPage({ params }: LegalPageProps) {
   return (
     <>
       {draft && (
-        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL!} />
+        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}
       <div className="max-w-3xl">
         <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4">

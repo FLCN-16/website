@@ -25,6 +25,7 @@ export function generatePreviewUrl({
   slug: string
   template?: string
 }): string {
+  if (!slug) return ''
   const serverURL = process.env.NEXT_PUBLIC_SITE_URL || ''
   const previewSecret = process.env.PREVIEW_SECRET || ''
   const path = generatePreviewPath({ collection, slug, template })

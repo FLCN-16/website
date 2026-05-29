@@ -29,8 +29,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: BasicPageProps): Promise<Metadata> {
   const { slug } = await params
+  const { isEnabled: draft } = await draftMode()
   try {
-    const page = await getCachedBasicPage(slug)
+    const page = draft ? await getPreviewPage(slug, 'basic') : await getCachedBasicPage(slug)
     if (!page) return { title: 'Not Found' }
     return createMetadata({
       title: page.meta?.title || (page.title ?? slug),
@@ -58,7 +59,7 @@ export default async function BasicPage({ params }: BasicPageProps) {
   return (
     <>
       {draft && (
-        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL!} />
+        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}
       <div className="max-w-3xl">
         <h1 className="font-sans text-4xl font-semibold tracking-tight mb-8">
