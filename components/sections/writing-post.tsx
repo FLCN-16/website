@@ -7,6 +7,7 @@ import { RichText } from "@payloadcms/richtext-lexical/react";
 import { richTextConverters } from "@/components/writing/richtext-converters";
 import { extractHeadings } from "@/lib/lexical-headings";
 import { PostToc } from "@/components/writing/post-toc";
+import { PostGallery } from "@/components/writing/post-gallery";
 import { ReadingProgress } from "@/components/writing/reading-progress";
 import { RelatedPosts } from "@/components/writing/related-posts";
 import type { PostCover, Post } from "@/lib/types";
@@ -49,7 +50,7 @@ export function WritingPost({
     <>
       <ReadingProgress />
 
-      <article className="py-16 md:py-24 max-w-4xl">
+      <article className="py-16 md:py-24 max-w-6xl">
         {/* Back link */}
         <Link
           href="/writing"
@@ -58,52 +59,80 @@ export function WritingPost({
           ← Writing
         </Link>
 
-        {/* Cover image */}
-        {cover && (
-          <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-8">
+        {/* Cover hero — image with text overlaid on faded bottom half */}
+        {cover ? (
+          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden mb-10">
             <Image
               src={cover.url}
               alt={cover.alt ?? title}
               fill
-              sizes="(max-width: 1024px) 100vw, 896px"
+              sizes="(max-width: 1024px) 100vw, 1152px"
               className="object-cover"
               priority
             />
+            {/* Gradient fade over bottom half */}
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+            {/* Text overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+              <div className="mb-2 flex items-center gap-4 flex-wrap">
+                {publishedAt && (
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {formatDate(publishedAt)}
+                  </span>
+                )}
+                {readingTime && (
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {readingTime} min read
+                  </span>
+                )}
+              </div>
+              <h1 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mb-3">
+                {title}
+              </h1>
+              {tags && tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {tags.map(({ tag }) => (
+                    <Badge key={tag} variant="secondary" className="font-mono text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-
-        {/* Meta */}
-        <div className="mb-4 flex items-center gap-4 flex-wrap">
-          {publishedAt && (
-            <span className="font-mono text-xs text-muted-foreground">
-              {formatDate(publishedAt)}
-            </span>
-          )}
-          {readingTime && (
-            <span className="font-mono text-xs text-muted-foreground">
-              {readingTime} min read
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h1 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-4 leading-tight">
-          {title}
-        </h1>
-
-        {/* Tags */}
-        {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-10">
-            {tags.map(({ tag }) => (
-              <Badge key={tag} variant="secondary" className="font-mono text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
+        ) : (
+          <>
+            {/* Meta */}
+            <div className="mb-4 flex items-center gap-4 flex-wrap">
+              {publishedAt && (
+                <span className="font-mono text-xs text-muted-foreground">
+                  {formatDate(publishedAt)}
+                </span>
+              )}
+              {readingTime && (
+                <span className="font-mono text-xs text-muted-foreground">
+                  {readingTime} min read
+                </span>
+              )}
+            </div>
+            <h1 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight mb-4 leading-tight">
+              {title}
+            </h1>
+            {tags && tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-10">
+                {tags.map(({ tag }) => (
+                  <Badge key={tag} variant="secondary" className="font-mono text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </>
         )}
 
         {/* Body + TOC: body left, TOC sticky right on lg+ */}
         <div
+          id="post-body"
           className={
             showToc
               ? "lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12"
@@ -130,6 +159,9 @@ export function WritingPost({
         {/* Related posts */}
         <RelatedPosts posts={related} />
       </article>
+
+      {/* PhotoSwipe lightbox for all post images */}
+      <PostGallery galleryId="post-body" />
     </>
   );
 }
