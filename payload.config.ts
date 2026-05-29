@@ -48,6 +48,16 @@ export default buildConfig({
     apiKey: process.env.RESEND_API_KEY || "",
   }),
   plugins: [
+    importExportPlugin({
+      collections: [
+        { slug: "posts", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "work", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "projects", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "timeline", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "education", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+        { slug: "certifications", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
+      ],
+    }),
     s3Storage({
       collections: {
         media: {
@@ -122,16 +132,6 @@ export default buildConfig({
         payment: false,
       },
       defaultToEmail: "hello@thefalcon.dev",
-    }),
-    importExportPlugin({
-      collections: [
-        { slug: "posts", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "work", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "projects", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "timeline", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "education", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "certifications", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-      ],
     }),
     mcpPlugin({
       collections: {
