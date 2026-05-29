@@ -20,7 +20,9 @@ export async function generateStaticParams() {
     limit: 100,
     depth: 0,
   })
-  return result.docs.map((doc) => ({ slug: String(doc.slug) }))
+  return result.docs
+    .filter((doc) => doc.slug)
+    .map((doc) => ({ slug: String(doc.slug) }))
 }
 
 export async function generateMetadata({ params }: BasicPageProps): Promise<Metadata> {
@@ -28,7 +30,7 @@ export async function generateMetadata({ params }: BasicPageProps): Promise<Meta
   try {
     const page = await getCachedBasicPage(slug)
     if (!page) return { title: 'Not Found' }
-    return createMetadata({ title: page.title })
+    return createMetadata({ title: page.title ?? slug })
   } catch {
     return { title: slug }
   }
@@ -52,7 +54,7 @@ export default async function BasicPage({ params }: BasicPageProps) {
         {page.title}
       </h1>
       <div className="prose prose-neutral dark:prose-invert max-w-none">
-        <RichText data={page.body} />
+        <RichText data={page.body as Parameters<typeof RichText>[0]['data']} />
       </div>
     </div>
   )
