@@ -1,5 +1,6 @@
 import { NodeFormat } from "@payloadcms/richtext-lexical"
 import type { JSXConvertersFunction } from "@payloadcms/richtext-lexical/react"
+import type React from "react"
 
 function slugify(text: string): string {
   return text
@@ -152,6 +153,7 @@ export const richTextConverters: JSXConvertersFunction = ({ defaultConverters })
     }
     const alt: string = node.fields?.alt || doc?.alt || ""
     const { url } = doc
+    if (!url) return null
 
     if (!doc.mimeType?.startsWith("image")) {
       return (
