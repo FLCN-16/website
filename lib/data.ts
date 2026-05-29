@@ -170,83 +170,115 @@ async function _fetchRecentPosts(
 
 // ─── Work ─────────────────────────────────────────────────────────────────────
 
+const WORK_LIST_QUERY = `
+  query GetWork {
+    Work(where: { status: { equals: "published" } }, sort: "ord", limit: 50) {
+      docs {
+        id title slug category ord description
+        tags { tag }
+        briefing {
+          problem
+          approach { step }
+          impact
+          quote
+        }
+        stack { name role }
+      }
+    }
+  }
+`
+
+interface RawWorkDoc {
+  id: string
+  title: string
+  slug: string
+  category?: string | null
+  ord?: string | null
+  description?: string | null
+  tags?: Array<{ tag?: string | null }> | null
+  briefing?: {
+    problem?: string | null
+    approach?: Array<{ step?: string | null }> | null
+    impact?: string | null
+    quote?: string | null
+  } | null
+  stack?: Array<{ name?: string | null; role?: string | null }> | null
+  updatedAt?: string
+}
+
+interface WorkResponse {
+  Work: { docs: RawWorkDoc[] }
+}
+
 export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'work',
-        where: { status: { equals: 'published' } },
-        sort: 'ord',
-        limit: 50,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        slug: doc.slug,
-        title: doc.title,
-        category: doc.category ?? '',
-        ord: doc.ord ?? '',
-        tags: doc.tags?.map((t: { tag?: string | null }) => t.tag ?? '') ?? [],
-        description: doc.description ?? '',
-        briefing: {
-          problem:
-            (doc.briefing as { problem?: string } | null)?.problem ?? '',
-          approach: (
-            (doc.briefing as { approach?: { step?: string }[] } | null)
-              ?.approach ?? []
-          ).map((a) => a.step ?? ''),
-          impact:
-            (doc.briefing as { impact?: string } | null)?.impact ?? '',
-          quote: (doc.briefing as { quote?: string } | null)?.quote ?? '',
-        },
-        stack: (
-          (doc.stack as { name?: string; role?: string }[] | null) ?? []
-        ).map((s) => ({
-          name: s.name ?? '',
-          role: s.role ?? '',
-        })),
-      }))
+  const data = await gqlFetch<WorkResponse>(WORK_LIST_QUERY, undefined, [CACHE_TAGS.work])
+  return data.Work.docs.map((d) => ({
+    id: String(d.id),
+    slug: d.slug,
+    title: d.title,
+    category: d.category ?? '',
+    ord: d.ord ?? '',
+    tags: d.tags?.map((t) => t.tag ?? '') ?? [],
+    description: d.description ?? '',
+    briefing: {
+      problem: d.briefing?.problem ?? '',
+      approach: d.briefing?.approach?.map((a) => a.step ?? '') ?? [],
+      impact: d.briefing?.impact ?? '',
+      quote: d.briefing?.quote ?? '',
     },
-    ['work-entries'],
-    { tags: [CACHE_TAGS.work], revalidate: false }
-  )()
+    stack: (d.stack ?? []).map((s) => ({ name: s.name ?? '', role: s.role ?? '' })),
+  }))
 }
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
+const PROJECTS_LIST_QUERY = `
+  query GetProjects {
+    Projects(where: { status: { equals: "published" } }, limit: 50) {
+      docs {
+        id title subtitle description category featured liveUrl repoUrl startDate endDate
+        tags { tag }
+        highlights { point }
+      }
+    }
+  }
+`
+
+interface RawProjectDoc {
+  id: string
+  title: string
+  subtitle?: string | null
+  description?: string | null
+  category?: string | null
+  featured?: boolean | null
+  liveUrl?: string | null
+  repoUrl?: string | null
+  startDate?: string | null
+  endDate?: string | null
+  tags?: Array<{ tag?: string | null }> | null
+  highlights?: Array<{ point?: string | null }> | null
+}
+
+interface ProjectsResponse {
+  Projects: { docs: RawProjectDoc[] }
+}
+
 export async function getCachedProjects(): Promise<ProjectEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'projects',
-        where: { status: { equals: 'published' } },
-        limit: 50,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        title: doc.title,
-        subtitle: doc.subtitle ?? undefined,
-        description: doc.description ?? undefined,
-        category: doc.category ?? undefined,
-        tags:
-          doc.tags?.map((t: { tag?: string | null }) => t.tag ?? '') ?? [],
-        liveUrl: doc.liveUrl ?? undefined,
-        repoUrl: doc.repoUrl ?? undefined,
-        startDate: doc.startDate ?? undefined,
-        endDate: doc.endDate ?? undefined,
-        highlights:
-          doc.highlights?.map(
-            (h: { point?: string | null }) => h.point ?? ''
-          ) ?? [],
-        featured: doc.featured ?? false,
-      }))
-    },
-    ['projects-list'],
-    { tags: [CACHE_TAGS.projects], revalidate: false }
-  )()
+  const data = await gqlFetch<ProjectsResponse>(PROJECTS_LIST_QUERY, undefined, [CACHE_TAGS.projects])
+  return data.Projects.docs.map((d) => ({
+    id: String(d.id),
+    title: d.title,
+    subtitle: d.subtitle ?? undefined,
+    description: d.description ?? undefined,
+    category: d.category ?? undefined,
+    tags: d.tags?.map((t) => t.tag ?? '') ?? [],
+    liveUrl: d.liveUrl ?? undefined,
+    repoUrl: d.repoUrl ?? undefined,
+    startDate: d.startDate ?? undefined,
+    endDate: d.endDate ?? undefined,
+    highlights: d.highlights?.map((h) => h.point ?? '') ?? [],
+    featured: d.featured ?? false,
+  }))
 }
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
@@ -346,27 +378,22 @@ export async function getSitemapPosts(): Promise<
   }))
 }
 
-export async function getSitemapWork(): Promise<
-  { slug: string; updatedAt: string }[]
-> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'work',
-        where: { status: { equals: 'published' } },
-        sort: 'ord',
-        pagination: false,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        slug: String(doc.slug),
-        updatedAt: String(doc.updatedAt),
-      }))
-    },
-    ['sitemap-work'],
-    { tags: [CACHE_TAGS.work], revalidate: false }
-  )()
+// ─── Sitemap Work ─────────────────────────────────────────────────────────
+
+const SITEMAP_WORK_QUERY = `
+  query GetSitemapWork {
+    Work(where: { status: { equals: "published" } }, sort: "ord", limit: 1000) {
+      docs {
+        slug
+        updatedAt
+      }
+    }
+  }
+`
+
+export async function getSitemapWork(): Promise<{ slug: string; updatedAt: string }[]> {
+  const data = await gqlFetch<WorkResponse>(SITEMAP_WORK_QUERY, undefined, [CACHE_TAGS.work])
+  return data.Work.docs.map((d) => ({ slug: d.slug, updatedAt: d.updatedAt ?? '' }))
 }
 
 export async function getSitemapPages(): Promise<
