@@ -1,7 +1,8 @@
 import { unstable_cache } from 'next/cache'
-import { getPayloadClient } from './payload'
+import { gqlFetch } from './graphql'
 import { mapPayloadPost } from './posts'
 import { CACHE_TAGS } from './cache-tags'
+import { getPayloadClient } from './payload'
 import type {
   Post,
   WorkEntry,
@@ -13,100 +14,157 @@ import type {
 
 // ─── Posts ────────────────────────────────────────────────────────────────────
 
-export async function getCachedPosts(): Promise<Post[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: { status: { equals: 'published' } },
-        sort: '-publishedAt',
-        limit: 50,
-        depth: 1,
-      })
-      return result.docs.map(mapPayloadPost)
-    },
-    ['posts-list'],
-    { tags: [CACHE_TAGS.posts], revalidate: false }
-  )()
+const POSTS_LIST_QUERY = `
+  {
+    Posts(where: { status: { equals: "published" } }, sort: "-publishedAt", limit: 50) {
+      docs {
+        id title slug excerpt featured publishedAt readingTime
+        cover { url width height alt }
+        tags { tag }
+      }
+    }
+  }
+`
+
+const POST_BY_SLUG_QUERY = `
+  query GetPost($slug: String) {
+    Posts(
+      where: { AND: [{ slug: { equals: $slug } }, { status: { equals: "published" } }] }
+      limit: 1
+    ) {
+      docs {
+        id title slug excerpt featured publishedAt readingTime
+        cover { url width height alt }
+        tags { tag }
+        body
+      }
+    }
+  }
+`
+
+const RELATED_POSTS_QUERY = `
+  query GetRelatedPosts($postSlug: String, $tags: [String]) {
+    Posts(
+      where: {
+        AND: [
+          { status: { equals: "published" } }
+          { slug: { not_equals: $postSlug } }
+          { tags__tag: { in: $tags } }
+        ]
+      }
+      sort: "-publishedAt"
+      limit: 3
+    ) {
+      docs {
+        id title slug excerpt featured publishedAt readingTime
+        cover { url width height alt }
+        tags { tag }
+      }
+    }
+  }
+`
+
+const RECENT_POSTS_QUERY = `
+  query GetRecentPosts($excludeSlug: String) {
+    Posts(
+      where: {
+        AND: [
+          { status: { equals: "published" } }
+          { slug: { not_equals: $excludeSlug } }
+        ]
+      }
+      sort: "-publishedAt"
+      limit: 6
+    ) {
+      docs {
+        id title slug excerpt featured publishedAt readingTime
+        cover { url width height alt }
+        tags { tag }
+      }
+    }
+  }
+`
+
+const SITEMAP_POSTS_QUERY = `
+  {
+    Posts(where: { status: { equals: "published" } }, sort: "-publishedAt", limit: 1000) {
+      docs {
+        slug
+        publishedAt
+        updatedAt
+      }
+    }
+  }
+`
+
+interface RawPostDoc {
+  id: string
+  title: string
+  slug: string
+  excerpt?: string | null
+  featured?: boolean | null
+  publishedAt?: string | null
+  readingTime?: number | null
+  cover?: { url: string; width?: number | null; height?: number | null; alt?: string | null } | null
+  tags?: { tag?: string | null }[]
+  body?: unknown
+  meta?: { title?: string | null; description?: string | null } | null
+  updatedAt: string
 }
 
-export async function getCachedPost(slug: string) {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: {
-          and: [
-            { slug: { equals: slug } },
-            { status: { equals: 'published' } },
-          ],
-        },
-        limit: 1,
-        depth: 1,
-      })
-      return result.docs[0] ?? null
-    },
-    ['post', slug],
-    { tags: [CACHE_TAGS.posts, CACHE_TAGS.post(slug)], revalidate: false }
-  )()
+interface PostsResponse {
+  Posts: { docs: unknown[] }
+}
+
+interface SinglePostResponse {
+  Posts: { docs: RawPostDoc[] }
+}
+
+export async function getCachedPosts(): Promise<Post[]> {
+  const data = await gqlFetch<PostsResponse>(POSTS_LIST_QUERY, undefined, [CACHE_TAGS.posts])
+  return data.Posts.docs.map(mapPayloadPost)
+}
+
+export async function getCachedPost(slug: string): Promise<RawPostDoc | null> {
+  const data = await gqlFetch<SinglePostResponse>(
+    POST_BY_SLUG_QUERY,
+    { slug },
+    [CACHE_TAGS.posts, CACHE_TAGS.post(slug)]
+  )
+  return data.Posts.docs[0] ?? null
 }
 
 export async function getCachedRelatedPosts(
   postSlug: string,
   tags: string[]
 ): Promise<Post[]> {
-  return unstable_cache(
-    async () => {
-      if (!tags.length) return _fetchRecentPosts(postSlug)
+  if (!tags.length) return _fetchRecentPosts(postSlug)
 
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: {
-          and: [
-            { status: { equals: 'published' } },
-            { slug: { not_equals: postSlug } },
-            { 'tags.tag': { in: tags } },
-          ],
-        },
-        sort: '-publishedAt',
-        limit: 3,
-        depth: 1,
-      })
+  const data = await gqlFetch<PostsResponse>(
+    RELATED_POSTS_QUERY,
+    { postSlug, tags },
+    [CACHE_TAGS.posts]
+  )
 
-      const docs = result.docs
-      if (docs.length >= 3) return docs.map(mapPayloadPost)
+  const docs = data.Posts.docs
+  if (docs.length >= 3) return docs.map(mapPayloadPost)
 
-      const existing = new Set(docs.map((d) => d.slug))
-      existing.add(postSlug)
-      const recent = await _fetchRecentPosts(postSlug, existing)
-      return [...docs.map(mapPayloadPost), ...recent].slice(0, 3)
-    },
-    ['related-posts', postSlug, ...tags.slice().sort()],
-    { tags: [CACHE_TAGS.posts], revalidate: false }
-  )()
+  const existing = new Set(docs.map((d: unknown) => (d as { slug: string }).slug))
+  existing.add(postSlug)
+  const recent = await _fetchRecentPosts(postSlug, existing)
+  return [...docs.map(mapPayloadPost), ...recent].slice(0, 3)
 }
 
 async function _fetchRecentPosts(
   excludeSlug: string,
   excludeSlugs?: Set<string>
 ): Promise<Post[]> {
-  const payload = await getPayloadClient()
-  const result = await payload.find({
-    collection: 'posts',
-    where: {
-      and: [
-        { status: { equals: 'published' } },
-        { slug: { not_equals: excludeSlug } },
-      ],
-    },
-    sort: '-publishedAt',
-    limit: 6,
-    depth: 1,
-  })
-  const all = result.docs.map(mapPayloadPost)
+  const data = await gqlFetch<PostsResponse>(
+    RECENT_POSTS_QUERY,
+    { excludeSlug },
+    [CACHE_TAGS.posts]
+  )
+  const all = data.Posts.docs.map(mapPayloadPost)
   if (!excludeSlugs) return all.slice(0, 3)
   return all.filter((p) => !excludeSlugs.has(p.slug)).slice(0, 3)
 }
@@ -281,25 +339,15 @@ export async function getCachedCertifications(): Promise<CertificationEntry[]> {
 export async function getSitemapPosts(): Promise<
   { slug: string; publishedAt: string | null; updatedAt: string }[]
 > {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: { status: { equals: 'published' } },
-        sort: '-publishedAt',
-        pagination: false,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        slug: String(doc.slug),
-        publishedAt: doc.publishedAt ? String(doc.publishedAt) : null,
-        updatedAt: String(doc.updatedAt),
-      }))
-    },
-    ['sitemap-posts'],
-    { tags: [CACHE_TAGS.posts], revalidate: false }
-  )()
+  const data = await gqlFetch<PostsResponse>(SITEMAP_POSTS_QUERY, undefined, [CACHE_TAGS.posts])
+  return data.Posts.docs.map((doc) => {
+    const d = doc as { slug: string; publishedAt?: string | null; updatedAt: string }
+    return {
+      slug: d.slug,
+      publishedAt: d.publishedAt ?? null,
+      updatedAt: d.updatedAt,
+    }
+  })
 }
 
 export async function getSitemapWork(): Promise<
