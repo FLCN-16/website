@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+import { richTextConverters } from "@/components/writing/richtext-converters";
 import { extractHeadings } from "@/lib/lexical-headings";
 import { PostToc } from "@/components/writing/post-toc";
 import { ReadingProgress } from "@/components/writing/reading-progress";
@@ -30,15 +31,6 @@ function formatDate(iso?: string) {
     day: "numeric",
     year: "numeric",
   });
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
 }
 
 export function WritingPost({
@@ -110,28 +102,28 @@ export function WritingPost({
           </div>
         )}
 
-        {/* Two-column: TOC + prose */}
-        <div className={showToc ? "lg:grid lg:grid-cols-[12rem_minmax(0,42rem)] lg:gap-12" : undefined}>
-          {/* TOC — sticky left column on lg+ */}
+        {/* Body + TOC: body left, TOC sticky right on lg+ */}
+        <div
+          className={
+            showToc
+              ? "lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12"
+              : undefined
+          }
+        >
+          {/* Body */}
+          {body && (
+            <div>
+              <RichText data={body} converters={richTextConverters} />
+            </div>
+          )}
+
+          {/* TOC — sticky right column on lg+ */}
           {showToc && (
             <aside className="hidden lg:block">
               <div className="sticky top-24">
                 <PostToc headings={headings} />
               </div>
             </aside>
-          )}
-
-          {/* Body */}
-          {body && (
-            <div className="prose prose-neutral dark:prose-invert max-w-none">
-              <RichText
-                data={body}
-                converters={({ defaultConverters }) => ({
-                  ...defaultConverters,
-                  heading: headingConverter,
-                })}
-              />
-            </div>
           )}
         </div>
 
@@ -140,18 +132,4 @@ export function WritingPost({
       </article>
     </>
   );
-}
-
-// Injects id attributes on h2/h3 heading elements so TOC anchor links work.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function headingConverter({ node, nodesToJSX }: any) {
-  const tag = node.tag as string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const text = (node.children as any[])
-    .map((c: any) => (typeof c?.text === "string" ? c.text : ""))
-    .join("");
-  const id = slugify(text);
-  const Tag = tag as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  const children = nodesToJSX({ nodes: node.children });
-  return <Tag id={id}>{children}</Tag>;
 }
