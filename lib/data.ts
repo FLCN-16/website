@@ -15,7 +15,7 @@ import type {
 // ─── Posts ────────────────────────────────────────────────────────────────────
 
 const POSTS_LIST_QUERY = `
-  {
+  query GetPosts {
     Posts(where: { status: { equals: "published" } }, sort: "-publishedAt", limit: 50) {
       docs {
         id title slug excerpt featured publishedAt readingTime
@@ -86,7 +86,7 @@ const RECENT_POSTS_QUERY = `
 `
 
 const SITEMAP_POSTS_QUERY = `
-  {
+  query GetSitemapPosts {
     Posts(where: { status: { equals: "published" } }, sort: "-publishedAt", limit: 1000) {
       docs {
         slug
@@ -108,12 +108,11 @@ interface RawPostDoc {
   cover?: { url: string; width?: number | null; height?: number | null; alt?: string | null } | null
   tags?: { tag?: string | null }[]
   body?: unknown
-  meta?: { title?: string | null; description?: string | null } | null
   updatedAt: string
 }
 
 interface PostsResponse {
-  Posts: { docs: unknown[] }
+  Posts: { docs: RawPostDoc[] }
 }
 
 interface SinglePostResponse {
@@ -149,7 +148,7 @@ export async function getCachedRelatedPosts(
   const docs = data.Posts.docs
   if (docs.length >= 3) return docs.map(mapPayloadPost)
 
-  const existing = new Set(docs.map((d: unknown) => (d as { slug: string }).slug))
+  const existing = new Set(docs.map((d) => d.slug))
   existing.add(postSlug)
   const recent = await _fetchRecentPosts(postSlug, existing)
   return [...docs.map(mapPayloadPost), ...recent].slice(0, 3)
@@ -340,14 +339,11 @@ export async function getSitemapPosts(): Promise<
   { slug: string; publishedAt: string | null; updatedAt: string }[]
 > {
   const data = await gqlFetch<PostsResponse>(SITEMAP_POSTS_QUERY, undefined, [CACHE_TAGS.posts])
-  return data.Posts.docs.map((doc) => {
-    const d = doc as { slug: string; publishedAt?: string | null; updatedAt: string }
-    return {
-      slug: d.slug,
-      publishedAt: d.publishedAt ?? null,
-      updatedAt: d.updatedAt,
-    }
-  })
+  return data.Posts.docs.map((doc) => ({
+    slug: doc.slug,
+    publishedAt: doc.publishedAt ?? null,
+    updatedAt: doc.updatedAt,
+  }))
 }
 
 export async function getSitemapWork(): Promise<
