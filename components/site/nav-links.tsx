@@ -10,9 +10,10 @@ import { useReducedMotion } from "@/lib/reduced-motion"
 
 interface NavLinksProps {
   onNavigate?: () => void
+  mobile?: boolean
 }
 
-export function NavLinks({ onNavigate }: NavLinksProps) {
+export function NavLinks({ onNavigate, mobile = false }: NavLinksProps) {
   const pathname = usePathname()
   const reduced = useReducedMotion()
   const navRef = useRef<HTMLElement>(null)
@@ -51,7 +52,7 @@ export function NavLinks({ onNavigate }: NavLinksProps) {
   )
 
   return (
-    <nav ref={navRef} className="relative flex flex-col gap-1 flex-1">
+    <nav ref={navRef} className={["relative flex flex-col flex-1", mobile ? "gap-1.5" : "gap-1"].join(" ")}>
       {/* Sliding active indicator */}
       <div
         ref={barRef}
@@ -69,11 +70,12 @@ export function NavLinks({ onNavigate }: NavLinksProps) {
             ref={(el) => { linkRefs.current[i] = el }}
             onClick={onNavigate}
             aria-current={isActive ? "page" : undefined}
-            className="group flex items-center gap-2 py-1 pl-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+            className={["group flex items-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm", mobile ? "py-3 pl-4" : "py-1 pl-3"].join(" ")}
           >
             <span
               className={[
-                "font-mono text-xs transition-colors",
+                "font-mono transition-colors",
+                mobile ? "text-sm" : "text-xs",
                 isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground",
               ].join(" ")}
             >
@@ -81,7 +83,8 @@ export function NavLinks({ onNavigate }: NavLinksProps) {
             </span>
             <span
               className={[
-                "font-mono text-xs transition-colors",
+                "font-mono transition-colors",
+                mobile ? "text-sm" : "text-xs",
                 isActive ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground",
               ].join(" ")}
             >

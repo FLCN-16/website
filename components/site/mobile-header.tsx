@@ -45,7 +45,7 @@ export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
             <span className="font-mono text-xs text-muted-foreground">{site.status.label}</span>
           </div>
 
-          <NavLinks onNavigate={() => setOpen(false)} />
+          <NavLinks mobile onNavigate={() => setOpen(false)} />
 
           {/* Bottom */}
           <div className="mt-auto flex flex-col gap-3">

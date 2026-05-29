@@ -32,46 +32,31 @@ function MaturityDots({ maturity }: { maturity: "expert" | "proficient" | "learn
 export function StackMatrix({ disciplines }: StackMatrixProps) {
   return (
     <div className="py-8">
-      <div className="overflow-x-auto">
-      <table className="w-full border-collapse min-w-[480px]">
-        <thead>
-          <tr className="border-b border-border">
-            <th className="font-mono text-xs uppercase tracking-widest text-muted-foreground py-3 px-4 text-left">
-              Discipline
-            </th>
-            <th className="font-mono text-xs uppercase tracking-widest text-muted-foreground py-3 px-4 text-left">
-              Tool
-            </th>
-            <th className="font-mono text-xs uppercase tracking-widest text-muted-foreground py-3 px-4 text-left">
-              Maturity
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {disciplines.map((discipline) =>
-            discipline.tools.map((tool, toolIndex) => (
-              <tr
-                key={`${discipline.name}-${tool.name}`}
-                className="border-b border-border"
-              >
-                <td className="font-mono text-xs py-3 px-4 align-top">
-                  {toolIndex === 0 ? (
-                    <span className="text-foreground">{discipline.name}</span>
-                  ) : (
-                    <span className="text-muted-foreground/30 select-none" aria-hidden>
-                      {discipline.name}
-                    </span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {disciplines.map((discipline) => (
+          <div
+            key={discipline.name}
+            className="bg-card border border-border rounded-lg p-4"
+          >
+            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-3">
+              {discipline.name}
+            </p>
+            <div>
+              {discipline.tools.map((tool, toolIndex) => (
+                <div
+                  key={`${discipline.name}-${tool.name}`}
+                  className={cn(
+                    "flex items-center justify-between py-2",
+                    toolIndex !== discipline.tools.length - 1 && "border-b border-border"
                   )}
-                </td>
-                <td className="font-mono text-xs py-3 px-4">{tool.name}</td>
-                <td className="font-mono text-xs py-3 px-4">
+                >
+                  <span className="font-mono text-xs">{tool.name}</span>
                   <MaturityDots maturity={tool.maturity} />
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
