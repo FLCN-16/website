@@ -1,8 +1,6 @@
-import { unstable_cache } from 'next/cache'
 import { gqlFetch } from './graphql'
 import { mapPayloadPost } from './posts'
 import { CACHE_TAGS } from './cache-tags'
-import { getPayloadClient } from './payload'
 import type {
   Post,
   WorkEntry,
@@ -283,86 +281,124 @@ export async function getCachedProjects(): Promise<ProjectEntry[]> {
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 
+const TIMELINE_QUERY = `
+  query GetTimeline {
+    Timeline(sort: "order", limit: 20) {
+      docs {
+        id company role start end summary order
+        tags { tag }
+      }
+    }
+  }
+`
+
+interface RawTimelineDoc {
+  id: string
+  company: string
+  role: string
+  start: string
+  end?: string | null
+  summary?: string | null
+  tags?: Array<{ tag?: string | null }> | null
+  order?: number | null
+}
+
+interface TimelineResponse {
+  Timeline: { docs: RawTimelineDoc[] }
+}
+
 export async function getCachedTimeline(): Promise<TimelineEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'timeline',
-        sort: 'order',
-        limit: 20,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        company: doc.company,
-        role: doc.role,
-        start: doc.start,
-        end: doc.end ?? null,
-        summary: doc.summary ?? undefined,
-        tags:
-          doc.tags?.map((t: { tag?: string | null }) => t.tag ?? '') ?? [],
-        order: doc.order ?? undefined,
-      }))
-    },
-    ['timeline'],
-    { tags: [CACHE_TAGS.timeline], revalidate: false }
-  )()
+  const data = await gqlFetch<TimelineResponse>(TIMELINE_QUERY, undefined, [CACHE_TAGS.timeline])
+  return data.Timeline.docs.map((d) => ({
+    id: String(d.id),
+    company: d.company,
+    role: d.role,
+    start: d.start,
+    end: d.end ?? null,
+    summary: d.summary ?? undefined,
+    tags: d.tags?.map((t) => t.tag ?? '') ?? [],
+    order: d.order ?? undefined,
+  }))
 }
 
 // ─── Education ────────────────────────────────────────────────────────────────
 
+const EDUCATION_QUERY = `
+  query GetEducation {
+    Education(sort: "order", limit: 20) {
+      docs {
+        id institution degree location start end gpa status order
+      }
+    }
+  }
+`
+
+interface RawEducationDoc {
+  id: string
+  institution: string
+  degree: string
+  location?: string | null
+  start?: string | null
+  end?: string | null
+  gpa?: string | null
+  status?: string | null
+  order?: number | null
+}
+
+interface EducationResponse {
+  Education: { docs: RawEducationDoc[] }
+}
+
 export async function getCachedEducation(): Promise<EducationEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'education',
-        sort: 'order',
-        limit: 20,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        institution: doc.institution,
-        degree: doc.degree,
-        location: doc.location ?? undefined,
-        start: doc.start ?? undefined,
-        end: doc.end ?? undefined,
-        gpa: doc.gpa ?? undefined,
-        status: (doc.status as EducationEntry['status']) ?? undefined,
-        order: doc.order ?? undefined,
-      }))
-    },
-    ['education'],
-    { tags: [CACHE_TAGS.education], revalidate: false }
-  )()
+  const data = await gqlFetch<EducationResponse>(EDUCATION_QUERY, undefined, [CACHE_TAGS.education])
+  return data.Education.docs.map((d) => ({
+    id: String(d.id),
+    institution: d.institution,
+    degree: d.degree,
+    location: d.location ?? undefined,
+    start: d.start ?? undefined,
+    end: d.end ?? undefined,
+    gpa: d.gpa ?? undefined,
+    status: (d.status as EducationEntry['status']) ?? undefined,
+    order: d.order ?? undefined,
+  }))
 }
 
 // ─── Certifications ───────────────────────────────────────────────────────────
 
+const CERTIFICATIONS_QUERY = `
+  query GetCertifications {
+    Certifications(sort: "order", limit: 20) {
+      docs {
+        id name issuer year credentialUrl order
+      }
+    }
+  }
+`
+
+interface RawCertificationDoc {
+  id: string
+  name: string
+  issuer: string
+  year: string
+  credentialUrl?: string | null
+  order?: number | null
+}
+
+interface CertificationsResponse {
+  Certifications: { docs: RawCertificationDoc[] }
+}
+
 export async function getCachedCertifications(): Promise<CertificationEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'certifications',
-        sort: 'order',
-        limit: 20,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        name: doc.name,
-        issuer: doc.issuer,
-        year: doc.year,
-        credentialUrl: doc.credentialUrl ?? undefined,
-        order: doc.order ?? undefined,
-      }))
-    },
-    ['certifications'],
-    { tags: [CACHE_TAGS.certifications], revalidate: false }
-  )()
+  const data = await gqlFetch<CertificationsResponse>(CERTIFICATIONS_QUERY, undefined, [CACHE_TAGS.certifications])
+  return data.Certifications.docs.map((d) => ({
+    id: String(d.id),
+    name: d.name,
+    issuer: d.issuer,
+    year: d.year,
+    credentialUrl: d.credentialUrl ?? undefined,
+    order: d.order ?? undefined,
+  }))
 }
 
 // ─── Sitemap fetchers ─────────────────────────────────────────────────────────
@@ -396,6 +432,32 @@ export async function getSitemapWork(): Promise<{ slug: string; updatedAt: strin
   return data.Work.docs.map((d) => ({ slug: d.slug, updatedAt: d.updatedAt ?? '' }))
 }
 
+// ─── Sitemap Pages ────────────────────────────────────────────────────────
+
+const SITEMAP_PAGES_QUERY = `
+  query GetSitemapPages {
+    Pages(limit: 1000) {
+      docs {
+        slug template lastUpdated updatedAt
+      }
+    }
+  }
+`
+
+interface RawPageDoc {
+  id?: string
+  title?: string
+  slug: string
+  template: string
+  lastUpdated?: string | null
+  updatedAt: string
+  body?: unknown
+}
+
+interface PagesResponse {
+  Pages: { docs: RawPageDoc[] }
+}
+
 export async function getSitemapPages(): Promise<
   {
     slug: string
@@ -404,66 +466,44 @@ export async function getSitemapPages(): Promise<
     updatedAt: string
   }[]
 > {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'pages',
-        pagination: false,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        slug: String(doc.slug),
-        template: doc.template as 'legal' | 'basic',
-        lastUpdated: doc.lastUpdated ? String(doc.lastUpdated) : null,
-        updatedAt: String(doc.updatedAt),
-      }))
-    },
-    ['sitemap-pages'],
-    { tags: [CACHE_TAGS.pages], revalidate: false }
-  )()
+  const data = await gqlFetch<PagesResponse>(SITEMAP_PAGES_QUERY, undefined, [CACHE_TAGS.pages])
+  return data.Pages.docs.map((d) => ({
+    slug: d.slug,
+    template: d.template as 'legal' | 'basic',
+    lastUpdated: d.lastUpdated ?? null,
+    updatedAt: d.updatedAt,
+  }))
 }
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
 
+const PAGE_BY_SLUG_QUERY = `
+  query GetPage($slug: String, $template: String) {
+    Pages(
+      where: { AND: [{ slug: { equals: $slug } }, { template: { equals: $template } }] }
+      limit: 1
+    ) {
+      docs {
+        id title slug template lastUpdated updatedAt body
+      }
+    }
+  }
+`
+
 export async function getCachedBasicPage(slug: string) {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'pages',
-        where: {
-          and: [
-            { slug: { equals: slug } },
-            { template: { equals: 'basic' } },
-          ],
-        },
-        limit: 1,
-      })
-      return result.docs[0] ?? null
-    },
-    ['page-basic', slug],
-    { tags: [CACHE_TAGS.pages, CACHE_TAGS.page(slug)], revalidate: false }
-  )()
+  const data = await gqlFetch<PagesResponse>(
+    PAGE_BY_SLUG_QUERY,
+    { slug, template: 'basic' },
+    [CACHE_TAGS.pages, CACHE_TAGS.page(slug)]
+  )
+  return data.Pages.docs[0] ?? null
 }
 
 export async function getCachedLegalPage(slug: string) {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'pages',
-        where: {
-          and: [
-            { slug: { equals: slug } },
-            { template: { equals: 'legal' } },
-          ],
-        },
-        limit: 1,
-      })
-      return result.docs[0] ?? null
-    },
-    ['page-legal', slug],
-    { tags: [CACHE_TAGS.pages, CACHE_TAGS.page(slug)], revalidate: false }
-  )()
+  const data = await gqlFetch<PagesResponse>(
+    PAGE_BY_SLUG_QUERY,
+    { slug, template: 'legal' },
+    [CACHE_TAGS.pages, CACHE_TAGS.page(slug)]
+  )
+  return data.Pages.docs[0] ?? null
 }
