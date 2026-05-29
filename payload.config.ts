@@ -8,7 +8,6 @@ import { resendAdapter } from "@payloadcms/email-resend";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { searchPlugin } from "@payloadcms/plugin-search";
 import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
-import { importExportPlugin } from "@payloadcms/plugin-import-export";
 import { mcpPlugin } from "@payloadcms/plugin-mcp";
 import { Users } from "./collections/Users";
 import { Posts } from "./collections/Posts";
@@ -64,16 +63,6 @@ export default buildConfig({
     apiKey: process.env.RESEND_API_KEY || "",
   }),
   plugins: [
-    importExportPlugin({
-      collections: [
-        { slug: "posts", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "work", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "projects", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "timeline", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "education", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-        { slug: "certifications", export: { disableJobsQueue: true }, import: { disableJobsQueue: true } },
-      ],
-    }),
     s3Storage({
       collections: {
         media: {
