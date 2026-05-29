@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: WorkDetailProps): Promise<Met
     return createMetadata({
       title: project.meta?.title || project.title,
       description: project.meta?.description || project.description,
-      image: project.meta?.image?.url ?? undefined,
+      image: typeof project.meta?.image === 'object' ? project.meta?.image?.url ?? undefined : undefined,
     })
   } catch {
     return {}

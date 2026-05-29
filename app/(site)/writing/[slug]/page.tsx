@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     return createMetadata({
       title: post.meta?.title || post.title,
       description: (post.meta?.description || post.excerpt) ?? undefined,
-      image: post.meta?.image?.url ?? undefined,
+      image: typeof post.meta?.image === 'object' ? post.meta?.image?.url ?? undefined : undefined,
     })
   } catch {
     return { title: slug }

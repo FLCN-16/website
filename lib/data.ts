@@ -25,10 +25,11 @@ export interface RawPostDoc {
   tags?: { tag?: string | null }[]
   body?: unknown
   updatedAt: string
+  // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapPosts)
   meta?: {
     title?: string | null
     description?: string | null
-    image?: { url?: string | null } | null
+    image?: { url?: string | null } | string | null
   } | null
 }
 
@@ -134,13 +135,15 @@ interface RawWorkDoc {
   } | null
   stack?: Array<{ name?: string | null; role?: string | null }> | null
   updatedAt?: string
+  // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapWork)
   meta?: {
     title?: string | null
     description?: string | null
-    image?: { url?: string | null } | null
+    image?: { url?: string | null } | string | null
   } | null
 }
 
+// depth=1 required to resolve meta.image for SEO; also resolves cover (not mapped here, acknowledged)
 export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
   const data = await restFetch<PayloadListResponse<RawWorkDoc>>(
     'work?where[status][equals]=published&sort=ord&limit=50&depth=1',
@@ -161,7 +164,13 @@ export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
         quote: d.briefing?.quote ?? '',
       },
       stack: (d.stack ?? []).map((s) => ({ name: s.name ?? '', role: s.role ?? '' })),
-      meta: d.meta,
+      meta: d.meta
+        ? {
+            title: d.meta.title,
+            description: d.meta.description,
+            image: typeof d.meta.image === 'object' ? d.meta.image : null,
+          }
+        : d.meta,
   }))
 }
 
@@ -309,10 +318,11 @@ interface RawPageDoc {
   lastUpdated?: string | null
   updatedAt: string
   body?: unknown
+  // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapPages)
   meta?: {
     title?: string | null
     description?: string | null
-    image?: { url?: string | null } | null
+    image?: { url?: string | null } | string | null
   } | null
 }
 
