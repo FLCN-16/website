@@ -30,7 +30,11 @@ export async function generateMetadata({ params }: WorkDetailProps): Promise<Met
     const entries = await getCachedWorkEntries()
     const project = entries.find((p) => p.slug === slug)
     if (!project) return {}
-    return createMetadata({ title: project.title, description: project.description })
+    return createMetadata({
+      title: project.meta?.title || project.title,
+      description: project.meta?.description || project.description,
+      image: typeof project.meta?.image === 'object' ? project.meta?.image?.url ?? undefined : undefined,
+    })
   } catch {
     return {}
   }

@@ -1,5 +1,7 @@
 import { restFetch } from './rest'
 import type { PayloadListResponse } from './rest'
+import { getPayloadClient } from './payload'
+import type { Where } from 'payload'
 import { mapPayloadPost } from './posts'
 import { CACHE_TAGS } from './cache-tags'
 import type {
@@ -25,6 +27,12 @@ export interface RawPostDoc {
   tags?: { tag?: string | null }[]
   body?: unknown
   updatedAt: string
+  // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapPosts)
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | string | null
+  } | null
 }
 
 export async function getCachedPosts(): Promise<Post[]> {
@@ -129,11 +137,18 @@ interface RawWorkDoc {
   } | null
   stack?: Array<{ name?: string | null; role?: string | null }> | null
   updatedAt?: string
+  // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapWork)
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | string | null
+  } | null
 }
 
+// depth=1 required to resolve meta.image for SEO; also resolves cover (not mapped here, acknowledged)
 export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
   const data = await restFetch<PayloadListResponse<RawWorkDoc>>(
-    'work?where[status][equals]=published&sort=ord&limit=50&depth=0',
+    'work?where[status][equals]=published&sort=ord&limit=50&depth=1',
     [CACHE_TAGS.work]
   )
   return data.docs.map((d) => ({
@@ -151,6 +166,13 @@ export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
         quote: d.briefing?.quote ?? '',
       },
       stack: (d.stack ?? []).map((s) => ({ name: s.name ?? '', role: s.role ?? '' })),
+      meta: d.meta
+        ? {
+            title: d.meta.title,
+            description: d.meta.description,
+            image: typeof d.meta.image === 'object' ? d.meta.image : null,
+          }
+        : d.meta,
   }))
 }
 
@@ -298,6 +320,12 @@ interface RawPageDoc {
   lastUpdated?: string | null
   updatedAt: string
   body?: unknown
+  // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapPages)
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | string | null
+  } | null
 }
 
 export async function getSitemapPages(): Promise<
@@ -343,4 +371,32 @@ export async function getCachedLegalPage(slug: string): Promise<RawPageDoc | nul
     [CACHE_TAGS.pages, CACHE_TAGS.page(slug)]
   )
   return data.docs[0] ?? null
+}
+
+// ─── Draft/Preview Fetchers ───────────────────────────────────────────────────
+
+export async function getPreviewPost(slug: string): Promise<RawPostDoc | null> {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'posts',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 1,
+    overrideAccess: true,
+  })
+  return (result.docs[0] as RawPostDoc) ?? null
+}
+
+export async function getPreviewPage(slug: string, template?: string): Promise<RawPageDoc | null> {
+  const payload = await getPayloadClient()
+  const where: Where = { slug: { equals: slug } }
+  if (template) where.template = { equals: template }
+  const result = await payload.find({
+    collection: 'pages',
+    where,
+    limit: 1,
+    depth: 1,
+    overrideAccess: true,
+  })
+  return (result.docs[0] as RawPageDoc) ?? null
 }

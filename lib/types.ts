@@ -13,6 +13,11 @@ export interface WorkEntry {
     quote: string
   }
   stack: { name: string; role: string }[]
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | null
+  } | null
 }
 
 export interface ProjectEntry {
