@@ -3,9 +3,24 @@ import { notFound } from 'next/navigation'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getCachedLegalPage } from '@/lib/data'
 import { createMetadata } from '@/lib/metadata'
+import { getPayloadClient } from '@/lib/payload'
+
+export const revalidate = false
+export const dynamicParams = true
 
 interface LegalPageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'pages',
+    where: { template: { equals: 'legal' } },
+    limit: 100,
+    depth: 0,
+  })
+  return result.docs.map((doc) => ({ slug: String(doc.slug) }))
 }
 
 export async function generateMetadata({ params }: LegalPageProps): Promise<Metadata> {
