@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { TrackedLink } from "@/components/site/tracked-link"
 import { FadeRise } from "@/components/anim/fade-rise"
 
 interface CtaBannerProps {
@@ -37,11 +37,21 @@ export function CtaBanner({
           {/* Buttons */}
           <div className="mt-8 flex gap-3 justify-center flex-wrap">
             <Button asChild variant="default" size="lg">
-              <Link href={primaryCta.href}>{primaryCta.label}</Link>
+              <TrackedLink
+                href={primaryCta.href}
+                event={{ event: 'cta_click', cta_label: primaryCta.label, cta_location: 'cta_banner', destination: primaryCta.href }}
+              >
+                {primaryCta.label}
+              </TrackedLink>
             </Button>
             {secondaryCta && (
               <Button asChild variant="outline" size="lg">
-                <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+                <TrackedLink
+                  href={secondaryCta.href}
+                  event={{ event: 'cta_click', cta_label: secondaryCta.label, cta_location: 'cta_banner', destination: secondaryCta.href }}
+                >
+                  {secondaryCta.label}
+                </TrackedLink>
               </Button>
             )}
           </div>

@@ -3,6 +3,8 @@ import { ProjectsGrid } from '@/components/sections/projects-grid'
 import { createMetadata } from '@/lib/metadata'
 import type { ProjectEntry } from '@/lib/types'
 
+export const revalidate = false
+
 export const metadata = createMetadata({
   title: 'Projects',
   description: 'Side projects, Chrome extensions, mobile apps, and open-source contributions.',

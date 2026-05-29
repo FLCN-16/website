@@ -1,6 +1,8 @@
 import { ContactFormSection } from "@/components/sections/contact-form-section"
 import { createMetadata } from "@/lib/metadata"
 
+export const dynamic = 'force-static'
+
 export const metadata = createMetadata({
   title: "Contact",
   description:

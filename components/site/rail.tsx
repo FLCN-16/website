@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NavLinks } from "@/components/site/nav-links"
 import { site } from "@/content/site"
+import { trackEvent } from "@/lib/analytics"
 
 const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
 const copyrightDomain = site.url.replace("https://", "").toUpperCase()
@@ -42,6 +43,7 @@ export function Rail({ resumeUrl }: { resumeUrl: string }) {
           <a
             href={resumeUrl}
             download
+            onClick={() => trackEvent({ event: 'file_download', file_name: resumeUrl.split('/').pop() ?? 'resume', location: 'rail' })}
             className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
           >
             <HugeiconsIcon

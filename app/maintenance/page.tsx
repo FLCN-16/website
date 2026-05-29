@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { site } from "@/content/site";
@@ -11,19 +12,21 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-async function getMessage(): Promise<string> {
-  try {
-    const payload = await getPayload({ config });
-    const settings = await payload.findGlobal({ slug: "site-settings" });
-    const mm = settings.maintenanceMode as { message?: string | null } | null | undefined;
-    return mm?.message || "We're doing some work on the site. We'll be back shortly.";
-  } catch {
-    return "We're doing some work on the site. We'll be back shortly.";
-  }
-}
-
 export default async function MaintenancePage() {
-  const message = await getMessage();
+  let enabled = true
+  let message = "We're doing some work on the site. We'll be back shortly."
+
+  try {
+    const payload = await getPayload({ config })
+    const settings = await payload.findGlobal({ slug: "site-settings" })
+    const mm = settings.maintenanceMode as { enabled?: boolean | null; message?: string | null } | null | undefined
+    enabled = mm?.enabled ?? true
+    message = mm?.message || message
+  } catch {
+    // CMS unreachable — assume maintenance is active
+  }
+
+  if (!enabled) redirect("/")
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
@@ -55,5 +58,5 @@ export default async function MaintenancePage() {
         </span>
       </div>
     </main>
-  );
+  )
 }

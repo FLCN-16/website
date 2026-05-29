@@ -3,6 +3,8 @@ import { SelectedWork } from '@/components/sections/selected-work'
 import { createMetadata } from '@/lib/metadata'
 import type { WorkEntry } from '@/lib/types'
 
+export const revalidate = false
+
 export const metadata = createMetadata({
   title: 'Work',
   description: 'Selected projects from 9+ years of full-stack engineering.',

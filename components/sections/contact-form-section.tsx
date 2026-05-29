@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { contactSchema, INQUIRY_OPTIONS, type ContactFormData } from "@/lib/schemas/contact"
 import { submitContact } from "@/actions/contact"
 import { site } from "@/content/site"
+import { trackEvent } from "@/lib/analytics"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -56,15 +57,18 @@ export function ContactFormSection() {
     try {
       const result = await submitContact(data)
       if (result.ok) {
+        trackEvent({ event: 'generate_lead', form_source: 'contact', inquiry_type: data.inquiry })
         toast.success("Message sent. I'll be in touch soon.")
         reset()
         // Increment key to remount the form — forces Radix Select back to placeholder
         setFormKey((k) => k + 1)
       } else {
         toast.error(result.error ?? "Something went wrong. Please try again.")
+        trackEvent({ event: 'form_error', form_source: 'contact', error_message: result.error ?? 'Unknown error' })
       }
     } catch {
       toast.error("Network error. Please check your connection and try again.")
+      trackEvent({ event: 'form_error', form_source: 'contact', error_message: 'Network error' })
     } finally {
       setIsPending(false)
     }

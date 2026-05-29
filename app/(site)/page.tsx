@@ -18,6 +18,8 @@ import { philosophy } from '@/content/philosophy'
 import { createMetadata } from '@/lib/metadata'
 import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, CertificationEntry } from '@/lib/types'
 
+export const revalidate = false
+
 export const metadata = createMetadata({
   title: 'About',
   description: site.subheadline,

@@ -12,6 +12,7 @@ import {
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NavLinks } from "@/components/site/nav-links"
 import { site } from "@/content/site"
+import { trackEvent } from "@/lib/analytics"
 
 export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
   const [open, setOpen] = useState(false)
@@ -54,6 +55,7 @@ export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
               <a
                 href={resumeUrl}
                 download
+                onClick={() => trackEvent({ event: 'file_download', file_name: resumeUrl.split('/').pop() ?? 'resume', location: 'mobile_menu' })}
                 className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
               >
                 <HugeiconsIcon

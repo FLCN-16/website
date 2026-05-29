@@ -4,9 +4,24 @@ import { getCachedPost, getCachedRelatedPosts } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
 import { createMetadata } from '@/lib/metadata'
 import { resolvePostCover } from '@/lib/posts'
+import { getPayloadClient } from '@/lib/payload'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
+}
+
+export const revalidate = false
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'posts',
+    where: { status: { equals: 'published' } },
+    limit: 1000,
+    depth: 0,
+  })
+  return result.docs.map((doc) => ({ slug: String(doc.slug) }))
 }
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
@@ -15,8 +30,8 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     const post = await getCachedPost(slug)
     if (!post) return { title: 'Not Found' }
     return createMetadata({
-      title: (post.meta as { title?: string })?.title ?? post.title,
-      description: (post.meta as { description?: string })?.description ?? post.excerpt ?? undefined,
+      title: post.title,
+      description: post.excerpt ?? undefined,
     })
   } catch {
     return { title: slug }

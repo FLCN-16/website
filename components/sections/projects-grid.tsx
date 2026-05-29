@@ -3,6 +3,7 @@ import Link from "next/link"
 import { type ProjectEntry } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { FadeRise } from "@/components/anim/fade-rise"
+import { OutboundLink } from "@/components/site/tracked-link"
 
 interface ProjectsGridProps {
   projects: ProjectEntry[]
@@ -85,24 +86,22 @@ export function ProjectsGrid({
               {(project.liveUrl || project.repoUrl) && (
                 <div className="flex gap-4 mt-4">
                   {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <OutboundLink
+                      url={project.liveUrl}
+                      context="project_card"
                       className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
                     >
                       Live ↗
-                    </a>
+                    </OutboundLink>
                   )}
                   {project.repoUrl && (
-                    <a
-                      href={project.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <OutboundLink
+                      url={project.repoUrl}
+                      context="project_card"
                       className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
                     >
                       Code ↗
-                    </a>
+                    </OutboundLink>
                   )}
                 </div>
               )}

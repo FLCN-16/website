@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
-import { redirect, unstable_rethrow } from "next/navigation";
+import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import "../globals.css";
@@ -14,8 +14,6 @@ import { SplashScreen } from "@/components/site/splash-screen";
 import { TalentInquiryDialog } from "@/components/site/talent-inquiry-dialog";
 import { site } from "@/content/site";
 import type { Form } from "@payloadcms/plugin-form-builder/types";
-
-export const dynamic = "force-dynamic";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,27 +55,27 @@ export const metadata: Metadata = {
   },
 };
 
+const getCachedTalentForm = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config })
+    const result = await payload.find({
+      collection: 'forms',
+      where: { slug: { equals: 'talent-inquiry' } },
+      limit: 1,
+      depth: 0,
+    })
+    return (result.docs[0] as unknown as Form) ?? null
+  },
+  ['talent-form'],
+  { tags: ['talent-form'], revalidate: false }
+)
+
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   let talentForm: Form | null = null
 
   try {
-    const payload = await getPayload({ config })
-
-    const settings = await payload.findGlobal({ slug: "site-settings" })
-    const mm = settings.maintenanceMode as { enabled?: boolean | null } | null | undefined
-    if (mm?.enabled) {
-      redirect("/maintenance")
-    }
-
-    const formsResult = await payload.find({
-      collection: "forms",
-      where: { slug: { equals: "talent-inquiry" } },
-      limit: 1,
-      depth: 0,
-    })
-    talentForm = (formsResult.docs[0] as unknown as Form) ?? null
-  } catch (err) {
-    unstable_rethrow(err)
+    talentForm = await getCachedTalentForm()
+  } catch {
     // CMS unreachable — proceed without dialog
   }
 
