@@ -14,7 +14,14 @@ export { metadata } from "@payloadcms/next/layouts";
 export default function Layout({ children }: Args) {
   async function serverFunction(args: ServerFunctionClientArgs) {
     "use server";
-    return handleServerFunctions({ ...args, config, importMap });
+    try {
+      return await handleServerFunctions({ ...args, config, importMap });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      const stack = err instanceof Error ? err.stack : undefined;
+      console.error("[serverFunction] error", { name: (args as { name?: string }).name, message, stack });
+      throw err;
+    }
   }
 
   return RootLayout({ children, config, importMap, serverFunction });
