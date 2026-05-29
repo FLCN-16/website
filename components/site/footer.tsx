@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Linkedin01Icon, Github01Icon } from "@hugeicons/core-free-icons"
 import { site } from "@/content/site"
 import { BackToTop } from "@/components/site/back-to-top"
+import { OutboundLink } from "@/components/site/tracked-link"
 
 const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
 const copyrightDomain = site.url.replace("https://", "").toUpperCase()
@@ -44,10 +45,9 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-4">
             {linkedin && (
-              <a
-                href={linkedin.url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <OutboundLink
+                url={linkedin.url}
+                context="footer"
                 aria-label="LinkedIn"
                 className="group text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
               >
@@ -57,13 +57,12 @@ export function Footer() {
                   strokeWidth={1.5}
                   className="size-3.5 motion-safe:transition-transform motion-safe:group-hover:-translate-y-0.5"
                 />
-              </a>
+              </OutboundLink>
             )}
             {github && (
-              <a
-                href={github.url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <OutboundLink
+                url={github.url}
+                context="footer"
                 aria-label="GitHub"
                 className="group text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
               >
@@ -73,7 +72,7 @@ export function Footer() {
                   strokeWidth={1.5}
                   className="size-3.5 motion-safe:transition-transform motion-safe:group-hover:-translate-y-0.5"
                 />
-              </a>
+              </OutboundLink>
             )}
             <BackToTop />
           </div>

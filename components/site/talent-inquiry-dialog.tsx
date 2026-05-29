@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+import { trackEvent } from "@/lib/analytics"
 import { submitTalentInquiry } from "@/actions/talent-inquiry"
 import type { Form, FormFieldBlock } from "@payloadcms/plugin-form-builder/types"
 import {
@@ -30,15 +31,22 @@ export function TalentInquiryDialog({ form }: Props) {
   const [fileName, setFileName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+  const submittedRef = useRef(false)
 
   useEffect(() => {
     if (localStorage.getItem(STORAGE_KEY)) return
-    const timer = setTimeout(() => setOpen(true), DELAY_MS)
+    const timer = setTimeout(() => {
+      setOpen(true)
+      trackEvent({ event: 'popup_impression', form_source: 'talent_dialog' })
+    }, DELAY_MS)
     return () => clearTimeout(timer)
   }, [])
 
   function handleOpenChange(next: boolean) {
     if (!next) {
+      if (!submittedRef.current && !isPending) {
+        trackEvent({ event: 'popup_dismiss', form_source: 'talent_dialog' })
+      }
       localStorage.setItem(STORAGE_KEY, "1")
     }
     setOpen(next)
@@ -56,12 +64,18 @@ export function TalentInquiryDialog({ form }: Props) {
       const result = await submitTalentInquiry(fd)
 
       if (result.ok) {
+        trackEvent({ event: 'generate_lead', form_source: 'talent_dialog' })
         localStorage.setItem(STORAGE_KEY, "1")
+        submittedRef.current = true
         setOpen(false)
         toast.success("Details sent.")
       } else {
         setError(result.error ?? "Something went wrong. Please try again.")
+        trackEvent({ event: 'form_error', form_source: 'talent_dialog', error_message: result.error ?? 'Unknown error' })
       }
+    } catch {
+      setError("Network error. Please check your connection and try again.")
+      trackEvent({ event: 'form_error', form_source: 'talent_dialog', error_message: 'Network error' })
     } finally {
       setIsPending(false)
     }

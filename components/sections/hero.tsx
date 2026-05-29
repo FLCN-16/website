@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { TrackedLink } from "@/components/site/tracked-link"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { MaskReveal } from "@/components/anim/mask-reveal"
 import { CountUp } from "@/components/anim/count-up"
@@ -93,10 +93,20 @@ export function Hero({
           </p>
           <div className="flex flex-wrap gap-3 md:ml-auto md:shrink-0">
             <Button asChild variant="default" size="lg">
-              <Link href={primaryCta.href}>{primaryCta.label}</Link>
+              <TrackedLink
+                href={primaryCta.href}
+                event={{ event: 'cta_click', cta_label: primaryCta.label, cta_location: 'hero', destination: primaryCta.href }}
+              >
+                {primaryCta.label}
+              </TrackedLink>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+              <TrackedLink
+                href={secondaryCta.href}
+                event={{ event: 'cta_click', cta_label: secondaryCta.label, cta_location: 'hero', destination: secondaryCta.href }}
+              >
+                {secondaryCta.label}
+              </TrackedLink>
             </Button>
           </div>
         </div>

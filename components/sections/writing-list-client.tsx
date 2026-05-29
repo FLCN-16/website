@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { FeaturedCard } from "@/components/writing/featured-card"
 import { PostRow } from "@/components/writing/post-row"
 import { ChipFilters, type SortOption, type ReadingTime } from "@/components/writing/chip-filters"
 import type { Post } from "@/lib/types"
+import { trackEvent } from "@/lib/analytics"
 
 interface WritingListClientProps {
   initialPosts: Post[]
@@ -96,6 +97,14 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
     placeholderData: initialPosts,
   })
 
+  useEffect(() => {
+    if (!search) return
+    const timer = setTimeout(() => {
+      trackEvent({ event: 'search', search_term: search })
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [search])
+
   const rawPosts = isServerFiltering ? (serverPosts ?? initialPosts) : initialPosts
   const filtered = applyLocalFilters(rawPosts, selectedTags, selectedReadingTime)
   const sorted = applySorting(filtered, sort)
@@ -118,6 +127,7 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     )
+    trackEvent({ event: 'filter_apply', filter_type: 'tag', filter_value: tag })
   }, [])
 
   const clearAll = useCallback(() => {
@@ -125,6 +135,16 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
     setSelectedTags([])
     setSelectedReadingTime(null)
     setSort("newest")
+  }, [])
+
+  const handleReadingTimeSelect = useCallback((value: ReadingTime | null) => {
+    setSelectedReadingTime(value)
+    trackEvent({ event: 'filter_apply', filter_type: 'reading_time', filter_value: value ?? 'none' })
+  }, [])
+
+  const handleSortChange = useCallback((value: SortOption) => {
+    setSort(value)
+    trackEvent({ event: 'filter_apply', filter_type: 'sort', filter_value: value })
   }, [])
 
   return (
@@ -138,8 +158,8 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
         activeFilterCount={activeFilterCount}
         onSearchChange={setSearch}
         onTagToggle={toggleTag}
-        onReadingTimeSelect={setSelectedReadingTime}
-        onSortChange={setSort}
+        onReadingTimeSelect={handleReadingTimeSelect}
+        onSortChange={handleSortChange}
         onClearAll={clearAll}
       />
 
