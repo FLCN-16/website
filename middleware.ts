@@ -4,9 +4,8 @@ import type { NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Skip maintenance check for maintenance page itself, admin, API, and Next.js internals
+  // Skip admin, API, and Next.js internals entirely
   if (
-    pathname.startsWith('/maintenance') ||
     pathname.startsWith('/admin') ||
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next')
@@ -23,8 +22,18 @@ export async function middleware(request: NextRequest) {
       if (res.ok) {
         const settings = await res.json()
         const mm = settings?.maintenanceMode as { enabled?: boolean | null } | null | undefined
+        const isMaintenancePage = pathname.startsWith('/maintenance')
+
         if (mm?.enabled) {
-          return NextResponse.redirect(new URL('/maintenance', request.url))
+          // Maintenance on: redirect all non-maintenance pages to /maintenance
+          if (!isMaintenancePage) {
+            return NextResponse.redirect(new URL('/maintenance', request.url))
+          }
+        } else {
+          // Maintenance off: redirect /maintenance back to homepage
+          if (isMaintenancePage) {
+            return NextResponse.redirect(new URL('/', request.url))
+          }
         }
       }
     }
