@@ -170,14 +170,33 @@ export const richTextConverters: JSXConvertersFunction = ({ defaultConverters })
 
     return (
       <figure className="my-6">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={url}
-          alt={alt}
-          width={doc.width}
-          height={doc.height}
-          className="rounded-lg w-full h-auto"
-        />
+        <a
+          href={url}
+          data-pswp-src={url}
+          data-pswp-width={doc.width ?? 1200}
+          data-pswp-height={doc.height ?? 800}
+          aria-label={alt || "View image"}
+          className="group relative block overflow-hidden rounded-lg cursor-zoom-in"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={url}
+            alt={alt}
+            width={doc.width}
+            height={doc.height}
+            className="w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+          />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/20 rounded-lg">
+            <div className="bg-background/90 backdrop-blur-sm rounded-full p-2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+                <line x1="11" y1="8" x2="11" y2="14"/>
+                <line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+            </div>
+          </div>
+        </a>
         {alt && (
           <figcaption className="mt-2 text-center text-sm text-muted-foreground font-mono">
             {alt}
