@@ -6,6 +6,7 @@ import { getCachedLegalPage, getPreviewPage } from '@/lib/data'
 import { createMetadata } from '@/lib/metadata'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
+import { richTextConverters } from '@/components/writing/richtext-converters'
 
 export const revalidate = false
 export const dynamicParams = true
@@ -81,9 +82,10 @@ export default async function LegalPage({ params }: LegalPageProps) {
             Last updated {lastUpdated}
           </p>
         )}
-        <div className="prose prose-neutral dark:prose-invert max-w-none">
-          <RichText data={page.body as Parameters<typeof RichText>[0]['data']} />
-        </div>
+        <RichText
+          data={page.body as Parameters<typeof RichText>[0]['data']}
+          converters={richTextConverters}
+        />
       </div>
     </>
   )
