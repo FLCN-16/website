@@ -3,9 +3,26 @@ import { notFound } from 'next/navigation'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getCachedBasicPage } from '@/lib/data'
 import { createMetadata } from '@/lib/metadata'
+import { getPayloadClient } from '@/lib/payload'
+
+export const revalidate = false
+export const dynamicParams = true
 
 interface BasicPageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'pages',
+    where: { template: { equals: 'basic' } },
+    limit: 100,
+    depth: 0,
+  })
+  return result.docs
+    .filter((doc) => doc.slug)
+    .map((doc) => ({ slug: String(doc.slug) }))
 }
 
 export async function generateMetadata({ params }: BasicPageProps): Promise<Metadata> {
@@ -13,7 +30,7 @@ export async function generateMetadata({ params }: BasicPageProps): Promise<Meta
   try {
     const page = await getCachedBasicPage(slug)
     if (!page) return { title: 'Not Found' }
-    return createMetadata({ title: page.title })
+    return createMetadata({ title: page.title ?? slug })
   } catch {
     return { title: slug }
   }
@@ -37,7 +54,7 @@ export default async function BasicPage({ params }: BasicPageProps) {
         {page.title}
       </h1>
       <div className="prose prose-neutral dark:prose-invert max-w-none">
-        <RichText data={page.body} />
+        <RichText data={page.body as Parameters<typeof RichText>[0]['data']} />
       </div>
     </div>
   )

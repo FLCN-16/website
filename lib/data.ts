@@ -1,5 +1,5 @@
-import { unstable_cache } from 'next/cache'
-import { getPayloadClient } from './payload'
+import { restFetch } from './rest'
+import type { PayloadListResponse } from './rest'
 import { mapPayloadPost } from './posts'
 import { CACHE_TAGS } from './cache-tags'
 import type {
@@ -13,386 +13,334 @@ import type {
 
 // ─── Posts ────────────────────────────────────────────────────────────────────
 
-export async function getCachedPosts(): Promise<Post[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: { status: { equals: 'published' } },
-        sort: '-publishedAt',
-        limit: 50,
-        depth: 1,
-      })
-      return result.docs.map(mapPayloadPost)
-    },
-    ['posts-list'],
-    { tags: [CACHE_TAGS.posts], revalidate: false }
-  )()
+export interface RawPostDoc {
+  id: string
+  title: string
+  slug: string
+  excerpt?: string | null
+  featured?: boolean | null
+  publishedAt?: string | null
+  readingTime?: number | null
+  cover?: { url: string; width?: number | null; height?: number | null; alt?: string | null } | null
+  tags?: { tag?: string | null }[]
+  body?: unknown
+  updatedAt: string
 }
 
-export async function getCachedPost(slug: string) {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: {
-          and: [
-            { slug: { equals: slug } },
-            { status: { equals: 'published' } },
-          ],
-        },
-        limit: 1,
-        depth: 1,
-      })
-      return result.docs[0] ?? null
-    },
-    ['post', slug],
-    { tags: [CACHE_TAGS.posts, CACHE_TAGS.post(slug)], revalidate: false }
-  )()
+export async function getCachedPosts(): Promise<Post[]> {
+  const data = await restFetch<PayloadListResponse<RawPostDoc>>(
+    'posts?where[status][equals]=published&sort=-publishedAt&limit=50&depth=1',
+    [CACHE_TAGS.posts]
+  )
+  return data.docs.map(mapPayloadPost)
+}
+
+export async function getCachedPost(slug: string): Promise<RawPostDoc | null> {
+  const params = new URLSearchParams({
+    'where[and][0][slug][equals]': slug,
+    'where[and][1][status][equals]': 'published',
+    'limit': '1',
+    'depth': '1',
+  })
+  const data = await restFetch<PayloadListResponse<RawPostDoc>>(
+    `posts?${params}`,
+    [CACHE_TAGS.posts, CACHE_TAGS.post(slug)]
+  )
+  return data.docs[0] ?? null
 }
 
 export async function getCachedRelatedPosts(
   postSlug: string,
   tags: string[]
 ): Promise<Post[]> {
-  return unstable_cache(
-    async () => {
-      if (!tags.length) return _fetchRecentPosts(postSlug)
+  if (!tags.length) return _fetchRecentPosts(postSlug)
 
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: {
-          and: [
-            { status: { equals: 'published' } },
-            { slug: { not_equals: postSlug } },
-            { 'tags.tag': { in: tags } },
-          ],
-        },
-        sort: '-publishedAt',
-        limit: 3,
-        depth: 1,
-      })
+  const params = new URLSearchParams({
+    'where[and][0][status][equals]': 'published',
+    'where[and][1][slug][not_equals]': postSlug,
+    'where[and][2][tags.tag][in]': tags.join(','),
+    'sort': '-publishedAt',
+    'limit': '3',
+    'depth': '1',
+  })
+  const data = await restFetch<PayloadListResponse<RawPostDoc>>(
+    `posts?${params}`,
+    [CACHE_TAGS.posts]
+  )
 
-      const docs = result.docs
-      if (docs.length >= 3) return docs.map(mapPayloadPost)
+  const docs = data.docs
+  if (docs.length >= 3) return docs.map(mapPayloadPost)
 
-      const existing = new Set(docs.map((d) => d.slug))
-      existing.add(postSlug)
-      const recent = await _fetchRecentPosts(postSlug, existing)
-      return [...docs.map(mapPayloadPost), ...recent].slice(0, 3)
-    },
-    ['related-posts', postSlug, ...tags.slice().sort()],
-    { tags: [CACHE_TAGS.posts], revalidate: false }
-  )()
+  const existing = new Set(docs.map((d) => d.slug))
+  existing.add(postSlug)
+  const recent = await _fetchRecentPosts(postSlug, existing)
+  return [...docs.map(mapPayloadPost), ...recent].slice(0, 3)
 }
 
 async function _fetchRecentPosts(
   excludeSlug: string,
   excludeSlugs?: Set<string>
 ): Promise<Post[]> {
-  const payload = await getPayloadClient()
-  const result = await payload.find({
-    collection: 'posts',
-    where: {
-      and: [
-        { status: { equals: 'published' } },
-        { slug: { not_equals: excludeSlug } },
-      ],
-    },
-    sort: '-publishedAt',
-    limit: 6,
-    depth: 1,
+  const params = new URLSearchParams({
+    'where[and][0][status][equals]': 'published',
+    'where[and][1][slug][not_equals]': excludeSlug,
+    'sort': '-publishedAt',
+    'limit': '6',
+    'depth': '1',
   })
-  const all = result.docs.map(mapPayloadPost)
+  const data = await restFetch<PayloadListResponse<RawPostDoc>>(
+    `posts?${params}`,
+    [CACHE_TAGS.posts]
+  )
+  const all = data.docs.map(mapPayloadPost)
   if (!excludeSlugs) return all.slice(0, 3)
   return all.filter((p) => !excludeSlugs.has(p.slug)).slice(0, 3)
 }
 
+export async function getSitemapPosts(): Promise<
+  { slug: string; publishedAt: string | null; updatedAt: string }[]
+> {
+  const data = await restFetch<PayloadListResponse<RawPostDoc>>(
+    'posts?where[status][equals]=published&sort=-publishedAt&limit=1000&depth=0',
+    [CACHE_TAGS.posts]
+  )
+  return data.docs.map((d) => ({
+    slug: d.slug,
+    publishedAt: d.publishedAt ?? null,
+    updatedAt: d.updatedAt,
+  }))
+}
+
 // ─── Work ─────────────────────────────────────────────────────────────────────
 
+interface RawWorkDoc {
+  id: string
+  title: string
+  slug: string
+  category?: string | null
+  ord?: string | null
+  description?: string | null
+  tags?: Array<{ tag?: string | null }> | null
+  briefing?: {
+    problem?: string | null
+    approach?: Array<{ step?: string | null }> | null
+    impact?: string | null
+    quote?: string | null
+  } | null
+  stack?: Array<{ name?: string | null; role?: string | null }> | null
+  updatedAt?: string
+}
+
 export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'work',
-        where: { status: { equals: 'published' } },
-        sort: 'ord',
-        limit: 50,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        slug: doc.slug,
-        title: doc.title,
-        category: doc.category ?? '',
-        ord: doc.ord ?? '',
-        tags: doc.tags?.map((t: { tag?: string | null }) => t.tag ?? '') ?? [],
-        description: doc.description ?? '',
-        briefing: {
-          problem:
-            (doc.briefing as { problem?: string } | null)?.problem ?? '',
-          approach: (
-            (doc.briefing as { approach?: { step?: string }[] } | null)
-              ?.approach ?? []
-          ).map((a) => a.step ?? ''),
-          impact:
-            (doc.briefing as { impact?: string } | null)?.impact ?? '',
-          quote: (doc.briefing as { quote?: string } | null)?.quote ?? '',
-        },
-        stack: (
-          (doc.stack as { name?: string; role?: string }[] | null) ?? []
-        ).map((s) => ({
-          name: s.name ?? '',
-          role: s.role ?? '',
-        })),
-      }))
-    },
-    ['work-entries'],
-    { tags: [CACHE_TAGS.work], revalidate: false }
-  )()
+  const data = await restFetch<PayloadListResponse<RawWorkDoc>>(
+    'work?where[status][equals]=published&sort=ord&limit=50&depth=0',
+    [CACHE_TAGS.work]
+  )
+  return data.docs.map((d) => ({
+      id: String(d.id),
+      slug: d.slug,
+      title: d.title,
+      category: d.category ?? '',
+      ord: d.ord ?? '',
+      tags: d.tags?.map((t) => t.tag ?? '') ?? [],
+      description: d.description ?? '',
+      briefing: {
+        problem: d.briefing?.problem ?? '',
+        approach: d.briefing?.approach?.map((a) => a.step ?? '') ?? [],
+        impact: d.briefing?.impact ?? '',
+        quote: d.briefing?.quote ?? '',
+      },
+      stack: (d.stack ?? []).map((s) => ({ name: s.name ?? '', role: s.role ?? '' })),
+  }))
+}
+
+export async function getSitemapWork(): Promise<{ slug: string; updatedAt: string }[]> {
+  const data = await restFetch<PayloadListResponse<RawWorkDoc>>(
+    'work?where[status][equals]=published&sort=ord&limit=1000&depth=0',
+    [CACHE_TAGS.work]
+  )
+  return data.docs.map((d) => ({ slug: d.slug, updatedAt: d.updatedAt ?? '' }))
 }
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
+interface RawProjectDoc {
+  id: string
+  title: string
+  subtitle?: string | null
+  description?: string | null
+  category?: string | null
+  featured?: boolean | null
+  liveUrl?: string | null
+  repoUrl?: string | null
+  startDate?: string | null
+  endDate?: string | null
+  tags?: Array<{ tag?: string | null }> | null
+  highlights?: Array<{ point?: string | null }> | null
+}
+
 export async function getCachedProjects(): Promise<ProjectEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'projects',
-        where: { status: { equals: 'published' } },
-        limit: 50,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        title: doc.title,
-        subtitle: doc.subtitle ?? undefined,
-        description: doc.description ?? undefined,
-        category: doc.category ?? undefined,
-        tags:
-          doc.tags?.map((t: { tag?: string | null }) => t.tag ?? '') ?? [],
-        liveUrl: doc.liveUrl ?? undefined,
-        repoUrl: doc.repoUrl ?? undefined,
-        startDate: doc.startDate ?? undefined,
-        endDate: doc.endDate ?? undefined,
-        highlights:
-          doc.highlights?.map(
-            (h: { point?: string | null }) => h.point ?? ''
-          ) ?? [],
-        featured: doc.featured ?? false,
-      }))
-    },
-    ['projects-list'],
-    { tags: [CACHE_TAGS.projects], revalidate: false }
-  )()
+  const data = await restFetch<PayloadListResponse<RawProjectDoc>>(
+    'projects?where[status][equals]=published&limit=50&depth=0',
+    [CACHE_TAGS.projects]
+  )
+  return data.docs.map((d) => ({
+    id: String(d.id),
+    title: d.title,
+    subtitle: d.subtitle ?? undefined,
+    description: d.description ?? undefined,
+    category: d.category ?? undefined,
+    tags: d.tags?.map((t) => t.tag ?? '') ?? [],
+    liveUrl: d.liveUrl ?? undefined,
+    repoUrl: d.repoUrl ?? undefined,
+    startDate: d.startDate ?? undefined,
+    endDate: d.endDate ?? undefined,
+    highlights: d.highlights?.map((h) => h.point ?? '') ?? [],
+    featured: d.featured ?? false,
+  }))
 }
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 
+interface RawTimelineDoc {
+  id: string
+  company: string
+  role: string
+  start: string
+  end?: string | null
+  summary?: string | null
+  tags?: Array<{ tag?: string | null }> | null
+  order?: number | null
+}
+
 export async function getCachedTimeline(): Promise<TimelineEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'timeline',
-        sort: 'order',
-        limit: 20,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        company: doc.company,
-        role: doc.role,
-        start: doc.start,
-        end: doc.end ?? null,
-        summary: doc.summary ?? undefined,
-        tags:
-          doc.tags?.map((t: { tag?: string | null }) => t.tag ?? '') ?? [],
-        order: doc.order ?? undefined,
-      }))
-    },
-    ['timeline'],
-    { tags: [CACHE_TAGS.timeline], revalidate: false }
-  )()
+  const data = await restFetch<PayloadListResponse<RawTimelineDoc>>(
+    'timeline?sort=order&limit=20&depth=0',
+    [CACHE_TAGS.timeline]
+  )
+  return data.docs.map((d) => ({
+    id: String(d.id),
+    company: d.company,
+    role: d.role,
+    start: d.start,
+    end: d.end ?? null,
+    summary: d.summary ?? undefined,
+    tags: d.tags?.map((t) => t.tag ?? '') ?? [],
+    order: d.order ?? undefined,
+  }))
 }
 
 // ─── Education ────────────────────────────────────────────────────────────────
 
+interface RawEducationDoc {
+  id: string
+  institution: string
+  degree: string
+  location?: string | null
+  start?: string | null
+  end?: string | null
+  gpa?: string | null
+  status?: string | null
+  order?: number | null
+}
+
 export async function getCachedEducation(): Promise<EducationEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'education',
-        sort: 'order',
-        limit: 20,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        institution: doc.institution,
-        degree: doc.degree,
-        location: doc.location ?? undefined,
-        start: doc.start ?? undefined,
-        end: doc.end ?? undefined,
-        gpa: doc.gpa ?? undefined,
-        status: (doc.status as EducationEntry['status']) ?? undefined,
-        order: doc.order ?? undefined,
-      }))
-    },
-    ['education'],
-    { tags: [CACHE_TAGS.education], revalidate: false }
-  )()
+  const data = await restFetch<PayloadListResponse<RawEducationDoc>>(
+    'education?sort=order&limit=20&depth=0',
+    [CACHE_TAGS.education]
+  )
+  return data.docs.map((d) => ({
+    id: String(d.id),
+    institution: d.institution,
+    degree: d.degree,
+    location: d.location ?? undefined,
+    start: d.start ?? undefined,
+    end: d.end ?? undefined,
+    gpa: d.gpa ?? undefined,
+    status: (d.status as EducationEntry['status']) ?? undefined,
+    order: d.order ?? undefined,
+  }))
 }
 
 // ─── Certifications ───────────────────────────────────────────────────────────
 
+interface RawCertificationDoc {
+  id: string
+  name: string
+  issuer: string
+  year: string
+  credentialUrl?: string | null
+  order?: number | null
+}
+
 export async function getCachedCertifications(): Promise<CertificationEntry[]> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'certifications',
-        sort: 'order',
-        limit: 20,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        id: String(doc.id),
-        name: doc.name,
-        issuer: doc.issuer,
-        year: doc.year,
-        credentialUrl: doc.credentialUrl ?? undefined,
-        order: doc.order ?? undefined,
-      }))
-    },
-    ['certifications'],
-    { tags: [CACHE_TAGS.certifications], revalidate: false }
-  )()
+  const data = await restFetch<PayloadListResponse<RawCertificationDoc>>(
+    'certifications?sort=order&limit=20&depth=0',
+    [CACHE_TAGS.certifications]
+  )
+  return data.docs.map((d) => ({
+    id: String(d.id),
+    name: d.name,
+    issuer: d.issuer,
+    year: d.year,
+    credentialUrl: d.credentialUrl ?? undefined,
+    order: d.order ?? undefined,
+  }))
 }
 
-// ─── Sitemap fetchers ─────────────────────────────────────────────────────────
+// ─── Sitemap Pages ────────────────────────────────────────────────────────────
 
-export async function getSitemapPosts(): Promise<
-  { slug: string; publishedAt: string | null; updatedAt: string }[]
-> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'posts',
-        where: { status: { equals: 'published' } },
-        sort: '-publishedAt',
-        pagination: false,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        slug: String(doc.slug),
-        publishedAt: doc.publishedAt ? String(doc.publishedAt) : null,
-        updatedAt: String(doc.updatedAt),
-      }))
-    },
-    ['sitemap-posts'],
-    { tags: [CACHE_TAGS.posts], revalidate: false }
-  )()
-}
-
-export async function getSitemapWork(): Promise<
-  { slug: string; updatedAt: string }[]
-> {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'work',
-        where: { status: { equals: 'published' } },
-        sort: 'ord',
-        pagination: false,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        slug: String(doc.slug),
-        updatedAt: String(doc.updatedAt),
-      }))
-    },
-    ['sitemap-work'],
-    { tags: [CACHE_TAGS.work], revalidate: false }
-  )()
+interface RawPageDoc {
+  id?: string
+  title?: string
+  slug: string
+  template: string
+  lastUpdated?: string | null
+  updatedAt: string
+  body?: unknown
 }
 
 export async function getSitemapPages(): Promise<
-  {
-    slug: string
-    template: 'legal' | 'basic'
-    lastUpdated: string | null
-    updatedAt: string
-  }[]
+  { slug: string; template: 'legal' | 'basic'; lastUpdated: string | null; updatedAt: string }[]
 > {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'pages',
-        pagination: false,
-        depth: 0,
-      })
-      return result.docs.map((doc) => ({
-        slug: String(doc.slug),
-        template: doc.template as 'legal' | 'basic',
-        lastUpdated: doc.lastUpdated ? String(doc.lastUpdated) : null,
-        updatedAt: String(doc.updatedAt),
-      }))
-    },
-    ['sitemap-pages'],
-    { tags: [CACHE_TAGS.pages], revalidate: false }
-  )()
+  const data = await restFetch<PayloadListResponse<RawPageDoc>>(
+    'pages?limit=1000&depth=0',
+    [CACHE_TAGS.pages]
+  )
+  return data.docs.map((d) => ({
+    slug: d.slug,
+    template: d.template as 'legal' | 'basic',
+    lastUpdated: d.lastUpdated ?? null,
+    updatedAt: d.updatedAt,
+  }))
 }
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
 
-export async function getCachedBasicPage(slug: string) {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'pages',
-        where: {
-          and: [
-            { slug: { equals: slug } },
-            { template: { equals: 'basic' } },
-          ],
-        },
-        limit: 1,
-      })
-      return result.docs[0] ?? null
-    },
-    ['page-basic', slug],
-    { tags: [CACHE_TAGS.pages, CACHE_TAGS.page(slug)], revalidate: false }
-  )()
+export async function getCachedBasicPage(slug: string): Promise<RawPageDoc | null> {
+  const params = new URLSearchParams({
+    'where[and][0][slug][equals]': slug,
+    'where[and][1][template][equals]': 'basic',
+    'limit': '1',
+    'depth': '1',
+  })
+  const data = await restFetch<PayloadListResponse<RawPageDoc>>(
+    `pages?${params}`,
+    [CACHE_TAGS.pages, CACHE_TAGS.page(slug)]
+  )
+  return data.docs[0] ?? null
 }
 
-export async function getCachedLegalPage(slug: string) {
-  return unstable_cache(
-    async () => {
-      const payload = await getPayloadClient()
-      const result = await payload.find({
-        collection: 'pages',
-        where: {
-          and: [
-            { slug: { equals: slug } },
-            { template: { equals: 'legal' } },
-          ],
-        },
-        limit: 1,
-      })
-      return result.docs[0] ?? null
-    },
-    ['page-legal', slug],
-    { tags: [CACHE_TAGS.pages, CACHE_TAGS.page(slug)], revalidate: false }
-  )()
+export async function getCachedLegalPage(slug: string): Promise<RawPageDoc | null> {
+  const params = new URLSearchParams({
+    'where[and][0][slug][equals]': slug,
+    'where[and][1][template][equals]': 'legal',
+    'limit': '1',
+    'depth': '1',
+  })
+  const data = await restFetch<PayloadListResponse<RawPageDoc>>(
+    `pages?${params}`,
+    [CACHE_TAGS.pages, CACHE_TAGS.page(slug)]
+  )
+  return data.docs[0] ?? null
 }

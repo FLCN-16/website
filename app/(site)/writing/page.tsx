@@ -3,6 +3,8 @@ import { WritingList } from '@/components/sections/writing-list'
 import { createMetadata } from '@/lib/metadata'
 import type { Post } from '@/lib/types'
 
+export const revalidate = false
+
 export const metadata = createMetadata({
   title: 'Writing',
   description: 'Articles and thoughts on frontend engineering, architecture, and building at scale.',
