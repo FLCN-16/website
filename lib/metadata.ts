@@ -4,9 +4,11 @@ import { site } from "@/content/site"
 export function createMetadata({
   title,
   description,
+  image,
 }: {
   title: string
   description?: string
+  image?: string
 }): Metadata {
   const fullTitle = `${title} — ${site.name}`
 
@@ -22,12 +24,14 @@ export function createMetadata({
       siteName: site.name,
       title: fullTitle,
       description,
+      ...(image ? { images: [{ url: image }] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       creator: `@${site.handle}`,
       title: fullTitle,
       description,
+      ...(image ? { images: [image] } : {}),
     },
     robots: {
       index: true,

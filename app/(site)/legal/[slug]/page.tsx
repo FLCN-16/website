@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getCachedLegalPage } from '@/lib/data'
+import { getCachedLegalPage, getPreviewPage } from '@/lib/data'
 import { createMetadata } from '@/lib/metadata'
 import { getPayloadClient } from '@/lib/payload'
+import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
 
 export const revalidate = false
 export const dynamicParams = true
@@ -27,10 +29,15 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: LegalPageProps): Promise<Metadata> {
   const { slug } = await params
+  const { isEnabled: draft } = await draftMode()
   try {
-    const page = await getCachedLegalPage(slug)
+    const page = draft ? await getPreviewPage(slug, 'legal') : await getCachedLegalPage(slug)
     if (!page) return { title: 'Not Found' }
-    return createMetadata({ title: page.title ?? slug })
+    return createMetadata({
+      title: page.meta?.title || (page.title ?? slug),
+      description: page.meta?.description || undefined,
+      image: typeof page.meta?.image === 'object' ? page.meta?.image?.url ?? undefined : undefined,
+    })
   } catch {
     return { title: slug }
   }
@@ -38,10 +45,11 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
 
 export default async function LegalPage({ params }: LegalPageProps) {
   const { slug } = await params
+  const { isEnabled: draft } = await draftMode()
 
   let page: Awaited<ReturnType<typeof getCachedLegalPage>> | undefined
   try {
-    page = await getCachedLegalPage(slug)
+    page = draft ? await getPreviewPage(slug, 'legal') : await getCachedLegalPage(slug)
   } catch {
     // Payload unavailable — fall through to notFound below
   }
@@ -57,21 +65,26 @@ export default async function LegalPage({ params }: LegalPageProps) {
     : null
 
   return (
-    <div className="max-w-3xl">
-      <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4">
-        Legal
-      </p>
-      <h1 className="font-sans text-4xl font-semibold tracking-tight mb-2">
-        {page.title}
-      </h1>
-      {lastUpdated && (
-        <p className="text-sm text-muted-foreground mb-8">
-          Last updated {lastUpdated}
-        </p>
+    <>
+      {draft && (
+        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}
-      <div className="prose prose-neutral dark:prose-invert max-w-none">
-        <RichText data={page.body as Parameters<typeof RichText>[0]['data']} />
+      <div className="max-w-3xl">
+        <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4">
+          Legal
+        </p>
+        <h1 className="font-sans text-4xl font-semibold tracking-tight mb-2">
+          {page.title}
+        </h1>
+        {lastUpdated && (
+          <p className="text-sm text-muted-foreground mb-8">
+            Last updated {lastUpdated}
+          </p>
+        )}
+        <div className="prose prose-neutral dark:prose-invert max-w-none">
+          <RichText data={page.body as Parameters<typeof RichText>[0]['data']} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

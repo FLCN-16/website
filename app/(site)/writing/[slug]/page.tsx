@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getCachedPost, getCachedRelatedPosts } from '@/lib/data'
+import { draftMode } from 'next/headers'
+import { getCachedPost, getCachedRelatedPosts, getPreviewPost } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
 import { createMetadata } from '@/lib/metadata'
 import { resolvePostCover } from '@/lib/posts'
 import { getPayloadClient } from '@/lib/payload'
+import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -26,12 +28,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params
+  const { isEnabled: draft } = await draftMode()
   try {
-    const post = await getCachedPost(slug)
+    const post = draft ? await getPreviewPost(slug) : await getCachedPost(slug)
     if (!post) return { title: 'Not Found' }
     return createMetadata({
-      title: post.title,
-      description: post.excerpt ?? undefined,
+      title: post.meta?.title || post.title,
+      description: (post.meta?.description || post.excerpt) ?? undefined,
+      image: typeof post.meta?.image === 'object' ? post.meta?.image?.url ?? undefined : undefined,
     })
   } catch {
     return { title: slug }
@@ -40,10 +44,11 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params
+  const { isEnabled: draft } = await draftMode()
 
   let post: Awaited<ReturnType<typeof getCachedPost>> | undefined
   try {
-    post = await getCachedPost(slug)
+    post = draft ? await getPreviewPost(slug) : await getCachedPost(slug)
   } catch {
     // Payload unavailable — fall through to notFound below
   }
@@ -56,14 +61,19 @@ export default async function PostPage({ params }: PostPageProps) {
   const coverResolved = resolvePostCover(post.cover)
 
   return (
-    <WritingPost
-      title={post.title}
-      publishedAt={post.publishedAt ?? undefined}
-      readingTime={post.readingTime ?? undefined}
-      tags={post.tags?.map((t: { tag?: string | null }) => ({ tag: t.tag ?? '' }))}
-      body={post.body}
-      cover={coverResolved}
-      related={relatedPosts}
-    />
+    <>
+      {draft && (
+        <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
+      )}
+      <WritingPost
+        title={post.title}
+        publishedAt={post.publishedAt ?? undefined}
+        readingTime={post.readingTime ?? undefined}
+        tags={post.tags?.map((t: { tag?: string | null }) => ({ tag: t.tag ?? '' }))}
+        body={post.body}
+        cover={coverResolved}
+        related={relatedPosts}
+      />
+    </>
   )
 }
