@@ -39,9 +39,9 @@ export function FeaturedSwiper({ posts }: FeaturedSwiperProps) {
       {/* Pill indicators + counter */}
       <div className="flex items-center justify-between px-1">
         <div className="flex gap-1.5 items-center">
-          {posts.map((_, i) => (
+          {posts.map((post, i) => (
             <button
-              key={i}
+              key={post.id}
               onClick={() => swiperRef.current?.slideToLoop(i)}
               aria-label={`Go to slide ${i + 1}`}
               className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${

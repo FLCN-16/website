@@ -10,7 +10,14 @@ interface PostTocProps {
 
 export function PostToc({ headings }: PostTocProps) {
   const [activeId, setActiveId] = useState<string>("")
+  const [prevHeadings, setPrevHeadings] = useState(headings)
   const activeRef = useRef<HTMLAnchorElement | null>(null)
+
+  // Adjust state during render when the headings prop changes (new post loaded)
+  if (headings !== prevHeadings) {
+    setPrevHeadings(headings)
+    setActiveId("")
+  }
 
   useEffect(() => {
     if (headings.length < 3) return

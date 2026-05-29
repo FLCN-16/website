@@ -27,8 +27,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const { isEnabled: draft } = await draftMode()
+  const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
   try {
     const post = draft ? await getPreviewPost(slug) : await getCachedPost(slug)
     if (!post) return { title: 'Not Found' }
@@ -43,8 +42,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = await params
-  const { isEnabled: draft } = await draftMode()
+  const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
 
   let post: Awaited<ReturnType<typeof getCachedPost>> | undefined
   try {

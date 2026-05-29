@@ -1,5 +1,5 @@
 /** Returns the frontend path for a given collection + doc data */
-export function generatePreviewPath({
+function generatePreviewPath({
   collection,
   slug,
   template,
