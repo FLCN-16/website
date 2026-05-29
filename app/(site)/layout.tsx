@@ -5,6 +5,7 @@ import { redirect, unstable_rethrow } from "next/navigation";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import "../globals.css";
+import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
@@ -90,6 +91,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
       )}
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <NextTopLoader color="var(--primary)" height={3} showSpinner={false} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
