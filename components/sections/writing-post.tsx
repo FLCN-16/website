@@ -49,7 +49,7 @@ export function WritingPost({
     <>
       <ReadingProgress />
 
-      <article className="py-16 md:py-24 max-w-4xl">
+      <article className="py-16 md:py-24 max-w-6xl">
         {/* Back link */}
         <Link
           href="/writing"
