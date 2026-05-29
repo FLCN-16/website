@@ -1,5 +1,7 @@
 import { restFetch } from './rest'
 import type { PayloadListResponse } from './rest'
+import { getPayloadClient } from './payload'
+import type { Where } from 'payload'
 import { mapPayloadPost } from './posts'
 import { CACHE_TAGS } from './cache-tags'
 import type {
@@ -369,4 +371,32 @@ export async function getCachedLegalPage(slug: string): Promise<RawPageDoc | nul
     [CACHE_TAGS.pages, CACHE_TAGS.page(slug)]
   )
   return data.docs[0] ?? null
+}
+
+// ─── Draft/Preview Fetchers ───────────────────────────────────────────────────
+
+export async function getPreviewPost(slug: string): Promise<RawPostDoc | null> {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'posts',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 1,
+    overrideAccess: true,
+  })
+  return (result.docs[0] as RawPostDoc) ?? null
+}
+
+export async function getPreviewPage(slug: string, template?: string): Promise<RawPageDoc | null> {
+  const payload = await getPayloadClient()
+  const where: Where = { slug: { equals: slug } }
+  if (template) where.template = { equals: template }
+  const result = await payload.find({
+    collection: 'pages',
+    where,
+    limit: 1,
+    depth: 1,
+    overrideAccess: true,
+  })
+  return (result.docs[0] as RawPageDoc) ?? null
 }

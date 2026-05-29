@@ -21,6 +21,7 @@ import { Education } from "./collections/Education";
 import { Certifications } from "./collections/Certifications";
 import { Pages } from "./collections/Pages";
 import { SiteSettings } from "./globals/SiteSettings";
+import { generatePreviewUrl } from "./lib/preview";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -30,6 +31,21 @@ export default buildConfig({
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
+    },
+    livePreview: {
+      url: ({ data, collectionConfig }) => {
+        return generatePreviewUrl({
+          collection: collectionConfig?.slug ?? '',
+          slug: String(data?.slug ?? ''),
+          template: data?.template ? String(data.template) : undefined,
+        })
+      },
+      collections: ['posts', 'pages'],
+      breakpoints: [
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
+      ],
     },
   },
   collections: [Users, Posts, Media, Submissions, Work, Projects, Timeline, Education, Certifications, Pages],

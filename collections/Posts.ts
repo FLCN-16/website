@@ -2,12 +2,17 @@ import type { CollectionConfig } from 'payload'
 import { revalidateTag } from 'next/cache'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { CACHE_TAGS } from '@/lib/cache-tags'
+import { generatePreviewUrl } from '@/lib/preview'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'featured', 'publishedAt'],
+    preview: (data) => generatePreviewUrl({
+      collection: 'posts',
+      slug: String(data?.slug ?? ''),
+    }),
   },
   access: {
     read: ({ req }) => {
