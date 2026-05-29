@@ -9,10 +9,10 @@ import type { Post } from "@/lib/types"
 export type SortOption = "newest" | "oldest" | "longest" | "shortest"
 export type ReadingTime = "short" | "medium" | "long"
 
-const READING_TIME_OPTIONS: Array<{ value: ReadingTime; label: string }> = [
-  { value: "short", label: "<5m" },
-  { value: "medium", label: "5–15m" },
-  { value: "long", label: ">15m" },
+const READING_TIME_OPTIONS: Array<{ value: ReadingTime; label: string; sub: string }> = [
+  { value: "short", label: "Quick read", sub: "<5 min" },
+  { value: "medium", label: "Medium read", sub: "5–15 min" },
+  { value: "long", label: "Long read", sub: ">15 min" },
 ]
 
 const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
@@ -70,11 +70,9 @@ export function ChipFilters({
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
-  const [isMac, setIsMac] = useState(true)
-
-  useEffect(() => {
-    setIsMac(navigator.platform.toUpperCase().includes("MAC"))
-  }, [])
+  const [isMac] = useState(() =>
+    typeof navigator !== "undefined" && navigator.platform.toUpperCase().includes("MAC")
+  )
 
   // Cmd/Ctrl+S focuses the input
   useEffect(() => {
@@ -90,13 +88,14 @@ export function ChipFilters({
 
   // Debounce search → fetch dropdown results
   useEffect(() => {
-    if (!search.trim()) {
-      setDropdownResults([])
-      setDropdownOpen(false)
-      setActiveIndex(-1)
-      return
-    }
+    const delay = search.trim() ? 300 : 0
     const timer = setTimeout(async () => {
+      if (!search.trim()) {
+        setDropdownResults([])
+        setDropdownOpen(false)
+        setActiveIndex(-1)
+        return
+      }
       setIsLoading(true)
       try {
         const results = await fetchDropdownResults(search.trim())
@@ -106,7 +105,7 @@ export function ChipFilters({
       } finally {
         setIsLoading(false)
       }
-    }, 300)
+    }, delay)
     return () => clearTimeout(timer)
   }, [search])
 
@@ -252,12 +251,13 @@ export function ChipFilters({
         )}
 
         {/* Reading time chips */}
-        {READING_TIME_OPTIONS.map(({ value, label }) => {
+        {READING_TIME_OPTIONS.map(({ value, label, sub }) => {
           const active = selectedReadingTime === value
           return (
             <button
               type="button"
               key={value}
+              title={sub}
               onClick={() => onReadingTimeSelect(active ? null : value)}
               className={cn(
                 "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",

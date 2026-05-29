@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
+import { cn } from "@/lib/utils"
 
 const STORAGE_KEY = "talent_popup_seen"
 const DELAY_MS = 15_000
@@ -83,29 +84,28 @@ export function TalentInquiryDialog({ form }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[440px]">
         <DialogHeader>
-          <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             Opportunity
           </p>
-          <DialogTitle className="font-mono text-base uppercase tracking-widest">
+          <DialogTitle className="text-xl font-bold tracking-tight">
             Looking for Talent?
           </DialogTitle>
-          <DialogDescription>
-            Hiring or have an opportunity?
+          <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
+            Building something that demands precision? I&apos;m a Full-Stack Technical Lead
+            open to the right full-time role.
           </DialogDescription>
         </DialogHeader>
 
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          If you&apos;re building something that demands precision and are looking
-          for a full-time Front-End Technical Lead, I&apos;d love to hear about it.
-          <br />
-          <span className="font-medium text-foreground">
-            Please note: I am only open to full-time opportunities (no freelance or contract work).
-          </span>
-        </p>
+        <div className="border-l-2 border-amber-500/50 pl-3 py-0.5">
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-amber-500/80 mr-1.5">Note —</span>
+            Full-time only. No freelance or contract work.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* CMS-driven fields */}
           {form.fields?.map((field: FormFieldBlock) => {
             if (field.blockType === "email") {
@@ -156,42 +156,39 @@ export function TalentInquiryDialog({ form }: Props) {
 
           {/* Static file input */}
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1.5">
+            <Label className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1.5 block">
               Or Attach JD File
-            </p>
-            <div className="flex items-center gap-3">
-              <input
-                ref={fileRef}
-                type="file"
-                name="jdFile"
-                accept=".pdf,.doc,.docx"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0]
-                  if (f && f.size > 5 * 1024 * 1024) {
-                    setError("File must be under 5 MB.")
-                    e.target.value = ""
-                    return
-                  }
-                  setError(null)
-                  setFileName(f?.name ?? null)
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="font-mono text-xs uppercase tracking-widest"
-                onClick={() => fileRef.current?.click()}
-              >
-                Browse Files
-              </Button>
-              {fileName && (
-                <span className="text-xs text-muted-foreground truncate max-w-[180px]">
-                  {fileName}
-                </span>
-              )}
-            </div>
+            </Label>
+            <input
+              ref={fileRef}
+              type="file"
+              name="jdFile"
+              accept=".pdf,.doc,.docx"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                if (f && f.size > 5 * 1024 * 1024) {
+                  setError("File must be under 5 MB.")
+                  e.target.value = ""
+                  return
+                }
+                setError(null)
+                setFileName(f?.name ?? null)
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="w-full h-10 px-3 flex items-center gap-2 border border-input rounded-sm bg-transparent hover:bg-muted transition-colors cursor-pointer text-left"
+            >
+              <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground shrink-0">
+                Browse
+              </span>
+              <span className="h-4 w-px bg-border shrink-0" />
+              <span className={cn("text-xs truncate", fileName ? "text-foreground" : "text-muted-foreground/50")}>
+                {fileName ?? "No file chosen"}
+              </span>
+            </button>
           </div>
 
           {error && (
@@ -200,12 +197,25 @@ export function TalentInquiryDialog({ form }: Props) {
 
           <Button
             type="submit"
+            size="lg"
             disabled={isPending}
-            className="w-full font-mono uppercase tracking-widest text-xs"
+            className="w-full"
           >
             {isPending ? <Spinner className="mr-2 h-3 w-3" /> : null}
             {isPending ? "Sending…" : (form.submitButtonLabel ?? "Send Details")}
           </Button>
+
+          <p className="text-[11px] text-muted-foreground/60 leading-relaxed text-center -mt-3">
+            By sending, you agree to the{" "}
+            <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
+              Privacy Policy
+            </a>
+            {" "}and{" "}
+            <a href="/legal/terms" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
+              Terms
+            </a>
+            . Your information is only used to respond to your inquiry.
+          </p>
         </form>
       </DialogContent>
     </Dialog>

@@ -29,7 +29,7 @@ export function PostRow({ post, className }: PostRowProps) {
     >
       {/* Thumbnail — only when cover is present */}
       {post.cover && (
-        <div className="relative shrink-0 w-24 h-24 md:w-36 md:h-24 rounded-md overflow-hidden">
+        <div className="relative shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-md overflow-hidden">
           <Image
             src={post.cover.url}
             alt={post.cover.alt ?? post.title}

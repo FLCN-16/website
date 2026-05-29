@@ -19,13 +19,13 @@ export default async function WritingIndex() {
     // Payload not available — show empty state
   }
 
-  const heroPost = pickHero(posts)
+  const featuredPosts = pickFeatured(posts)
 
-  return <WritingList posts={posts} heroPost={heroPost} />
+  return <WritingList posts={posts} featuredPosts={featuredPosts} />
 }
 
-function pickHero(posts: Post[]): Post | null {
-  const featured = posts.find((p) => p.featured && p.cover)
-  if (featured) return featured
-  return posts.find((p) => p.cover) ?? null
+function pickFeatured(posts: Post[]): Post[] {
+  const featured = posts.filter((p) => p.featured && p.cover)
+  if (featured.length > 0) return featured.slice(0, 5)
+  return posts.filter((p) => p.cover).slice(0, 1)
 }

@@ -61,7 +61,7 @@ export const Projects: CollectionConfig = {
       },
     ],
     afterDelete: [
-      ({ doc }) => {
+      () => {
         try {
           revalidateTag(CACHE_TAGS.projects, 'max')
         } catch {

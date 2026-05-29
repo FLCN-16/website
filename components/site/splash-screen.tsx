@@ -20,7 +20,8 @@ export function SplashScreen() {
     if (reduced) return
     if (window.location.pathname !== "/") return
     if (sessionStorage.getItem("splash_seen")) return
-    setVisible(true)
+    const t = setTimeout(() => setVisible(true), 0)
+    return () => clearTimeout(t)
   }, [reduced])
 
   useGSAP(

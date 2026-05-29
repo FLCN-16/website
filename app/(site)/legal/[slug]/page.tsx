@@ -29,8 +29,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: LegalPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const { isEnabled: draft } = await draftMode()
+  const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
   try {
     const page = draft ? await getPreviewPage(slug, 'legal') : await getCachedLegalPage(slug)
     if (!page) return { title: 'Not Found' }
@@ -45,8 +44,7 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
 }
 
 export default async function LegalPage({ params }: LegalPageProps) {
-  const { slug } = await params
-  const { isEnabled: draft } = await draftMode()
+  const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
 
   let page: Awaited<ReturnType<typeof getCachedLegalPage>> | undefined
   try {

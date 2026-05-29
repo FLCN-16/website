@@ -1,5 +1,5 @@
 export interface Social {
-  platform: "github" | "linkedin";
+  platform: "github" | "linkedin" | "instagram";
   url: string;
   label: string;
 }
@@ -53,6 +53,11 @@ export const site: Site = {
       platform: "linkedin",
       url: "https://linkedin.com/in/rishabh-kumar-flcn16",
       label: "LinkedIn",
+    },
+    {
+      platform: "instagram",
+      url: "https://instagram.com/thefalcon.dev",
+      label: "Instagram",
     },
   ],
   resumeUrl: "https://media.thefalcon.dev/rishabh-kumar-resume.pdf",
