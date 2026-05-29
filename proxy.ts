@@ -14,6 +14,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Logged-in users always bypass maintenance mode
+  if (request.cookies.get('payload-token')) {
+    return NextResponse.next()
+  }
+
   try {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
     if (siteUrl) {
