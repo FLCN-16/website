@@ -25,6 +25,11 @@ export interface RawPostDoc {
   tags?: { tag?: string | null }[]
   body?: unknown
   updatedAt: string
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | null
+  } | null
 }
 
 export async function getCachedPosts(): Promise<Post[]> {
@@ -129,11 +134,16 @@ interface RawWorkDoc {
   } | null
   stack?: Array<{ name?: string | null; role?: string | null }> | null
   updatedAt?: string
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | null
+  } | null
 }
 
 export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
   const data = await restFetch<PayloadListResponse<RawWorkDoc>>(
-    'work?where[status][equals]=published&sort=ord&limit=50&depth=0',
+    'work?where[status][equals]=published&sort=ord&limit=50&depth=1',
     [CACHE_TAGS.work]
   )
   return data.docs.map((d) => ({
@@ -151,6 +161,7 @@ export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
         quote: d.briefing?.quote ?? '',
       },
       stack: (d.stack ?? []).map((s) => ({ name: s.name ?? '', role: s.role ?? '' })),
+      meta: d.meta,
   }))
 }
 
@@ -298,6 +309,11 @@ interface RawPageDoc {
   lastUpdated?: string | null
   updatedAt: string
   body?: unknown
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | null
+  } | null
 }
 
 export async function getSitemapPages(): Promise<

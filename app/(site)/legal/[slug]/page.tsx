@@ -30,7 +30,11 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
   try {
     const page = await getCachedLegalPage(slug)
     if (!page) return { title: 'Not Found' }
-    return createMetadata({ title: page.title ?? slug })
+    return createMetadata({
+      title: page.meta?.title || (page.title ?? slug),
+      description: page.meta?.description ?? undefined,
+      image: page.meta?.image?.url ?? undefined,
+    })
   } catch {
     return { title: slug }
   }

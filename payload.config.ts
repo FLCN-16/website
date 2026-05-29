@@ -82,7 +82,7 @@ export default buildConfig({
       },
     }),
     seoPlugin({
-      collections: ["posts", "work", "projects"],
+      collections: ["posts", "pages", "work", "projects"],
       uploadsCollection: "media",
       tabbedUI: true,
       generateTitle: ({ doc }) => (doc as { title?: string })?.title ?? "",
