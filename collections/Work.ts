@@ -70,7 +70,7 @@ export const Work: CollectionConfig = {
       },
     ],
     afterDelete: [
-      ({ doc }) => {
+      () => {
         try {
           revalidateTag(CACHE_TAGS.work, 'max')
         } catch {

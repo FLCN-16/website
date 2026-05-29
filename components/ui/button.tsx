@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Slot } from "radix-ui"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 // ── SVG path generators ────────────────────────────────────────────────────────
@@ -45,12 +45,9 @@ const COLORS = {
   destructive: { svgFill: "var(--destructive)",  svgStroke: "var(--destructive)", textClass: "text-white" },
 } as const
 
-// Variants that use the SVG shape system
-const SVG_VARIANTS = new Set<string>(["default", "outline", "secondary", "destructive"])
-
 // Height per size token
 const HEIGHTS: Record<string, number> = {
-  xs: 24, sm: 28, default: 32, lg: 40,
+  xs: 24, sm: 28, default: 32, lg: 40, xl: 52,
 }
 
 // ── Shape renderers ────────────────────────────────────────────────────────────
@@ -90,7 +87,7 @@ function ShapeLayer({ h, outline, color }: { h: number; outline: boolean; color:
 // ── Main Button component ──────────────────────────────────────────────────────
 
 type ButtonVariant = "default" | "outline" | "secondary" | "destructive" | "ghost" | "link"
-type ButtonSize = "xs" | "sm" | "default" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"
+type ButtonSize = "xs" | "sm" | "default" | "lg" | "xl" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"
 
 interface ButtonProps extends React.ComponentProps<"button"> {
   variant?: ButtonVariant
@@ -125,6 +122,7 @@ function Button({
           size === "default" && "h-8",
           size === "sm" && "h-7",
           size === "lg" && "h-10",
+          size === "xl" && "h-[52px] text-sm",
           size === "xs" && "h-6 text-[10px]",
           className,
         )}
@@ -230,6 +228,7 @@ const buttonVariants = cva(
         xs:      "h-6 px-2 text-[10px]",
         sm:      "h-7 px-2.5",
         lg:      "h-10 px-5",
+        xl:      "h-[52px] px-8 text-sm",
         icon:    "size-8 rounded-sm",
         "icon-xs": "size-6 rounded-sm",
         "icon-sm": "size-7 rounded-sm",

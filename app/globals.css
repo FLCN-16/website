@@ -154,6 +154,38 @@
   cursor: not-allowed;
 }
 
+.camera-frame {
+  position: relative;
+}
+.camera-frame::before,
+.camera-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+.camera-frame::before {
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-size: 2px 20px, 20px 2px, 2px 20px, 20px 2px;
+  background-position: top left, top left, bottom left, bottom left;
+}
+.camera-frame::after {
+  color: color-mix(in srgb, currentColor 80%, transparent);
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-size: 2px 20px, 20px 2px, 2px 20px, 20px 2px;
+  background-position: top right, top right, bottom right, bottom right;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

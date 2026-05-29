@@ -13,7 +13,7 @@ export const contactSchema = z.object({
   inquiry: z.enum(["project", "consulting", "fulltime", "other"], {
     error: "Please select an inquiry type",
   }),
-  message: z.string().min(20, "Message must be at least 20 characters"),
+  message: z.string().min(20, "Message must be at least 20 characters").max(2000, "Message must be under 2000 characters"),
   _honeypot: z.string().max(0, "").optional(),
 })
 

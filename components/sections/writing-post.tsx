@@ -10,6 +10,7 @@ import { PostToc } from "@/components/writing/post-toc";
 import { PostGallery } from "@/components/writing/post-gallery";
 import { ReadingProgress } from "@/components/writing/reading-progress";
 import { RelatedPosts } from "@/components/writing/related-posts";
+import { WritingSocialCTA } from "@/components/writing/social-cta";
 import type { PostCover, Post } from "@/lib/types";
 
 interface WritingPostProps {
@@ -158,6 +159,9 @@ export function WritingPost({
 
         {/* Related posts */}
         <RelatedPosts posts={related} />
+
+        {/* Subscribe + social CTA */}
+        <WritingSocialCTA />
       </article>
 
       {/* PhotoSwipe lightbox for all post images */}

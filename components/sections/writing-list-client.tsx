@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { FeaturedCard } from "@/components/writing/featured-card"
+import { FeaturedSwiper } from "@/components/writing/featured-swiper"
 import { PostRow } from "@/components/writing/post-row"
 import { ChipFilters, type SortOption, type ReadingTime } from "@/components/writing/chip-filters"
 import type { Post } from "@/lib/types"
@@ -10,7 +10,7 @@ import { trackEvent } from "@/lib/analytics"
 
 interface WritingListClientProps {
   initialPosts: Post[]
-  heroPost: Post | null
+  featuredPosts: Post[]
   allTags: string[]
 }
 
@@ -81,7 +81,7 @@ function groupByYear(posts: Post[]): Array<{ year: string; posts: Post[] }> {
     .map(([year, posts]) => ({ year, posts }))
 }
 
-export function WritingListClient({ initialPosts, heroPost, allTags }: WritingListClientProps) {
+export function WritingListClient({ initialPosts, featuredPosts, allTags }: WritingListClientProps) {
   const [search, setSearch] = useState("")
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [selectedReadingTime, setSelectedReadingTime] = useState<ReadingTime | null>(null)
@@ -109,9 +109,10 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
   const filtered = applyLocalFilters(rawPosts, selectedTags, selectedReadingTime)
   const sorted = applySorting(filtered, sort)
 
-  // Exclude hero from the row list to avoid duplication
-  const rowPosts = heroPost
-    ? sorted.filter((p) => p.id !== heroPost.id)
+  // Exclude featured posts from the row list to avoid duplication
+  const featuredIds = new Set(featuredPosts.map((p) => p.id))
+  const rowPosts = featuredIds.size > 0
+    ? sorted.filter((p) => !featuredIds.has(p.id))
     : sorted
 
   const isFiltering = search.length > 0 || selectedTags.length > 0 || selectedReadingTime !== null
@@ -163,36 +164,46 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
         onClearAll={clearAll}
       />
 
-      {/* Featured hero — only when not actively filtering */}
-      {!isFiltering && sort === "newest" && heroPost && (
-        <div className="mt-8">
-          <FeaturedCard post={heroPost} />
+      {/* Featured swiper — only when not actively filtering */}
+      {!isFiltering && sort === "newest" && featuredPosts.length > 0 && (
+        <div className="mt-10">
+          <FeaturedSwiper posts={featuredPosts} />
         </div>
       )}
 
       {/* Post list */}
-      <div className="mt-8">
+      <div className="mt-12">
         {rowPosts.length === 0 ? (
-          <p className="font-mono text-sm text-muted-foreground">
+          <p className="font-mono text-sm text-muted-foreground py-8">
             No articles match your filters.
           </p>
         ) : grouped ? (
           /* Year-section layout (no active filter, newest sort) */
-          grouped.map(({ year, posts: yearPosts }) => (
-            <div key={year} className="mb-10">
-              <div className="flex items-center gap-4 mb-2">
-                <span className="font-mono text-sm font-medium text-muted-foreground">
-                  {year}
+          <>
+            {!isFiltering && sort === "newest" && featuredPosts.length > 0 && (
+              <div className="flex items-center gap-4 mb-8">
+                <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                  All Articles
                 </span>
                 <div className="flex-1 h-px bg-border" />
               </div>
-              <div>
-                {yearPosts.map((post) => (
-                  <PostRow key={post.id} post={post} />
-                ))}
+            )}
+            {grouped.map(({ year, posts: yearPosts }) => (
+              <div key={year} className="mb-12">
+                <div className="flex items-center gap-4 mb-1">
+                  <span className="font-mono text-sm font-semibold tabular-nums text-foreground/50">
+                    {year}
+                  </span>
+                  <div className="flex-1 h-px bg-border" />
+                </div>
+                <div>
+                  {yearPosts.map((post) => (
+                    <PostRow key={post.id} post={post} />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+          </>
         ) : (
           /* Flat list when filtering or sorting differently */
           <div>
@@ -202,6 +213,7 @@ export function WritingListClient({ initialPosts, heroPost, allTags }: WritingLi
           </div>
         )}
       </div>
+
     </div>
   )
 }

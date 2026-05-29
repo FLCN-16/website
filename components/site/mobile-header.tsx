@@ -18,7 +18,7 @@ export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border bg-background md:hidden">
+    <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border/60 bg-background/70 backdrop-blur-md supports-backdrop-filter:backdrop-blur-md md:hidden">
       <span className="font-mono font-semibold text-sm text-foreground">
         FLCN
       </span>
