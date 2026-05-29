@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useCallback } from "react"
 import Link from "next/link"
 import { trackEvent, outboundParams } from "@/lib/analytics"
 import type { GTMEvent } from "@/lib/analytics"
@@ -16,10 +16,10 @@ type TrackedLinkProps = React.ComponentProps<typeof Link> & {
 }
 
 export function TrackedLink({ event, onClick, ...props }: TrackedLinkProps) {
-  const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+  const handleClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((e) => {
     trackEvent(event)
     onClick?.(e)
-  }
+  }, [event, onClick])
 
   return <Link {...props} onClick={handleClick} />
 }
@@ -37,10 +37,10 @@ type OutboundLinkProps = Omit<React.ComponentProps<"a">, "href" | "target" | "re
 }
 
 export function OutboundLink({ url, context, onClick, children, ...props }: OutboundLinkProps) {
-  const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+  const handleClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((e) => {
     trackEvent({ event: "outbound_click", ...outboundParams(url, context) })
     onClick?.(e)
-  }
+  }, [url, context, onClick])
 
   return (
     <a
