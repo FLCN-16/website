@@ -10,7 +10,7 @@ export async function SiteFrame({ children }: { children: React.ReactNode }) {
 
   try {
     const payload = await getPayload({ config });
-    const settings = await payload.findGlobal({ slug: "site-settings" });
+    const settings = await payload.findGlobal({ slug: "site-settings", depth: 1 });
     const resume = settings.resume as { url?: string | null } | null | undefined;
     if (resume?.url) resumeUrl = resume.url;
   } catch {
