@@ -17,19 +17,26 @@ export async function proxy(request: NextRequest) {
   try {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
     if (siteUrl) {
-      const res = await fetch(`${siteUrl}/api/globals/site-settings`, {
-        next: { revalidate: 60 },
-      })
-      if (res.ok) {
-        const settings = await res.json()
-        const mm = settings?.maintenanceMode as { enabled?: boolean | null } | null | undefined
-        if (mm?.enabled) {
-          return NextResponse.redirect(new URL('/maintenance', request.url))
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 1500)
+      try {
+        const res = await fetch(`${siteUrl}/api/globals/site-settings`, {
+          signal: controller.signal,
+          next: { revalidate: 60 },
+        })
+        if (res.ok) {
+          const settings = await res.json()
+          const mm = settings?.maintenanceMode as { enabled?: boolean | null } | null | undefined
+          if (mm?.enabled) {
+            return NextResponse.redirect(new URL('/maintenance', request.url))
+          }
         }
+      } finally {
+        clearTimeout(timeout)
       }
     }
   } catch {
-    // CMS unreachable — don't block the request
+    // CMS unreachable or timed out — fail open
   }
 
   return NextResponse.next()
