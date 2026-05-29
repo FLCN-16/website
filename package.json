@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate:importmap && next build",
     "generate:importmap": "NODE_OPTIONS='--import tsx/esm' payload generate:importmap",
     "start": "next start",
     "lint": "eslint",
@@ -26,7 +26,6 @@
     "@payloadcms/live-preview-react": "3.85.0",
     "@payloadcms/next": "^3.85.0",
     "@payloadcms/plugin-form-builder": "3.85.0",
-    "@payloadcms/plugin-import-export": "3.85.0",
     "@payloadcms/plugin-mcp": "3.85.0",
     "@payloadcms/plugin-search": "3.85.0",
     "@payloadcms/plugin-seo": "3.85.0",

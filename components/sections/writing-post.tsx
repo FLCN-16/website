@@ -126,9 +126,10 @@ export function WritingPost({
             <div className="prose prose-neutral dark:prose-invert max-w-none">
               <RichText
                 data={body}
-                converters={{
+                converters={({ defaultConverters }) => ({
+                  ...defaultConverters,
                   heading: headingConverter,
-                }}
+                })}
               />
             </div>
           )}
