@@ -15,6 +15,7 @@ function slugify(text: string): string {
 function headingText(node: any): string {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (node.children as any[])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((c: any) => (typeof c?.text === "string" ? c.text : ""))
     .join("")
 }
