@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getPayloadClient } from '@/lib/payload'
 import { getCachedWorkEntries } from '@/lib/data'
 import { ProjectBriefing } from '@/components/sections/project-briefing'
 import { createMetadata } from '@/lib/metadata'
@@ -7,6 +8,20 @@ import type { WorkEntry } from '@/lib/types'
 
 interface WorkDetailProps {
   params: Promise<{ slug: string }>
+}
+
+export const revalidate = false
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const payload = await getPayloadClient()
+  const result = await payload.find({
+    collection: 'work',
+    where: { status: { equals: 'published' } },
+    limit: 1000,
+    depth: 0,
+  })
+  return result.docs.map((doc) => ({ slug: String(doc.slug) }))
 }
 
 export async function generateMetadata({ params }: WorkDetailProps): Promise<Metadata> {
