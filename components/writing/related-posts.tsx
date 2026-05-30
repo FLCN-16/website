@@ -15,9 +15,9 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
       <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-6">
         More writing
       </p>
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         {posts.map((post) => (
-          <div key={post.id} className="border border-border rounded-xl overflow-hidden">
+          <div key={post.id} className="border border-border overflow-hidden">
             <PostRow post={post} className="p-4 border-b-0" />
           </div>
         ))}

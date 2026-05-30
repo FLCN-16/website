@@ -3,6 +3,7 @@ import type { CollectionConfig } from "payload";
 export const Submissions: CollectionConfig = {
   slug: "submissions",
   admin: {
+    group: 'System',
     useAsTitle: "email",
     defaultColumns: ["name", "email", "inquiry", "submittedAt"],
   },

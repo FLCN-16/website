@@ -6,10 +6,36 @@ interface EducationProps {
   items: EducationEntry[]
 }
 
-const STATUS_LABEL: Record<string, string> = {
-  completed: "Completed",
-  ongoing: "Ongoing",
-  expected: "Expected",
+const STATUS_CONFIG: Record<
+  string,
+  { label: string; pulse: boolean; color: string }
+> = {
+  completed: { label: "Completed", pulse: false, color: "text-muted-foreground/60" },
+  ongoing: { label: "Ongoing", pulse: true, color: "text-primary/80" },
+  expected: { label: "Expected", pulse: false, color: "text-muted-foreground/60" },
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const cfg = STATUS_CONFIG[status] ?? { label: status, pulse: false, color: "text-muted-foreground/60" }
+  return (
+    <span className={cn("inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em]", cfg.color)}>
+      {cfg.pulse ? (
+        <span className="relative flex h-1.5 w-1.5 shrink-0">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+        </span>
+      ) : (
+        <span className="inline-flex h-1.5 w-1.5 rounded-full bg-current opacity-50 shrink-0" />
+      )}
+      {cfg.label}
+    </span>
+  )
+}
+
+function dateRange(item: EducationEntry) {
+  if (item.start && item.end) return `${item.start} – ${item.end}`
+  if (item.start) return `${item.start} – Present`
+  return item.end ?? ""
 }
 
 export function Education({ items }: EducationProps) {
@@ -25,40 +51,39 @@ export function Education({ items }: EducationProps) {
           Academic background
         </h2>
 
-        <div className="relative">
+        <div>
           {items.map((item, i) => (
             <div
               key={item.id}
               className={cn(
                 "grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 md:gap-8",
-                i < items.length - 1
-                  ? "border-b border-border pb-8 mb-8"
-                  : undefined
+                i < items.length - 1 && "border-b border-border pb-8 mb-8"
               )}
             >
-              <div>
-                <p className="font-semibold text-foreground">{item.institution}</p>
-                {item.location && (
-                  <p className="text-sm text-foreground/80 mt-0.5">{item.location}</p>
-                )}
-                <p className="font-mono text-xs text-muted-foreground mt-2">
-                  {item.start && item.end
-                    ? `${item.start} – ${item.end}`
-                    : item.start
-                      ? `${item.start} – Present`
-                      : item.end ?? ""}
+              {/* Left: institution meta */}
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-semibold text-foreground leading-snug">
+                  {item.institution}
+                </p>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  {[item.location, dateRange(item)].filter(Boolean).join(" · ")}
                 </p>
                 {item.status && (
-                  <p className="font-mono text-xs text-muted-foreground mt-1">
-                    {STATUS_LABEL[item.status] ?? item.status}
-                  </p>
+                  <div className="mt-1.5">
+                    <StatusBadge status={item.status} />
+                  </div>
                 )}
               </div>
 
+              {/* Right: degree + gpa */}
               <div>
-                <p className="text-sm text-foreground leading-relaxed">{item.degree}</p>
+                <p className="text-base font-semibold leading-snug text-foreground">
+                  {item.degree}
+                </p>
                 {item.gpa && (
-                  <p className="font-mono text-xs text-muted-foreground mt-2">{item.gpa}</p>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mt-2">
+                    GPA · {item.gpa}
+                  </p>
                 )}
               </div>
             </div>

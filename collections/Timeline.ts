@@ -5,6 +5,7 @@ import { CACHE_TAGS } from '@/lib/cache-tags'
 export const Timeline: CollectionConfig = {
   slug: 'timeline',
   admin: {
+    group: 'About',
     useAsTitle: 'company',
     defaultColumns: ['company', 'role', 'start', 'end', 'order'],
   },

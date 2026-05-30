@@ -55,31 +55,32 @@ export function SelectedWork({
 
 function GridLayout({ projects }: { projects: WorkEntry[] }) {
   return (
-    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
       {projects.map((project) => (
         <Link
           key={project.slug}
           href={`/work/${project.slug}`}
-          className="group flex flex-col border border-border rounded-lg p-6 hover:border-foreground/20 hover:bg-muted/40 transition-all duration-200"
+          className="group relative flex flex-col border border-border p-5 md:p-6 hover:border-foreground/25 hover:-translate-y-0.5 hover:shadow-lg dark:hover:shadow-black/40 transition-all duration-300"
         >
-          <div className="flex items-start justify-between gap-2 mb-3">
-            <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
               {project.category}
             </span>
-            <span className="font-mono text-xs text-muted-foreground">
-              {project.ord}
+            <span className="font-mono text-xs text-muted-foreground/0 group-hover:text-muted-foreground transition-colors duration-200">
+              →
             </span>
           </div>
-          <h3 className="text-base font-semibold leading-snug group-hover:text-primary transition-colors">
-            {project.title}
-          </h3>
+
+          <h3 className="text-base font-semibold leading-snug">{project.title}</h3>
+
           <p className="text-sm text-muted-foreground mt-3 leading-relaxed flex-1">
             {project.description}
           </p>
+
           {project.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-border">
+            <div className="flex flex-wrap gap-1.5 mt-5 pt-4 border-t border-border/60">
               {project.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="font-mono text-xs">
+                <Badge key={tag} variant="secondary" className="font-mono text-[10px] py-0 h-5">
                   {tag}
                 </Badge>
               ))}
@@ -98,28 +99,26 @@ function ListLayout({ projects }: { projects: WorkEntry[] }) {
         <Link
           key={project.slug}
           href={`/work/${project.slug}`}
-          className="group flex items-start gap-6 md:gap-10 py-8 md:py-10 hover:bg-muted/30 -mx-6 px-6 md:-mx-12 md:px-12 transition-colors"
+          className="group flex items-start gap-6 md:gap-10 py-8 md:py-10 -mx-6 px-6 md:-mx-12 md:px-12 hover:bg-muted/25 transition-colors duration-200"
         >
-          {/* Ordinal */}
-          <span className="font-mono text-4xl md:text-5xl font-bold text-muted-foreground/25 leading-none shrink-0 pt-1 select-none group-hover:text-muted-foreground/40 transition-colors">
+          <span className="font-mono text-4xl md:text-5xl font-bold text-muted-foreground/20 leading-none shrink-0 pt-1 select-none group-hover:text-muted-foreground/35 transition-colors">
             {project.ord}
           </span>
 
-          {/* Content */}
           <div className="flex-1 min-w-0">
-            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-2">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
               {project.category}
             </p>
-            <h2 className="text-xl md:text-2xl font-semibold tracking-tight group-hover:text-primary transition-colors leading-snug">
+            <h2 className="text-xl md:text-2xl font-semibold tracking-tight leading-snug">
               {project.title}
             </h2>
-            <p className="text-muted-foreground mt-3 leading-relaxed max-w-2xl">
+            <p className="text-muted-foreground mt-3 leading-relaxed max-w-2xl text-sm">
               {project.description}
             </p>
             {project.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-4">
                 {project.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="font-mono text-xs">
+                  <Badge key={tag} variant="secondary" className="font-mono text-[10px] py-0 h-5">
                     {tag}
                   </Badge>
                 ))}
@@ -127,8 +126,7 @@ function ListLayout({ projects }: { projects: WorkEntry[] }) {
             )}
           </div>
 
-          {/* Arrow */}
-          <span className="font-mono text-muted-foreground group-hover:text-foreground transition-all group-hover:translate-x-0.5 -translate-y-0 shrink-0 self-center text-lg">
+          <span className="font-mono text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0 self-center text-lg">
             →
           </span>
         </Link>

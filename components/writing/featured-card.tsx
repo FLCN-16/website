@@ -15,22 +15,23 @@ function formatDate(iso?: string | null) {
 
 interface FeaturedCardProps {
   post: Post
+  wide?: boolean
   className?: string
 }
 
-export function FeaturedCard({ post, className }: FeaturedCardProps) {
+export function FeaturedCard({ post, wide = false, className }: FeaturedCardProps) {
   return (
     <Link
       href={`/writing/${post.slug}`}
       className={cn(
-        "group relative block rounded-xl overflow-hidden border border-border transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 dark:hover:shadow-none",
+        "group relative block overflow-hidden border border-border transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 dark:hover:shadow-none",
         className,
       )}
     >
       {post.cover ? (
         <>
           {/* Full-width hero image */}
-          <div className="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-muted">
+          <div className={cn("relative overflow-hidden bg-muted", wide ? "aspect-[16/9] md:aspect-[21/9]" : "aspect-[16/9]")}>
             <Image
               src={post.cover.url}
               alt={post.cover.alt ?? post.title}
@@ -61,7 +62,7 @@ export function FeaturedCard({ post, className }: FeaturedCardProps) {
                     {post.title}
                   </h2>
                   {post.excerpt && (
-                    <p className="text-sm text-white/65 leading-relaxed line-clamp-2 max-w-2xl">
+                    <p className="hidden md:block text-sm text-white/65 leading-relaxed line-clamp-2 max-w-2xl">
                       {post.excerpt}
                     </p>
                   )}
@@ -85,11 +86,20 @@ export function FeaturedCard({ post, className }: FeaturedCardProps) {
 
                   {post.tags && post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
-                      {post.tags.slice(0, 3).map(({ tag }) => (
+                      {post.tags.slice(0, 2).map(({ tag }) => (
                         <Badge
                           key={tag}
                           variant="secondary"
-                          className="font-mono text-xs bg-white/10 text-white/75 border border-white/15 hover:bg-white/20"
+                          className="font-mono text-xs bg-white/10 text-white/75 border border-white/15 hover:bg-white/20 md:hidden"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                      {post.tags.slice(0, 3).map(({ tag }) => (
+                        <Badge
+                          key={`md-${tag}`}
+                          variant="secondary"
+                          className="hidden md:inline-flex font-mono text-xs bg-white/10 text-white/75 border border-white/15 hover:bg-white/20"
                         >
                           {tag}
                         </Badge>
