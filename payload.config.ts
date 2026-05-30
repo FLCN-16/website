@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { CodeHighlightFeature } from "./features/code-highlight-feature";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { resendAdapter } from "@payloadcms/email-resend";
 import { seoPlugin } from "@payloadcms/plugin-seo";
@@ -56,7 +57,9 @@ export default buildConfig({
       maxPoolSize: 1,
     },
   }),
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [...defaultFeatures, CodeHighlightFeature()],
+  }),
   email: resendAdapter({
     defaultFromAddress: process.env.RESEND_FROM_ADDRESS || "hello@thefalcon.dev",
     defaultFromName: process.env.RESEND_FROM_NAME || "The Falcon",
