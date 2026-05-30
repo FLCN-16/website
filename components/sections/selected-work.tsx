@@ -1,14 +1,14 @@
-import Link from "next/link"
-import { type WorkEntry } from "@/lib/types"
-import { Badge } from "@/components/ui/badge"
-import { FadeRise } from "@/components/anim/fade-rise"
-import { cn } from "@/lib/utils"
+import Link from "next/link";
+import { type WorkEntry } from "@/lib/types";
+import { Badge } from "@/components/ui/badge";
+import { FadeRise } from "@/components/anim/fade-rise";
+import { cn } from "@/lib/utils";
 
 interface SelectedWorkProps {
-  projects: WorkEntry[]
-  showViewAll?: boolean
-  variant?: "grid" | "list"
-  showSectionHeader?: boolean
+  projects: WorkEntry[];
+  showViewAll?: boolean;
+  variant?: "grid" | "list";
+  showSectionHeader?: boolean;
 }
 
 export function SelectedWork({
@@ -18,7 +18,9 @@ export function SelectedWork({
   showSectionHeader = true,
 }: SelectedWorkProps) {
   return (
-    <section className={cn("py-16 md:py-24", variant === "list" && "py-0 md:py-0")}>
+    <section
+      className={cn("py-16 md:py-24", variant === "list" && "py-0 md:py-0")}
+    >
       <FadeRise>
         {showSectionHeader && (
           <div className="mb-10 md:mb-14">
@@ -44,13 +46,15 @@ export function SelectedWork({
               className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors group"
             >
               View All Work
-              <span className="transition-transform group-hover:translate-x-0.5">→</span>
+              <span className="transition-transform group-hover:translate-x-0.5">
+                →
+              </span>
             </Link>
           </div>
         )}
       </FadeRise>
     </section>
-  )
+  );
 }
 
 function GridLayout({ projects }: { projects: WorkEntry[] }) {
@@ -71,7 +75,9 @@ function GridLayout({ projects }: { projects: WorkEntry[] }) {
             </span>
           </div>
 
-          <h3 className="text-base font-semibold leading-snug">{project.title}</h3>
+          <h3 className="text-base font-semibold leading-snug">
+            {project.title}
+          </h3>
 
           <p className="text-sm text-muted-foreground mt-3 leading-relaxed flex-1">
             {project.description}
@@ -80,7 +86,11 @@ function GridLayout({ projects }: { projects: WorkEntry[] }) {
           {project.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-5 pt-4 border-t border-border/60">
               {project.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="font-mono text-[10px] py-0 h-5">
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="font-mono text-[10px] py-0 h-5"
+                >
                   {tag}
                 </Badge>
               ))}
@@ -89,12 +99,12 @@ function GridLayout({ projects }: { projects: WorkEntry[] }) {
         </Link>
       ))}
     </div>
-  )
+  );
 }
 
 function ListLayout({ projects }: { projects: WorkEntry[] }) {
   return (
-    <div className="divide-y divide-border border-t border-border">
+    <div className="divide-y divide-border">
       {projects.map((project) => (
         <Link
           key={project.slug}
@@ -118,7 +128,11 @@ function ListLayout({ projects }: { projects: WorkEntry[] }) {
             {project.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-4">
                 {project.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="font-mono text-[10px] py-0 h-5">
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="font-mono text-[10px] py-0 h-5"
+                  >
                     {tag}
                   </Badge>
                 ))}
@@ -132,5 +146,5 @@ function ListLayout({ projects }: { projects: WorkEntry[] }) {
         </Link>
       ))}
     </div>
-  )
+  );
 }

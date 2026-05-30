@@ -21,7 +21,7 @@ export default async function WorkIndex() {
 
   return (
     <>
-      <div className="pt-6 pb-10 border-b border-border">
+      <div className="pt-6 pb-10">
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-3">
           Selected Work
         </p>

@@ -56,8 +56,8 @@ export const site: Site = {
     },
     {
       platform: "instagram",
-      url: "https://instagram.com/thefalcon.dev",
-      label: "Instagram",
+      url: "https://instagram.com/flcn16",
+      label: "@flcn16",
     },
   ],
   resumeUrl: "https://media.thefalcon.dev/rishabh-kumar-resume.pdf",
