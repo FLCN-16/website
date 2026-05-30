@@ -24,7 +24,7 @@ export async function SiteFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <Rail resumeUrl={site.resumeUrl} status={status} />
-      <div className="flex flex-col flex-1 md:ml-[240px]">
+      <div className="flex flex-col flex-1 min-w-0 md:ml-[240px]">
         <MobileHeader resumeUrl={site.resumeUrl} status={status} />
         <main className="flex-1 px-6 py-12 md:px-12 md:py-16">
           {children}
