@@ -7,6 +7,7 @@ import { generatePreviewUrl } from '@/lib/preview'
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
+    group: 'Writing',
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'featured', 'publishedAt'],
     preview: (data) => generatePreviewUrl({
@@ -32,6 +33,7 @@ export const Posts: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
+        position: 'sidebar',
         description: 'URL-friendly identifier, e.g. my-post-title',
       },
     },
@@ -115,8 +117,8 @@ export const Posts: CollectionConfig = {
     afterChange: [
       ({ doc }) => {
         try {
-          revalidateTag(CACHE_TAGS.posts, 'max')
-          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)), 'max')
+          revalidateTag(CACHE_TAGS.posts)
+          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)))
         } catch {
           // not in Next.js request context
         }
@@ -126,8 +128,8 @@ export const Posts: CollectionConfig = {
     afterDelete: [
       ({ doc }) => {
         try {
-          revalidateTag(CACHE_TAGS.posts, 'max')
-          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)), 'max')
+          revalidateTag(CACHE_TAGS.posts)
+          if (doc.slug) revalidateTag(CACHE_TAGS.post(String(doc.slug)))
         } catch {
           // not in Next.js request context
         }

@@ -9,4 +9,5 @@ export const CACHE_TAGS = {
   timeline: 'timeline',
   education: 'education',
   certifications: 'certifications',
+  siteSettings: 'site-settings',
 } as const

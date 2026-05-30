@@ -5,6 +5,7 @@ import { CACHE_TAGS } from '@/lib/cache-tags'
 export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
+    group: 'Portfolio',
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'featured', 'status'],
   },
@@ -18,12 +19,12 @@ export const Projects: CollectionConfig = {
     { name: 'title', type: 'text', required: true },
     { name: 'subtitle', type: 'text', admin: { description: 'Short tagline shown below title' } },
     { name: 'description', type: 'textarea' },
-    { name: 'category', type: 'text', admin: { description: 'e.g. Chrome Extension, Agentic AI, Mobile App' } },
+    { name: 'category', type: 'text', admin: { position: 'sidebar', description: 'e.g. Chrome Extension, Agentic AI, Mobile App' } },
+    { name: 'startDate', type: 'text', admin: { position: 'sidebar', description: 'e.g. February 2025' } },
+    { name: 'endDate', type: 'text', admin: { position: 'sidebar', description: 'e.g. October 2025 — leave blank for ongoing' } },
+    { name: 'liveUrl', type: 'text', admin: { position: 'sidebar', description: 'Chrome Web Store, Play Store, or live URL' } },
+    { name: 'repoUrl', type: 'text', admin: { position: 'sidebar', description: 'GitHub repo or PR URL' } },
     { name: 'tags', type: 'array', fields: [{ name: 'tag', type: 'text' }] },
-    { name: 'liveUrl', type: 'text', admin: { description: 'Chrome Web Store, Play Store, or live URL' } },
-    { name: 'repoUrl', type: 'text', admin: { description: 'GitHub repo or PR URL' } },
-    { name: 'startDate', type: 'text', admin: { description: 'e.g. February 2025' } },
-    { name: 'endDate', type: 'text', admin: { description: 'e.g. October 2025 — leave blank for ongoing' } },
     {
       name: 'highlights',
       type: 'array',

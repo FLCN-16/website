@@ -1,5 +1,7 @@
 import type { GlobalConfig } from "payload";
+import { revalidateTag } from "next/cache";
 import { S3Client, CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { CACHE_TAGS } from "@/lib/cache-tags";
 
 const RESUME_FILENAME = "rishabh-kumar-resume.pdf";
 
@@ -88,6 +90,16 @@ export const SiteSettings: GlobalConfig = {
         ]);
 
         return data;
+      },
+    ],
+    afterChange: [
+      ({ doc }) => {
+        try {
+          revalidateTag(CACHE_TAGS.home, 'max')
+        } catch {
+          // not in Next.js request context
+        }
+        return doc
       },
     ],
   },

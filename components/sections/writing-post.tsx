@@ -11,9 +11,11 @@ import { PostGallery } from "@/components/writing/post-gallery";
 import { ReadingProgress } from "@/components/writing/reading-progress";
 import { RelatedPosts } from "@/components/writing/related-posts";
 import { WritingSocialCTA } from "@/components/writing/social-cta";
+import { PostShare } from "@/components/writing/post-share";
 import type { PostCover, Post } from "@/lib/types";
 
 interface WritingPostProps {
+  slug: string;
   title: string;
   publishedAt?: string;
   readingTime?: number;
@@ -36,6 +38,7 @@ function formatDate(iso?: string) {
 }
 
 export function WritingPost({
+  slug,
   title,
   publishedAt,
   readingTime,
@@ -157,11 +160,16 @@ export function WritingPost({
           )}
         </div>
 
+        {/* Share */}
+        <PostShare title={title} slug={slug} />
+
         {/* Related posts */}
         <RelatedPosts posts={related} />
 
         {/* Subscribe + social CTA */}
-        <WritingSocialCTA />
+        <div className="mt-16 border-t border-border pt-16">
+          <WritingSocialCTA />
+        </div>
       </article>
 
       {/* PhotoSwipe lightbox for all post images */}

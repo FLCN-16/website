@@ -5,6 +5,7 @@ import { CACHE_TAGS } from '@/lib/cache-tags'
 export const Work: CollectionConfig = {
   slug: 'work',
   admin: {
+    group: 'Portfolio',
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'ord', 'status'],
   },
@@ -21,10 +22,10 @@ export const Work: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
-      admin: { description: 'URL-friendly identifier, e.g. design-system-foundation' },
+      admin: { position: 'sidebar', description: 'URL-friendly identifier, e.g. design-system-foundation' },
     },
-    { name: 'category', type: 'text', admin: { description: 'e.g. Design Systems, Platform Engineering' } },
-    { name: 'ord', type: 'text', admin: { description: 'Display order label: 01, 02, 03' } },
+    { name: 'category', type: 'text', admin: { position: 'sidebar', description: 'e.g. Design Systems, Platform Engineering' } },
+    { name: 'ord', type: 'text', admin: { position: 'sidebar', description: 'Display order label: 01, 02, 03' } },
     { name: 'tags', type: 'array', fields: [{ name: 'tag', type: 'text' }] },
     { name: 'description', type: 'textarea' },
     { name: 'cover', type: 'upload', relationTo: 'media' },
