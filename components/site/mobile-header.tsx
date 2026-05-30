@@ -16,7 +16,7 @@ import { site } from "@/content/site"
 import { trackEvent } from "@/lib/analytics"
 import { Logo } from "@/components/site/logo"
 
-export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
+export function MobileHeader({ resumeUrl, status }: { resumeUrl: string; status: { available: boolean; label: string } }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -41,10 +41,12 @@ export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
           </div>
 
           {/* Status pill */}
-          <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
-            <span className="text-primary text-xs leading-none motion-safe:animate-pulse">●</span>
-            <span className="font-mono text-xs text-muted-foreground">{site.status.label}</span>
-          </div>
+          {status.available && (
+            <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
+              <span className="text-primary text-xs leading-none motion-safe:animate-pulse">●</span>
+              <span className="font-mono text-xs text-muted-foreground">{status.label}</span>
+            </div>
+          )}
 
           <NavLinks mobile onNavigate={() => setOpen(false)} />
 

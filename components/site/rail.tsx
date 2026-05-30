@@ -7,19 +7,18 @@ import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NavLinks } from "@/components/site/nav-links"
 import { site } from "@/content/site"
 import { trackEvent } from "@/lib/analytics"
-import { Logo } from "@/components/site/logo"
 
 const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
 const copyrightDomain = site.url.replace("https://", "").toUpperCase()
 
-export function Rail({ resumeUrl }: { resumeUrl: string }) {
+export function Rail({ resumeUrl, status }: { resumeUrl: string; status: { available: boolean; label: string } }) {
   const year = new Date().getFullYear()
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-[240px] border-r border-border bg-background hidden md:flex flex-col p-6 gap-4">
       {/* Identity block */}
       <div className="flex flex-col gap-2">
-        <Logo className="h-8 w-auto text-foreground" />
+        <span className="font-mono text-sm font-medium text-foreground">{site.name}</span>
         <span className="font-mono text-xs text-muted-foreground">
           {site.role}
         </span>
@@ -28,10 +27,12 @@ export function Rail({ resumeUrl }: { resumeUrl: string }) {
       <Separator />
 
       {/* Status pill */}
-      <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
-        <span className="text-primary text-xs leading-none motion-safe:animate-pulse">●</span>
-        <span className="font-mono text-xs text-muted-foreground">{site.status.label}</span>
-      </div>
+      {status.available && (
+        <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2.5 py-1">
+          <span className="text-primary text-xs leading-none motion-safe:animate-pulse">●</span>
+          <span className="font-mono text-xs text-muted-foreground">{status.label}</span>
+        </div>
+      )}
 
       <NavLinks />
 

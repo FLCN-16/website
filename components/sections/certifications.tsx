@@ -1,10 +1,51 @@
 import type { CertificationEntry } from "@/lib/types"
 import { FadeRise } from "@/components/anim/fade-rise"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { LinkSquare01Icon } from "@hugeicons/core-free-icons"
+import { cn } from "@/lib/utils"
 
 interface CertificationsProps {
   items: CertificationEntry[]
+}
+
+function CertRow({ item }: { item: CertificationEntry }) {
+  const inner = (
+    <div className={cn(
+      "group flex items-center justify-between gap-4 py-4 border-b border-border/60 last:border-0",
+      item.credentialUrl && "hover:bg-muted/25 -mx-6 px-6 md:-mx-12 md:px-12 transition-colors duration-150 cursor-pointer"
+    )}>
+      <div className="flex flex-col gap-0.5 min-w-0">
+        <p className={cn(
+          "text-sm font-medium text-foreground leading-snug transition-colors",
+          item.credentialUrl && "group-hover:text-foreground"
+        )}>
+          {item.name}
+        </p>
+        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          {item.issuer}
+        </p>
+      </div>
+
+      <div className="flex items-center gap-3 shrink-0">
+        <span className="font-mono text-[10px] text-muted-foreground/60 tabular-nums">
+          {item.year}
+        </span>
+        {item.credentialUrl && (
+          <span className="font-mono text-xs text-muted-foreground/40 group-hover:text-foreground transition-all duration-200 group-hover:translate-x-0.5">
+            →
+          </span>
+        )}
+      </div>
+    </div>
+  )
+
+  if (item.credentialUrl) {
+    return (
+      <a href={item.credentialUrl} target="_blank" rel="noopener noreferrer">
+        {inner}
+      </a>
+    )
+  }
+
+  return inner
 }
 
 export function Certifications({ items }: CertificationsProps) {
@@ -20,30 +61,9 @@ export function Certifications({ items }: CertificationsProps) {
           Credentials
         </h2>
 
-        <div className="flex flex-col gap-4">
+        <div className="border-t border-border">
           {items.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between gap-4 border-b border-border pb-4 last:border-0 last:pb-0"
-            >
-              <div className="flex flex-col gap-0.5">
-                <p className="text-sm font-medium text-foreground">{item.name}</p>
-                <p className="font-mono text-xs text-muted-foreground">
-                  {item.issuer} · {item.year}
-                </p>
-              </div>
-              {item.credentialUrl && (
-                <a
-                  href={item.credentialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Verify ${item.name}`}
-                  className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
-                >
-                  <HugeiconsIcon icon={LinkSquare01Icon} size={14} strokeWidth={1.5} />
-                </a>
-              )}
-            </div>
+            <CertRow key={item.id} item={item} />
           ))}
         </div>
       </FadeRise>

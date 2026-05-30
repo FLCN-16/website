@@ -139,7 +139,7 @@ export function ChipFilters({
   }
 
   return (
-    <div className="flex flex-col gap-3 py-4 border-y border-border">
+    <div className="flex flex-col gap-3 py-4 border-y border-border -mx-6 px-6 md:-mx-12 md:px-12">
       {/* Search row */}
       <div className="flex items-center gap-3">
         <div ref={containerRef} className="relative flex-1">
@@ -225,31 +225,6 @@ export function ChipFilters({
 
       {/* Chips row — always rendered so reading-time chips are always visible */}
       <div className="flex flex-wrap gap-2 items-center">
-        {/* Tag chips */}
-        {allTags.map((tag) => {
-          const active = selectedTags.includes(tag)
-          return (
-            <button
-              type="button"
-              key={tag}
-              onClick={() => onTagToggle(tag)}
-              className={cn(
-                "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",
-                active
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {tag}
-            </button>
-          )
-        })}
-
-        {/* Divider between tags and reading time */}
-        {allTags.length > 0 && (
-          <span className="text-border select-none">|</span>
-        )}
-
         {/* Reading time chips */}
         {READING_TIME_OPTIONS.map(({ value, label, sub }) => {
           const active = selectedReadingTime === value

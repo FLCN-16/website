@@ -5,6 +5,7 @@ import { CACHE_TAGS } from '@/lib/cache-tags'
 export const Certifications: CollectionConfig = {
   slug: 'certifications',
   admin: {
+    group: 'About',
     useAsTitle: 'name',
     defaultColumns: ['name', 'issuer', 'year', 'order'],
   },

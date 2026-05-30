@@ -64,6 +64,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}
       <WritingPost
+        slug={slug}
         title={post.title}
         publishedAt={post.publishedAt ?? undefined}
         readingTime={post.readingTime ?? undefined}

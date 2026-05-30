@@ -52,7 +52,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
         {state === "success" ? (
           <div className="py-4">
             <p className="font-mono text-sm text-muted-foreground">
-              You&apos;re subscribed. Thanks!
+              You&apos;re in. New articles coming your way.
             </p>
           </div>
         ) : (
@@ -74,7 +74,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
                 disabled={isPending}
                 className="w-full"
               >
-                {isPending ? "Subscribing…" : "Subscribe"}
+                {isPending ? "Pushing…" : "Subscribe →"}
               </Button>
 
               {state === "error" && (
@@ -108,7 +108,7 @@ export function SubscribeButton() {
   return (
     <>
       <Button size="xl" className="w-full" onClick={() => setOpen(true)}>
-        Subscribe
+        Get the dispatch →
       </Button>
       <SubscribeDialog open={open} onOpenChange={setOpen} />
     </>

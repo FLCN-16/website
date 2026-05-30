@@ -7,6 +7,7 @@ import { generatePreviewUrl } from '@/lib/preview'
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
+    group: 'Writing',
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'featured', 'publishedAt'],
     preview: (data) => generatePreviewUrl({
@@ -32,6 +33,7 @@ export const Posts: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
+        position: 'sidebar',
         description: 'URL-friendly identifier, e.g. my-post-title',
       },
     },

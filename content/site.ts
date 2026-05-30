@@ -40,9 +40,9 @@ export const site: Site = {
   timezone: "UTC+5:30",
   email: "me@thefalcon.dev",
   status: {
-    available: true,
+    available: false,
     label: "OPEN TO ROLES",
-  },
+  }, // fallback only — live value comes from Payload site-settings global
   socials: [
     {
       platform: "github",

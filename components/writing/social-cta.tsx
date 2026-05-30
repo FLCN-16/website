@@ -23,7 +23,7 @@ const SOCIAL_STYLES: Record<string, string> = {
 
 export function WritingSocialCTA() {
   return (
-    <div className="camera-frame mt-16 border border-border/60 bg-transparent p-6 sm:p-8 md:p-12 text-foreground">
+    <div className="camera-frame border border-border/60 bg-transparent p-6 sm:p-8 md:p-12 text-foreground">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 md:gap-10">
 
         {/* Copy */}
