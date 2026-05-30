@@ -8,6 +8,7 @@ export const revalidate = false
 export const metadata = createMetadata({
   title: 'Projects',
   description: 'Side projects, Chrome extensions, mobile apps, and open-source contributions.',
+  path: '/projects',
 })
 
 export default async function ProjectsIndex() {

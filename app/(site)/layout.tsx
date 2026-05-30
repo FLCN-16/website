@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     default: `${site.name} — ${site.role}`,
     template: `%s — ${site.name}`,
   },
-  description: site.subheadline,
+  description: site.description,
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
   openGraph: {
@@ -41,13 +41,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: site.name,
     title: `${site.name} — ${site.role}`,
-    description: site.subheadline,
+    description: site.description,
   },
   twitter: {
     card: "summary_large_image",
     creator: `@${site.handle}`,
     title: `${site.name} — ${site.role}`,
-    description: site.subheadline,
+    description: site.description,
   },
   robots: {
     index: true,

@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { getCachedPost, getCachedRelatedPosts, getPreviewPost } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
+import { JsonLd } from '@/components/structured-data/json-ld'
 import { createMetadata } from '@/lib/metadata'
 import { resolvePostCover } from '@/lib/posts'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
+import { site } from '@/content/site'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -35,6 +37,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       title: post.meta?.title || post.title,
       description: (post.meta?.description || post.excerpt) ?? undefined,
       image: typeof post.meta?.image === 'object' ? post.meta?.image?.url ?? undefined : undefined,
+      path: `/writing/${slug}`,
     })
   } catch {
     return { title: slug }
@@ -58,8 +61,21 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const coverResolved = resolvePostCover(post.cover)
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: (post.meta?.description || post.excerpt) ?? undefined,
+    author: { '@type': 'Person', name: site.name, url: site.url },
+    publisher: { '@type': 'Person', name: site.name, url: site.url },
+    url: `${site.url}/writing/${slug}`,
+    ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
+    ...(coverResolved?.url ? { image: coverResolved.url } : {}),
+  }
+
   return (
     <>
+      <JsonLd data={articleSchema} />
       {draft && (
         <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}

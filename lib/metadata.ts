@@ -5,19 +5,27 @@ export function createMetadata({
   title,
   description,
   image,
+  path,
+  absolute = false,
 }: {
   title: string
   description?: string
   image?: string
+  /** URL path (e.g. "/writing") — sets an explicit canonical */
+  path?: string
+  /** When true, bypasses the layout title template */
+  absolute?: boolean
 }): Metadata {
   const fullTitle = `${title} — ${site.name}`
+  const resolvedTitle = absolute ? ({ absolute: title } as Metadata["title"]) : title
 
   return {
     metadataBase: new URL(site.url),
-    title,
+    title: resolvedTitle,
     description,
     authors: [{ name: site.name, url: site.url }],
     creator: site.name,
+    ...(path ? { alternates: { canonical: `${site.url}${path}` } } : {}),
     openGraph: {
       type: "website",
       locale: "en_US",

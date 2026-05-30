@@ -27,6 +27,8 @@ export interface Site {
   resumeUrl: string;
   headline: string;
   subheadline: string;
+  /** Short meta description ≤160 chars for SERP snippets */
+  description: string;
   stats: Stat[];
   eyebrow: string;
 }
@@ -64,6 +66,8 @@ export const site: Site = {
   headline: "Leading teams across the stack,\nshipping production systems.",
   subheadline:
     "Full-Stack Technical Lead with 9+ years building and shipping production web, mobile, and browser-based applications. Open-source contributor to Next.js (vercel/next.js), builder of agentic AI systems with LangChain and Mastra AI, and author of apps live on the Chrome Web Store and Google Play.",
+  description:
+    "Full-Stack Technical Lead with 9+ years shipping production web, mobile, and AI systems. Next.js OSS contributor. Open to senior engineering roles.",
   stats: [
     { value: "9+", label: "Years Shipping" },
     { value: "1M+", label: "Users Reached" },

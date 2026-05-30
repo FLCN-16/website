@@ -8,6 +8,7 @@ export const revalidate = false
 export const metadata = createMetadata({
   title: 'Work',
   description: 'Selected projects from 9+ years of full-stack engineering.',
+  path: '/work',
 })
 
 export default async function WorkIndex() {
