@@ -1,7 +1,7 @@
 'use client'
 
 import { CodeHighlightNode, CodeNode, registerCodeHighlighting } from '@lexical/code'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js'
 import { createClientFeature } from '@payloadcms/richtext-lexical/client'
 import { useEffect } from 'react'
 
