@@ -131,6 +131,20 @@ export function FeaturedCard({ post, className }: FeaturedCardProps) {
               </>
             )}
           </div>
+
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {post.tags.slice(0, 2).map(({ tag }) => (
+                <Badge key={tag} variant="secondary" className="font-mono text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          )}
+
+          <span className="font-mono text-xs text-primary mt-1">
+            Read article →
+          </span>
         </div>
       )}
     </Link>
