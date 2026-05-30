@@ -145,6 +145,7 @@ export function ChipFilters({
         <div ref={containerRef} className="relative flex-1">
           <input
             ref={inputRef}
+            aria-label="Search articles"
             placeholder="Search articles…"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}

@@ -45,7 +45,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
             Stay in the loop
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
-            New articles on frontend engineering, system design, and building software that lasts — straight to your inbox.
+            New articles on frontend engineering, system design, and building software that lasts. Straight to your inbox.
           </DialogDescription>
         </DialogHeader>
 
@@ -60,6 +60,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
             <input
               type="email"
               required
+              aria-label="Email address"
               placeholder="your@email.com"
               value={email}
               onChange={(e) => { setEmail(e.target.value); setState("idle") }}

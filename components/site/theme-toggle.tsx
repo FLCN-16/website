@@ -1,19 +1,16 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Sun02Icon, Moon02Icon } from "@hugeicons/core-free-icons"
 
+const subscribe = () => () => {}
+
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false)
 
   if (!mounted) {
     return <div className="size-8" />

@@ -117,8 +117,8 @@ export function StackMatrix({ disciplines }: StackMatrixProps) {
             className="stack-card relative overflow-hidden p-4"
             style={{
               background: "linear-gradient(145deg, rgba(0,0,0,0.45) 0%, rgba(10,10,15,0.25) 50%, rgba(0,0,0,0.4) 100%)",
-              backdropFilter: "blur(48px) saturate(160%) brightness(0.75)",
-              WebkitBackdropFilter: "blur(48px) saturate(160%) brightness(0.75)",
+              backdropFilter: "blur(8px) saturate(160%) brightness(0.75)",
+              WebkitBackdropFilter: "blur(8px) saturate(160%) brightness(0.75)",
               border: "1px solid rgba(255,255,255,0.07)",
               boxShadow: [
                 "0 0 0 1px rgba(0,0,0,0.5)",

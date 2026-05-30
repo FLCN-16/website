@@ -31,6 +31,7 @@ export default function SiteError({ error, reset }: ErrorProps) {
       {/* Actions */}
       <div className="flex items-center gap-4">
         <button
+          type="button"
           onClick={reset}
           className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors"
         >

@@ -23,9 +23,11 @@ export async function generateStaticParams() {
     limit: 100,
     depth: 0,
   })
-  return result.docs
-    .filter((doc) => doc.slug)
-    .map((doc) => ({ slug: String(doc.slug) }))
+  const params: { slug: string }[] = []
+  for (const doc of result.docs) {
+    if (doc.slug) params.push({ slug: String(doc.slug) })
+  }
+  return params
 }
 
 export async function generateMetadata({ params }: BasicPageProps): Promise<Metadata> {
