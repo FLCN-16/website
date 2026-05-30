@@ -190,9 +190,9 @@
 .token.comment,
 .token.prolog,
 .token.doctype,
-.token.cdata            { color: hsl(var(--muted-foreground)); font-style: italic; }
+.token.cdata            { color: var(--muted-foreground); font-style: italic; }
 
-.token.punctuation      { color: hsl(var(--foreground) / 0.6); }
+.token.punctuation      { color: color-mix(in oklch, var(--foreground) 60%, transparent); }
 
 .token.property,
 .token.tag,
