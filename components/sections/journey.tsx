@@ -41,9 +41,9 @@ export function Journey({ items }: JourneyProps) {
                 </p>
                 {isCurrent(item) && (
                   <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-primary/80 mt-1">
-                    <span className="relative flex h-1.5 w-1.5 shrink-0">
+                    <span className="relative flex size-1.5 shrink-0">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                      <span className="relative inline-flex size-1.5 rounded-full bg-primary" />
                     </span>
                     Current
                   </span>

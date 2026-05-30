@@ -74,7 +74,7 @@ export const richTextConverters: JSXConvertersFunction = ({ defaultConverters })
   quote: ({ node, nodesToJSX }: any) => {
     const children = nodesToJSX({ nodes: node.children })
     return (
-      <blockquote className="border-l-4 border-primary/40 pl-4 italic text-muted-foreground my-6">
+      <blockquote className="border-l-2 border-primary/30 pl-4 italic text-muted-foreground my-6">
         {children}
       </blockquote>
     )

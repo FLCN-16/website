@@ -85,6 +85,7 @@ export function PostShare({ title, slug }: PostShareProps) {
       </p>
       <div className="flex flex-wrap gap-2">
         <button
+          type="button"
           onClick={copyLink}
           aria-label="Copy link"
           className={cn(

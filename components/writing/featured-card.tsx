@@ -47,9 +47,9 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-10">
               {/* Featured chip */}
               <div className="inline-flex items-center gap-2 mb-3 bg-black/40 backdrop-blur-sm border border-white/15 rounded-full px-3 py-1">
-                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                <span className="relative flex size-1.5 shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                  <span className="relative inline-flex size-1.5 rounded-full bg-primary" />
                 </span>
                 <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/80">
                   Featured
@@ -115,7 +115,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
         /* Fallback — no cover image */
         <div className="flex flex-col gap-5 p-6 md:p-8 bg-card">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+            <span className="size-1.5 rounded-full bg-primary shrink-0" />
             <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
               Featured
             </p>

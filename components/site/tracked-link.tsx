@@ -16,12 +16,12 @@ type TrackedLinkProps = React.ComponentProps<typeof Link> & {
 }
 
 export function TrackedLink({ event, onClick, ...props }: TrackedLinkProps) {
-  const handleClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((e) => {
+  const trackAndNavigate = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((e) => {
     trackEvent(event)
     onClick?.(e)
   }, [event, onClick])
 
-  return <Link {...props} onClick={handleClick} />
+  return <Link {...props} onClick={trackAndNavigate} />
 }
 
 // ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ type OutboundLinkProps = Omit<React.ComponentProps<"a">, "href" | "target" | "re
 }
 
 export function OutboundLink({ url, context, onClick, children, ...props }: OutboundLinkProps) {
-  const handleClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((e) => {
+  const trackOutboundClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>((e) => {
     trackEvent({ event: "outbound_click", ...outboundParams(url, context) })
     onClick?.(e)
   }, [url, context, onClick])
@@ -48,7 +48,7 @@ export function OutboundLink({ url, context, onClick, children, ...props }: Outb
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={handleClick}
+      onClick={trackOutboundClick}
     >
       {children}
     </a>

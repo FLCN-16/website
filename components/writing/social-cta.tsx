@@ -35,7 +35,7 @@ export function WritingSocialCTA() {
             Stay in the loop.
           </h3>
           <p className="text-base text-foreground/60 leading-relaxed max-w-sm">
-            New articles on engineering, architecture, and building software that lasts — straight to your inbox.
+            New articles on engineering, architecture, and building software that lasts. Straight to your inbox.
           </p>
         </div>
 

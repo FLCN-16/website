@@ -5,6 +5,7 @@ import { toast } from "sonner"
 import { trackEvent } from "@/lib/analytics"
 import { submitTalentInquiry } from "@/actions/talent-inquiry"
 import type { Form, FormFieldBlock } from "@payloadcms/plugin-form-builder/types"
+import Link from "next/link"
 import {
   Dialog,
   DialogContent,
@@ -100,7 +101,7 @@ export function TalentInquiryDialog({ form }: Props) {
 
         <div className="border-l-2 border-amber-500/50 pl-3 py-0.5">
           <p className="text-xs text-muted-foreground leading-relaxed">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-amber-500/80 mr-1.5">Note —</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-amber-500/80 mr-1.5">Note:</span>
             Full-time only. No freelance or contract work.
           </p>
         </div>
@@ -164,6 +165,7 @@ export function TalentInquiryDialog({ form }: Props) {
               type="file"
               name="jdFile"
               accept=".pdf,.doc,.docx"
+              aria-label="Attach job description file"
               className="hidden"
               onChange={(e) => {
                 const f = e.target.files?.[0]
@@ -201,19 +203,19 @@ export function TalentInquiryDialog({ form }: Props) {
             disabled={isPending}
             className="w-full"
           >
-            {isPending ? <Spinner className="mr-2 h-3 w-3" /> : null}
+            {isPending ? <Spinner className="mr-2 size-3" /> : null}
             {isPending ? "Sending…" : (form.submitButtonLabel ?? "Send Details")}
           </Button>
 
           <p className="text-[11px] text-muted-foreground/60 leading-relaxed text-center -mt-3">
             By sending, you agree to the{" "}
-            <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
+            <Link href="/legal/privacy" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
               Privacy Policy
-            </a>
+            </Link>
             {" "}and{" "}
-            <a href="/legal/terms" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
+            <Link href="/legal/terms" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
               Terms
-            </a>
+            </Link>
             . Your information is only used to respond to your inquiry.
           </p>
         </form>

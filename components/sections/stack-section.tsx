@@ -77,7 +77,7 @@ export function StackSection({
         {/* Word-split heading */}
         <div ref={wordsRef} className="flex flex-wrap gap-x-[0.3em] overflow-hidden">
           {words.map((word, i) => (
-            <span key={i} className="overflow-hidden inline-block">
+            <span key={`${word}-${i}`} className="overflow-hidden inline-block">
               <span className="word-inner inline-block text-4xl md:text-6xl font-bold tracking-tight leading-tight">
                 {word}
               </span>

@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import Link from "next/link"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { cn } from "@/lib/utils"
 
@@ -257,13 +258,13 @@ export function ContactFormSection() {
             <div className="border-t border-border pt-4">
               <p className="text-[11px] text-muted-foreground/60 leading-relaxed text-center">
                 By sending, you agree to the{" "}
-                <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
+                <Link href="/legal/privacy" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
                 {" "}and{" "}
-                <a href="/legal/terms" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
+                <Link href="/legal/terms" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
                   Terms
-                </a>
+                </Link>
                 . Your information is only used to respond to your message.
               </p>
             </div>
