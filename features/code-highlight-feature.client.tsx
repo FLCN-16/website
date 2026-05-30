@@ -1,3 +1,5 @@
+'use client'
+
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { createClientFeature } from '@payloadcms/richtext-lexical/client'
 import { CodeHighlightPlugin } from './code-highlight-plugin'
