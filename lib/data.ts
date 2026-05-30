@@ -373,6 +373,24 @@ export async function getCachedLegalPage(slug: string): Promise<RawPageDoc | nul
   return data.docs[0] ?? null
 }
 
+// ─── Site Settings ────────────────────────────────────────────────────────────
+
+export interface RawSiteSettings {
+  availability?: { available?: boolean | null; label?: string | null } | null
+  headline?: string | null
+  subheadline?: string | null
+  eyebrow?: string | null
+  stats?: { value: string; label: string }[] | null
+}
+
+export async function getCachedSiteSettings(): Promise<RawSiteSettings | null> {
+  try {
+    return await restFetch<RawSiteSettings>('globals/site-settings', [CACHE_TAGS.home])
+  } catch {
+    return null
+  }
+}
+
 // ─── Draft/Preview Fetchers ───────────────────────────────────────────────────
 
 export async function getPreviewPost(slug: string): Promise<RawPostDoc | null> {

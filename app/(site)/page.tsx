@@ -4,6 +4,7 @@ import {
   getCachedTimeline,
   getCachedEducation,
   getCachedCertifications,
+  getCachedSiteSettings,
 } from '@/lib/data'
 import { Hero } from '@/components/sections/hero'
 import { Journey } from '@/components/sections/journey'
@@ -32,13 +33,14 @@ export default async function Home() {
   let educationItems: EducationEntry[] = []
   let certificationItems: CertificationEntry[] = []
 
-  const [workResult, projectsResult, timelineResult, educationResult, certificationsResult] =
+  const [workResult, projectsResult, timelineResult, educationResult, certificationsResult, settingsResult] =
     await Promise.allSettled([
       getCachedWorkEntries(),
       getCachedProjects(),
       getCachedTimeline(),
       getCachedEducation(),
       getCachedCertifications(),
+      getCachedSiteSettings(),
     ])
 
   if (workResult.status === 'fulfilled') workEntries = workResult.value
@@ -47,16 +49,20 @@ export default async function Home() {
   if (educationResult.status === 'fulfilled') educationItems = educationResult.value
   if (certificationsResult.status === 'fulfilled') certificationItems = certificationsResult.value
 
+  const cmsSettings = settingsResult.status === 'fulfilled' ? settingsResult.value : null
+
   const featuredProjects = allProjects.filter((p) => p.featured).slice(0, 6)
 
   return (
     <>
       <Hero
-        eyebrow={site.eyebrow}
-        headline={site.headline}
-        subheadline={site.subheadline}
-        status={site.status}
-        stats={site.stats}
+        eyebrow={cmsSettings?.eyebrow ?? site.eyebrow}
+        headline={cmsSettings?.headline ?? site.headline}
+        subheadline={cmsSettings?.subheadline ?? site.subheadline}
+        status={cmsSettings?.availability
+          ? { available: cmsSettings.availability.available ?? site.status.available, label: cmsSettings.availability.label ?? site.status.label }
+          : site.status}
+        stats={cmsSettings?.stats ?? site.stats}
         primaryCta={{ label: 'View My Work', href: '/work' }}
         secondaryCta={{ label: 'Get In Touch', href: '/contact' }}
       />
