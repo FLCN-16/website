@@ -122,6 +122,28 @@ export const richTextConverters: JSXConvertersFunction = ({ defaultConverters })
   horizontalrule: <hr className="border-t border-border my-8" />,
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  code: ({ node, nodesToJSX }: any) => {
+    const lang: string = node.language ?? ""
+    const children = nodesToJSX({ nodes: node.children })
+    return (
+      <pre
+        className="my-6 overflow-x-auto rounded-lg bg-muted p-4 text-sm leading-relaxed"
+        data-language={lang || undefined}
+      >
+        <code className={lang ? `language-${lang}` : undefined}>{children}</code>
+      </pre>
+    )
+  },
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  "code-highlight": ({ node }: any) => {
+    const text: string = node.text ?? ""
+    const type: string | null = node.highlightType ?? null
+    if (!type) return <span>{text}</span>
+    return <span className={`token ${type}`}>{text}</span>
+  },
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   text: ({ node }: any) => {
     let text: React.ReactNode = node.text as string
     if (node.format & NodeFormat.IS_BOLD) text = <strong>{text}</strong>

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { revalidateTag } from 'next/cache'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { CodeHighlightFeature } from '@/features/code-highlight-feature'
 import { CACHE_TAGS } from '@/lib/cache-tags'
 import { generatePreviewUrl } from '@/lib/preview'
 
@@ -100,7 +101,7 @@ export const Posts: CollectionConfig = {
     {
       name: 'body',
       type: 'richText',
-      editor: lexicalEditor(),
+      editor: lexicalEditor({ features: ({ defaultFeatures }) => [...defaultFeatures, CodeHighlightFeature()] }),
     },
   ],
   hooks: {
