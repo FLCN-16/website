@@ -14,6 +14,7 @@ import { ProjectsGrid } from '@/components/sections/projects-grid'
 import { Education } from '@/components/sections/education'
 import { Certifications } from '@/components/sections/certifications'
 import { CtaBanner } from '@/components/sections/cta-banner'
+import { JsonLd } from '@/components/structured-data/json-ld'
 import { site } from '@/content/site'
 import { philosophy } from '@/content/philosophy'
 import { createMetadata } from '@/lib/metadata'
@@ -22,8 +23,10 @@ import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, Certificat
 export const revalidate = false
 
 export const metadata = createMetadata({
-  title: 'About',
-  description: site.subheadline,
+  title: `${site.name} — ${site.role}`,
+  description: site.description,
+  path: '/',
+  absolute: true,
 })
 
 export default async function Home() {
@@ -53,8 +56,20 @@ export default async function Home() {
 
   const featuredProjects = allProjects.filter((p) => p.featured).slice(0, 6)
 
+  const personSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: site.name,
+    url: site.url,
+    email: site.email,
+    jobTitle: site.role,
+    description: site.description,
+    sameAs: site.socials.map((s) => s.url),
+  }
+
   return (
     <>
+      <JsonLd data={personSchema} />
       <Hero
         eyebrow={cmsSettings?.eyebrow ?? site.eyebrow}
         headline={cmsSettings?.headline ?? site.headline}
