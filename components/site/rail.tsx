@@ -7,6 +7,7 @@ import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NavLinks } from "@/components/site/nav-links"
 import { site } from "@/content/site"
 import { trackEvent } from "@/lib/analytics"
+import { Logo } from "@/components/site/logo"
 
 const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
 const copyrightDomain = site.url.replace("https://", "").toUpperCase()
@@ -17,10 +18,8 @@ export function Rail({ resumeUrl }: { resumeUrl: string }) {
   return (
     <aside className="fixed left-0 top-0 h-screen w-[240px] border-r border-border bg-background hidden md:flex flex-col p-6 gap-4">
       {/* Identity block */}
-      <div className="flex flex-col gap-1">
-        <span className="font-sans font-semibold text-sm text-foreground">
-          {site.name}
-        </span>
+      <div className="flex flex-col gap-2">
+        <Logo className="h-8 w-auto text-foreground" />
         <span className="font-mono text-xs text-muted-foreground">
           {site.role}
         </span>

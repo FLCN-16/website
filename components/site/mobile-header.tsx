@@ -11,17 +11,19 @@ import {
 } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NavLinks } from "@/components/site/nav-links"
+import Link from "next/link"
 import { site } from "@/content/site"
 import { trackEvent } from "@/lib/analytics"
+import { Logo } from "@/components/site/logo"
 
 export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
   const [open, setOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border/60 bg-background/70 backdrop-blur-md supports-backdrop-filter:backdrop-blur-md md:hidden">
-      <span className="font-mono font-semibold text-sm text-foreground">
-        FLCN
-      </span>
+      <Link href="/" aria-label="Go to home">
+        <Logo className="h-7 w-auto text-foreground" />
+      </Link>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
@@ -31,10 +33,8 @@ export function MobileHeader({ resumeUrl }: { resumeUrl: string }) {
         </SheetTrigger>
         <SheetContent side="left" className="w-[260px] p-6 flex flex-col gap-4">
           {/* Identity */}
-          <div className="flex flex-col gap-1 pt-2">
-            <span className="font-sans font-semibold text-sm text-foreground">
-              {site.name}
-            </span>
+          <div className="flex flex-col gap-2 pt-2">
+            <Logo className="h-8 w-auto text-foreground" />
             <span className="font-mono text-xs text-muted-foreground">
               {site.role}
             </span>
