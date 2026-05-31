@@ -6,6 +6,7 @@ import type { Post } from '@/lib/types'
 export const revalidate = false
 
 export const metadata = createMetadata({
+  kind: 'WRITING',
   title: 'Writing',
   description: 'Articles and thoughts on frontend engineering, architecture, and building at scale.',
   path: '/writing',

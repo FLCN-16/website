@@ -34,6 +34,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     const post = draft ? await getPreviewPost(slug) : await getCachedPost(slug)
     if (!post) return { title: 'Not Found' }
     return createMetadata({
+      kind: 'WRITING',
       title: post.meta?.title || post.title,
       description: (post.meta?.description || post.excerpt) ?? undefined,
       image: typeof post.meta?.image === 'object' ? post.meta?.image?.url ?? undefined : undefined,

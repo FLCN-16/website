@@ -10,10 +10,9 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
-import { SplashScreen } from "@/components/site/splash-screen";
-import { TalentInquiryDialog } from "@/components/site/talent-inquiry-dialog";
 import { site } from "@/content/site";
 import type { Form } from "@payloadcms/plugin-form-builder/types";
+import { ClientOverlays } from "@/components/site/client-overlays";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -96,8 +95,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           enableSystem
           disableTransitionOnChange
         >
-          <SplashScreen />
-          {talentForm && <TalentInquiryDialog form={talentForm} />}
+          <ClientOverlays form={talentForm} />
           <QueryProvider>
             <SiteFrame>{children}</SiteFrame>
           </QueryProvider>

@@ -6,6 +6,7 @@ import type { WorkEntry } from '@/lib/types'
 export const revalidate = false
 
 export const metadata = createMetadata({
+  kind: 'WORK',
   title: 'Work',
   description: 'Selected projects from 9+ years of full-stack engineering.',
   path: '/work',

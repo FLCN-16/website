@@ -2,11 +2,16 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { FeaturedSwiper } from "@/components/writing/featured-swiper"
+import dynamic from "next/dynamic"
 import { PostRow } from "@/components/writing/post-row"
 import { ChipFilters, type SortOption, type ReadingTime } from "@/components/writing/chip-filters"
 import type { Post } from "@/lib/types"
 import { trackEvent } from "@/lib/analytics"
+
+const FeaturedSwiper = dynamic(
+  () => import("@/components/writing/featured-swiper").then((m) => ({ default: m.FeaturedSwiper })),
+  { ssr: false, loading: () => null }
+)
 
 interface WritingListClientProps {
   initialPosts: Post[]

@@ -6,6 +6,7 @@ import { createMetadata } from "@/lib/metadata"
 export const dynamic = 'force-static'
 
 export const metadata = createMetadata({
+  kind: 'STACK',
   title: "Stack",
   description: stack.intro,
   path: '/stack',
