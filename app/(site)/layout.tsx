@@ -10,8 +10,17 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
-import { SplashScreen } from "@/components/site/splash-screen";
-import { TalentInquiryDialog } from "@/components/site/talent-inquiry-dialog";
+import dynamic from "next/dynamic";
+
+const SplashScreen = dynamic(
+  () => import("@/components/site/splash-screen").then((m) => ({ default: m.SplashScreen })),
+  { ssr: false, loading: () => null }
+);
+
+const TalentInquiryDialog = dynamic(
+  () => import("@/components/site/talent-inquiry-dialog").then((m) => ({ default: m.TalentInquiryDialog })),
+  { ssr: false, loading: () => null }
+);
 import { site } from "@/content/site";
 import type { Form } from "@payloadcms/plugin-form-builder/types";
 
