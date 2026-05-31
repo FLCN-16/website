@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
     const page = draft ? await getPreviewPage(slug, 'legal') : await getCachedLegalPage(slug)
     if (!page) return { title: 'Not Found' }
     return createMetadata({
+      kind: 'LEGAL',
       title: page.meta?.title || (page.title ?? slug),
       description: page.meta?.description || undefined,
       image: typeof page.meta?.image === 'object' ? page.meta?.image?.url ?? undefined : undefined,

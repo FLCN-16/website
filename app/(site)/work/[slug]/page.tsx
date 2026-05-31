@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: WorkDetailProps): Promise<Met
     const project = entries.find((p) => p.slug === slug)
     if (!project) return {}
     return createMetadata({
+      kind: 'WORK',
       title: project.meta?.title || project.title,
       description: project.meta?.description || project.description,
       image: typeof project.meta?.image === 'object' ? project.meta?.image?.url ?? undefined : undefined,

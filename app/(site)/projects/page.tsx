@@ -6,6 +6,7 @@ import type { ProjectEntry } from '@/lib/types'
 export const revalidate = false
 
 export const metadata = createMetadata({
+  kind: 'PROJECTS',
   title: 'Projects',
   description: 'Side projects, Chrome extensions, mobile apps, and open-source contributions.',
   path: '/projects',
