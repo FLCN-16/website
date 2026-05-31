@@ -10,19 +10,9 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
-import dynamic from "next/dynamic";
 import { site } from "@/content/site";
 import type { Form } from "@payloadcms/plugin-form-builder/types";
-
-const SplashScreen = dynamic(
-  () => import("@/components/site/splash-screen").then((m) => ({ default: m.SplashScreen })),
-  { ssr: false, loading: () => null }
-);
-
-const TalentInquiryDialog = dynamic(
-  () => import("@/components/site/talent-inquiry-dialog").then((m) => ({ default: m.TalentInquiryDialog })),
-  { ssr: false, loading: () => null }
-);
+import { ClientOverlays } from "@/components/site/client-overlays";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -105,8 +95,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           enableSystem
           disableTransitionOnChange
         >
-          <SplashScreen />
-          {talentForm && <TalentInquiryDialog form={talentForm} />}
+          <ClientOverlays form={talentForm} />
           <QueryProvider>
             <SiteFrame>{children}</SiteFrame>
           </QueryProvider>
