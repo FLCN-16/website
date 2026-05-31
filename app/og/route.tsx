@@ -28,11 +28,17 @@ export async function GET(req: NextRequest): Promise<Response> {
     return new Response('title param is required', { status: 400 })
   }
 
-  const [interRegular, interSemiBold, jetbrainsMono] = await Promise.all([
-    loadFont('Inter-Regular.woff'),
-    loadFont('Inter-SemiBold.woff'),
-    loadFont('JetBrainsMono-Regular.woff'),
-  ])
+  let interRegular: ArrayBuffer, interSemiBold: ArrayBuffer, jetbrainsMono: ArrayBuffer
+  try {
+    ;[interRegular, interSemiBold, jetbrainsMono] = await Promise.all([
+      loadFont('Inter-Regular.woff'),
+      loadFont('Inter-SemiBold.woff'),
+      loadFont('JetBrainsMono-Regular.woff'),
+    ])
+  } catch (err) {
+    console.error('[og] font load failed:', err)
+    return new Response('font load error', { status: 500 })
+  }
 
   return new ImageResponse(
     (
@@ -76,8 +82,9 @@ export async function GET(req: NextRequest): Promise<Response> {
               lineHeight: 1.15,
               letterSpacing: '-0.02em',
               fontFamily: '"Inter"',
-              display: 'flex',
-              flexWrap: 'wrap',
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
             }}
           >
@@ -92,8 +99,9 @@ export async function GET(req: NextRequest): Promise<Response> {
                 marginTop: '24px',
                 lineHeight: 1.5,
                 fontFamily: '"Inter"',
-                display: 'flex',
-                flexWrap: 'wrap',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
               }}
             >
