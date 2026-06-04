@@ -1,11 +1,10 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { RichText } from "@payloadcms/richtext-lexical/react";
-import { richTextConverters } from "@/components/writing/richtext-converters";
-import { extractHeadings } from "@/lib/lexical-headings";
+import type { Heading } from "@/lib/lexical-headings";
 import { PostToc } from "@/components/writing/post-toc";
 import { PostGallery } from "@/components/writing/post-gallery";
 import { ReadingProgress } from "@/components/writing/reading-progress";
@@ -20,8 +19,10 @@ interface WritingPostProps {
   publishedAt?: string;
   readingTime?: number;
   tags?: Array<{ tag: string }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  body: any;
+  /** Section headings for the table of contents, extracted server-side. */
+  headings: Heading[];
+  /** The rich-text body, rendered on the server (keeps PrismJS off the client). */
+  children: ReactNode;
   cover?: PostCover | null;
   related?: Post[];
 }
@@ -43,11 +44,11 @@ export function WritingPost({
   publishedAt,
   readingTime,
   tags,
-  body,
+  headings,
+  children,
   cover,
   related = EMPTY_RELATED,
 }: WritingPostProps) {
-  const headings = extractHeadings(body);
   const showToc = headings.length >= 3;
 
   return (
@@ -143,12 +144,8 @@ export function WritingPost({
               : undefined
           }
         >
-          {/* Body */}
-          {body && (
-            <div>
-              <RichText data={body} converters={richTextConverters} />
-            </div>
-          )}
+          {/* Body — rendered on the server, passed in as children */}
+          {children && <div>{children}</div>}
 
           {/* TOC — sticky right column on lg+ */}
           {showToc && (

@@ -17,3 +17,6 @@
 
 ## `deslop/unused-dependency` and `deslop/unused-dev-dependency`
 - `package.json` — dependency analysis likely conflicts with the monorepo workspace setup; verify manually before removing any package.
+
+## `react-doctor/no-danger`
+- File: `components/writing/richtext-converters.tsx` — the `code` converter injects server-side PrismJS-highlighted HTML via `dangerouslySetInnerHTML`. PrismJS escapes `<` and `&` in the source (no element injection is possible — see `lib/__tests__/highlight-code.test.ts`), and code content is authored by the site owner through the CMS. Emitting the `.token.*` markup that `app/globals.css` styles is the standard pattern for server-rendered syntax highlighting and cannot be expressed without raw HTML. Runs server-only, so Prism never reaches the client.

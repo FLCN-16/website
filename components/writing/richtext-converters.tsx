@@ -1,6 +1,7 @@
 import { NodeFormat } from "@payloadcms/richtext-lexical"
 import type { JSXConvertersFunction } from "@payloadcms/richtext-lexical/react"
 import type React from "react"
+import { highlightCode, lexicalCodeText } from "@/lib/highlight-code"
 
 function slugify(text: string): string {
   return text
@@ -121,26 +122,24 @@ export const richTextConverters: JSXConvertersFunction = ({ defaultConverters })
 
   horizontalrule: <hr className="border-t border-border my-8" />,
 
+  // Server-rendered: code text is highlighted with PrismJS at render time
+  // (see lib/highlight-code.ts), independent of how the content was authored.
+  // The emitted `.token.*` classes are styled in app/globals.css.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  code: ({ node, nodesToJSX }: any) => {
-    const lang: string = node.language ?? ""
-    const children = nodesToJSX({ nodes: node.children })
+  code: ({ node }: any) => {
+    const code = lexicalCodeText(node)
+    const { html, language } = highlightCode(code, node.language)
     return (
       <pre
         className="my-6 overflow-x-auto rounded-lg bg-muted p-4 text-sm leading-relaxed"
-        data-language={lang || undefined}
+        data-language={language || undefined}
       >
-        <code className={lang ? `language-${lang}` : undefined}>{children}</code>
+        <code
+          className={language ? `language-${language}` : undefined}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
       </pre>
     )
-  },
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  "code-highlight": ({ node }: any) => {
-    const text: string = node.text ?? ""
-    const type: string | null = node.highlightType ?? null
-    if (!type) return <span>{text}</span>
-    return <span className={`token ${type}`}>{text}</span>
   },
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

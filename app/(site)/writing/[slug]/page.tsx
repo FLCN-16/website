@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getCachedPost, getCachedRelatedPosts, getPreviewPost } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
+import { richTextConverters } from '@/components/writing/richtext-converters'
+import { extractHeadings } from '@/lib/lexical-headings'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { createMetadata } from '@/lib/metadata'
 import { resolvePostCover } from '@/lib/posts'
@@ -86,10 +89,15 @@ export default async function PostPage({ params }: PostPageProps) {
         publishedAt={post.publishedAt ?? undefined}
         readingTime={post.readingTime ?? undefined}
         tags={post.tags?.map((t: { tag?: string | null }) => ({ tag: t.tag ?? '' }))}
-        body={post.body}
+        headings={extractHeadings(post.body)}
         cover={coverResolved}
         related={relatedPosts}
-      />
+      >
+        <RichText
+          data={post.body as Parameters<typeof RichText>[0]['data']}
+          converters={richTextConverters}
+        />
+      </WritingPost>
     </>
   )
 }
