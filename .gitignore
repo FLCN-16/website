@@ -43,4 +43,10 @@ next-env.d.ts
 
 # Payload generated
 payload-types.ts
+
+# agent / tooling artifacts (kept local, not committed)
 .superpowers/
+graphify-out/
+docs/
+.plans/
+.react-doctor/

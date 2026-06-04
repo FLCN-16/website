@@ -1,1 +1,0 @@
-{"nodes": [{"id": "lib_payload_getpayloadclient", "label": "getPayloadClient \u2014 thin wrapper around Payload getPayload with config", "file_type": "code", "source_file": "lib/payload.ts", "source_location": "4", "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}
