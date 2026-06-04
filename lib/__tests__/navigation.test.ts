@@ -3,7 +3,7 @@ import { RECOVERY_LINKS } from "@/lib/navigation";
 
 describe("RECOVERY_LINKS", () => {
   it("excludes the home link", () => {
-    expect(RECOVERY_LINKS.some((link) => link.href === "/")).toBe(false);
+    expect(RECOVERY_LINKS.some((link) => (link.href as string) === "/")).toBe(false);
   });
 
   it("keeps the non-home nav links in order", () => {
