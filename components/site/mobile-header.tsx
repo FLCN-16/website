@@ -33,8 +33,10 @@ export function MobileHeader({ resumeUrl, status }: { resumeUrl: string; status:
         </SheetTrigger>
         <SheetContent side="left" className="w-[260px] p-6 flex flex-col gap-4">
           {/* Identity */}
-          <div className="flex flex-col gap-2 pt-2">
-            <Logo className="h-8 w-auto text-foreground" />
+          <div className="flex flex-col gap-1 pt-2">
+            <span className="font-sans text-lg font-semibold tracking-tight text-foreground">
+              {site.name}
+            </span>
             <span className="font-mono text-xs text-muted-foreground">
               {site.role}
             </span>
