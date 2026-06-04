@@ -31,7 +31,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
       {post.cover ? (
         <>
           {/* Full-width hero image */}
-          <div className={cn("relative overflow-hidden bg-muted", wide ? "aspect-[16/9] md:aspect-[21/9]" : "aspect-[16/9]")}>
+          <div className={cn("relative overflow-hidden bg-muted", wide ? "aspect-[4/3] md:aspect-[21/9]" : "aspect-[4/3] md:aspect-[16/9]")}>
             <Image
               src={post.cover.url}
               alt={post.cover.alt ?? post.title}
@@ -41,7 +41,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
               priority
             />
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/5" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
 
             {/* Content anchored at bottom */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-10">
@@ -58,7 +58,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
 
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <h2 className="font-sans text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight text-white mb-2">
+                  <h2 className="font-sans text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight text-white mb-2 line-clamp-2">
                     {post.title}
                   </h2>
                   {post.excerpt && (
