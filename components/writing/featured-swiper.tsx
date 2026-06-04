@@ -21,7 +21,7 @@ export function FeaturedSwiper({ posts }: FeaturedSwiperProps) {
 
   return (
     <div className="space-y-3 w-full min-w-0">
-      <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+      <div className="relative w-full aspect-[4/3] md:aspect-[21/9] overflow-hidden">
         <Swiper
           modules={[A11y, Keyboard, Autoplay]}
           keyboard={{ enabled: true }}

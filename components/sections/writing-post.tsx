@@ -38,6 +38,48 @@ function formatDate(iso?: string) {
   });
 }
 
+/** Date + reading time, title, and tags — shared by the desktop overlay and the mobile stacked layout. */
+function CoverMeta({
+  publishedAt,
+  readingTime,
+  title,
+  tags,
+}: {
+  publishedAt?: string;
+  readingTime?: number;
+  title: string;
+  tags?: Array<{ tag: string }>;
+}) {
+  return (
+    <>
+      <div className="mb-2 flex items-center gap-4 flex-wrap">
+        {publishedAt && (
+          <span className="font-mono text-xs text-muted-foreground">
+            {formatDate(publishedAt)}
+          </span>
+        )}
+        {readingTime && (
+          <span className="font-mono text-xs text-muted-foreground">
+            {readingTime} min read
+          </span>
+        )}
+      </div>
+      <h1 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mb-3">
+        {title}
+      </h1>
+      {tags && tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {tags.map(({ tag }) => (
+            <Badge key={tag} variant="secondary" className="font-mono text-xs">
+              {tag}
+            </Badge>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
 export function WritingPost({
   slug,
   title,
@@ -64,45 +106,37 @@ export function WritingPost({
           ← Writing
         </Link>
 
-        {/* Cover hero — image with text overlaid on faded bottom half */}
+        {/* Cover hero — text overlay on md+, stacked (image then content) on mobile */}
         {cover ? (
-          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden mb-10">
-            <Image
-              src={cover.url}
-              alt={cover.alt ?? title}
-              fill
-              sizes="(max-width: 1024px) 100vw, 1152px"
-              className="object-cover"
-              priority
-            />
-            {/* Gradient fade over bottom half */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-            {/* Text overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-              <div className="mb-2 flex items-center gap-4 flex-wrap">
-                {publishedAt && (
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {formatDate(publishedAt)}
-                  </span>
-                )}
-                {readingTime && (
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {readingTime} min read
-                  </span>
-                )}
+          <div className="mb-10">
+            <div className="relative h-64 md:h-96 rounded-xl overflow-hidden">
+              <Image
+                src={cover.url}
+                alt={cover.alt ?? title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 1152px"
+                className="object-cover"
+                priority
+              />
+              {/* Gradient fade + overlay text — md and up only */}
+              <div className="absolute inset-0 hidden md:block bg-gradient-to-t from-background via-background/85 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-8 hidden md:block">
+                <CoverMeta
+                  publishedAt={publishedAt}
+                  readingTime={readingTime}
+                  title={title}
+                  tags={tags}
+                />
               </div>
-              <h1 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mb-3">
-                {title}
-              </h1>
-              {tags && tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {tags.map(({ tag }) => (
-                    <Badge key={tag} variant="secondary" className="font-mono text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
+            </div>
+            {/* Stacked content below the image — mobile only */}
+            <div className="mt-5 md:hidden">
+              <CoverMeta
+                publishedAt={publishedAt}
+                readingTime={readingTime}
+                title={title}
+                tags={tags}
+              />
             </div>
           </div>
         ) : (
