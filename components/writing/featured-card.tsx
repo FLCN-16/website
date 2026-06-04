@@ -40,11 +40,11 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
               className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               priority
             />
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
+            {/* Gradient overlay — md and up only */}
+            <div className="absolute inset-0 hidden md:block bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
 
-            {/* Content anchored at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-10">
+            {/* Content overlay — md and up only */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-10 hidden md:block">
               {/* Featured chip */}
               <div className="inline-flex items-center gap-2 mb-3 bg-black/40 backdrop-blur-sm border border-white/15 rounded-full px-3 py-1">
                 <span className="relative flex size-1.5 shrink-0">
@@ -109,6 +109,48 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Stacked caption below the image — mobile only */}
+          <div className="md:hidden bg-card p-5">
+            {/* Featured chip */}
+            <div className="inline-flex items-center gap-2 mb-2.5">
+              <span className="relative flex size-1.5 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex size-1.5 rounded-full bg-primary" />
+              </span>
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Featured
+              </p>
+            </div>
+
+            <h2 className="font-sans text-xl font-bold tracking-tight leading-tight text-foreground mb-2 line-clamp-2">
+              {post.title}
+            </h2>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-3">
+              <span className="font-mono text-xs text-muted-foreground">
+                {formatDate(post.publishedAt)}
+              </span>
+              {post.readingTime && (
+                <>
+                  <span className="text-muted-foreground/40 text-xs">·</span>
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {post.readingTime} min read
+                  </span>
+                </>
+              )}
+            </div>
+
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {post.tags.slice(0, 2).map(({ tag }) => (
+                  <Badge key={tag} variant="secondary" className="font-mono text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
         </>
       ) : (

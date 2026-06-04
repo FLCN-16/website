@@ -21,24 +21,23 @@ export function FeaturedSwiper({ posts }: FeaturedSwiperProps) {
 
   return (
     <div className="space-y-3 w-full min-w-0">
-      <div className="relative w-full aspect-[4/3] md:aspect-[21/9] overflow-hidden">
-        <Swiper
-          modules={[A11y, Keyboard, Autoplay]}
-          keyboard={{ enabled: true }}
-          slidesPerView={1}
-          loop
-          autoplay={{ delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }}
-          onSwiper={(s) => { swiperRef.current = s }}
-          onSlideChange={(s) => setCurrent(s.realIndex)}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-        >
-          {posts.map((post) => (
-            <SwiperSlide key={post.id}>
-              <FeaturedCard post={post} wide />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      <Swiper
+        modules={[A11y, Keyboard, Autoplay]}
+        keyboard={{ enabled: true }}
+        slidesPerView={1}
+        loop
+        autoHeight
+        autoplay={{ delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }}
+        onSwiper={(s) => { swiperRef.current = s }}
+        onSlideChange={(s) => setCurrent(s.realIndex)}
+        className="w-full min-w-0"
+      >
+        {posts.map((post) => (
+          <SwiperSlide key={post.id}>
+            <FeaturedCard post={post} wide />
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
       {/* Pill indicators + counter */}
       <div className="flex items-center justify-between px-1">
