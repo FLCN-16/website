@@ -38,7 +38,7 @@ export default function NotFound() {
           enableSystem
           disableTransitionOnChange
         >
-          <main className="flex min-h-screen flex-col items-start justify-center px-6 py-16">
+          <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
             <ErrorState
               code="404"
               label="NOT FOUND"

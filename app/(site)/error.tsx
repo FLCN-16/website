@@ -16,7 +16,7 @@ export default function SiteError({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className="flex min-h-[60vh] flex-col justify-center">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center">
       <ErrorState
         code="500"
         label="SERVER ERROR"

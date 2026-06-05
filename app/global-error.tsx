@@ -43,7 +43,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <main className="flex min-h-screen flex-col items-start justify-center px-6 py-16">
+          <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
             <ErrorState
               code="500"
               label="SERVER ERROR"
