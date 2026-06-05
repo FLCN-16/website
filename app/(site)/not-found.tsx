@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function SiteNotFound() {
   return (
-    <div className="flex min-h-[60vh] flex-col justify-center">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center">
       <ErrorState
         code="404"
         label="NOT FOUND"

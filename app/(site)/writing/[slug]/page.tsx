@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getCachedPost, getCachedRelatedPosts, getPreviewPost } from '@/lib/data'
+import { getCachedPost, getPreviewPost } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
 import { richTextConverters } from '@/components/writing/richtext-converters'
 import { extractHeadings } from '@/lib/lexical-headings'
@@ -60,9 +60,6 @@ export default async function PostPage({ params }: PostPageProps) {
 
   if (!post) notFound()
 
-  const postTags = post.tags?.map((t: { tag?: string | null }) => t.tag ?? '') ?? []
-  const relatedPosts = await getCachedRelatedPosts(post.slug, postTags).catch(() => [])
-
   const coverResolved = resolvePostCover(post.cover)
 
   const articleSchema = {
@@ -91,7 +88,6 @@ export default async function PostPage({ params }: PostPageProps) {
         tags={post.tags?.map((t: { tag?: string | null }) => ({ tag: t.tag ?? '' }))}
         headings={extractHeadings(post.body)}
         cover={coverResolved}
-        related={relatedPosts}
       >
         <RichText
           data={post.body as Parameters<typeof RichText>[0]['data']}

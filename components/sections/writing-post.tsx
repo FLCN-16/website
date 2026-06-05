@@ -11,7 +11,7 @@ import { ReadingProgress } from "@/components/writing/reading-progress";
 import { RelatedPosts } from "@/components/writing/related-posts";
 import { WritingSocialCTA } from "@/components/writing/social-cta";
 import { PostShare } from "@/components/writing/post-share";
-import type { PostCover, Post } from "@/lib/types";
+import type { PostCover } from "@/lib/types";
 
 interface WritingPostProps {
   slug: string;
@@ -24,10 +24,7 @@ interface WritingPostProps {
   /** The rich-text body, rendered on the server (keeps PrismJS off the client). */
   children: ReactNode;
   cover?: PostCover | null;
-  related?: Post[];
 }
-
-const EMPTY_RELATED: Post[] = [];
 
 function formatDate(iso?: string) {
   if (!iso) return "—";
@@ -89,7 +86,6 @@ export function WritingPost({
   headings,
   children,
   cover,
-  related = EMPTY_RELATED,
 }: WritingPostProps) {
   const showToc = headings.length >= 3;
 
@@ -195,7 +191,7 @@ export function WritingPost({
         <PostShare title={title} slug={slug} />
 
         {/* Related posts */}
-        <RelatedPosts posts={related} />
+        <RelatedPosts currentSlug={slug} tags={tags?.map(({ tag }) => tag) ?? []} />
 
         {/* Subscribe + social CTA */}
         <div className="mt-16 border-t border-border pt-16">

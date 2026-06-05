@@ -35,7 +35,7 @@ export interface Site {
 
 export const site: Site = {
   name: "Rishabh Kumar",
-  url: "https://thefalcon.dev",
+  url: "https://www.thefalcon.dev",
   handle: "thefalcon",
   role: "Technical Lead — Full Stack",
   location: "Jalandhar, Punjab, India",
