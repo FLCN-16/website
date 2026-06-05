@@ -103,9 +103,9 @@ export function RelatedPostsSwiper({ currentSlug, tags }: RelatedPostsSwiperProp
       {/* Controls */}
       <div className="flex items-center justify-between px-0.5">
         <div className="flex gap-1.5 items-center">
-          {posts.map((_, i) => (
+          {posts.map((post, i) => (
             <button
-              key={i}
+              key={post.id}
               type="button"
               onClick={() => swiperRef.current?.slideTo(i)}
               aria-label={`Go to slide ${i + 1}`}
