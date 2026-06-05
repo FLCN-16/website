@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useEffect } from "react";
 import Link from "next/link";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ErrorState } from "@/components/site/error-state";
 import { Button } from "@/components/ui/button";
-import { site } from "@/content/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,12 +20,16 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: `Not Found — ${site.name}`,
-  robots: { index: false, follow: false },
-};
+interface GlobalErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
 
-export default function NotFound() {
+export default function GlobalError({ error, reset }: GlobalErrorProps) {
+  useEffect(() => {
+    console.error("[GlobalError]", error.digest ?? error.message);
+  }, [error]);
+
   return (
     <html
       lang="en"
@@ -40,19 +45,26 @@ export default function NotFound() {
         >
           <main className="flex min-h-screen flex-col items-start justify-center px-6 py-16">
             <ErrorState
-              code="404"
-              label="NOT FOUND"
-              tone="muted"
-              title="Page not found"
-              message="The page you're looking for doesn't exist or has been moved."
+              code="500"
+              label="SERVER ERROR"
+              tone="destructive"
+              title="Something went wrong"
+              message="An unexpected error occurred. You can try again or return home."
               showIdentity
-              showLinks
               actions={
-                <Button asChild>
-                  <Link href="/">Back home</Link>
-                </Button>
+                <>
+                  <Button onClick={reset}>Try again</Button>
+                  <Button asChild variant="outline">
+                    <Link href="/">Back home</Link>
+                  </Button>
+                </>
               }
             />
+            {error.digest && (
+              <span className="mt-6 font-mono text-xs text-muted-foreground">
+                REF: {error.digest}
+              </span>
+            )}
           </main>
         </ThemeProvider>
       </body>
