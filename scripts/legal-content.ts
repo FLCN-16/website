@@ -36,7 +36,7 @@ export function textToLexical(text: string) {
   const blocks = text.split("\n\n").filter(Boolean)
   const children: LexicalNode[] = blocks.map((block) => {
     const trimmed = block.trim()
-    const headingMatch = trimmed.match(/^\*\*(.+)\*\*$/)
+    const headingMatch = trimmed.match(/^\*\*([^*]+)\*\*$/)
     if (headingMatch) {
       return {
         children: [{ detail: 0, format: 0, mode: "normal", style: "", text: headingMatch[1], type: "text" as const, version: 1 }],
@@ -86,17 +86,17 @@ Rishabh Kumar, Jalandhar, Punjab, India. For anything related to your personal d
 
 **Contact form.** If you use the contact form, I collect your name, email address, the inquiry type you select, and your message. This data is stored in the Site's database (MongoDB Atlas) and delivered to my inbox by the email service Resend; you also receive an automatic confirmation email. Legal basis: legitimate interest in responding to enquiries and, where your message concerns work, steps taken prior to entering into a contract (GDPR Art. 6(1)(b) and 6(1)(f)).
 
-**Talent and hiring inquiries.** If you use the hiring inquiry dialog, I collect your email address, the role or pitch you describe, and any document you choose to attach (for example a job description). This is delivered to my inbox by Resend. Legal basis: steps taken prior to entering into a contract and legitimate interest (GDPR Art. 6(1)(b) and 6(1)(f)).
+**Talent and hiring inquiries.** If you use the hiring inquiry dialog, I collect your email address, the role or pitch you describe, and any document you choose to attach (for example a job description). This is stored in the Site's database (MongoDB Atlas) and delivered to my inbox by Resend. Legal basis: steps taken prior to entering into a contract and legitimate interest (GDPR Art. 6(1)(b) and 6(1)(f)).
 
-**Newsletter.** If you subscribe to the newsletter, your email address is stored with Resend, the service that also sends the newsletter, and is used solely to send you new posts published on this Site. Legal basis: your consent (GDPR Art. 6(1)(a)). Every newsletter contains an unsubscribe link; unsubscribing takes effect immediately and removes your address from the mailing list.
+**Newsletter.** If you subscribe to the newsletter, your email address is stored with Resend, the service that also sends the newsletter, and is used solely to send you new posts published on this Site. Legal basis: your consent (GDPR Art. 6(1)(a)). Every newsletter contains an unsubscribe link; unsubscribing takes effect immediately and no further newsletters will be sent; you can additionally request full deletion of your address at any time.
 
-**Analytics.** With your prior consent, the Site uses Google Tag Manager and Google Analytics to understand how the Site is used: pages visited, approximate location at city level, device type, and interactions such as searches and downloads. No analytics cookies are set and no identifiers are collected unless you click Accept in the cookie banner. Advertising storage and ad-personalisation signals are permanently disabled on this Site, regardless of your choice. Legal basis: your consent (GDPR Art. 6(1)(a)), which you can withdraw at any time via Cookie settings in the footer. Details are in the Cookie Policy at thefalcon.dev/legal/cookies.
+**Analytics.** The Site uses Google Tag Manager and Google Analytics to understand how the Site is used: pages visited, approximate location at city level, device type, and interactions such as searches and downloads. The Tag Manager script loads in consent-denied mode: your browser requests it from Google's servers (which involves your IP address), but no analytics cookies are set and no identifiers are collected unless you click Accept in the cookie banner. Advertising storage and ad-personalisation signals are permanently disabled on this Site, regardless of your choice. Legal basis: your consent (GDPR Art. 6(1)(a)), which you can withdraw at any time via Cookie settings in the footer. Details are in the Cookie Policy at thefalcon.dev/legal/cookies.
 
 **Server logs.** The hosting infrastructure records standard access logs (IP address, requested URL, timestamp, user agent) for security, abuse prevention, and operational monitoring. Legal basis: legitimate interest in running the Site securely (GDPR Art. 6(1)(f)).
 
 **Cookies and local storage**
 
-The Site stores a small number of items in your browser: your theme preference, an interface-state cookie, and your cookie-consent choice. All are strictly necessary and contain no personal identifiers. Analytics cookies are set only after you opt in. The full list, with purposes and durations, is in the Cookie Policy at thefalcon.dev/legal/cookies.
+The Site stores a small number of items in your browser: your theme preference, your cookie-consent choice, and one-time interface flags (a splash-screen marker and a hiring-popup marker). All are strictly necessary and contain no personal identifiers. Analytics cookies are set only after you opt in. The full list, with purposes and durations, is in the Cookie Policy at thefalcon.dev/legal/cookies.
 
 **Service providers**
 
@@ -104,13 +104,13 @@ The Site relies on a small set of providers that process data on my behalf:
 
 **Vercel Inc.** (USA) hosts the Site and serves its pages, processing standard server logs. See vercel.com/legal/privacy-policy.
 
-**MongoDB, Inc.** (USA) provides MongoDB Atlas, the managed database storing Site content and contact form submissions. See mongodb.com/legal/privacy-policy.
+**MongoDB, Inc.** (USA) provides MongoDB Atlas, the managed database that stores Site content, contact form submissions, and hiring-inquiry submissions. See mongodb.com/legal/privacy-policy.
 
 **Cloudflare, Inc.** (USA) stores and delivers the Site's images and files (R2); serving a file involves processing the requesting IP address. See cloudflare.com/privacypolicy.
 
 **Resend** (Plus Five Five, Inc., USA) sends transactional email and the newsletter, and stores newsletter subscriber addresses. See resend.com/legal/privacy-policy.
 
-**Google LLC** (USA) provides Google Tag Manager and Google Analytics, used only after you consent. See policies.google.com/privacy.
+**Google LLC** (USA) provides Google Tag Manager and Google Analytics. The script loads in consent-denied mode; analytics measurement and cookies are enabled only after you consent. See policies.google.com/privacy.
 
 Fonts are self-hosted with the Site's build, so visiting the Site makes no request to Google Fonts or any other font service.
 
@@ -175,7 +175,7 @@ Information you submit through the contact or hiring forms must be accurate and 
 
 **Newsletter**
 
-The newsletter is free. By subscribing you agree to receive emails when new posts are published. You can unsubscribe at any time using the link included in every email, and your address will be removed immediately. Newsletter data handling is described in the Privacy Policy.
+The newsletter is free. By subscribing you agree to receive emails when new posts are published. You can unsubscribe at any time using the link included in every email; no further newsletters will be sent after that, and you can request full deletion of your address. Newsletter data handling is described in the Privacy Policy.
 
 **Accuracy of information**
 
@@ -226,7 +226,9 @@ These items are required for the Site to function and do not need consent. None 
 
 **theme** (localStorage) — remembers your light or dark theme preference. Kept until you clear your browser data.
 
-**sidebar_state** (cookie) — remembers whether the admin sidebar is open; only relevant to the Site's admin area. Expires after 7 days.
+**splash_seen** (sessionStorage) — remembers that you have already seen the intro splash animation in this browser session so it does not replay on every page. Cleared automatically when the browser session ends.
+
+**talent_popup_seen** (localStorage) — remembers that the hiring popup has already been shown so it is not shown repeatedly. Kept until you clear your browser data.
 
 **flcn-consent-v1** (localStorage) — records your cookie-consent choice and when you made it, so you are not asked again on every visit. Kept until you clear your browser data or change your choice.
 
