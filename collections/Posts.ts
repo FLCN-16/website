@@ -23,10 +23,48 @@ export const Posts: CollectionConfig = {
     },
   },
   fields: [
+    // Keep the tabs field first: the SEO plugin (tabbedUI) appends its SEO tab
+    // into it and leaves the fields after it at the top level, so their
+    // `position: 'sidebar'` keeps working. The tab is unnamed, so the data
+    // shape is unchanged.
     {
-      name: 'title',
-      type: 'text',
-      required: true,
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Content',
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'excerpt',
+              type: 'textarea',
+            },
+            {
+              name: 'cover',
+              type: 'upload',
+              relationTo: 'media',
+            },
+            {
+              name: 'tags',
+              type: 'array',
+              fields: [
+                {
+                  name: 'tag',
+                  type: 'text',
+                },
+              ],
+            },
+            {
+              name: 'body',
+              type: 'richText',
+              editor: lexicalEditor({ features: ({ defaultFeatures }) => [...defaultFeatures, CodeHighlightFeature()] }),
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'slug',
@@ -37,25 +75,6 @@ export const Posts: CollectionConfig = {
         position: 'sidebar',
         description: 'URL-friendly identifier, e.g. my-post-title',
       },
-    },
-    {
-      name: 'excerpt',
-      type: 'textarea',
-    },
-    {
-      name: 'cover',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
-      name: 'tags',
-      type: 'array',
-      fields: [
-        {
-          name: 'tag',
-          type: 'text',
-        },
-      ],
     },
     {
       name: 'status',
@@ -116,11 +135,6 @@ export const Posts: CollectionConfig = {
         description: 'Estimated reading time in minutes (auto-calculated on save)',
         readOnly: false,
       },
-    },
-    {
-      name: 'body',
-      type: 'richText',
-      editor: lexicalEditor({ features: ({ defaultFeatures }) => [...defaultFeatures, CodeHighlightFeature()] }),
     },
   ],
   hooks: {

@@ -30,6 +30,9 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
+import { default as default_f31393aa1c6d62557e401b45f2773c67 } from '../../../components/admin/widgets/ContentStats'
+import { default as default_dd880fde73bf28bd3e5b8d06ad6f6a1f } from '../../../components/admin/widgets/RecentPosts'
+import { default as default_272d715bf8813b2a1d18b0ce6252ba18 } from '../../../components/admin/widgets/RecentSubmissions'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -66,5 +69,8 @@ export const importMap = {
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
+  "/components/admin/widgets/ContentStats#default": default_f31393aa1c6d62557e401b45f2773c67,
+  "/components/admin/widgets/RecentPosts#default": default_dd880fde73bf28bd3e5b8d06ad6f6a1f,
+  "/components/admin/widgets/RecentSubmissions#default": default_272d715bf8813b2a1d18b0ce6252ba18,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
