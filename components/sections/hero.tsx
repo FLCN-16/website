@@ -76,7 +76,7 @@ export function Hero({
         <div className="mt-8 md:mt-10">
           <MaskReveal
             as="h1"
-            className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.1]"
+            className="text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight leading-[1.1] text-balance"
           >
             {headline.split("\n").map((line) => (
               <span key={line} className="block overflow-hidden">
@@ -87,11 +87,11 @@ export function Hero({
         </div>
 
         {/* Subheadline + CTAs row */}
-        <div className="mt-8 md:mt-10 flex flex-col md:flex-row md:items-end gap-6 md:gap-16">
-          <p className="text-lg text-muted-foreground leading-relaxed md:max-w-xl">
+        <div className="mt-8 md:mt-10 flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-16">
+          <p className="text-lg text-muted-foreground leading-relaxed lg:max-w-xl">
             {subheadline}
           </p>
-          <div className="flex flex-wrap gap-3 md:ml-auto md:shrink-0">
+          <div className="flex flex-wrap gap-3 lg:ml-auto lg:shrink-0">
             <Button asChild variant="default" size="lg">
               <TrackedLink
                 href={primaryCta.href}
