@@ -10,14 +10,5 @@ allowBuilds:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
-
-# monaco-editor (via @payloadcms/ui) pins dompurify to a vulnerable exact
-# version; force the patched line until upstream bumps it.
-# NOTE: this setting requires pnpm 10+. Vercel selects pnpm 9 for this
-# project (by creation date), which can't read overrides from this file and
-# fails its frozen-lockfile install; its PATH even shadows corepack shims.
-# vercel.json's installCommand therefore runs pnpm via npx, pinned to the
-# same version as package.json#packageManager, keeping CI installs identical
-# to local
-overrides:
-  dompurify: ^3.4.0
+minimumReleaseAgeExclude:
+  - dompurify@3.4.7
