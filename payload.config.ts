@@ -147,6 +147,7 @@ export default buildConfig({
         timeline: { enabled: true },
         education: { enabled: true },
         certifications: { enabled: true },
+        media: { enabled: true },
       },
     }),
   ],
