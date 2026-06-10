@@ -69,7 +69,6 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
             <input
               type="email"
               required
-              autoFocus
               aria-label="Email address"
               placeholder="your@email.com"
               value={email}
