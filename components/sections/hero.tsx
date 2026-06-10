@@ -10,21 +10,21 @@ interface StatCellProps {
   index: number
 }
 
-// Each of the 4 stats has distinct border needs across mobile (2-col) and desktop (4-col)
+// Each of the 4 stats has distinct border needs across 2-col (base/md) and 4-col (lg+)
 function StatCell({ stat, index: i }: StatCellProps) {
   return (
     <div
       className={cn(
         "py-5 px-5",
-        // First item in each column on mobile has no left padding
+        // First item in each column has no left padding
         i === 0 && "pl-0",
-        i === 2 && "pl-0 md:pl-5",
+        i === 2 && "pl-0 lg:pl-5",
         // Left borders
         i === 1 && "border-l border-border",
-        i === 2 && "md:border-l md:border-border",
+        i === 2 && "lg:border-l lg:border-border",
         i === 3 && "border-l border-border",
-        // Second row top border on mobile only
-        i >= 2 && "border-t border-border md:border-t-0",
+        // Second row top border on 2-col (base + md); removed at 4-col (lg)
+        i >= 2 && "border-t border-border lg:border-t-0",
       )}
     >
       <div className="text-3xl md:text-4xl font-mono font-bold text-foreground tabular-nums">
@@ -57,7 +57,7 @@ export function Hero({
   secondaryCta,
 }: HeroProps) {
   return (
-    <section className="pt-6 pb-16 md:pt-8 md:pb-24">
+    <section className="pt-6 pb-16 md:pt-8 md:pb-20 lg:pb-24">
       <FadeRise>
         {/* Top bar — eyebrow + status */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-border">
@@ -112,7 +112,7 @@ export function Hero({
         </div>
 
         {/* Stats strip */}
-        <div className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-4 border-t border-b border-border">
+        <div className="mt-12 md:mt-14 lg:mt-16 grid grid-cols-2 lg:grid-cols-4 border-t border-b border-border">
           {stats.map((stat, i) => (
             <StatCell key={stat.label} stat={stat} index={i} />
           ))}
