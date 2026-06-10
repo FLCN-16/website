@@ -9,7 +9,7 @@ import { extractHeadings } from '@/lib/lexical-headings'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { breadcrumbSchema, personRef } from '@/lib/structured-data'
 import { createMetadata, resolveMetaImage } from '@/lib/metadata'
-import { resolvePostCover } from '@/lib/posts'
+import { normalizeTags, resolvePostCover } from '@/lib/posts'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
 import { site } from '@/content/site'
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       article: {
         publishedTime: post.publishedAt ?? undefined,
         modifiedTime: post.updatedAt,
-        tags: post.tags?.flatMap((t) => (t.tag ? [t.tag] : [])),
+        tags: normalizeTags(post.tags),
       },
     })
   } catch {
@@ -69,7 +69,7 @@ export default async function PostPage({ params }: PostPageProps) {
   const coverResolved = resolvePostCover(post.cover)
 
   const postUrl = `${site.url}/writing/${slug}`
-  const tags = post.tags?.flatMap((t) => (t.tag ? [t.tag] : [])) ?? []
+  const tags = normalizeTags(post.tags)
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -105,7 +105,7 @@ export default async function PostPage({ params }: PostPageProps) {
         title={post.title}
         publishedAt={post.publishedAt ?? undefined}
         readingTime={post.readingTime ?? undefined}
-        tags={post.tags?.map((t: { tag?: string | null }) => ({ tag: t.tag ?? '' }))}
+        tags={tags}
         headings={extractHeadings(post.body)}
         cover={coverResolved}
       >

@@ -7,6 +7,7 @@ import { A11y, Keyboard } from "swiper/modules"
 import type { Swiper as SwiperType } from "swiper"
 import { PostCard } from "./post-card"
 import type { Post } from "@/lib/types"
+import { normalizeTags } from "@/lib/posts"
 import "swiper/css"
 
 interface RelatedPostsSwiperProps {
@@ -23,12 +24,13 @@ async function fetchRelatedPosts(slug: string, tags: string[]): Promise<Post[]> 
     "depth": "1",
   })
   if (tags.length > 0) {
-    params.set("where[and][2][tags.tag][in]", tags.join(","))
+    params.set("where[and][2][tags][in]", tags.join(","))
   }
   const res = await fetch(`/api/posts?${params}`)
   if (!res.ok) throw new Error("Failed to fetch related posts")
   const data = await res.json()
-  return data.docs as Post[]
+  // normalize both tag shapes — old docs may not be migrated yet
+  return (data.docs as Post[]).map((d) => ({ ...d, tags: normalizeTags(d.tags) }))
 }
 
 function SkeletonCard() {

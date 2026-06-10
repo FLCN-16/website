@@ -29,7 +29,7 @@ async function fetchPostsRemote(search: string, singleTag: string): Promise<Post
     qs.set("where[or][0][title][contains]", search)
     qs.set("where[or][1][excerpt][contains]", search)
   }
-  if (singleTag) qs.set("where[tags.tag][equals]", singleTag)
+  if (singleTag) qs.set("where[tags][equals]", singleTag)
 
   const res = await fetch(`/api/posts?${qs.toString()}`)
   if (!res.ok) throw new Error("Failed to fetch posts")
@@ -44,7 +44,7 @@ function applyLocalFilters(
 ): Post[] {
   return posts.filter((post) => {
     if (tags.length > 0) {
-      const postTags = post.tags?.map((t) => t.tag) ?? []
+      const postTags = post.tags ?? []
       if (!tags.some((tag) => postTags.includes(tag))) return false
     }
     if (readingTime) {

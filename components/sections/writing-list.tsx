@@ -10,7 +10,7 @@ interface WritingListProps {
 function extractTags(posts: Post[]): string[] {
   const seen = new Set<string>()
   for (const post of posts) {
-    for (const { tag } of post.tags ?? []) {
+    for (const tag of post.tags ?? []) {
       seen.add(tag)
     }
   }
