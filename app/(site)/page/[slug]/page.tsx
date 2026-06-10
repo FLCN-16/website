@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getCachedBasicPage, getPreviewPage } from '@/lib/data'
-import { createMetadata } from '@/lib/metadata'
+import { createMetadata, resolveMetaImage } from '@/lib/metadata'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
 import { richTextConverters } from '@/components/writing/richtext-converters'
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: BasicPageProps): Promise<Meta
     return createMetadata({
       title: page.meta?.title || (page.title ?? slug),
       description: page.meta?.description || undefined,
-      image: typeof page.meta?.image === 'object' ? page.meta?.image?.url ?? undefined : undefined,
+      image: resolveMetaImage(page.meta?.image),
       path: `/page/${slug}`,
     })
   } catch {
