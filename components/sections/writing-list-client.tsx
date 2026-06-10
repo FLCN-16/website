@@ -203,7 +203,7 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
                     <div className="flex-1 h-px bg-border" />
                   </div>
                 )}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                   {yearPosts.map((post) => (
                     <PostRow key={post.id} post={post} />
                   ))}
@@ -213,7 +213,7 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
           </>
         ) : (
           /* Flat list when filtering or sorting differently */
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
             {rowPosts.map((post) => (
               <PostRow key={post.id} post={post} />
             ))}
