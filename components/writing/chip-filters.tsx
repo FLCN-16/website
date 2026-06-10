@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useReducer, useRef } from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
@@ -36,6 +36,38 @@ export interface ChipFiltersProps {
   onClearAll: () => void
 }
 
+const isMac = typeof navigator !== "undefined" && navigator.platform.toUpperCase().includes("MAC")
+
+type DropdownState = {
+  results: Post[]
+  open: boolean
+  loading: boolean
+  activeIndex: number
+}
+
+type DropdownAction =
+  | { type: "SEARCH_START" }
+  | { type: "SEARCH_CLEAR" }
+  | { type: "SEARCH_DONE"; results: Post[] }
+  | { type: "CLOSE" }
+  | { type: "OPEN_IF_HAS_RESULTS" }
+  | { type: "MOVE_DOWN" }
+  | { type: "MOVE_UP" }
+
+const initialDropdown: DropdownState = { results: [], open: false, loading: false, activeIndex: -1 }
+
+function dropdownReducer(state: DropdownState, action: DropdownAction): DropdownState {
+  switch (action.type) {
+    case "SEARCH_START":      return { ...state, loading: true }
+    case "SEARCH_CLEAR":      return initialDropdown
+    case "SEARCH_DONE":       return { results: action.results, open: true, loading: false, activeIndex: -1 }
+    case "CLOSE":             return { ...state, open: false, activeIndex: -1 }
+    case "OPEN_IF_HAS_RESULTS": return state.results.length > 0 ? { ...state, open: true } : state
+    case "MOVE_DOWN":         return { ...state, activeIndex: Math.min(state.activeIndex + 1, state.results.length - 1) }
+    case "MOVE_UP":           return { ...state, activeIndex: Math.max(state.activeIndex - 1, -1) }
+  }
+}
+
 async function fetchDropdownResults(query: string): Promise<Post[]> {
   const qs = new URLSearchParams()
   qs.set("where[status][equals]", "published")
@@ -65,14 +97,7 @@ export function ChipFilters({
 }: ChipFiltersProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const [dropdownResults, setDropdownResults] = useState<Post[]>([])
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(-1)
-  const [isMac] = useState(() =>
-    typeof navigator !== "undefined" && navigator.platform.toUpperCase().includes("MAC")
-  )
+  const [dropdown, dispatch] = useReducer(dropdownReducer, initialDropdown)
 
   // Cmd/Ctrl+S focuses the input
   useEffect(() => {
@@ -91,20 +116,12 @@ export function ChipFilters({
     const delay = search.trim() ? 300 : 0
     const timer = setTimeout(async () => {
       if (!search.trim()) {
-        setDropdownResults([])
-        setDropdownOpen(false)
-        setActiveIndex(-1)
+        dispatch({ type: "SEARCH_CLEAR" })
         return
       }
-      setIsLoading(true)
-      try {
-        const results = await fetchDropdownResults(search.trim())
-        setDropdownResults(results)
-        setDropdownOpen(true)
-        setActiveIndex(-1)
-      } finally {
-        setIsLoading(false)
-      }
+      dispatch({ type: "SEARCH_START" })
+      const results = await fetchDropdownResults(search.trim())
+      dispatch({ type: "SEARCH_DONE", results })
     }, delay)
     return () => clearTimeout(timer)
   }, [search])
@@ -113,7 +130,7 @@ export function ChipFilters({
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false)
+        dispatch({ type: "CLOSE" })
       }
     }
     document.addEventListener("mousedown", handler)
@@ -121,19 +138,18 @@ export function ChipFilters({
   }, [])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!dropdownOpen || dropdownResults.length === 0) return
+    if (!dropdown.open || dropdown.results.length === 0) return
     if (e.key === "ArrowDown") {
       e.preventDefault()
-      setActiveIndex((i) => Math.min(i + 1, dropdownResults.length - 1))
+      dispatch({ type: "MOVE_DOWN" })
     } else if (e.key === "ArrowUp") {
       e.preventDefault()
-      setActiveIndex((i) => Math.max(i - 1, -1))
+      dispatch({ type: "MOVE_UP" })
     } else if (e.key === "Escape") {
-      setDropdownOpen(false)
-      setActiveIndex(-1)
-    } else if (e.key === "Enter" && activeIndex >= 0) {
+      dispatch({ type: "CLOSE" })
+    } else if (e.key === "Enter" && dropdown.activeIndex >= 0) {
       e.preventDefault()
-      const post = dropdownResults[activeIndex]
+      const post = dropdown.results[dropdown.activeIndex]
       if (post) window.location.href = `/writing/${post.slug}`
     }
   }
@@ -150,7 +166,7 @@ export function ChipFilters({
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             onKeyDown={handleKeyDown}
-            onFocus={() => dropdownResults.length > 0 && setDropdownOpen(true)}
+            onFocus={() => dispatch({ type: "OPEN_IF_HAS_RESULTS" })}
             className="w-full font-mono text-sm h-8 min-w-0 bg-transparent px-2.5 py-1 text-xs outline-none placeholder:text-muted-foreground transition-colors pr-14"
           />
           {!search && (
@@ -161,28 +177,28 @@ export function ChipFilters({
           )}
 
           {/* Dropdown */}
-          {dropdownOpen && (
+          {dropdown.open && (
             <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border border-border rounded-md shadow-lg overflow-hidden">
-              {isLoading ? (
+              {dropdown.loading ? (
                 <div className="px-3 py-2 font-mono text-xs text-muted-foreground">
                   Searching…
                 </div>
-              ) : dropdownResults.length === 0 ? (
+              ) : dropdown.results.length === 0 ? (
                 <div className="px-3 py-2 font-mono text-xs text-muted-foreground">
                   No results for &ldquo;{search}&rdquo;
                 </div>
               ) : (
-                dropdownResults.map((post, i) => (
+                dropdown.results.map((post, i) => (
                   <Link
                     key={post.id}
                     href={`/writing/${post.slug}`}
                     onClick={() => {
-                      setDropdownOpen(false)
+                      dispatch({ type: "CLOSE" })
                       onSearchChange("")
                     }}
                     className={cn(
                       "flex flex-col gap-0.5 px-3 py-2 transition-colors",
-                      i === activeIndex
+                      i === dropdown.activeIndex
                         ? "bg-muted text-foreground"
                         : "hover:bg-muted/60 text-foreground",
                     )}

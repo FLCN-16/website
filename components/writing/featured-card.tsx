@@ -62,7 +62,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
                     {post.title}
                   </h2>
                   {post.excerpt && (
-                    <p className="hidden md:block text-sm text-white/65 leading-relaxed line-clamp-2 max-w-2xl">
+                    <p className="hidden md:block text-sm text-white/65 leading-relaxed line-clamp-3 max-w-2xl">
                       {post.excerpt}
                     </p>
                   )}

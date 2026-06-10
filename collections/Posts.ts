@@ -90,6 +90,25 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'newsletterSentAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        date: { pickerAppearance: 'dayAndTime' },
+        description: 'Auto-set when the publish newsletter broadcast was sent. Clear to allow a re-send.',
+      },
+    },
+    {
+      name: 'skipNewsletter',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Publish this post without sending the newsletter broadcast.',
+      },
+    },
+    {
       name: 'readingTime',
       type: 'number',
       admin: {
@@ -123,6 +142,46 @@ export const Posts: CollectionConfig = {
         } catch {
           // not in Next.js request context
         }
+        return doc
+      },
+      async ({ doc, previousDoc, operation, req, context }) => {
+        // Skip when this hook triggered our own newsletterSentAt stamp update.
+        if (context?.skipNewsletter) return doc
+
+        const becamePublished =
+          doc.status === 'published' && previousDoc?.status !== 'published'
+
+        if (
+          !becamePublished ||
+          doc.skipNewsletter ||
+          doc.newsletterSentAt ||
+          (operation !== 'create' && operation !== 'update')
+        ) {
+          return doc
+        }
+
+        // Fire-and-forget so the admin save isn't blocked on Resend latency.
+        void (async () => {
+          try {
+            const { sendPostBroadcast } = await import('@/lib/email/post-broadcast')
+            await sendPostBroadcast({ doc, payload: req.payload })
+
+            // Stamp the post so future re-publishes don't re-blast.
+            // The context flag prevents this update from re-entering this branch.
+            await req.payload.update({
+              collection: 'posts',
+              id: doc.id as string,
+              data: { newsletterSentAt: new Date().toISOString() },
+              context: { skipNewsletter: true },
+              overrideAccess: true,
+            })
+          } catch (err) {
+            try {
+              req.payload.logger.error({ msg: '[posts.afterChange] Newsletter broadcast failed', err })
+            } catch { /* noop */ }
+          }
+        })()
+
         return doc
       },
     ],
