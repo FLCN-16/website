@@ -10,9 +10,6 @@ allowBuilds:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
-minimumReleaseAgeExclude:
-  - dompurify@3.4.7
-  - dompurify@3.4.8
 
 # monaco-editor (via @payloadcms/ui) pins dompurify to a vulnerable exact
 # version; force the patched line until upstream bumps it.
