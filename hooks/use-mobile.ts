@@ -1,7 +1,7 @@
 "use client"
 import { useSyncExternalStore } from "react"
 
-const MOBILE_BREAKPOINT = 768
+const MOBILE_BREAKPOINT = 1024
 
 function subscribe(callback: () => void) {
   if (typeof window === "undefined") return () => {}

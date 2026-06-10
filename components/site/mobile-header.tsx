@@ -20,7 +20,7 @@ export function MobileHeader({ resumeUrl, status }: { resumeUrl: string; status:
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border/60 bg-background/70 backdrop-blur-md supports-backdrop-filter:backdrop-blur-md md:hidden">
+    <header className="sticky top-0 z-50 h-14 px-6 flex items-center justify-between border-b border-border/60 bg-background/70 backdrop-blur-md supports-backdrop-filter:backdrop-blur-md lg:hidden">
       <Link href="/" aria-label="Go to home">
         <Logo className="h-7 w-auto text-foreground" />
       </Link>

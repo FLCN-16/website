@@ -97,9 +97,9 @@ export function ContactFormSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-[300px_1fr] xl:grid-cols-[300px_1fr_200px] gap-10 md:gap-16 items-start">
+        <div className="grid lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_1fr_200px] gap-10 md:gap-16 items-start">
           {/* NODE_STATS panel — cut-corner border matching button aesthetic */}
-          <aside className="relative font-mono text-sm order-last md:order-first md:sticky md:top-24" aria-label="Contact details">
+          <aside className="relative font-mono text-sm order-last lg:order-first lg:sticky lg:top-24" aria-label="Contact details">
             {/* SVG border: top, left, right, bottom edges + diagonal cut at bottom-right */}
             <svg
               className="absolute inset-0 w-full h-full text-border pointer-events-none"
@@ -146,7 +146,7 @@ export function ContactFormSection() {
           </aside>
 
           {/* Form */}
-          <form key={formKey} onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5 order-first md:order-last">
+          <form key={formKey} onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5 order-first lg:order-last">
             {/* Honeypot — hidden from real users, visible to bots */}
             <div className="absolute -left-[9999px] -top-[9999px] overflow-hidden" aria-hidden="true">
               <input
@@ -157,8 +157,8 @@ export function ContactFormSection() {
               />
             </div>
 
-            {/* Name + Email — side-by-side on lg */}
-            <div className="grid lg:grid-cols-2 gap-5">
+            {/* Name + Email — side-by-side on xl */}
+            <div className="grid xl:grid-cols-2 gap-5">
               <div>
                 <Label htmlFor="name" className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1.5 block">
                   Name
