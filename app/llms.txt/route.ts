@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server'
-import { getCachedWorkEntries } from '@/lib/data'
+import { getCachedWorkEntries, getCachedPosts, getCachedProjects } from '@/lib/data'
 import { site } from '@/content/site'
 import { stack } from '@/content/stack'
 
 export async function GET() {
-  const workEntries = await getCachedWorkEntries().catch(() => [])
+  const [workEntries, posts, projects] = await Promise.all([
+    getCachedWorkEntries().catch(() => []),
+    getCachedPosts().catch(() => []),
+    getCachedProjects().catch(() => []),
+  ])
 
   const lines: string[] = [
     `# ${site.name}`,
@@ -24,6 +28,19 @@ export async function GET() {
     ...workEntries.map(
       (p) => `- [${p.title}](${site.url}/work/${p.slug}): ${p.description}`
     ),
+    '',
+    '## Writing',
+    ...posts.map(
+      (p) =>
+        `- [${p.title}](${site.url}/writing/${p.slug})${p.excerpt ? `: ${p.excerpt}` : ''}`
+    ),
+    '',
+    '## Projects',
+    ...projects.map((p) => {
+      const url = p.liveUrl ?? p.repoUrl
+      const name = url ? `[${p.title}](${url})` : p.title
+      return `- ${name}${p.description ? `: ${p.description}` : ''}`
+    }),
     '',
     '## Stack Highlights',
     ...stack.disciplines.map(
