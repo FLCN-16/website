@@ -193,15 +193,17 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
                 <div className="flex-1 h-px bg-border" />
               </div>
             )}
-            {grouped.map(({ year, posts: yearPosts }) => (
+            {grouped.map(({ year, posts: yearPosts }, index) => (
               <div key={year} className="mb-12">
-                <div className="flex items-center gap-4 mb-1">
-                  <span className="font-mono text-sm font-semibold tabular-nums text-foreground/50">
-                    {year}
-                  </span>
-                  <div className="flex-1 h-px bg-border" />
-                </div>
-                <div>
+                {index > 0 && (
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="font-mono text-sm font-semibold tabular-nums text-foreground/50">
+                      {year}
+                    </span>
+                    <div className="flex-1 h-px bg-border" />
+                  </div>
+                )}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                   {yearPosts.map((post) => (
                     <PostRow key={post.id} post={post} />
                   ))}
@@ -211,7 +213,7 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
           </>
         ) : (
           /* Flat list when filtering or sorting differently */
-          <div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
             {rowPosts.map((post) => (
               <PostRow key={post.id} post={post} />
             ))}
