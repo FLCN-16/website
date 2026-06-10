@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { site } from "@/content/site"
+import { buildCloudflareUrl } from "@/lib/cloudflare-image-loader"
 
 // Bump when the /og template design changes — busts year-long CDN/scraper caches
 const OG_VERSION = '2'
@@ -19,6 +20,10 @@ export interface MetaImage {
   alt?: string
 }
 
+// Scrapers (Telegram, Slack, …) skip very large OG images, so serve CMS originals
+// through Cloudflare image resizing capped at the recommended OG width.
+const OG_IMAGE_MAX_WIDTH = 1200
+
 /** Maps a Payload `meta.image` upload (string id or populated doc) to a MetaImage. */
 export function resolveMetaImage(
   image: unknown,
@@ -26,10 +31,25 @@ export function resolveMetaImage(
   if (typeof image !== 'object' || image === null) return undefined
   const doc = image as { url?: string | null; width?: number | null; height?: number | null; alt?: string | null }
   if (!doc.url) return undefined
+
+  let url = doc.url
+  let width = doc.width ?? undefined
+  let height = doc.height ?? undefined
+
+  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
+  if (mediaUrl && url.startsWith(mediaUrl)) {
+    const targetWidth = width ? Math.min(width, OG_IMAGE_MAX_WIDTH) : OG_IMAGE_MAX_WIDTH
+    url = buildCloudflareUrl(url, targetWidth, undefined, mediaUrl)
+    if (width && height) {
+      height = Math.round(height * (targetWidth / width))
+      width = targetWidth
+    }
+  }
+
   return {
-    url: doc.url,
-    width: doc.width ?? undefined,
-    height: doc.height ?? undefined,
+    url,
+    width,
+    height,
     alt: doc.alt ?? undefined,
   }
 }
