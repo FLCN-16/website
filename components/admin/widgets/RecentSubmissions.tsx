@@ -23,11 +23,11 @@ const INQUIRY_LABELS: Record<string, string> = {
   other: 'Other',
 }
 
+const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+
 const formatDate = (value?: string | null) => {
   if (!value) return ''
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(
-    new Date(value),
-  )
+  return dateFormatter.format(new Date(value))
 }
 
 export default async function RecentSubmissions({ req }: Props) {
