@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { CONSENT_SETTINGS_EVENT, openConsentSettings, readConsent, saveConsent } from '@/lib/consent'
@@ -16,12 +16,30 @@ export function CookieConsent() {
   const hydrated = useHydrated()
   const [forcedOpen, setForcedOpen] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const regionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const reopen = () => setForcedOpen(true)
     window.addEventListener(CONSENT_SETTINGS_EVENT, reopen)
     return () => window.removeEventListener(CONSENT_SETTINGS_EVENT, reopen)
   }, [])
+
+  // Focus banner when explicitly reopened via settings event
+  useEffect(() => {
+    if (forcedOpen) {
+      regionRef.current?.focus()
+    }
+  }, [forcedOpen])
+
+  // Escape key closes the banner when it was reopened and prior consent exists
+  useEffect(() => {
+    if (!forcedOpen || readConsent() === null) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setForcedOpen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [forcedOpen])
 
   const open = forcedOpen || (hydrated && !dismissed && !readConsent())
   if (!open) return null
@@ -32,12 +50,26 @@ export function CookieConsent() {
     setDismissed(true)
   }
 
+  const canDismissWithoutChoosing = forcedOpen && readConsent() !== null
+
   return (
     <div
+      ref={regionRef}
+      tabIndex={-1}
       role="region"
       aria-label="Cookie consent"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 px-6 py-4 backdrop-blur md:px-12"
     >
+      {canDismissWithoutChoosing && (
+        <button
+          type="button"
+          aria-label="Close cookie settings"
+          onClick={() => setForcedOpen(false)}
+          className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+        >
+          ✕
+        </button>
+      )}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
           <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1">
