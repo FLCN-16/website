@@ -5,6 +5,7 @@ import { site } from "@/content/site"
 import { NAV_LINKS } from "@/lib/navigation"
 import { BackToTop } from "@/components/site/back-to-top"
 import { OutboundLink } from "@/components/site/tracked-link"
+import { CookieSettingsButton } from "@/components/site/cookie-consent"
 
 const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
 const copyrightDomain = site.url.replace("https://", "").toUpperCase()
@@ -43,9 +44,11 @@ export function Footer() {
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <Link href="/legal/privacy" className={LINK_CLASS}>Privacy</Link>
             <Link href="/legal/terms" className={LINK_CLASS}>Terms</Link>
+            <Link href="/legal/cookies" className={LINK_CLASS}>Cookies</Link>
+            <CookieSettingsButton className={LINK_CLASS} />
           </div>
         </div>
 
