@@ -10,6 +10,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { subscribe } from "@/actions/subscribe"
 
 interface SubscribeDialogProps {
@@ -48,12 +49,10 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle className="font-sans text-xl font-semibold tracking-tight">
-            Stay in the loop
-          </DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
+          <DialogTitle>Stay in the loop</DialogTitle>
+          <DialogDescription>
             New articles on frontend engineering, system design, and building software that lasts. Straight to your inbox.
           </DialogDescription>
         </DialogHeader>
@@ -66,7 +65,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-2">
-            <input
+            <Input
               type="email"
               required
               aria-label="Email address"
@@ -74,7 +73,6 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
               value={email}
               onChange={(e) => { setEmail(e.target.value); setState("idle") }}
               disabled={isPending}
-              className="font-mono text-sm h-10 px-4 rounded-lg border border-border bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring w-full"
             />
 
             <div className="flex flex-col gap-2">
