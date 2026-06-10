@@ -23,6 +23,15 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
   const [errorMsg, setErrorMsg] = useState("")
   const [isPending, startTransition] = useTransition()
 
+  function handleOpenChange(next: boolean) {
+    if (!next) {
+      setState("idle")
+      setEmail("")
+      setErrorMsg("")
+    }
+    onOpenChange(next)
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     startTransition(async () => {
@@ -38,7 +47,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="font-sans text-xl font-semibold tracking-tight">
@@ -60,6 +69,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
             <input
               type="email"
               required
+              autoFocus
               aria-label="Email address"
               placeholder="your@email.com"
               value={email}
@@ -75,7 +85,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
                 disabled={isPending}
                 className="w-full"
               >
-                {isPending ? "Pushing…" : "Subscribe →"}
+                {isPending ? "Subscribing…" : "Subscribe →"}
               </Button>
 
               {state === "error" && (
