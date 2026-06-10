@@ -30,7 +30,7 @@ export function PostRow({ post, className }: PostRowProps) {
         "md:border-t-0 md:border-l-0 md:border-r-0 md:last:border-b-0",
         "md:hover:translate-y-0 md:hover:shadow-none",
         // Desktop: back to card column with full border
-        "lg:flex-col lg:border-t lg:border-l lg:border-r lg:border-b lg:overflow-hidden lg:py-0",
+        "lg:flex-col lg:border lg:overflow-hidden lg:py-0",
         "lg:hover:-translate-y-0.5 lg:hover:shadow-md",
         className,
       )}
@@ -118,7 +118,7 @@ export function PostRow({ post, className }: PostRowProps) {
       </div>
 
       {/* Arrow — tablet row only */}
-      <span className="hidden md:inline lg:hidden font-mono text-sm text-muted-foreground/50 group-hover:text-foreground group-hover:translate-x-1 transition-all duration-200 select-none shrink-0">
+      <span aria-hidden="true" className="hidden md:inline lg:hidden font-mono text-sm text-muted-foreground/50 group-hover:text-foreground group-hover:translate-x-1 transition-all duration-200 select-none shrink-0">
         →
       </span>
     </Link>
