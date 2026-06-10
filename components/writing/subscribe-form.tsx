@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState, useTransition, useEffect } from "react"
 import Link from "next/link"
 import {
   Dialog,
@@ -10,6 +10,9 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { CheckmarkCircle01Icon, Alert01Icon } from "@hugeicons/core-free-icons"
 import { subscribe } from "@/actions/subscribe"
 
 interface SubscribeDialogProps {
@@ -22,6 +25,26 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
   const [state, setState] = useState<"idle" | "success" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState("")
   const [isPending, startTransition] = useTransition()
+
+  function handleOpenChange(next: boolean) {
+    if (!next) {
+      setState("idle")
+      setEmail("")
+      setErrorMsg("")
+    }
+    onOpenChange(next)
+  }
+
+  useEffect(() => {
+    if (state !== "success") return
+    const t = setTimeout(() => {
+      setState("idle")
+      setEmail("")
+      setErrorMsg("")
+      onOpenChange(false)
+    }, 1500)
+    return () => clearTimeout(t)
+  }, [state, onOpenChange])
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -38,26 +61,31 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle className="font-sans text-xl font-semibold tracking-tight">
-            Stay in the loop
-          </DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
+          <DialogTitle>Stay in the loop</DialogTitle>
+          <DialogDescription>
             New articles on frontend engineering, system design, and building software that lasts. Straight to your inbox.
           </DialogDescription>
         </DialogHeader>
 
         {state === "success" ? (
-          <div className="py-4">
-            <p className="font-mono text-sm text-muted-foreground">
-              You&apos;re in. New articles coming your way.
-            </p>
+          <div className="flex items-start gap-3 py-2">
+            <HugeiconsIcon
+              icon={CheckmarkCircle01Icon}
+              size={16}
+              strokeWidth={1.5}
+              className="shrink-0 mt-0.5 text-foreground"
+            />
+            <div>
+              <p className="font-mono text-xs font-medium">You&apos;re in.</p>
+              <p className="font-mono text-xs text-muted-foreground">New articles coming your way.</p>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-2">
-            <input
+            <Input
               type="email"
               required
               aria-label="Email address"
@@ -65,21 +93,23 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
               value={email}
               onChange={(e) => { setEmail(e.target.value); setState("idle") }}
               disabled={isPending}
-              className="font-mono text-sm h-10 px-4 rounded-lg border border-border bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring w-full"
             />
 
             <div className="flex flex-col gap-2">
               <Button
                 type="submit"
-                size="lg"
+                size="default"
                 disabled={isPending}
                 className="w-full"
               >
-                {isPending ? "Pushing…" : "Subscribe →"}
+                {isPending ? "Subscribing…" : "Subscribe →"}
               </Button>
 
               {state === "error" && (
-                <p className="font-mono text-xs text-destructive">{errorMsg}</p>
+                <p className="flex items-center gap-1.5 font-mono text-xs text-destructive">
+                  <HugeiconsIcon icon={Alert01Icon} size={12} strokeWidth={1.5} className="shrink-0" />
+                  {errorMsg}
+                </p>
               )}
 
               <div className="text-xs text-muted-foreground text-center space-y-0.5">
