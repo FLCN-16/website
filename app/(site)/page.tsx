@@ -15,6 +15,7 @@ import { Education } from '@/components/sections/education'
 import { Certifications } from '@/components/sections/certifications'
 import { CtaBanner } from '@/components/sections/cta-banner'
 import { JsonLd } from '@/components/structured-data/json-ld'
+import { personSchema } from '@/lib/structured-data'
 import { site } from '@/content/site'
 import { philosophy } from '@/content/philosophy'
 import { createMetadata } from '@/lib/metadata'
@@ -56,20 +57,9 @@ export default async function Home() {
 
   const featuredProjects = allProjects.filter((p) => p.featured).slice(0, 6)
 
-  const personSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: site.name,
-    url: site.url,
-    email: site.email,
-    jobTitle: site.role,
-    description: site.description,
-    sameAs: site.socials.map((s) => s.url),
-  }
-
   return (
     <>
-      <JsonLd data={personSchema} />
+      <JsonLd data={personSchema()} />
       <Hero
         eyebrow={cmsSettings?.eyebrow ?? site.eyebrow}
         headline={cmsSettings?.headline ?? site.headline}

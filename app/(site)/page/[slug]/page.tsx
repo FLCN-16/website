@@ -39,6 +39,7 @@ export async function generateMetadata({ params }: BasicPageProps): Promise<Meta
       title: page.meta?.title || (page.title ?? slug),
       description: page.meta?.description || undefined,
       image: typeof page.meta?.image === 'object' ? page.meta?.image?.url ?? undefined : undefined,
+      path: `/page/${slug}`,
     })
   } catch {
     return { title: slug }

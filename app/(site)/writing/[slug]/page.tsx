@@ -7,6 +7,7 @@ import { WritingPost } from '@/components/sections/writing-post'
 import { richTextConverters } from '@/components/writing/richtext-converters'
 import { extractHeadings } from '@/lib/lexical-headings'
 import { JsonLd } from '@/components/structured-data/json-ld'
+import { breadcrumbSchema, personRef } from '@/lib/structured-data'
 import { createMetadata } from '@/lib/metadata'
 import { resolvePostCover } from '@/lib/posts'
 import { getPayloadClient } from '@/lib/payload'
@@ -42,6 +43,11 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       description: (post.meta?.description || post.excerpt) ?? undefined,
       image: typeof post.meta?.image === 'object' ? post.meta?.image?.url ?? undefined : undefined,
       path: `/writing/${slug}`,
+      article: {
+        publishedTime: post.publishedAt ?? undefined,
+        modifiedTime: post.updatedAt,
+        tags: post.tags?.flatMap((t) => (t.tag ? [t.tag] : [])),
+      },
     })
   } catch {
     return { title: slug }
@@ -62,21 +68,35 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const coverResolved = resolvePostCover(post.cover)
 
+  const postUrl = `${site.url}/writing/${slug}`
+  const tags = post.tags?.flatMap((t) => (t.tag ? [t.tag] : [])) ?? []
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: (post.meta?.description || post.excerpt) ?? undefined,
-    author: { '@type': 'Person', name: site.name, url: site.url },
-    publisher: { '@type': 'Person', name: site.name, url: site.url },
-    url: `${site.url}/writing/${slug}`,
+    author: personRef(),
+    publisher: personRef(),
+    url: postUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+    inLanguage: 'en',
+    ...(tags.length ? { keywords: tags.join(', ') } : {}),
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
+    dateModified: post.updatedAt,
     ...(coverResolved?.url ? { image: coverResolved.url } : {}),
   }
+
+  const breadcrumbs = breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Writing', path: '/writing' },
+    { name: post.title },
+  ])
 
   return (
     <>
       <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbs} />
       {draft && (
         <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}

@@ -13,6 +13,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { site } from "@/content/site";
 import type { Form } from "@payloadcms/plugin-form-builder/types";
 import { ClientOverlays } from "@/components/site/client-overlays";
+import { JsonLd } from "@/components/structured-data/json-ld";
+import { websiteSchema } from "@/lib/structured-data";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +37,11 @@ export const metadata: Metadata = {
   description: site.description,
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
+  alternates: {
+    types: {
+      "application/rss+xml": `${site.url}/feed.xml`,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -88,6 +95,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
       )}
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <JsonLd data={websiteSchema()} />
         <NextTopLoader color="var(--primary)" height={3} showSpinner={false} />
         <ThemeProvider
           attribute="class"
