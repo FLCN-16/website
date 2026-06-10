@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payload'
 import { getCachedWorkEntries } from '@/lib/data'
 import { ProjectBriefing } from '@/components/sections/project-briefing'
-import { createMetadata } from '@/lib/metadata'
+import { createMetadata, resolveMetaImage } from '@/lib/metadata'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { breadcrumbSchema, personRef } from '@/lib/structured-data'
 import { site } from '@/content/site'
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: WorkDetailProps): Promise<Met
       kind: 'WORK',
       title: project.meta?.title || project.title,
       description: project.meta?.description || project.description,
-      image: typeof project.meta?.image === 'object' ? project.meta?.image?.url ?? undefined : undefined,
+      image: resolveMetaImage(project.meta?.image),
       path: `/work/${slug}`,
     })
   } catch {

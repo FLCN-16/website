@@ -35,17 +35,21 @@ function formatDate(iso?: string) {
   });
 }
 
-/** Date + reading time, title, and tags — shared by the desktop overlay and the mobile stacked layout. */
+/** Date + reading time, title, and tags — shared by the desktop overlay and the mobile stacked layout.
+ * Both copies are always in the DOM (toggled via CSS), so only one may render the title as an <h1>
+ * to keep a single h1 in the document. */
 function CoverMeta({
   publishedAt,
   readingTime,
   title,
   tags,
+  titleAs: TitleTag = "h1",
 }: {
   publishedAt?: string;
   readingTime?: number;
   title: string;
   tags?: Array<{ tag: string }>;
+  titleAs?: "h1" | "p";
 }) {
   return (
     <>
@@ -61,9 +65,9 @@ function CoverMeta({
           </span>
         )}
       </div>
-      <h1 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mb-3">
+      <TitleTag className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mb-3">
         {title}
-      </h1>
+      </TitleTag>
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {tags.map(({ tag }) => (
@@ -122,6 +126,7 @@ export function WritingPost({
                   readingTime={readingTime}
                   title={title}
                   tags={tags}
+                  titleAs="p"
                 />
               </div>
             </div>

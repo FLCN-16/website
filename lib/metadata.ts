@@ -12,6 +12,28 @@ export function buildOgUrl(title: string, kind?: string, desc?: string): string 
   return `${site.url}/og?${params.toString()}`
 }
 
+export interface MetaImage {
+  url: string
+  width?: number
+  height?: number
+  alt?: string
+}
+
+/** Maps a Payload `meta.image` upload (string id or populated doc) to a MetaImage. */
+export function resolveMetaImage(
+  image: unknown,
+): MetaImage | undefined {
+  if (typeof image !== 'object' || image === null) return undefined
+  const doc = image as { url?: string | null; width?: number | null; height?: number | null; alt?: string | null }
+  if (!doc.url) return undefined
+  return {
+    url: doc.url,
+    width: doc.width ?? undefined,
+    height: doc.height ?? undefined,
+    alt: doc.alt ?? undefined,
+  }
+}
+
 export function createMetadata({
   title,
   description,
@@ -23,7 +45,7 @@ export function createMetadata({
 }: {
   title: string
   description?: string
-  image?: string
+  image?: string | MetaImage
   path?: string
   absolute?: boolean
   kind?: string
@@ -35,10 +57,11 @@ export function createMetadata({
 }): Metadata {
   const fullTitle = `${title} — ${site.name}`
   const resolvedTitle = absolute ? ({ absolute: title } as Metadata["title"]) : title
-  const ogImage = image ?? buildOgUrl(title, kind, description)
-  // Generated OG images are always 1200x630; CMS-supplied images have unknown dimensions
-  const ogImageDescriptor = image
-    ? { url: ogImage, alt: title }
+  const metaImage = typeof image === 'string' ? { url: image } : image
+  const ogImage = metaImage?.url ?? buildOgUrl(title, kind, description)
+  // Generated OG images are always 1200x630; CMS-supplied images carry their own dimensions
+  const ogImageDescriptor = metaImage
+    ? { url: ogImage, width: metaImage.width, height: metaImage.height, alt: metaImage.alt ?? title }
     : { url: ogImage, width: 1200, height: 630, alt: title }
 
   return {
@@ -65,12 +88,14 @@ export function createMetadata({
         : { type: "website" }),
       locale: "en_US",
       siteName: site.name,
+      ...(path ? { url: `${site.url}${path}` } : {}),
       title: fullTitle,
       description,
       images: [ogImageDescriptor],
     },
     twitter: {
       card: "summary_large_image",
+      site: `@${site.handle}`,
       creator: `@${site.handle}`,
       title: fullTitle,
       description,

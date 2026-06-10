@@ -8,7 +8,7 @@ import { richTextConverters } from '@/components/writing/richtext-converters'
 import { extractHeadings } from '@/lib/lexical-headings'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { breadcrumbSchema, personRef } from '@/lib/structured-data'
-import { createMetadata } from '@/lib/metadata'
+import { createMetadata, resolveMetaImage } from '@/lib/metadata'
 import { resolvePostCover } from '@/lib/posts'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       kind: 'WRITING',
       title: post.meta?.title || post.title,
       description: (post.meta?.description || post.excerpt) ?? undefined,
-      image: typeof post.meta?.image === 'object' ? post.meta?.image?.url ?? undefined : undefined,
+      image: resolveMetaImage(post.meta?.image),
       path: `/writing/${slug}`,
       article: {
         publishedTime: post.publishedAt ?? undefined,
