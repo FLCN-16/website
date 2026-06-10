@@ -32,6 +32,34 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    dashboard: {
+      widgets: [
+        {
+          slug: "content-stats",
+          label: "Content Overview",
+          Component: "/components/admin/widgets/ContentStats",
+          minWidth: "medium",
+        },
+        {
+          slug: "recent-posts",
+          label: "Recent Posts",
+          Component: "/components/admin/widgets/RecentPosts",
+          minWidth: "small",
+        },
+        {
+          slug: "recent-submissions",
+          label: "Recent Inquiries",
+          Component: "/components/admin/widgets/RecentSubmissions",
+          minWidth: "small",
+        },
+      ],
+      defaultLayout: [
+        { widgetSlug: "content-stats", width: "full" },
+        { widgetSlug: "recent-posts", width: "medium" },
+        { widgetSlug: "recent-submissions", width: "medium" },
+        { widgetSlug: "collections", width: "full" },
+      ],
+    },
     livePreview: {
       url: ({ data, collectionConfig }) => {
         return generatePreviewUrl({
