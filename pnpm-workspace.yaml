@@ -15,6 +15,9 @@ minimumReleaseAgeExclude:
   - dompurify@3.4.8
 
 # monaco-editor (via @payloadcms/ui) pins dompurify to a vulnerable exact
-# version; force the patched line until upstream bumps it
+# version; force the patched line until upstream bumps it.
+# NOTE: this setting requires pnpm 10+ — package.json#packageManager pins
+# pnpm 11.5.0 so Vercel doesn't fall back to pnpm 9 (which can't read
+# overrides from this file and then fails its frozen-lockfile install)
 overrides:
   dompurify: ^3.4.0
