@@ -24,7 +24,8 @@ export interface RawPostDoc {
   publishedAt?: string | null
   readingTime?: number | null
   cover?: { url: string; width?: number | null; height?: number | null; alt?: string | null } | null
-  tags?: { tag?: string | null }[]
+  // string[] after the tags migration; Array<{ tag }> for docs not yet migrated
+  tags?: Array<string | { tag?: string | null }> | null
   body?: unknown
   updatedAt: string
   // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapPosts)
@@ -66,7 +67,7 @@ export async function getCachedRelatedPosts(
   const params = new URLSearchParams({
     'where[and][0][status][equals]': 'published',
     'where[and][1][slug][not_equals]': postSlug,
-    'where[and][2][tags.tag][in]': tags.join(','),
+    'where[and][2][tags][in]': tags.join(','),
     'sort': '-publishedAt',
     'limit': '3',
     'depth': '1',

@@ -4,7 +4,7 @@
  */
 import { Resend } from "resend"
 import type { Payload } from "payload"
-import { mapPayloadPost } from "@/lib/posts"
+import { mapPayloadPost, normalizeTags } from "@/lib/posts"
 import { site } from "@/content/site"
 import { PostBroadcast } from "@/emails/post-broadcast"
 
@@ -78,7 +78,7 @@ export async function sendPostBroadcast({ doc, payload }: SendPostBroadcastArgs)
         slug: hero.slug,
         excerpt: hero.excerpt ?? null,
         cover: hero.cover ? { url: hero.cover.url, alt: hero.cover.alt ?? null } : null,
-        tag: hero.tags?.[0]?.tag ?? null,
+        tag: normalizeTags(hero.tags)[0] ?? null,
         publishedAt: hero.publishedAt ?? null,
         readingTime: hero.readingTime ?? null,
         recent: recent.map((p) => ({

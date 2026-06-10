@@ -86,7 +86,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
 
                   {post.tags && post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
-                      {post.tags.slice(0, 2).map(({ tag }) => (
+                      {post.tags.slice(0, 2).map((tag) => (
                         <Badge
                           key={tag}
                           variant="secondary"
@@ -95,7 +95,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
                           {tag}
                         </Badge>
                       ))}
-                      {post.tags.slice(0, 3).map(({ tag }) => (
+                      {post.tags.slice(0, 3).map((tag) => (
                         <Badge
                           key={`md-${tag}`}
                           variant="secondary"
@@ -144,7 +144,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
 
             {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
-                {post.tags.slice(0, 2).map(({ tag }) => (
+                {post.tags.slice(0, 2).map((tag) => (
                   <Badge key={tag} variant="secondary" className="font-mono text-xs">
                     {tag}
                   </Badge>
@@ -186,7 +186,7 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
 
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
-              {post.tags.slice(0, 2).map(({ tag }) => (
+              {post.tags.slice(0, 2).map((tag) => (
                 <Badge key={tag} variant="secondary" className="font-mono text-xs">
                   {tag}
                 </Badge>

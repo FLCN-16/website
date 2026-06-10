@@ -18,7 +18,7 @@ interface WritingPostProps {
   title: string;
   publishedAt?: string;
   readingTime?: number;
-  tags?: Array<{ tag: string }>;
+  tags?: string[];
   /** Section headings for the table of contents, extracted server-side. */
   headings: Heading[];
   /** The rich-text body, rendered on the server (keeps PrismJS off the client). */
@@ -48,7 +48,7 @@ function CoverMeta({
   publishedAt?: string;
   readingTime?: number;
   title: string;
-  tags?: Array<{ tag: string }>;
+  tags?: string[];
   titleAs?: "h1" | "p";
 }) {
   return (
@@ -70,7 +70,7 @@ function CoverMeta({
       </TitleTag>
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
-          {tags.map(({ tag }) => (
+          {tags.map((tag) => (
             <Badge key={tag} variant="secondary" className="font-mono text-xs">
               {tag}
             </Badge>
@@ -160,7 +160,7 @@ export function WritingPost({
             </h1>
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mb-10">
-                {tags.map(({ tag }) => (
+                {tags.map((tag) => (
                   <Badge key={tag} variant="secondary" className="font-mono text-xs">
                     {tag}
                   </Badge>
@@ -196,7 +196,7 @@ export function WritingPost({
         <PostShare title={title} slug={slug} />
 
         {/* Related posts */}
-        <RelatedPosts currentSlug={slug} tags={tags?.map(({ tag }) => tag) ?? []} />
+        <RelatedPosts currentSlug={slug} tags={tags ?? []} />
 
         {/* Subscribe + social CTA */}
         <div className="mt-16 border-t border-border pt-16">

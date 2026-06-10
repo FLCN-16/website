@@ -45,7 +45,7 @@ export function PostRow({ post, className }: PostRowProps) {
       <div className="flex flex-col gap-1.5 min-w-0 flex-1 p-4">
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-0.5">
-            {post.tags.slice(0, 2).map(({ tag }) => (
+            {post.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag}
                 className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70"

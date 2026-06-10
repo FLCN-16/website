@@ -80,7 +80,7 @@ export interface Post {
   slug: string
   excerpt?: string | null
   cover?: PostCover | null
-  tags?: Array<{ tag: string }> | null
+  tags?: string[] | null
   publishedAt?: string | null
   readingTime?: number | null
   featured?: boolean

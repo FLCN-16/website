@@ -45,7 +45,7 @@ export function PostCard({ post, className }: PostCardProps) {
       <div className="p-4 flex flex-col gap-2">
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {post.tags.slice(0, 2).map(({ tag }) => (
+            {post.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag}
                 className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70"

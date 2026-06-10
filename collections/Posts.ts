@@ -49,13 +49,11 @@ export const Posts: CollectionConfig = {
             },
             {
               name: 'tags',
-              type: 'array',
-              fields: [
-                {
-                  name: 'tag',
-                  type: 'text',
-                },
-              ],
+              type: 'text',
+              hasMany: true,
+              admin: {
+                description: 'Type a tag and press Enter to add it.',
+              },
             },
             {
               name: 'body',
