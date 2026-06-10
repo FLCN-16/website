@@ -1,10 +1,10 @@
 {
   "_instructions": [
-    "MCP-ready payloads for the Payload CMS pages collection (generated from scripts/legal-content.ts — regenerate there, do not edit body JSON by hand).",
+    "MCP-ready payloads for the Payload CMS pages collection (generated from scripts/legal-content.ts \u2014 regenerate there, do not edit body JSON by hand).",
     "Upload via the Payload MCP endpoint (/api/mcp) with an API key that has pages find/create/update permissions.",
     "For each entry, send a JSON-RPC tools/call with the given tool name and arguments object verbatim.",
     "privacy and terms carry the id of the existing document (production DB as of 2026-06-10) and use updatePages; cookies is new and uses createPages.",
-    "If ids have changed, re-resolve them first: tools/call findPages with arguments {\"where\": \"{\"template\":{\"equals\":\"legal\"}}\"} — note: where must be a JSON-encoded string."
+    "If ids have changed, re-resolve them first with a findPages tools/call whose arguments are: {\"where\": \"{\\\"template\\\":{\\\"equals\\\":\\\"legal\\\"}}\"} (the where value is a JSON object encoded as a string \u2014 this plugin requires string-encoded where/select)."
   ],
   "pages": [
     {
@@ -495,7 +495,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": "I am based in India, and the providers above operate primarily in the United States. Where personal data of EEA or UK visitors is transferred outside those regions, it is protected by appropriate safeguards: the EU–US Data Privacy Framework where the provider is certified, and/or the European Commission's Standard Contractual Clauses.",
+                    "text": "I am based in India, and the providers above operate primarily in the United States. Where personal data of EEA or UK visitors is transferred outside those regions, it is protected by appropriate safeguards: the EU\u2013US Data Privacy Framework where the provider is certified, and/or the European Commission's Standard Contractual Clauses.",
                     "type": "text",
                     "version": 1
                   }
@@ -1067,7 +1067,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": "The information on the Site — including employment history, project descriptions, and technical content — is provided in good faith and to the best of my knowledge, for general information only. It does not constitute professional advice. I make no warranties about completeness or accuracy and accept no liability for errors or omissions.",
+                    "text": "The information on the Site \u2014 including employment history, project descriptions, and technical content \u2014 is provided in good faith and to the best of my knowledge, for general information only. It does not constitute professional advice. I make no warranties about completeness or accuracy and accept no liability for errors or omissions.",
                     "type": "text",
                     "version": 1
                   }
@@ -1476,7 +1476,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": " (localStorage) — remembers your light or dark theme preference. Kept until you clear your browser data.",
+                    "text": " (localStorage) \u2014 remembers your light or dark theme preference. Kept until you clear your browser data.",
                     "type": "text",
                     "version": 1
                   }
@@ -1504,7 +1504,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": " (sessionStorage) — remembers that you have already seen the intro splash animation in this browser session so it does not replay on every page. Cleared automatically when the browser session ends.",
+                    "text": " (sessionStorage) \u2014 remembers that you have already seen the intro splash animation in this browser session so it does not replay on every page. Cleared automatically when the browser session ends.",
                     "type": "text",
                     "version": 1
                   }
@@ -1532,7 +1532,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": " (localStorage) — remembers that the hiring popup has already been shown so it is not shown repeatedly. Kept until you clear your browser data.",
+                    "text": " (localStorage) \u2014 remembers that the hiring popup has already been shown so it is not shown repeatedly. Kept until you clear your browser data.",
                     "type": "text",
                     "version": 1
                   }
@@ -1560,7 +1560,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": " (localStorage) — records your cookie-consent choice and when you made it, so you are not asked again on every visit. Kept until you clear your browser data or change your choice.",
+                    "text": " (localStorage) \u2014 records your cookie-consent choice and when you made it, so you are not asked again on every visit. Kept until you clear your browser data or change your choice.",
                     "type": "text",
                     "version": 1
                   }
@@ -1626,7 +1626,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": " — distinguishes visitors. Expires after 2 years.",
+                    "text": " \u2014 distinguishes visitors. Expires after 2 years.",
                     "type": "text",
                     "version": 1
                   }
@@ -1654,7 +1654,7 @@
                     "format": 0,
                     "mode": "normal",
                     "style": "",
-                    "text": " — keeps session state for this Site's Analytics property. Expires after 2 years.",
+                    "text": " \u2014 keeps session state for this Site's Analytics property. Expires after 2 years.",
                     "type": "text",
                     "version": 1
                   }

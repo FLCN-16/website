@@ -47,7 +47,7 @@ describe('consentModePayload', () => {
 })
 
 describe('CONSENT_KEY', () => {
-  it('is the versioned storage key the inline layout script also hardcodes', () => {
+  it('is the versioned storage key interpolated into the inline layout script', () => {
     expect(CONSENT_KEY).toBe('flcn-consent-v1')
   })
 })
