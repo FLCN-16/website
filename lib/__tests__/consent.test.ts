@@ -27,16 +27,16 @@ describe('parseConsent', () => {
 })
 
 describe('consentModePayload', () => {
-  it('grants all four signals when true', () => {
+  it('keeps ad signals denied and grants analytics_storage when true', () => {
     expect(consentModePayload(true)).toEqual({
-      ad_storage: 'granted',
-      ad_user_data: 'granted',
-      ad_personalization: 'granted',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
       analytics_storage: 'granted',
     })
   })
 
-  it('denies all four signals when false', () => {
+  it('denies all signals when false', () => {
     expect(consentModePayload(false)).toEqual({
       ad_storage: 'denied',
       ad_user_data: 'denied',

@@ -22,18 +22,21 @@ export function parseConsent(raw: string | null): ConsentState | null {
 }
 
 export function consentModePayload(granted: boolean): Record<string, 'granted' | 'denied'> {
-  const value = granted ? 'granted' : 'denied'
   return {
-    ad_storage: value,
-    ad_user_data: value,
-    ad_personalization: value,
-    analytics_storage: value,
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: granted ? 'granted' : 'denied',
   }
 }
 
 export function readConsent(): ConsentState | null {
   if (typeof window === 'undefined') return null
-  return parseConsent(window.localStorage.getItem(CONSENT_KEY))
+  try {
+    return parseConsent(window.localStorage.getItem(CONSENT_KEY))
+  } catch {
+    return null
+  }
 }
 
 type DataLayerWindow = Window & { dataLayer?: unknown[] }
@@ -42,8 +45,7 @@ function gtagConsentUpdate(granted: boolean) {
   const w = window as DataLayerWindow
   w.dataLayer = w.dataLayer ?? []
   // Consent commands must be pushed as an `arguments` object, not a plain array
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function gtag(..._args: unknown[]) {
+  function gtag() {
     // eslint-disable-next-line prefer-rest-params
     w.dataLayer?.push(arguments)
   }
@@ -52,7 +54,11 @@ function gtagConsentUpdate(granted: boolean) {
 
 export function saveConsent(analytics: boolean): ConsentState {
   const state: ConsentState = { analytics, timestamp: new Date().toISOString() }
-  window.localStorage.setItem(CONSENT_KEY, JSON.stringify(state))
+  try {
+    window.localStorage.setItem(CONSENT_KEY, JSON.stringify(state))
+  } catch {
+    // ignore — gtag update and event dispatch still run below
+  }
   gtagConsentUpdate(analytics)
   window.dispatchEvent(new CustomEvent(CONSENT_CHANGE_EVENT, { detail: state }))
   return state
