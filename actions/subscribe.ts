@@ -15,8 +15,8 @@ export async function subscribe(data: unknown): Promise<SubscribeResult> {
 
   const { email } = parsed.data
 
-  if (!process.env.RESEND_API_KEY || !process.env.RESEND_AUDIENCE_ID) {
-    console.warn("[subscribe] RESEND_API_KEY or RESEND_AUDIENCE_ID not configured")
+  if (!process.env.RESEND_API_KEY || !process.env.RESEND_SEGMENT_ID) {
+    console.warn("[subscribe] RESEND_API_KEY or RESEND_SEGMENT_ID not configured")
     return { ok: false, error: "Subscription unavailable right now." }
   }
 
@@ -25,7 +25,7 @@ export async function subscribe(data: unknown): Promise<SubscribeResult> {
   try {
     await resend.contacts.create({
       email,
-      audienceId: process.env.RESEND_AUDIENCE_ID,
+      audienceId: process.env.RESEND_SEGMENT_ID,
       unsubscribed: false,
     })
     return { ok: true }
