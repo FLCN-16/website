@@ -1,5 +1,5 @@
 {
-  "installCommand": "corepack enable && pnpm install",
+  "installCommand": "npx pnpm@11.5.0 install",
   "functions": {
     "app/**": {
       "maxDuration": 60
