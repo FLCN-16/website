@@ -42,7 +42,7 @@ export function Education({ items }: EducationProps) {
   if (!items.length) return null
 
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-16 md:py-20 lg:py-24">
       <FadeRise>
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-2">
           Education

@@ -127,7 +127,7 @@ export function ProjectsGrid({
   showViewAll = false,
 }: ProjectsGridProps) {
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-16 md:py-20 lg:py-24">
       <FadeRise>
         {showSectionHeader && (
           <div className="mb-10 md:mb-14">

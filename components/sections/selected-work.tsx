@@ -19,7 +19,7 @@ export function SelectedWork({
 }: SelectedWorkProps) {
   return (
     <section
-      className={cn("py-16 md:py-24", variant === "list" && "py-0 md:py-0")}
+      className={cn("py-16 md:py-20 lg:py-24", variant === "list" && "py-0 md:py-0")}
     >
       <FadeRise>
         {showSectionHeader && (

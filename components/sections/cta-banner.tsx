@@ -18,7 +18,7 @@ export function CtaBanner({
   secondaryCta,
 }: CtaBannerProps) {
   return (
-    <section className="py-20 md:py-28 border-t border-border">
+    <section className="py-20 md:py-24 lg:py-28 border-t border-border">
       <FadeRise>
         <div className="max-w-2xl mx-auto text-center">
           {/* Eyebrow */}
