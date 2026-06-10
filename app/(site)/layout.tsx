@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
+import Script from "next/script";
+import { CookieConsent } from "@/components/site/cookie-consent";
 import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -92,7 +94,30 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       {process.env.NEXT_PUBLIC_GTM_ID && (
-        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+        <>
+          {/* Consent Mode v2 defaults must be set before GTM loads. Ad signals stay
+              denied permanently (analytics-only site); only analytics_storage follows
+              the stored choice. Key literal mirrors CONSENT_KEY in lib/consent.ts
+              (inline script can't import). */}
+          <Script id="gtag-consent-default" strategy="beforeInteractive">
+            {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function () {
+  var analytics = 'denied';
+  try {
+    var stored = JSON.parse(localStorage.getItem('flcn-consent-v1'));
+    if (stored && stored.analytics === true) analytics = 'granted';
+  } catch (e) {}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: analytics
+  });
+})();`}
+          </Script>
+          <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+        </>
       )}
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <JsonLd data={websiteSchema()} />
@@ -108,6 +133,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
             <SiteFrame>{children}</SiteFrame>
           </QueryProvider>
           <Toaster position="bottom-right" />
+          <CookieConsent />
         </ThemeProvider>
       </body>
     </html>
