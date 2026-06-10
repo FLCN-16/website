@@ -37,12 +37,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
 
   useEffect(() => {
     if (state !== "success") return
-    const t = setTimeout(() => {
-      setState("idle")
-      setEmail("")
-      setErrorMsg("")
-      onOpenChange(false)
-    }, 1500)
+    const t = setTimeout(() => handleOpenChange(false), 1500)
     return () => clearTimeout(t)
   }, [state, onOpenChange])
 
