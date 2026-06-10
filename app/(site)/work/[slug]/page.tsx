@@ -4,6 +4,9 @@ import { getPayloadClient } from '@/lib/payload'
 import { getCachedWorkEntries } from '@/lib/data'
 import { ProjectBriefing } from '@/components/sections/project-briefing'
 import { createMetadata } from '@/lib/metadata'
+import { JsonLd } from '@/components/structured-data/json-ld'
+import { breadcrumbSchema, personRef } from '@/lib/structured-data'
+import { site } from '@/content/site'
 import type { WorkEntry } from '@/lib/types'
 
 interface WorkDetailProps {
@@ -66,7 +69,28 @@ export default async function WorkDetail({ params }: WorkDetailProps) {
 
   if (!project) notFound()
 
+  const workSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.title,
+    description: project.meta?.description || project.description,
+    url: `${site.url}/work/${slug}`,
+    author: personRef(),
+    inLanguage: 'en',
+    ...(project.tags.length ? { keywords: project.tags.join(', ') } : {}),
+  }
+
+  const breadcrumbs = breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Work', path: '/work' },
+    { name: project.title },
+  ])
+
   return (
-    <ProjectBriefing project={project} prevProject={prevProject} nextProject={nextProject} />
+    <>
+      <JsonLd data={workSchema} />
+      <JsonLd data={breadcrumbs} />
+      <ProjectBriefing project={project} prevProject={prevProject} nextProject={nextProject} />
+    </>
   )
 }

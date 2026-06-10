@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
       title: page.meta?.title || (page.title ?? slug),
       description: page.meta?.description || undefined,
       image: typeof page.meta?.image === 'object' ? page.meta?.image?.url ?? undefined : undefined,
+      path: `/legal/${slug}`,
     })
   } catch {
     return { title: slug }
