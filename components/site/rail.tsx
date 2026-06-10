@@ -15,7 +15,7 @@ export function Rail({ resumeUrl, status }: { resumeUrl: string; status: { avail
   const year = new Date().getFullYear()
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[240px] border-r border-border bg-background hidden md:flex flex-col p-6 gap-4">
+    <aside className="fixed left-0 top-0 h-screen w-[240px] border-r border-border bg-background hidden lg:flex flex-col p-6 gap-4">
       {/* Identity block */}
       <div className="flex flex-col gap-2">
         <span className="font-mono text-sm font-medium text-foreground">{site.name}</span>
