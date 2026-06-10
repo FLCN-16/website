@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
 import { CookieConsent } from "@/components/site/cookie-consent";
+import { CONSENT_KEY } from "@/lib/consent";
 import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -97,15 +98,14 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <>
           {/* Consent Mode v2 defaults must be set before GTM loads. Ad signals stay
               denied permanently (analytics-only site); only analytics_storage follows
-              the stored choice. Key literal mirrors CONSENT_KEY in lib/consent.ts
-              (inline script can't import). */}
+              the stored choice. */}
           <Script id="gtag-consent-default" strategy="beforeInteractive">
             {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 (function () {
   var analytics = 'denied';
   try {
-    var stored = JSON.parse(localStorage.getItem('flcn-consent-v1'));
+    var stored = JSON.parse(localStorage.getItem(${JSON.stringify(CONSENT_KEY)}));
     if (stored && stored.analytics === true) analytics = 'granted';
   } catch (e) {}
   gtag('consent', 'default', {
