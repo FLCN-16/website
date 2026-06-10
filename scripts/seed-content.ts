@@ -13,6 +13,7 @@
 import { readFileSync } from "fs"
 import { resolve } from "path"
 import type { Payload } from "payload"
+import { LEGAL_PAGES, textToLexical } from "./legal-content"
 
 function loadEnvLocal() {
   try {
@@ -28,70 +29,6 @@ function loadEnvLocal() {
     }
   } catch {
     // no .env.local — rely on shell environment
-  }
-}
-
-// ─── Lexical helpers ──────────────────────────────────────────────────────────
-
-type LexicalTextNode = {
-  detail: number; format: number; mode: string; style: string; text: string; type: "text"; version: number;
-}
-
-type LexicalNode =
-  | { type: "heading"; tag: string; children: LexicalTextNode[]; direction: string; format: string; indent: number; version: number }
-  | { type: "paragraph"; children: LexicalTextNode[]; direction: string; format: string; indent: number; version: number; textFormat: number }
-
-function parseInline(text: string): LexicalTextNode[] {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g)
-  return parts.filter(Boolean).map((part) => {
-    const isBold = part.startsWith("**") && part.endsWith("**")
-    return {
-      detail: 0,
-      format: isBold ? 1 : 0,
-      mode: "normal",
-      style: "",
-      text: isBold ? part.slice(2, -2) : part,
-      type: "text" as const,
-      version: 1,
-    }
-  })
-}
-
-function textToLexical(text: string) {
-  const blocks = text.split("\n\n").filter(Boolean)
-  const children: LexicalNode[] = blocks.map((block) => {
-    const trimmed = block.trim()
-    const headingMatch = trimmed.match(/^\*\*(.+)\*\*$/)
-    if (headingMatch) {
-      return {
-        children: [{ detail: 0, format: 0, mode: "normal", style: "", text: headingMatch[1], type: "text" as const, version: 1 }],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "heading" as const,
-        tag: "h2",
-        version: 1,
-      }
-    }
-    return {
-      children: parseInline(trimmed),
-      direction: "ltr",
-      format: "",
-      indent: 0,
-      type: "paragraph" as const,
-      version: 1,
-      textFormat: 0,
-    }
-  })
-  return {
-    root: {
-      children,
-      direction: "ltr" as const,
-      format: "" as const,
-      indent: 0,
-      type: "root" as const,
-      version: 1,
-    },
   }
 }
 
@@ -411,75 +348,6 @@ const CERTIFICATIONS = [
     year: "2023",
     credentialUrl: "",
     order: 3,
-  },
-]
-
-const LEGAL_PAGES = [
-  {
-    title: "Privacy Policy",
-    slug: "privacy",
-    template: "legal" as const,
-    lastUpdated: "2025-01-01T00:00:00.000Z",
-    bodyText: `This Privacy Policy describes how thefalcon.dev ("this website", "I") handles information when you visit or use this personal portfolio site.
-
-**What data is collected**
-
-The only personal data collected on this site is information you voluntarily submit through the contact form: your name, email address, and the message you choose to send. This data is used solely to respond to your enquiry and is not stored in a database beyond what is necessary to reply. No data is sold, shared with third parties, or used for marketing purposes.
-
-**Cookies and local storage**
-
-This site does not use tracking cookies or analytics of any kind. A single entry is written to your browser's localStorage to remember your preferred colour theme (light or dark). This value never leaves your device and contains no personally identifiable information.
-
-**Third-party services**
-
-This site is hosted on Vercel. Vercel may collect standard server access logs (IP address, request path, timestamp) as part of normal hosting operations. Please refer to Vercel's privacy policy at vercel.com/legal/privacy-policy for details on their data handling.
-
-**Your rights**
-
-If you have submitted a contact form and wish to have that correspondence deleted, please email hello@thefalcon.dev and I will remove it promptly.
-
-**Changes to this policy**
-
-This policy may be updated occasionally. The "last updated" date at the top of this page will reflect any changes. Continued use of the site after changes constitutes acceptance of the revised policy.
-
-**Contact**
-
-For any privacy-related questions, reach out at hello@thefalcon.dev.`,
-  },
-  {
-    title: "Terms of Use",
-    slug: "terms",
-    template: "legal" as const,
-    lastUpdated: "2025-01-01T00:00:00.000Z",
-    bodyText: `These Terms of Use govern your access to and use of thefalcon.dev (the "Site"). By using the Site, you agree to these terms.
-
-**Content and intellectual property**
-
-All written content, code samples, and design on this Site are the personal work of Rishabh Kumar unless otherwise noted. You may share links to any page on this Site freely. You may quote brief excerpts with clear attribution. You may not reproduce substantial portions of the content, pass off any of the work as your own, or use the content for commercial purposes without prior written permission.
-
-**Accuracy**
-
-The information on this Site — including employment history, project descriptions, and technical content — is provided in good faith and to the best of my knowledge. I make no warranties about the completeness or accuracy of any information and accept no liability for errors or omissions.
-
-**External links**
-
-The Site may contain links to third-party websites. These links are provided for convenience only. I have no control over the content of those sites and accept no responsibility for them or for any loss or damage arising from your use of them.
-
-**Limitation of liability**
-
-To the fullest extent permitted by applicable law, I am not liable for any indirect, incidental, or consequential damages arising out of your use of this Site or your inability to use it.
-
-**Governing law**
-
-These terms are governed by the laws of India. Any disputes arising in connection with these terms shall be subject to the jurisdiction of courts in Punjab, India.
-
-**Changes to these terms**
-
-These terms may be updated from time to time. The "last updated" date above will reflect any revisions. Continued use of the Site after changes constitutes acceptance of the updated terms.
-
-**Contact**
-
-For any questions about these terms, contact hello@thefalcon.dev.`,
   },
 ]
 

@@ -148,6 +148,7 @@ export default buildConfig({
         education: { enabled: true },
         certifications: { enabled: true },
         media: { enabled: true },
+        pages: { enabled: true },
       },
     }),
   ],
