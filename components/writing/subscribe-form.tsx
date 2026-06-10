@@ -78,7 +78,7 @@ function SubscribeDialog({ open, onOpenChange }: SubscribeDialogProps) {
             <div className="flex flex-col gap-2">
               <Button
                 type="submit"
-                size="lg"
+                size="default"
                 disabled={isPending}
                 className="w-full"
               >
