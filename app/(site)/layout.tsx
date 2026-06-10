@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
-import Script from "next/script";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { CONSENT_KEY } from "@/lib/consent";
 import { unstable_cache } from "next/cache";
@@ -95,12 +94,20 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       {process.env.NEXT_PUBLIC_GTM_ID && (
-        <>
-          {/* Consent Mode v2 defaults must be set before GTM loads. Ad signals stay
-              denied permanently (analytics-only site); only analytics_storage follows
-              the stored choice. */}
-          <Script id="gtag-consent-default" strategy="beforeInteractive">
-            {`window.dataLayer = window.dataLayer || [];
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+      )}
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        {/* Consent Mode v2 defaults must be set before GTM loads. A plain inline
+            script as the first child of <body> runs during HTML parse — long before
+            GTM, which @next/third-parties injects after hydration. (next/script
+            beforeInteractive renders an invalid <script> child of <html> here.)
+            Ad signals stay denied permanently (analytics-only site); only
+            analytics_storage follows the stored choice. */}
+        {process.env.NEXT_PUBLIC_GTM_ID && (
+          <script
+            id="gtag-consent-default"
+            dangerouslySetInnerHTML={{
+              __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 (function () {
   var analytics = 'denied';
@@ -114,12 +121,10 @@ function gtag(){dataLayer.push(arguments);}
     ad_personalization: 'denied',
     analytics_storage: analytics
   });
-})();`}
-          </Script>
-          <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
-        </>
-      )}
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+})();`,
+            }}
+          />
+        )}
         <JsonLd data={websiteSchema()} />
         <NextTopLoader color="var(--primary)" height={3} showSpinner={false} />
         <ThemeProvider
