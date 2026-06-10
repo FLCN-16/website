@@ -11,13 +11,13 @@ import {
   Text,
 } from "@react-email/components"
 
-// ─── colour / type tokens ────────────────────────────────────────────────────
-const C = {
-  outerBg:   "#f5f5f5",
-  paper:     "#ffffff",
+// ─── light-mode tokens (dark overrides live in the <style> block) ─────────────
+const L = {
+  bg:        "#ffffff",
   headerBar: "#111111",
   text:      "#0A0A0A",
   muted:     "#737373",
+  subdued:   "#aaaaaa",
   border:    "#E5E5E5",
   chipBg:    "#F4F4F5",
   accent:    "#007A55",
@@ -26,7 +26,7 @@ const C = {
 const SANS = "Inter, system-ui, -apple-system, sans-serif"
 const MONO = "'JetBrains Mono', 'Fira Mono', monospace"
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
+// ─── helpers ──────────────────────────────────────────────────────────────────
 function fmtDate(d?: string | null): string | null {
   if (!d) return null
   try {
@@ -41,9 +41,7 @@ function fmtDate(d?: string | null): string | null {
 }
 
 function postMeta(publishedAt?: string | null, readingTime?: number | null): string | null {
-  const parts = [fmtDate(publishedAt), readingTime ? `${readingTime} min read` : null].filter(
-    Boolean,
-  )
+  const parts = [fmtDate(publishedAt), readingTime ? `${readingTime} min read` : null].filter(Boolean)
   return parts.length ? parts.join("  ·  ") : null
 }
 
@@ -56,7 +54,6 @@ export interface RecentPostItem {
 }
 
 export interface PostBroadcastProps {
-  /** The just-published post (hero) */
   title: string
   slug: string
   excerpt: string | null
@@ -64,17 +61,13 @@ export interface PostBroadcastProps {
   tag: string | null
   publishedAt: string | null
   readingTime: number | null
-  /** Up to 3 other recent posts (compact list) */
   recent: RecentPostItem[]
-  /** Canonical site root, e.g. https://www.thefalcon.dev */
   siteUrl: string
-  /** Full post URL */
   postUrl: string
-  /** Writing index URL */
   writingIndexUrl: string
 }
 
-// ─── email template ───────────────────────────────────────────────────────────
+// ─── template ─────────────────────────────────────────────────────────────────
 export function PostBroadcast({
   title,
   excerpt,
@@ -92,37 +85,52 @@ export function PostBroadcast({
   return (
     <Html>
       <Head>
-        {/* hover affordances — stripped by some clients but degrade gracefully */}
         <style>{`
-          .btn-cta:hover { background: ${C.accentHov} !important; }
-          .hero-card:hover { border-color: ${C.accent} !important; }
-          .recent-row:hover .recent-title { color: ${C.accent} !important; }
-          .more-link:hover { color: ${C.accentHov} !important; }
+          /* ── hover (degrades gracefully where unsupported) ── */
+          .btn-cta:hover  { background: ${L.accentHov} !important; }
+          .hero-card:hover { border-color: ${L.accent} !important; }
+          .recent-row:hover .recent-title { color: ${L.accent} !important; }
+          .more-link:hover { color: ${L.accentHov} !important; }
+
+          /* ── dark mode ─────────────────────────────────────── */
+          @media (prefers-color-scheme: dark) {
+            .email-body     { background-color: #0A0A0A !important; }
+            .email-wrap     { background-color: #0A0A0A !important; border-color: #262626 !important; }
+            .card-body      { background-color: #111111 !important; }
+            .hero-card      { border-color: #262626 !important; }
+            .cover-img      { border-bottom-color: #262626 !important; }
+            .tag-chip       { background-color: #1C1C1C !important; color: #00BC7D !important; }
+            .card-title     { color: #FAFAFA !important; }
+            .text-muted     { color: #A1A1A1 !important; }
+            .hr-divider     { border-top: 1px solid #262626 !important; }
+            .recent-title   { color: #FAFAFA !important; }
+            .recent-row     { border-bottom-color: #262626 !important; }
+            .footer-wrap    { border-top-color: #262626 !important; }
+            .footer-domain  { color: #555555 !important; }
+            .footer-link    { color: #555555 !important; }
+          }
         `}</style>
       </Head>
 
       <Preview>{`New post: ${title}`}</Preview>
 
+      {/* No padding/margin — flush to email client viewport */}
       <Body
-        style={{
-          fontFamily: SANS,
-          backgroundColor: C.outerBg,
-          margin: 0,
-          padding: "24px 0",
-        }}
+        className="email-body"
+        style={{ fontFamily: SANS, backgroundColor: L.bg, margin: 0, padding: 0 }}
       >
         <Container
+          className="email-wrap"
           style={{
             maxWidth: "600px",
             margin: "0 auto",
-            backgroundColor: C.paper,
-            borderRadius: "8px",
-            border: `1px solid ${C.border}`,
+            backgroundColor: L.bg,
+            border: `1px solid ${L.border}`,
             overflow: "hidden",
           }}
         >
-          {/* ── HEADER ─────────────────────────────────────────────────── */}
-          <Section style={{ backgroundColor: C.headerBar, padding: "20px 28px" }}>
+          {/* ── HEADER ──────────────────────────────────────────────────── */}
+          <Section style={{ backgroundColor: L.headerBar, padding: "20px 28px" }}>
             <Heading
               style={{
                 color: "#ffffff",
@@ -138,15 +146,16 @@ export function PostBroadcast({
             </Heading>
           </Section>
 
-          {/* ── EYEBROW ────────────────────────────────────────────────── */}
+          {/* ── EYEBROW ─────────────────────────────────────────────────── */}
           <Section style={{ padding: "28px 28px 0" }}>
             <Text
+              className="text-muted"
               style={{
                 fontFamily: MONO,
                 fontSize: "11px",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                color: C.muted,
+                color: L.muted,
                 margin: 0,
               }}
             >
@@ -154,50 +163,49 @@ export function PostBroadcast({
             </Text>
           </Section>
 
-          {/* ── HERO CARD ──────────────────────────────────────────────── */}
+          {/* ── HERO CARD ───────────────────────────────────────────────── */}
           <Section style={{ padding: "16px 28px 8px" }}>
-            {/* Outer anchor wraps the whole card */}
             <a
               href={postUrl}
               className="hero-card"
               style={{
                 display: "block",
                 textDecoration: "none",
-                border: `1px solid ${C.border}`,
-                borderRadius: "8px",
+                border: `1px solid ${L.border}`,
                 overflow: "hidden",
               }}
             >
-              {/* Cover image */}
               {cover && (
                 <Img
                   src={cover.url}
                   alt={cover.alt ?? title}
                   width="544"
+                  className="cover-img"
                   style={{
                     width: "100%",
                     display: "block",
-                    borderBottom: `1px solid ${C.border}`,
+                    borderBottom: `1px solid ${L.border}`,
                   }}
                 />
               )}
 
-              {/* Card body */}
-              <div style={{ padding: "20px" }}>
-                {/* Tag chip */}
+              <div
+                className="card-body"
+                style={{ padding: "20px", backgroundColor: L.bg }}
+              >
                 {tag && (
                   <div style={{ marginBottom: "12px" }}>
                     <span
+                      className="tag-chip"
                       style={{
                         display: "inline-block",
                         fontFamily: MONO,
                         fontSize: "11px",
                         textTransform: "uppercase",
                         letterSpacing: "0.06em",
-                        color: C.accent,
-                        backgroundColor: C.chipBg,
+                        color: L.accent,
+                        backgroundColor: L.chipBg,
                         padding: "4px 10px",
-                        borderRadius: "999px",
                       }}
                     >
                       {tag}
@@ -205,28 +213,28 @@ export function PostBroadcast({
                   </div>
                 )}
 
-                {/* Title */}
                 <Heading
+                  className="card-title"
                   style={{
                     fontFamily: SANS,
                     fontSize: "22px",
                     fontWeight: "700",
                     lineHeight: "1.25",
-                    color: C.text,
+                    color: L.text,
                     margin: "0 0 10px",
                   }}
                 >
                   {title}
                 </Heading>
 
-                {/* Excerpt */}
                 {excerpt && (
                   <Text
+                    className="text-muted"
                     style={{
                       fontFamily: SANS,
                       fontSize: "15px",
                       lineHeight: "1.65",
-                      color: C.muted,
+                      color: L.muted,
                       margin: "0 0 14px",
                     }}
                   >
@@ -234,13 +242,13 @@ export function PostBroadcast({
                   </Text>
                 )}
 
-                {/* Date · reading time */}
                 {heroMeta && (
                   <Text
+                    className="text-muted"
                     style={{
                       fontFamily: MONO,
                       fontSize: "12px",
-                      color: C.muted,
+                      color: L.muted,
                       margin: 0,
                     }}
                   >
@@ -251,39 +259,42 @@ export function PostBroadcast({
             </a>
           </Section>
 
-          {/* ── CTA BUTTON ─────────────────────────────────────────────── */}
+          {/* ── CTA BUTTON ──────────────────────────────────────────────── */}
           <Section style={{ padding: "12px 28px 28px" }}>
             <a
               href={postUrl}
               className="btn-cta"
               style={{
                 display: "inline-block",
-                backgroundColor: C.accent,
+                backgroundColor: L.accent,
                 color: "#ffffff",
                 fontFamily: SANS,
                 fontSize: "14px",
                 fontWeight: "600",
                 textDecoration: "none",
                 padding: "11px 22px",
-                borderRadius: "7px",
               }}
             >
               Read article →
             </a>
           </Section>
 
-          {/* ── RECENT POSTS ───────────────────────────────────────────── */}
+          {/* ── RECENT POSTS ────────────────────────────────────────────── */}
           {recent.length > 0 && (
             <>
-              <Hr style={{ borderColor: C.border, margin: "0 28px" }} />
+              <Hr
+                className="hr-divider"
+                style={{ borderTop: `1px solid ${L.border}`, margin: "0 28px" }}
+              />
               <Section style={{ padding: "24px 28px 4px" }}>
                 <Text
+                  className="text-muted"
                   style={{
                     fontFamily: MONO,
                     fontSize: "11px",
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    color: C.muted,
+                    color: L.muted,
                     margin: "0 0 4px",
                   }}
                 >
@@ -302,7 +313,7 @@ export function PostBroadcast({
                         display: "block",
                         textDecoration: "none",
                         padding: "13px 0",
-                        borderBottom: `1px solid ${C.border}`,
+                        borderBottom: `1px solid ${L.border}`,
                       }}
                     >
                       <Text
@@ -311,7 +322,7 @@ export function PostBroadcast({
                           fontFamily: SANS,
                           fontSize: "15px",
                           fontWeight: "600",
-                          color: C.text,
+                          color: L.text,
                           margin: "0 0 3px",
                         }}
                       >
@@ -319,10 +330,11 @@ export function PostBroadcast({
                       </Text>
                       {meta && (
                         <Text
+                          className="text-muted"
                           style={{
                             fontFamily: MONO,
                             fontSize: "12px",
-                            color: C.muted,
+                            color: L.muted,
                             margin: 0,
                           }}
                         >
@@ -336,7 +348,7 @@ export function PostBroadcast({
             </>
           )}
 
-          {/* ── MORE WRITINGS ──────────────────────────────────────────── */}
+          {/* ── MORE WRITINGS ───────────────────────────────────────────── */}
           <Section style={{ padding: recent.length > 0 ? "20px 28px 28px" : "4px 28px 28px" }}>
             <a
               href={writingIndexUrl}
@@ -345,7 +357,7 @@ export function PostBroadcast({
                 fontFamily: SANS,
                 fontSize: "14px",
                 fontWeight: "600",
-                color: C.accent,
+                color: L.accent,
                 textDecoration: "none",
               }}
             >
@@ -353,40 +365,45 @@ export function PostBroadcast({
             </a>
           </Section>
 
-          {/* ── FOOTER ─────────────────────────────────────────────────── */}
+          {/* ── FOOTER ──────────────────────────────────────────────────── */}
           <Section
-            style={{
-              borderTop: `1px solid ${C.border}`,
-              padding: "16px 28px",
-            }}
+            className="footer-wrap"
+            style={{ borderTop: `1px solid ${L.border}`, padding: "16px 28px" }}
           >
             <Text
+              className="footer-domain"
               style={{
                 fontFamily: MONO,
                 fontSize: "12px",
-                color: "#aaaaaa",
+                color: L.subdued,
                 margin: "0 0 6px",
               }}
             >
               thefalcon.dev · Jalandhar, India
             </Text>
             <Text
+              className="text-muted"
               style={{
                 fontFamily: SANS,
                 fontSize: "12px",
-                color: C.muted,
+                color: L.muted,
                 margin: 0,
                 lineHeight: "1.6",
               }}
             >
               You received this because you subscribed at{" "}
-              <a href={siteUrl} style={{ color: C.muted, textDecoration: "underline" }}>
+              <a
+                href={siteUrl}
+                className="footer-link"
+                style={{ color: L.muted, textDecoration: "underline" }}
+              >
                 thefalcon.dev
               </a>
               .{" "}
               <a
                 href="{{{RESEND_UNSUBSCRIBE_URL}}}"
-                style={{ color: C.muted, textDecoration: "underline" }}
+                className="footer-link"
+                style={{ color: L.muted, textDecoration: "underline" }}
               >
                 Unsubscribe
               </a>
