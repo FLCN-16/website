@@ -1,24 +1,35 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { CONSENT_SETTINGS_EVENT, openConsentSettings, readConsent, saveConsent } from '@/lib/consent'
 
+const emptySubscribe = () => () => {}
+
+/** false during SSR/hydration, true after — without a setState-in-effect. */
+function useHydrated() {
+  return useSyncExternalStore(emptySubscribe, () => true, () => false)
+}
+
 export function CookieConsent() {
-  const [open, setOpen] = useState(() => !readConsent())
+  const hydrated = useHydrated()
+  const [forcedOpen, setForcedOpen] = useState(false)
+  const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
-    const reopen = () => setOpen(true)
+    const reopen = () => setForcedOpen(true)
     window.addEventListener(CONSENT_SETTINGS_EVENT, reopen)
     return () => window.removeEventListener(CONSENT_SETTINGS_EVENT, reopen)
   }, [])
 
+  const open = forcedOpen || (hydrated && !dismissed && !readConsent())
   if (!open) return null
 
   const choose = (analytics: boolean) => {
     saveConsent(analytics)
-    setOpen(false)
+    setForcedOpen(false)
+    setDismissed(true)
   }
 
   return (

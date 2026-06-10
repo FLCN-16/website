@@ -45,7 +45,8 @@ function gtagConsentUpdate(granted: boolean) {
   const w = window as DataLayerWindow
   w.dataLayer = w.dataLayer ?? []
   // Consent commands must be pushed as an `arguments` object, not a plain array
-  function gtag() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function gtag(..._args: unknown[]) {
     // eslint-disable-next-line prefer-rest-params
     w.dataLayer?.push(arguments)
   }
