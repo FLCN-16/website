@@ -22,26 +22,56 @@ export function PostRow({ post, className }: PostRowProps) {
     <Link
       href={`/writing/${post.slug}`}
       className={cn(
-        "group flex items-center gap-6 py-6 border-b border-border last:border-b-0 transition-colors duration-200",
+        "group flex flex-col transition-all duration-300",
+        // Mobile + desktop card: full border, column stack, hover lift
+        "border border-border overflow-hidden hover:-translate-y-0.5 hover:shadow-md",
+        // Tablet row: horizontal, strip card border to bottom-only, suppress card hover
+        "md:flex-row md:items-center md:gap-6 md:py-6 md:overflow-visible",
+        "md:border-t-0 md:border-l-0 md:border-r-0 md:last:border-b-0",
+        "md:hover:translate-y-0 md:hover:shadow-none",
+        // Desktop: back to card column with full border
+        "lg:flex-col lg:border lg:overflow-hidden lg:py-0",
+        "lg:hover:-translate-y-0.5 lg:hover:shadow-md",
         className,
       )}
     >
-      {/* Thumbnail — left */}
-      {post.cover && (
-        <div className="relative w-16 h-16 md:w-20 md:h-20 overflow-hidden shrink-0">
+      {/* Card image — mobile (<md) and desktop (≥lg) */}
+      <div className="relative aspect-[16/9] bg-muted overflow-hidden md:hidden lg:block shrink-0">
+        {post.cover ? (
           <Image
             src={post.cover.url}
             alt={post.cover.alt ?? post.title}
             fill
-            sizes="(max-width: 768px) 64px, 80px"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-muted-foreground/5 to-muted-foreground/15" />
+        )}
+      </div>
+
+      {/* Square thumbnail — tablet row only (md to lg) */}
+      {post.cover && (
+        <div className="hidden md:block lg:hidden relative w-24 h-24 overflow-hidden rounded-sm shrink-0">
+          <Image
+            src={post.cover.url}
+            alt={post.cover.alt ?? post.title}
+            fill
+            sizes="96px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
       )}
 
-      {/* Text */}
-      <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-        {/* Tags */}
+      {/* Text content */}
+      <div
+        className={cn(
+          "flex flex-col gap-1.5 min-w-0 flex-1",
+          "p-4",
+          "md:p-0",
+          "lg:p-4",
+        )}
+      >
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-0.5">
             {post.tags.slice(0, 2).map(({ tag }) => (
@@ -60,12 +90,19 @@ export function PostRow({ post, className }: PostRowProps) {
         </h3>
 
         {post.excerpt && (
-          <p className="hidden md:block text-sm text-muted-foreground line-clamp-1 leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
             {post.excerpt}
           </p>
         )}
 
-        <div className="flex items-center gap-2 mt-1">
+        <div
+          className={cn(
+            "flex items-center gap-1.5 mt-auto",
+            "pt-3 border-t border-border/60",
+            "md:border-t-0 md:pt-0 md:mt-1",
+            "lg:border-t lg:border-border/60 lg:pt-3 lg:mt-auto",
+          )}
+        >
           <span className="font-mono text-xs text-muted-foreground">
             {formatDate(post.publishedAt)}
           </span>
@@ -80,8 +117,8 @@ export function PostRow({ post, className }: PostRowProps) {
         </div>
       </div>
 
-      {/* Arrow */}
-      <span className="font-mono text-sm text-muted-foreground/50 group-hover:text-foreground group-hover:translate-x-1 transition-all duration-200 select-none shrink-0">
+      {/* Arrow — tablet row only */}
+      <span aria-hidden="true" className="hidden md:inline lg:hidden font-mono text-sm text-muted-foreground/50 group-hover:text-foreground group-hover:translate-x-1 transition-all duration-200 select-none shrink-0">
         →
       </span>
     </Link>
