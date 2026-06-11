@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getCachedLegalPage, getPreviewPage } from '@/lib/data'
+import { getCachedLegalPage, getPreviewPage, getCachedSiteSettings } from '@/lib/data'
 import { createMetadata } from '@/lib/metadata'
+import { buildIdentity } from '@/lib/site-identity'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
 import { richTextConverters } from '@/components/writing/richtext-converters'
@@ -33,14 +34,19 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: LegalPageProps): Promise<Metadata> {
   const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
   try {
-    const page = draft ? await getPreviewPage(slug, 'legal') : await getCachedLegalPage(slug)
+    const [page, settings] = await Promise.all([
+      draft ? getPreviewPage(slug, 'legal') : getCachedLegalPage(slug),
+      getCachedSiteSettings(),
+    ])
     if (!page) return { title: 'Not Found' }
+    const identity = buildIdentity(settings)
     return createMetadata({
       kind: 'LEGAL',
       title: page.meta?.title || (page.title ?? slug),
       description: page.meta?.description || undefined,
       image: typeof page.meta?.image === 'object' ? page.meta?.image?.url ?? undefined : undefined,
       path: `/legal/${slug}`,
+      identity,
     })
   } catch {
     return { title: slug }

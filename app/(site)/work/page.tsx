@@ -1,16 +1,22 @@
-import { getCachedWorkEntries } from '@/lib/data'
+import { getCachedWorkEntries, getCachedSiteSettings } from '@/lib/data'
 import { SelectedWork } from '@/components/sections/selected-work'
 import { createMetadata } from '@/lib/metadata'
+import { buildIdentity } from '@/lib/site-identity'
 import type { WorkEntry } from '@/lib/types'
 
 export const revalidate = false
 
-export const metadata = createMetadata({
-  kind: 'WORK',
-  title: 'Work',
-  description: 'Selected projects from 9+ years of full-stack engineering.',
-  path: '/work',
-})
+export async function generateMetadata() {
+  const settings = await getCachedSiteSettings()
+  const identity = buildIdentity(settings)
+  return createMetadata({
+    kind: 'WORK',
+    title: 'Work',
+    description: 'Selected projects from 9+ years of full-stack engineering.',
+    path: '/work',
+    identity,
+  })
+}
 
 export default async function WorkIndex() {
   let projects: WorkEntry[] = []

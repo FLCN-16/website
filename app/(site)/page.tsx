@@ -16,6 +16,7 @@ import { Certifications } from '@/components/sections/certifications'
 import { CtaBanner } from '@/components/sections/cta-banner'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { personSchema } from '@/lib/structured-data'
+import { buildIdentity } from '@/lib/site-identity'
 import { site } from '@/content/site'
 import { philosophy } from '@/content/philosophy'
 import { createMetadata } from '@/lib/metadata'
@@ -23,12 +24,17 @@ import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, Certificat
 
 export const revalidate = false
 
-export const metadata = createMetadata({
-  title: `${site.name} — ${site.role}`,
-  description: site.description,
-  path: '/',
-  absolute: true,
-})
+export async function generateMetadata() {
+  const settings = await getCachedSiteSettings()
+  const identity = buildIdentity(settings)
+  return createMetadata({
+    title: `${identity.name} — ${identity.role}`,
+    description: identity.description,
+    path: '/',
+    absolute: true,
+    identity,
+  })
+}
 
 export default async function Home() {
   let workEntries: WorkEntry[] = []
@@ -54,12 +60,13 @@ export default async function Home() {
   if (certificationsResult.status === 'fulfilled') certificationItems = certificationsResult.value
 
   const cmsSettings = settingsResult.status === 'fulfilled' ? settingsResult.value : null
+  const identity = buildIdentity(cmsSettings)
 
   const featuredProjects = allProjects.filter((p) => p.featured).slice(0, 6)
 
   return (
     <>
-      <JsonLd data={personSchema()} />
+      <JsonLd data={personSchema(identity)} />
       <Hero
         eyebrow={cmsSettings?.eyebrow ?? site.eyebrow}
         headline={cmsSettings?.headline ?? site.headline}

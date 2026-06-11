@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payload'
-import { getCachedWorkEntries } from '@/lib/data'
+import { getCachedWorkEntries, getCachedSiteSettings } from '@/lib/data'
 import { ProjectBriefing } from '@/components/sections/project-briefing'
 import { createMetadata, resolveMetaImage } from '@/lib/metadata'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { breadcrumbSchema, personRef } from '@/lib/structured-data'
-import { site } from '@/content/site'
+import { buildIdentity } from '@/lib/site-identity'
 import type { WorkEntry } from '@/lib/types'
 
 interface WorkDetailProps {
@@ -30,15 +30,17 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: WorkDetailProps): Promise<Metadata> {
   const { slug } = await params
   try {
-    const entries = await getCachedWorkEntries()
+    const [entries, settings] = await Promise.all([getCachedWorkEntries(), getCachedSiteSettings()])
     const project = entries.find((p) => p.slug === slug)
     if (!project) return {}
+    const identity = buildIdentity(settings)
     return createMetadata({
       kind: 'WORK',
       title: project.meta?.title || project.title,
       description: project.meta?.description || project.description,
       image: resolveMetaImage(project.meta?.image),
       path: `/work/${slug}`,
+      identity,
     })
   } catch {
     return {}
@@ -69,18 +71,21 @@ export default async function WorkDetail({ params }: WorkDetailProps) {
 
   if (!project) notFound()
 
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   const workSchema = {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: project.title,
     description: project.meta?.description || project.description,
-    url: `${site.url}/work/${slug}`,
-    author: personRef(),
+    url: `${identity.url}/work/${slug}`,
+    author: personRef(identity),
     inLanguage: 'en',
     ...(project.tags.length ? { keywords: project.tags.join(', ') } : {}),
   }
 
-  const breadcrumbs = breadcrumbSchema([
+  const breadcrumbs = breadcrumbSchema(identity, [
     { name: 'Home', path: '/' },
     { name: 'Work', path: '/work' },
     { name: project.title },

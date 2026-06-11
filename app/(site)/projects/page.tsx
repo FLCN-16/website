@@ -1,16 +1,22 @@
-import { getCachedProjects } from '@/lib/data'
+import { getCachedProjects, getCachedSiteSettings } from '@/lib/data'
 import { ProjectsGrid } from '@/components/sections/projects-grid'
 import { createMetadata } from '@/lib/metadata'
+import { buildIdentity } from '@/lib/site-identity'
 import type { ProjectEntry } from '@/lib/types'
 
 export const revalidate = false
 
-export const metadata = createMetadata({
-  kind: 'PROJECTS',
-  title: 'Projects',
-  description: 'Side projects, Chrome extensions, mobile apps, and open-source contributions.',
-  path: '/projects',
-})
+export async function generateMetadata() {
+  const settings = await getCachedSiteSettings()
+  const identity = buildIdentity(settings)
+  return createMetadata({
+    kind: 'PROJECTS',
+    title: 'Projects',
+    description: 'Side projects, Chrome extensions, mobile apps, and open-source contributions.',
+    path: '/projects',
+    identity,
+  })
+}
 
 export default async function ProjectsIndex() {
   let projects: ProjectEntry[] = []

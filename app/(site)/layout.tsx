@@ -131,7 +131,7 @@ function gtag(){dataLayer.push(arguments);}
             }}
           />
         )}
-        <JsonLd data={websiteSchema()} />
+        <JsonLd data={websiteSchema(identity)} />
         <NextTopLoader color="var(--primary)" height={3} showSpinner={false} />
         <SiteIdentityProvider identity={identity}>
           <ThemeProvider

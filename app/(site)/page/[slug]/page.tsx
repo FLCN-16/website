@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getCachedBasicPage, getPreviewPage } from '@/lib/data'
+import { getCachedBasicPage, getPreviewPage, getCachedSiteSettings } from '@/lib/data'
 import { createMetadata, resolveMetaImage } from '@/lib/metadata'
+import { buildIdentity } from '@/lib/site-identity'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
 import { richTextConverters } from '@/components/writing/richtext-converters'
@@ -33,13 +34,18 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: BasicPageProps): Promise<Metadata> {
   const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
   try {
-    const page = draft ? await getPreviewPage(slug, 'basic') : await getCachedBasicPage(slug)
+    const [page, settings] = await Promise.all([
+      draft ? getPreviewPage(slug, 'basic') : getCachedBasicPage(slug),
+      getCachedSiteSettings(),
+    ])
     if (!page) return { title: 'Not Found' }
+    const identity = buildIdentity(settings)
     return createMetadata({
       title: page.meta?.title || (page.title ?? slug),
       description: page.meta?.description || undefined,
       image: resolveMetaImage(page.meta?.image),
       path: `/page/${slug}`,
+      identity,
     })
   } catch {
     return { title: slug }

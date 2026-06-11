@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getCachedPost, getPreviewPost } from '@/lib/data'
+import { getCachedPost, getPreviewPost, getCachedSiteSettings } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
 import { richTextConverters } from '@/components/writing/richtext-converters'
 import { extractHeadings } from '@/lib/lexical-headings'
@@ -12,7 +12,7 @@ import { createMetadata, resolveMetaImage } from '@/lib/metadata'
 import { normalizeTags, resolvePostCover } from '@/lib/posts'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
-import { site } from '@/content/site'
+import { buildIdentity } from '@/lib/site-identity'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -35,8 +35,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
   try {
-    const post = draft ? await getPreviewPost(slug) : await getCachedPost(slug)
+    const [post, settings] = await Promise.all([
+      draft ? getPreviewPost(slug) : getCachedPost(slug),
+      getCachedSiteSettings(),
+    ])
     if (!post) return { title: 'Not Found' }
+    const identity = buildIdentity(settings)
     return createMetadata({
       kind: 'WRITING',
       title: post.meta?.title || post.title,
@@ -48,6 +52,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
         modifiedTime: post.updatedAt,
         tags: normalizeTags(post.tags),
       },
+      identity,
     })
   } catch {
     return { title: slug }
@@ -66,9 +71,12 @@ export default async function PostPage({ params }: PostPageProps) {
 
   if (!post) notFound()
 
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   const coverResolved = resolvePostCover(post.cover)
 
-  const postUrl = `${site.url}/writing/${slug}`
+  const postUrl = `${identity.url}/writing/${slug}`
   const tags = normalizeTags(post.tags)
 
   const articleSchema = {
@@ -76,8 +84,8 @@ export default async function PostPage({ params }: PostPageProps) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: (post.meta?.description || post.excerpt) ?? undefined,
-    author: personRef(),
-    publisher: personRef(),
+    author: personRef(identity),
+    publisher: personRef(identity),
     url: postUrl,
     mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
     inLanguage: 'en',
@@ -87,7 +95,7 @@ export default async function PostPage({ params }: PostPageProps) {
     ...(coverResolved?.url ? { image: coverResolved.url } : {}),
   }
 
-  const breadcrumbs = breadcrumbSchema([
+  const breadcrumbs = breadcrumbSchema(identity, [
     { name: 'Home', path: '/' },
     { name: 'Writing', path: '/writing' },
     { name: post.title },

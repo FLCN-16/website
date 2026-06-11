@@ -1,16 +1,22 @@
-import { getCachedPosts } from '@/lib/data'
+import { getCachedPosts, getCachedSiteSettings } from '@/lib/data'
 import { WritingList } from '@/components/sections/writing-list'
 import { createMetadata } from '@/lib/metadata'
+import { buildIdentity } from '@/lib/site-identity'
 import type { Post } from '@/lib/types'
 
 export const revalidate = false
 
-export const metadata = createMetadata({
-  kind: 'WRITING',
-  title: 'Writing',
-  description: 'Articles and thoughts on frontend engineering, architecture, and building at scale.',
-  path: '/writing',
-})
+export async function generateMetadata() {
+  const settings = await getCachedSiteSettings()
+  const identity = buildIdentity(settings)
+  return createMetadata({
+    kind: 'WRITING',
+    title: 'Writing',
+    description: 'Articles and thoughts on frontend engineering, architecture, and building at scale.',
+    path: '/writing',
+    identity,
+  })
+}
 
 export default async function WritingIndex() {
   let posts: Post[] = []
