@@ -1,14 +1,13 @@
+'use client'
+
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { GithubIcon, Linkedin02Icon, InstagramIcon } from "@hugeicons/core-free-icons"
-import { site } from "@/content/site"
+import { useSiteIdentity } from "@/components/providers/site-identity-provider"
 import { NAV_LINKS } from "@/lib/navigation"
 import { BackToTop } from "@/components/site/back-to-top"
 import { OutboundLink } from "@/components/site/tracked-link"
 import { CookieSettingsButton } from "@/components/site/cookie-consent"
-
-const locationLine = `${site.location.split(",")[0].toUpperCase()} · ${site.timezone}`
-const copyrightDomain = site.url.replace("https://", "").toUpperCase()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SOCIAL_ICONS: Record<string, any> = {
@@ -20,6 +19,9 @@ const SOCIAL_ICONS: Record<string, any> = {
 const LINK_CLASS = "font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
 
 export function Footer() {
+  const identity = useSiteIdentity()
+  const locationLine = `${identity.location.split(',')[0].toUpperCase()} · ${identity.timezone}`
+  const copyrightDomain = identity.url.replace('https://', '').toUpperCase()
   const year = new Date().getFullYear()
 
   return (
@@ -55,7 +57,7 @@ export function Footer() {
         {/* Row 3: socials + back to top */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {site.socials.map((social) => {
+            {identity.socials.map((social) => {
               const icon = SOCIAL_ICONS[social.platform]
               if (!icon) return null
               return (

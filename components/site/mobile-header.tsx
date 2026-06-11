@@ -12,11 +12,13 @@ import {
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { NavLinks } from "@/components/site/nav-links"
 import Link from "next/link"
-import { site } from "@/content/site"
+import { useSiteIdentity } from "@/components/providers/site-identity-provider"
 import { trackEvent } from "@/lib/analytics"
 import { Logo } from "@/components/site/logo"
 
-export function MobileHeader({ resumeUrl, status }: { resumeUrl: string; status: { available: boolean; label: string } }) {
+export function MobileHeader() {
+  const identity = useSiteIdentity()
+  const { resumeUrl, status } = identity
   const [open, setOpen] = useState(false)
 
   return (
@@ -35,10 +37,10 @@ export function MobileHeader({ resumeUrl, status }: { resumeUrl: string; status:
           {/* Identity */}
           <div className="flex flex-col gap-1 pt-2">
             <span className="font-sans text-lg font-semibold tracking-tight text-foreground">
-              {site.name}
+              {identity.name}
             </span>
             <span className="font-mono text-xs text-muted-foreground">
-              {site.role}
+              {identity.role}
             </span>
           </div>
 

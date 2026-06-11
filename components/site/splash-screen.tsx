@@ -4,12 +4,13 @@ import { useRef, useState, useEffect } from "react"
 import { useGSAP } from "@gsap/react"
 import { gsap } from "gsap"
 import { useReducedMotion } from "@/lib/reduced-motion"
-import { site } from "@/content/site"
+import { useSiteIdentity } from "@/components/providers/site-identity-provider"
 
 const WORDS = ["THE", "FALCON"]
-const DOMAIN = site.url.replace("https://", "")
 
 export function SplashScreen() {
+  const identity = useSiteIdentity()
+  const DOMAIN = identity.url.replace('https://', '')
   const reduced = useReducedMotion()
   const [visible, setVisible] = useState(false)
   const [done, setDone] = useState(false)
