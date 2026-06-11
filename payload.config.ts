@@ -178,6 +178,9 @@ export default buildConfig({
         media: { enabled: true },
         pages: { enabled: true },
       },
+      globals: {
+        'site-settings': { enabled: true },
+      },
     }),
   ],
   secret: process.env.PAYLOAD_SECRET || "",
