@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 import { S3Client, CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { CACHE_TAGS } from "@/lib/cache-tags";
 
-const RESUME_FILENAME = "rishabh-kumar-resume.pdf";
+const RESUME_FILENAME = "resume.pdf";
 
 function buildS3Client() {
   return new S3Client({
@@ -104,6 +104,135 @@ export const SiteSettings: GlobalConfig = {
     ],
   },
   fields: [
+    // ── Identity ──────────────────────────────────────────────────────────────
+    {
+      name: 'identity',
+      type: 'group',
+      label: 'Identity',
+      admin: {
+        description: 'Your personal details — shown in the nav, footer, metadata, and SEO.',
+      },
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Full Name',
+          admin: { description: 'e.g. Jane Smith' },
+        },
+        {
+          name: 'handle',
+          type: 'text',
+          label: 'Handle / Username',
+          admin: { description: 'e.g. janesmith — used in Twitter/X meta tags' },
+        },
+        {
+          name: 'role',
+          type: 'text',
+          label: 'Role / Title',
+          admin: { description: 'e.g. Senior Frontend Developer' },
+        },
+        {
+          name: 'location',
+          type: 'text',
+          label: 'Location',
+          admin: { description: 'e.g. San Francisco, CA' },
+        },
+        {
+          name: 'timezone',
+          type: 'text',
+          label: 'Timezone',
+          admin: { description: 'e.g. UTC-8 — shown in footer and contact page' },
+        },
+        {
+          name: 'email',
+          type: 'email',
+          label: 'Email Address',
+          admin: { description: 'Contact email shown on the site and in RSS feed' },
+        },
+        {
+          name: 'siteUrl',
+          type: 'text',
+          label: 'Site URL',
+          admin: { description: 'Full URL including https, e.g. https://janedoe.dev' },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Meta Description',
+          admin: {
+            description: '≤160 chars — shown in Google search snippets',
+            rows: 3,
+          },
+        },
+      ],
+    },
+
+    // ── Socials ───────────────────────────────────────────────────────────────
+    {
+      name: 'socials',
+      type: 'array',
+      label: 'Social Links',
+      maxRows: 6,
+      admin: {
+        description: 'Social profiles shown in the footer and writing CTA.',
+      },
+      fields: [
+        {
+          name: 'platform',
+          type: 'select',
+          label: 'Platform',
+          required: true,
+          options: [
+            { label: 'GitHub', value: 'github' },
+            { label: 'LinkedIn', value: 'linkedin' },
+            { label: 'Instagram', value: 'instagram' },
+            { label: 'Twitter / X', value: 'twitter' },
+            { label: 'YouTube', value: 'youtube' },
+          ],
+        },
+        {
+          name: 'url',
+          type: 'text',
+          label: 'Profile URL',
+          required: true,
+        },
+        {
+          name: 'label',
+          type: 'text',
+          label: 'Display Label',
+          admin: { description: 'e.g. GitHub, LinkedIn' },
+        },
+      ],
+    },
+
+    // ── Philosophy ────────────────────────────────────────────────────────────
+    {
+      name: 'philosophy',
+      type: 'array',
+      label: 'Engineering Philosophy',
+      maxRows: 5,
+      admin: {
+        description:
+          'The philosophy pillars shown on the homepage. Order is top-to-bottom display order.',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Pillar Title',
+          required: true,
+          admin: { description: 'e.g. Performance is a feature' },
+        },
+        {
+          name: 'body',
+          type: 'textarea',
+          label: 'Pillar Body',
+          required: true,
+          admin: { rows: 4 },
+        },
+      ],
+    },
+
     // ── Résumé ────────────────────────────────────────────────────────────────
     {
       name: "resume",
@@ -112,7 +241,7 @@ export const SiteSettings: GlobalConfig = {
       label: "Résumé PDF",
       admin: {
         description:
-          "Upload the PDF to Media, then select it here. It will automatically be renamed to rishabh-kumar-resume.pdf in R2.",
+          "Upload your résumé PDF here. It will be stored as resume.pdf in your R2 bucket.",
       },
     },
 
