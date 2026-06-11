@@ -1,0 +1,271 @@
+CODECANYON ASSET PROMPTS — payload-portfolio
+=============================================
+Use these prompts with Canva via Claude to generate all required
+CodeCanyon marketplace images. Run each block as a separate Canva
+generate request.
+
+Required sizes:
+  Preview image  : 590 × 300 px  (JPEG, shown in search results)
+  Cover / Banner : 2340 × 1560 px (3:2, main item page header)
+  Thumbnail      : 80 × 80 px    (icon shown in listings)
+  Gallery images : 1200 × 800 px each (up to 15, feature screenshots)
+
+
+──────────────────────────────────────────────
+1. PREVIEW IMAGE — 590 × 300 px
+──────────────────────────────────────────────
+
+Create a horizontal preview banner for a premium Next.js portfolio
+template called "payload-portfolio". Size: 590 × 300 px.
+
+Layout (left-to-right):
+  Left 55% — dark (zinc-950 #09090b) panel showing a minimal browser
+  chrome mockup of a portfolio homepage. Inside the mockup: a dark
+  sidebar rail with a small avatar circle and nav dots, and a hero
+  section with a large bold name heading "Your Name" in white, a
+  small indigo availability badge that reads "Available", and a
+  subheadline in muted grey. Keep the mockup flat and clean — no
+  drop shadows, pixel-perfect borders.
+
+  Right 45% — solid indigo (#6366f1) panel with:
+    - Top: white bold text "payload-portfolio" (18 px)
+    - Middle: three short feature lines in white/80 opacity, each
+      preceded by a small checkmark icon:
+          ✓ Next.js 16 + Payload CMS 3
+          ✓ No-code personalisation
+          ✓ One-click Vercel deploy
+    - Bottom: a small grey pill badge "v1.0.0"
+
+Typography: sans-serif, clean and modern.
+Overall feel: professional, dark-mode SaaS product.
+
+
+──────────────────────────────────────────────
+2. COVER / BANNER — 2340 × 1560 px
+──────────────────────────────────────────────
+
+Create a large marketing banner for a premium Next.js + Payload CMS
+portfolio template. Size: 2340 × 1560 px (3:2 landscape).
+
+Background: very dark zinc (#09090b) with a subtle radial glow of
+deep indigo (#3730a3 at 15% opacity) centred-top, fading to pure
+black at the edges.
+
+Top section (top 30% of canvas):
+  Centre-aligned.
+  - Small pill badge in indigo-900 border: "Next.js 16 · Payload CMS 3"
+  - Large headline (80–90 px, white, bold):
+      "The Portfolio Template
+       Built for Developers"
+  - Subheadline (28 px, zinc-400):
+      "Full-stack. CMS-powered. One-click deploy."
+
+Middle section (middle 50%):
+  A wide browser window mockup (rounded corners, dark chrome bar with
+  3 traffic-light dots) showing the portfolio homepage in dark mode:
+    - Left sidebar rail: avatar circle, indigo dot for "Available",
+      vertical nav icons, social icon row at bottom
+    - Main content: hero with large "Your Name" heading, stats row
+      (e.g. "5 yrs · 30 projects · 12k readers"), featured work cards
+      in a 2-column grid, each card with a cover image placeholder,
+      title, and category chip
+  The mockup should fill ~75% of the canvas width and feel like a
+  real product screenshot — not a wireframe.
+
+Bottom section (bottom 20%):
+  Six evenly spaced feature pills in a row, dark zinc-900 background
+  with zinc-700 border:
+    [ Payload CMS Admin ]  [ Cloudflare R2 ]  [ Resend Email ]
+    [ ISR Caching ]        [ JSON-LD SEO ]    [ Dark / Light Mode ]
+
+Bottom-right corner: small "CodeCanyon" wordmark in zinc-600.
+
+Overall feel: premium developer product, confident dark-mode aesthetic,
+similar to Vercel or Linear marketing imagery.
+
+
+──────────────────────────────────────────────
+3. THUMBNAIL — 80 × 80 px
+──────────────────────────────────────────────
+
+Create a square app icon / thumbnail. Size: 80 × 80 px.
+
+Background: solid indigo (#6366f1).
+Centre: white bold letter "P" in a clean geometric sans-serif (similar
+to Inter or Geist) at ~48 px. The letterform should feel like a product
+logo mark, not a generic initial — give it slightly tighter tracking
+and a strong weight.
+No border radius on the overall square (CodeCanyon clips it).
+
+Simple, readable at small sizes.
+
+
+──────────────────────────────────────────────
+4. GALLERY IMAGE 1 — Homepage Overview (1200 × 800 px)
+──────────────────────────────────────────────
+
+Create a feature screenshot image. Size: 1200 × 800 px.
+
+Layout: browser window mockup (rounded, dark chrome, URL bar showing
+"yoursite.dev") on a dark zinc background (#0f0f11) with a thin indigo
+glow behind the browser frame.
+
+Inside the browser — portfolio homepage, dark mode:
+  - Sticky sidebar rail (left ~60px): avatar circle, "Available" badge
+    in green, vertical icon stack, social icons at bottom
+  - Main content area:
+      Top: eyebrow text "SOFTWARE ENGINEER" in indigo uppercase small
+      caps, then huge bold white headline "I build things for the web",
+      then a muted subheadline paragraph in zinc-400
+      Below: a stat row — "5 years · 30 projects · 12k readers" in
+      small zinc-300 text with thin zinc-800 dividers between items
+      Below: a "Selected Work" heading and two work cards side-by-side,
+      each with a dark grey cover placeholder, a white title, and a
+      small category chip
+
+Below the browser, bottom strip (zinc-950):
+  Centre-aligned label in zinc-500 uppercase small caps:
+  "HOMEPAGE · HERO · WORK · TIMELINE · PHILOSOPHY"
+
+
+──────────────────────────────────────────────
+5. GALLERY IMAGE 2 — Admin Panel / CMS (1200 × 800 px)
+──────────────────────────────────────────────
+
+Create a feature screenshot image. Size: 1200 × 800 px.
+
+Layout: two browser windows side by side on a dark zinc background,
+slightly overlapping, the left one behind the right.
+
+Left browser (slightly behind, showing Payload CMS admin):
+  Dark Payload admin UI. Left sidebar with collection groups:
+  "Portfolio", "Writing", "About", "Site". Main area showing a
+  "Site Settings" form with fields: Name, Role, Location, Email,
+  Site URL, and a Social Links array with GitHub/LinkedIn entries.
+  Clean, real-looking admin form.
+
+Right browser (in front, showing public portfolio):
+  The live portfolio homepage reflecting those settings — the name
+  "Jane Doe" and role "Senior Engineer" visible in the nav rail.
+
+Between the two browsers, a small indigo arrow icon pointing right
+with a label: "Save → Live in seconds"
+
+Bottom strip label: "PAYLOAD CMS ADMIN · NO-CODE PERSONALISATION"
+
+
+──────────────────────────────────────────────
+6. GALLERY IMAGE 3 — Blog / Writing Page (1200 × 800 px)
+──────────────────────────────────────────────
+
+Create a feature screenshot image. Size: 1200 × 800 px.
+
+Browser mockup showing the /writing page in dark mode:
+
+Page layout:
+  - Page heading "Writing" in large white bold text
+  - A masonry bento grid of blog post cards: some cards are large
+    (featured), some small. Each card has a dark cover image
+    placeholder, a category chip in indigo, a title in white, and
+    a reading time badge. One large featured card spans 2 rows.
+  - Below the grid: a tag filter chip row with chips like
+    "Engineering", "Career", "Open Source", "Productivity"
+
+Right side (floating above the grid): a narrow search input field
+in dark zinc-800 with a magnifier icon and placeholder "Search posts"
+
+Bottom strip label: "BLOG · MASONRY GRID · TAG FILTERS · FULL-TEXT SEARCH"
+
+
+──────────────────────────────────────────────
+7. GALLERY IMAGE 4 — SEO & Performance Features (1200 × 800 px)
+──────────────────────────────────────────────
+
+Create a feature callout image (not a browser screenshot). Size: 1200 × 800 px.
+
+Background: dark zinc (#09090b) with a very subtle grid of thin
+zinc-900 lines creating a dot-matrix pattern.
+
+Layout: 2 × 3 grid of feature cards, evenly spaced, each card in
+zinc-900 with a zinc-800 border and 16 px corner radius.
+
+Card 1 — ISR Caching
+  Icon: lightning bolt (indigo)
+  Title: "Instant Updates"
+  Body: "Save in admin → live in <1 second via on-demand cache revalidation"
+
+Card 2 — JSON-LD SEO
+  Icon: code brackets (indigo)
+  Title: "Structured Data"
+  Body: "Person, WebSite, BreadcrumbList schemas auto-injected on every page"
+
+Card 3 — Dynamic OG Images
+  Icon: image frame (indigo)
+  Title: "Auto OG Images"
+  Body: "PNG generated per page at /og — no manual image export needed"
+
+Card 4 — Sitemap
+  Icon: sitemap/tree (indigo)
+  Title: "Dynamic Sitemap"
+  Body: "Nested sitemap index auto-built from posts, work, and CMS pages"
+
+Card 5 — Analytics
+  Icon: bar chart (indigo)
+  Title: "GTM + Consent v2"
+  Body: "Cookie banner wired to Consent Mode v2 — GDPR-ready out of the box"
+
+Card 6 — AI Crawlers
+  Icon: robot (indigo)
+  Title: "AI-Ready"
+  Body: "robots.txt allows Claude, GPT, Perplexity. /llms.txt for model context"
+
+Bottom strip label: "SEO · ISR · ANALYTICS · AI-READY"
+
+
+──────────────────────────────────────────────
+8. GALLERY IMAGE 5 — Mobile Responsive (1200 × 800 px)
+──────────────────────────────────────────────
+
+Create a feature screenshot image. Size: 1200 × 800 px.
+
+Show three device mockups side by side on a dark background:
+
+Left — Desktop (1440px wide, shown as a wide flat monitor frame):
+  Portfolio homepage, same as Gallery Image 1 but narrower to fit.
+
+Centre — Tablet (768px, iPad-style frame):
+  Same page, adapted layout — sidebar collapsed, single column content.
+
+Right — Mobile (375px, iPhone-style frame):
+  Mobile nav with a hamburger menu icon at top. Hero section stacked
+  vertically. Availability badge, name heading, and CTA button.
+
+Below each device, a small label in zinc-500:
+  "Desktop 1440px"    "Tablet 768px"    "Mobile 375px"
+
+Background: dark zinc with a faint indigo radial glow behind the centre device.
+
+Bottom strip label: "FULLY RESPONSIVE · MOBILE-FIRST TAILWIND CSS 4"
+
+
+──────────────────────────────────────────────
+NOTES FOR CLAUDE / CANVA
+──────────────────────────────────────────────
+
+Colour palette reference:
+  zinc-950  #09090b   (page backgrounds)
+  zinc-900  #18181b   (cards)
+  zinc-800  #27272a   (borders, inputs)
+  zinc-400  #a1a1aa   (muted text)
+  zinc-300  #d4d4d8   (body text)
+  white     #ffffff   (headings)
+  indigo    #6366f1   (primary accent, badges, icons)
+  indigo-900 #312e81  (subtle badge backgrounds)
+  emerald   #10b981   (available badge)
+
+Font: Inter or Geist Sans (bold for headings, regular for body)
+Mono: JetBrains Mono or Fira Code (for code snippets)
+
+Style keywords: clean, minimal, dark-mode SaaS, developer tool,
+no gradients except subtle radial glows, flat UI mockups preferred
+over 3D perspective renders.
