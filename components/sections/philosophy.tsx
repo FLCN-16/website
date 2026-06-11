@@ -3,7 +3,7 @@ import { FadeRise } from "@/components/anim/fade-rise"
 interface PhilosophyProps {
   eyebrow: string
   heading: string
-  pillars: Array<{ num: string; title: string; body: string }>
+  pillars: Array<{ title: string; body: string }>
 }
 
 export function Philosophy({ eyebrow, heading, pillars }: PhilosophyProps) {
@@ -18,10 +18,10 @@ export function Philosophy({ eyebrow, heading, pillars }: PhilosophyProps) {
 
         {/* Pillars grid */}
         <div className="mt-12 grid md:grid-cols-3 gap-8">
-          {pillars.map((pillar) => (
-            <div key={pillar.num}>
+          {pillars.map((pillar, i) => (
+            <div key={i}>
               <p className="font-mono text-4xl text-primary font-bold">
-                {pillar.num}
+                {String(i + 1).padStart(2, '0')}
               </p>
               <h3 className="text-lg font-semibold mt-3">{pillar.title}</h3>
               <p className="text-muted-foreground text-sm mt-2 leading-relaxed">

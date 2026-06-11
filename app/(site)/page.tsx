@@ -18,7 +18,6 @@ import { JsonLd } from '@/components/structured-data/json-ld'
 import { personSchema } from '@/lib/structured-data'
 import { buildIdentity } from '@/lib/site-identity'
 import { site } from '@/content/site'
-import { philosophy } from '@/content/philosophy'
 import { createMetadata } from '@/lib/metadata'
 import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, CertificationEntry } from '@/lib/types'
 
@@ -79,11 +78,13 @@ export default async function Home() {
         secondaryCta={{ label: 'Get In Touch', href: '/contact' }}
       />
       <Journey items={timelineItems} />
-      <Philosophy
-        eyebrow={philosophy.eyebrow}
-        heading={philosophy.heading}
-        pillars={philosophy.pillars}
-      />
+      {cmsSettings?.philosophy && cmsSettings.philosophy.length > 0 && (
+        <Philosophy
+          eyebrow="Engineering Philosophy"
+          heading="How I think about building software"
+          pillars={cmsSettings.philosophy}
+        />
+      )}
       <SelectedWork projects={workEntries.slice(0, 3)} showViewAll />
       {featuredProjects.length > 0 && (
         <ProjectsGrid projects={featuredProjects} showViewAll />
