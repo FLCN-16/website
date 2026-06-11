@@ -1,0 +1,48 @@
+CodeCanyon Regular License
+==========================
+
+This item (payload-portfolio) is licensed under the CodeCanyon Regular License.
+
+License summary:
+- You may use this item in ONE end product (personal or client site).
+- The end product may be used by you or one client.
+- You may NOT sell or redistribute the item or its source code.
+- You may NOT include the item in a theme, template, or framework that is offered for sale.
+
+Full license terms: https://codecanyon.net/licenses/terms/regular
+
+---
+
+Third-Party Libraries
+---------------------
+
+This item bundles the following open-source libraries. Each is subject to its own license:
+
+  Next.js             MIT     https://github.com/vercel/next.js
+  Payload CMS         MIT     https://github.com/payloadcms/payload
+  React               MIT     https://github.com/facebook/react
+  Tailwind CSS        MIT     https://github.com/tailwindlabs/tailwindcss
+  TypeScript          Apache  https://github.com/microsoft/TypeScript
+  shadcn/ui           MIT     https://github.com/shadcn-ui/ui
+  Radix UI            MIT     https://github.com/radix-ui/primitives
+  Zod                 MIT     https://github.com/colinhacks/zod
+  React Hook Form     MIT     https://github.com/react-hook-form/react-hook-form
+  React Email         MIT     https://github.com/resend/react-email
+  GSAP                GSAP Standard (Free tier)  https://gsap.com/licensing/
+  Swiper              MIT     https://github.com/nolimits4web/swiper
+  next-themes         MIT     https://github.com/pacocoursey/next-themes
+  date-fns            MIT     https://github.com/date-fns/date-fns
+  HugeIcons (free)    Free tier — see https://hugeicons.com/license
+
+All third-party licenses permit use within a commercial end product.
+GSAP's free-tier license covers use in free and commercial websites but
+not redistribution of GSAP itself. If the end product requires GSAP's
+premium plugins, a separate GSAP Club license is required.
+
+---
+
+Preview Assets
+--------------
+
+Demo screenshots and preview images used on the CodeCanyon item page are
+NOT included in the download package and are for illustration only.

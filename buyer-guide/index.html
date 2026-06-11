@@ -274,7 +274,7 @@ cd payload-portfolio</pre>
             <div class="step-num">8</div>
             <div class="flex-1">
               <div class="text-white font-medium mb-2">Edit your tech stack</div>
-              <p class="text-sm text-zinc-400 mb-2">The only file you need to edit in code is <code>content/stack.ts</code>. Open it and replace the entries with your own technologies and proficiency levels.</p>
+              <p class="text-sm text-zinc-400 mb-2">The only file you need to edit in code is <code>src/content/stack.ts</code>. Open it and replace the entries with your own technologies and proficiency levels. Everything else is managed via the admin panel.</p>
               <div class="warn">
                 <span>⚠️</span>
                 <span>This is the only source file buyers need to edit. Everything else is managed via the admin panel.</span>
@@ -415,7 +415,7 @@ cd payload-portfolio</pre>
         <div class="space-y-5">
           <div class="card">
             <div class="flex items-center gap-2 mb-2">
-              <code>content/stack.ts</code>
+              <code>src/src/content/stack.ts</code>
               <span class="badge badge-yellow">edit this</span>
             </div>
             <p class="text-sm text-zinc-400">The only source file buyers need to modify. It exports a structured list of your technologies grouped by discipline (Backend, Frontend, DevOps, etc.) with a maturity level for each. Open it and replace the entries with your own stack.</p>
@@ -423,7 +423,7 @@ cd payload-portfolio</pre>
 
           <div class="card">
             <div class="flex items-center gap-2 mb-2">
-              <code>globals/SiteSettings.ts</code>
+              <code>src/globals/SiteSettings.ts</code>
               <span class="badge badge-purple">cms schema</span>
             </div>
             <p class="text-sm text-zinc-400">Defines the shape of the Site Settings global in the Payload admin. You never edit this file — you edit the data through the admin panel at <code>/admin → Globals → Site Settings</code>.</p>
@@ -431,21 +431,21 @@ cd payload-portfolio</pre>
 
           <div class="card">
             <div class="flex items-center gap-2 mb-2">
-              <code>lib/site-identity.ts</code>
+              <code>src/lib/site-identity.ts</code>
             </div>
             <p class="text-sm text-zinc-400">Defines the <code>SiteIdentity</code> type and <code>buildIdentity()</code> function. Merges CMS data with safe fallback defaults so the site renders correctly even if the admin hasn't been populated yet.</p>
           </div>
 
           <div class="card">
             <div class="flex items-center gap-2 mb-2">
-              <code>payload.config.ts</code>
+              <code>src/payload.config.ts</code>
             </div>
             <p class="text-sm text-zinc-400">Registers all Payload collections, globals, plugins (SEO, Search, Form Builder, MCP, S3 storage), and the email adapter. Modify with care — wrong changes here can break the admin panel.</p>
           </div>
 
           <div class="card">
             <div class="flex items-center gap-2 mb-2">
-              <code>lib/data.ts</code>
+              <code>src/lib/data.ts</code>
             </div>
             <p class="text-sm text-zinc-400">All cached data fetchers. Each function wraps a Payload REST call in <code>unstable_cache</code> with revalidation tags. This is why page loads are fast — content is cached and only re-fetched when you save in the admin.</p>
           </div>
@@ -551,9 +551,9 @@ cd payload-portfolio</pre>
       <!-- ── Stack file ── -->
       <section id="stack-file" class="mb-16">
         <h2 class="section-heading border-t border-zinc-800 pt-8">Tech Stack File</h2>
-        <p class="text-zinc-400 mb-4">Open <code>content/stack.ts</code> and replace the entries with your own technologies. This is the only TypeScript file you need to edit.</p>
+        <p class="text-zinc-400 mb-4">Open <code>src/content/stack.ts</code> and replace the entries with your own technologies. This is the only TypeScript file you need to edit.</p>
 
-        <pre>// content/stack.ts — edit this file with your own stack
+        <pre>// src/content/stack.ts — edit this file with your own stack
 
 export const stack: StackGroup[] = [
   {
@@ -582,10 +582,10 @@ export const stack: StackGroup[] = [
         <h2 class="section-heading border-t border-zinc-800 pt-8">Fonts &amp; Theme</h2>
 
         <h3 class="subsection-heading">Fonts</h3>
-        <p class="text-sm text-zinc-400 mb-4">Fonts are loaded from Google Fonts in <code>app/(site)/layout.tsx</code>. To change them, replace the <code>Inter</code> and <code>JetBrains_Mono</code> imports with any Google Font and update the <code>variable</code> CSS custom properties.</p>
+        <p class="text-sm text-zinc-400 mb-4">Fonts are loaded from Google Fonts in <code>src/app/(site)/layout.tsx</code>. To change them, replace the <code>Inter</code> and <code>JetBrains_Mono</code> imports with any Google Font and update the <code>variable</code> CSS custom properties.</p>
 
         <h3 class="subsection-heading">Colours &amp; Design Tokens</h3>
-        <p class="text-sm text-zinc-400 mb-4">Open <code>tailwind.config.ts</code> to change the colour palette. The site uses semantic tokens (<code>--background</code>, <code>--foreground</code>, <code>--primary</code>, <code>--muted</code>) defined in <code>app/globals.css</code> for both light and dark modes.</p>
+        <p class="text-sm text-zinc-400 mb-4">The site uses semantic tokens (<code>--background</code>, <code>--foreground</code>, <code>--primary</code>, <code>--muted</code>) defined in <code>src/app/globals.css</code> for both light and dark modes. Tailwind CSS 4 reads the tokens directly from this CSS file.</p>
 
         <h3 class="subsection-heading">Dark / Light Mode</h3>
         <p class="text-sm text-zinc-400">Handled automatically by <code>next-themes</code>. The toggle in the rail and mobile header switches between system, dark, and light. No configuration needed.</p>
@@ -602,10 +602,11 @@ export const stack: StackGroup[] = [
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/work</td><td class="text-zinc-400">All professional case studies (Work collection)</td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/work/[slug]</td><td class="text-zinc-400">Individual case study — full briefing, stack, and navigation</td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/projects</td><td class="text-zinc-400">Side projects, Chrome extensions, mobile apps, OSS</td></tr>
-              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/stack</td><td class="text-zinc-400">Tech stack matrix from <code>content/stack.ts</code></td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/stack</td><td class="text-zinc-400">Tech stack matrix from <code>src/content/stack.ts</code></td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/writing</td><td class="text-zinc-400">Blog listing with masonry grid, tag/year/read-time filters, search</td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/writing/[slug]</td><td class="text-zinc-400">Blog post — rich text, TOC, progress bar, related posts, share links</td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/contact</td><td class="text-zinc-400">Inquiry form — project, consulting, full-time, general</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/page/[slug]</td><td class="text-zinc-400">CMS-managed basic pages — create any page in the admin and it appears here instantly (ISR, on-demand revalidation)</td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/legal/[slug]</td><td class="text-zinc-400">CMS-managed legal pages (privacy, terms, cookies)</td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/admin</td><td class="text-zinc-400">Payload CMS admin panel</td></tr>
               <tr><td class="font-mono text-indigo-300 text-xs pr-4">/feed.xml</td><td class="text-zinc-400">RSS feed</td></tr>
@@ -844,8 +845,8 @@ pm2 start ecosystem.config.js</pre>
             <p class="text-sm text-zinc-400">Verify <code>RESEND_API_KEY</code>, <code>RESEND_FROM_ADDRESS</code>, and <code>RESEND_TO</code> are set. The from address must be on a domain verified in Resend. Check the Resend dashboard logs for delivery errors.</p>
           </div>
           <div class="card">
-            <div class="text-white font-medium mb-1">How do I add a new legal page?</div>
-            <p class="text-sm text-zinc-400">In the admin panel, go to <strong>Pages → Create New</strong>. Set the template to <strong>legal</strong>, add a slug (e.g. <code>cookie-policy</code>), and write your content. The page is live immediately at <code>/legal/cookie-policy</code>.</p>
+            <div class="text-white font-medium mb-1">How do I create a new custom page?</div>
+            <p class="text-sm text-zinc-400">In the admin panel go to <strong>Pages → Create New</strong>. Choose a template: <strong>basic</strong> creates a page at <code>/page/your-slug</code>, <strong>legal</strong> creates one at <code>/legal/your-slug</code>. The page is live immediately after saving — no redeploy needed.</p>
           </div>
           <div class="card">
             <div class="text-white font-medium mb-1">Can I add more social platforms?</div>
@@ -876,79 +877,78 @@ pm2 start ecosystem.config.js</pre>
   <!-- Folder tree renderer -->
   <script>
     const TREE = [
-      // prefix, isDir, name, description, depth, isLast, editMe
-      { pre: '',         dir: true,  name: 'payload-portfolio/',     desc: 'Project root',                                          depth: 0, last: false },
-      { pre: '├── ',     dir: true,  name: 'actions/',               desc: 'Server actions — form submissions, subscriptions',      depth: 0, last: false },
-      { pre: '│   ├── ', dir: false, name: 'contact.ts',             desc: 'Contact form submission + email notification',         depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'subscribe.ts',           desc: 'Newsletter subscribe/unsubscribe action',              depth: 1, last: false },
-      { pre: '│   └── ', dir: false, name: 'talent-inquiry.ts',      desc: 'Talent dialog submission + email with attachment',     depth: 1, last: true  },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: true,  name: 'app/',                   desc: 'Next.js App Router — all routes live here',            depth: 0, last: false },
-      { pre: '│   ├── ', dir: true,  name: '(site)/',                desc: 'Public portfolio routes — wrapped in site layout',     depth: 1, last: false },
-      { pre: '│   │   ├── ', dir: false, name: 'layout.tsx',         desc: 'Site shell — fonts, providers, SiteIdentityProvider', depth: 2, last: false },
-      { pre: '│   │   ├── ', dir: false, name: 'page.tsx',           desc: 'Homepage',                                            depth: 2, last: false },
-      { pre: '│   │   ├── ', dir: true,  name: 'work/',              desc: '/work listing + /work/[slug] case study detail',       depth: 2, last: false },
-      { pre: '│   │   ├── ', dir: true,  name: 'writing/',           desc: '/writing listing + /writing/[slug] blog post',         depth: 2, last: false },
-      { pre: '│   │   ├── ', dir: true,  name: 'projects/',          desc: '/projects side-projects gallery',                      depth: 2, last: false },
-      { pre: '│   │   ├── ', dir: true,  name: 'stack/',             desc: '/stack tech-stack page',                               depth: 2, last: false },
-      { pre: '│   │   ├── ', dir: true,  name: 'contact/',           desc: '/contact inquiry form',                                depth: 2, last: false },
-      { pre: '│   │   └── ', dir: true,  name: 'legal/',             desc: '/legal/[slug] CMS-managed legal pages',                depth: 2, last: true  },
-      { pre: '│   │',    dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '│   ├── ', dir: true,  name: '(payload)/',             desc: 'Payload CMS admin panel — mounted at /admin',          depth: 1, last: false },
-      { pre: '│   │   ├── ', dir: true, name: 'admin/',              desc: 'Admin UI entry point + importMap',                     depth: 2, last: false },
-      { pre: '│   │   └── ', dir: true, name: 'api/',                desc: 'Payload REST API routes',                              depth: 2, last: true  },
-      { pre: '│   │',    dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '│   ├── ', dir: true,  name: 'og/',                    desc: 'Dynamic OG image generation (PNG)',                    depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'feed.xml/',              desc: 'RSS feed route handler',                               depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'sitemap-index.xml/',     desc: 'Sitemap index linking to sub-sitemaps',                depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'llms.txt/',              desc: 'AI-readable plain-text site summary',                  depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'maintenance/',           desc: 'Maintenance mode page and layout',                     depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'robots.ts',              desc: 'robots.txt generation (allows AI crawlers)',           depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'manifest.ts',            desc: 'Web app manifest (PWA metadata)',                      depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'sitemap.ts',             desc: 'Dynamic sitemap (posts, work, pages)',                  depth: 1, last: false },
-      { pre: '│   └── ', dir: false, name: 'not-found.tsx',          desc: 'Global 404 page',                                      depth: 1, last: true  },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: true,  name: 'collections/',           desc: 'Payload CMS collection schemas',                       depth: 0, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Posts.ts',               desc: 'Blog articles with Lexical editor and tags',           depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Work.ts',                desc: 'Professional case studies',                            depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Projects.ts',            desc: 'Side projects and OSS contributions',                  depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Timeline.ts',            desc: 'Career history entries',                               depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Education.ts',           desc: 'Degrees and qualifications',                           depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Certifications.ts',      desc: 'Professional certifications',                          depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Pages.ts',               desc: 'CMS-managed static pages (legal, basic)',              depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Media.ts',               desc: 'Image/file uploads → Cloudflare R2',                  depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'Submissions.ts',         desc: 'Contact form and inquiry submissions',                  depth: 1, last: false },
-      { pre: '│   └── ', dir: false, name: 'Users.ts',               desc: 'Admin user accounts',                                  depth: 1, last: true  },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: true,  name: 'components/',            desc: 'React components',                                     depth: 0, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'providers/',             desc: 'React context providers',                              depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'sections/',              desc: 'Page section components (Hero, Philosophy, etc.)',     depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'site/',                  desc: 'Shell components — Rail, Footer, MobileHeader, etc.', depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'writing/',               desc: 'Blog-specific components (TOC, PostShare, etc.)',      depth: 1, last: false },
-      { pre: '│   ├── ', dir: true,  name: 'anim/',                  desc: 'Animation wrappers — FadeRise, MaskReveal, CountUp',   depth: 1, last: false },
-      { pre: '│   └── ', dir: true,  name: 'ui/',                    desc: 'shadcn/ui primitives — Button, Badge, Dialog, etc.',   depth: 1, last: true  },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: true,  name: 'content/',               desc: 'Static content files',                                 depth: 0, last: false },
-      { pre: '│   └── ', dir: false, name: 'stack.ts',               desc: '✏️  EDIT THIS — your tech stack list',                depth: 1, last: true,  edit: true },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: true,  name: 'globals/',               desc: 'Payload CMS global schemas',                           depth: 0, last: false },
-      { pre: '│   └── ', dir: false, name: 'SiteSettings.ts',        desc: 'Identity, socials, philosophy, resume, availability', depth: 1, last: true  },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: true,  name: 'lib/',                   desc: 'Shared utility modules',                               depth: 0, last: false },
-      { pre: '│   ├── ', dir: false, name: 'data.ts',                desc: 'Cached data fetchers (getCachedPosts, etc.)',          depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'site-identity.ts',       desc: 'SiteIdentity type + buildIdentity() helper',          depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'metadata.ts',            desc: 'createMetadata() and buildOgUrl() helpers',           depth: 1, last: false },
-      { pre: '│   ├── ', dir: false, name: 'structured-data.ts',     desc: 'JSON-LD schema builders (Person, WebSite, etc.)',      depth: 1, last: false },
-      { pre: '│   └── ', dir: true,  name: 'email/',                 desc: 'Email sending utilities',                              depth: 1, last: true  },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: true,  name: 'emails/',                desc: 'React Email templates',                                depth: 0, last: false },
-      { pre: '├── ',     dir: true,  name: 'hooks/',                 desc: 'Payload lifecycle hooks (cache revalidation)',          depth: 0, last: false },
-      { pre: '├── ',     dir: true,  name: 'public/',                desc: 'Static assets — favicon, fonts, icons',                depth: 0, last: false },
-      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
-      { pre: '├── ',     dir: false, name: 'payload.config.ts',      desc: 'Payload CMS — collections, plugins, storage, email',  depth: 0, last: false },
-      { pre: '├── ',     dir: false, name: 'next.config.ts',         desc: 'Next.js configuration — image domains, headers',      depth: 0, last: false },
-      { pre: '├── ',     dir: false, name: 'tailwind.config.ts',     desc: 'Tailwind theme and design tokens',                     depth: 0, last: false },
-      { pre: '└── ',     dir: false, name: '.env.example',           desc: 'Environment variable template — copy to .env.local',  depth: 0, last: true  },
+      { pre: '',             dir: true,  name: 'payload-portfolio/', desc: 'Project root',                                           depth: 0 },
+      { pre: '├── ',         dir: true,  name: 'src/',               desc: 'All TypeScript source code lives here',                  depth: 0 },
+      { pre: '│   ├── ',     dir: true,  name: 'actions/',           desc: 'Server actions — form submissions, subscriptions',       depth: 1 },
+      { pre: '│   │   ├── ', dir: false, name: 'contact.ts',         desc: 'Contact form submission + email notification',           depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'subscribe.ts',       desc: 'Newsletter subscribe/unsubscribe action',                depth: 2 },
+      { pre: '│   │   └── ', dir: false, name: 'talent-inquiry.ts',  desc: 'Talent dialog submission + email with attachment',       depth: 2 },
+      { pre: '│   │',        dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   ├── ',     dir: true,  name: 'app/',               desc: 'Next.js App Router — all routes live here',              depth: 1 },
+      { pre: '│   │   ├── ', dir: true,  name: '(site)/',            desc: 'Public portfolio routes — wrapped in site layout',       depth: 2 },
+      { pre: '│   │   │   ├── ', dir: false, name: 'layout.tsx',     desc: 'Site shell — fonts, providers, SiteIdentityProvider',    depth: 3 },
+      { pre: '│   │   │   ├── ', dir: false, name: 'page.tsx',       desc: 'Homepage',                                               depth: 3 },
+      { pre: '│   │   │   ├── ', dir: true,  name: 'work/',          desc: '/work listing + /work/[slug] case study',                depth: 3 },
+      { pre: '│   │   │   ├── ', dir: true,  name: 'writing/',       desc: '/writing listing + /writing/[slug] blog post',           depth: 3 },
+      { pre: '│   │   │   ├── ', dir: true,  name: 'projects/',      desc: '/projects side-projects gallery',                        depth: 3 },
+      { pre: '│   │   │   ├── ', dir: true,  name: 'stack/',         desc: '/stack tech-stack page',                                 depth: 3 },
+      { pre: '│   │   │   ├── ', dir: true,  name: 'contact/',       desc: '/contact inquiry form',                                  depth: 3 },
+      { pre: '│   │   │   ├── ', dir: true,  name: 'page/',          desc: '/page/[slug] — CMS basic pages with ISR',                depth: 3 },
+      { pre: '│   │   │   └── ', dir: true,  name: 'legal/',         desc: '/legal/[slug] — CMS legal pages',                        depth: 3 },
+      { pre: '│   │   │',    dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   │   ├── ', dir: true,  name: '(payload)/',         desc: 'Payload CMS admin panel — mounted at /admin',            depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'og/',                desc: 'Dynamic OG image generation (PNG)',                      depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'feed.xml/',          desc: 'RSS feed route handler',                                 depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'sitemap-index.xml/', desc: 'Sitemap index linking to sub-sitemaps',                  depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'llms.txt/',          desc: 'AI-readable plain-text site summary',                    depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'maintenance/',       desc: 'Maintenance mode page',                                  depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'robots.ts',          desc: 'robots.txt generation (allows AI crawlers)',             depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'sitemap.ts',         desc: 'Dynamic sitemap (posts, work, pages)',                   depth: 2 },
+      { pre: '│   │   └── ', dir: false, name: 'not-found.tsx',      desc: 'Global 404 page',                                        depth: 2 },
+      { pre: '│   │',        dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   ├── ',     dir: true,  name: 'collections/',       desc: 'Payload CMS collection schemas',                         depth: 1 },
+      { pre: '│   │   ├── ', dir: false, name: 'Posts.ts',           desc: 'Blog articles with Lexical editor and tags',             depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Work.ts',            desc: 'Professional case studies',                              depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Projects.ts',        desc: 'Side projects and OSS',                                  depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Timeline.ts',        desc: 'Career history entries',                                 depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Education.ts',       desc: 'Degrees and qualifications',                             depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Certifications.ts',  desc: 'Professional certifications',                            depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Pages.ts',           desc: 'CMS pages (legal + basic templates)',                    depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Media.ts',           desc: 'Image/file uploads → Cloudflare R2',                    depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'Submissions.ts',     desc: 'Form submissions (read-only admin)',                     depth: 2 },
+      { pre: '│   │   └── ', dir: false, name: 'Users.ts',           desc: 'Admin user accounts',                                    depth: 2 },
+      { pre: '│   │',        dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   ├── ',     dir: true,  name: 'components/',        desc: 'React components',                                       depth: 1 },
+      { pre: '│   │   ├── ', dir: true,  name: 'providers/',         desc: 'React context providers (SiteIdentity, Theme, etc.)',    depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'sections/',          desc: 'Page section components (Hero, Philosophy, etc.)',       depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'site/',              desc: 'Shell components — Rail, Footer, MobileHeader',          depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'writing/',           desc: 'Blog-specific components (TOC, PostShare, etc.)',        depth: 2 },
+      { pre: '│   │   ├── ', dir: true,  name: 'anim/',              desc: 'Animation wrappers — FadeRise, MaskReveal, CountUp',     depth: 2 },
+      { pre: '│   │   └── ', dir: true,  name: 'ui/',                desc: 'shadcn/ui primitives — Button, Badge, Dialog, etc.',     depth: 2 },
+      { pre: '│   │',        dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   ├── ',     dir: true,  name: 'content/',           desc: 'Static content files',                                   depth: 1 },
+      { pre: '│   │   └── ', dir: false, name: 'stack.ts',           desc: 'EDIT THIS — your tech stack list',                       depth: 2, edit: true },
+      { pre: '│   │',        dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   ├── ',     dir: true,  name: 'globals/',           desc: 'Payload CMS global schemas',                             depth: 1 },
+      { pre: '│   │   └── ', dir: false, name: 'SiteSettings.ts',    desc: 'Identity, socials, philosophy, resume, availability',    depth: 2 },
+      { pre: '│   │',        dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   ├── ',     dir: true,  name: 'lib/',               desc: 'Shared utility modules',                                 depth: 1 },
+      { pre: '│   │   ├── ', dir: false, name: 'data.ts',            desc: 'Cached data fetchers (getCachedPosts, etc.)',             depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'site-identity.ts',   desc: 'SiteIdentity type + buildIdentity() helper',             depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'metadata.ts',        desc: 'createMetadata() and buildOgUrl() helpers',              depth: 2 },
+      { pre: '│   │   ├── ', dir: false, name: 'structured-data.ts', desc: 'JSON-LD schema builders (Person, WebSite, etc.)',        depth: 2 },
+      { pre: '│   │   └── ', dir: true,  name: 'email/',             desc: 'Email sending utilities',                                depth: 2 },
+      { pre: '│   │',        dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '│   ├── ',     dir: true,  name: 'emails/',            desc: 'React Email templates',                                  depth: 1 },
+      { pre: '│   ├── ',     dir: true,  name: 'features/',          desc: 'Custom Payload/Lexical features',                        depth: 1 },
+      { pre: '│   ├── ',     dir: true,  name: 'hooks/',             desc: 'Custom React hooks (useMobile, etc.)',                   depth: 1 },
+      { pre: '│   └── ',     dir: false, name: 'payload.config.ts',  desc: 'Payload CMS — collections, plugins, storage, email',     depth: 1 },
+      { pre: '│',            dir: null,  name: '',                   desc: '',                                                       spacer: true },
+      { pre: '├── ',         dir: true,  name: 'public/',            desc: 'Static assets — favicon, fonts, icons',                  depth: 0 },
+      { pre: '├── ',         dir: false, name: 'next.config.ts',     desc: 'Next.js configuration — image loader, rewrites',         depth: 0 },
+      { pre: '├── ',         dir: false, name: 'tsconfig.json',      desc: 'TypeScript config — @/* paths point to src/',            depth: 0 },
+      { pre: '├── ',         dir: false, name: 'vercel.json',        desc: 'Raises serverless function timeout to 60 s',             depth: 0 },
+      { pre: '└── ',         dir: false, name: '.env.example',       desc: 'Environment variable template — copy to .env.local',     depth: 0, last: true },
     ];
 
     const container = document.getElementById('tree');
