@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { site } from '@/content/site'
+import { getCachedSiteSettings } from '@/lib/data'
+import { buildIdentity } from '@/lib/site-identity'
 import {
   getSitemapPosts,
   getSitemapWork,
@@ -13,6 +14,9 @@ function maxDate(dates: (string | null)[]): string | null {
 }
 
 export async function GET() {
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   const [posts, work, pages] = await Promise.all([
     getSitemapPosts(),
     getSitemapWork(),
@@ -34,10 +38,10 @@ export async function GET() {
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    sitemapEntry(`${site.url}/sitemap/static.xml`, null),
-    sitemapEntry(`${site.url}/sitemap/writing.xml`, writingLastmod),
-    sitemapEntry(`${site.url}/sitemap/work.xml`, workLastmod),
-    sitemapEntry(`${site.url}/sitemap/pages.xml`, pagesLastmod),
+    sitemapEntry(`${identity.url}/sitemap/static.xml`, null),
+    sitemapEntry(`${identity.url}/sitemap/writing.xml`, writingLastmod),
+    sitemapEntry(`${identity.url}/sitemap/work.xml`, workLastmod),
+    sitemapEntry(`${identity.url}/sitemap/pages.xml`, pagesLastmod),
     '</sitemapindex>',
   ].join('\n')
 

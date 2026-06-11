@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { getCachedPosts } from '@/lib/data'
-import { site } from '@/content/site'
+import { getCachedPosts, getCachedSiteSettings } from '@/lib/data'
+import { buildIdentity } from '@/lib/site-identity'
 
 function escapeXml(value: string): string {
   return value
@@ -12,11 +12,14 @@ function escapeXml(value: string): string {
 }
 
 export async function GET() {
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   const posts = await getCachedPosts().catch(() => [])
 
   const items = posts
     .map((post) => {
-      const url = `${site.url}/writing/${post.slug}`
+      const url = `${identity.url}/writing/${post.slug}`
       return [
         '    <item>',
         `      <title>${escapeXml(post.title)}</title>`,
@@ -26,7 +29,7 @@ export async function GET() {
         ...(post.publishedAt
           ? [`      <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>`]
           : []),
-        `      <author>${escapeXml(`${site.email} (${site.name})`)}</author>`,
+        `      <author>${escapeXml(`${identity.email} (${identity.name})`)}</author>`,
         '    </item>',
       ].join('\n')
     })
@@ -40,12 +43,12 @@ export async function GET() {
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
     '  <channel>',
-    `    <title>${escapeXml(`${site.name} — Writing`)}</title>`,
-    `    <link>${site.url}/writing</link>`,
-    `    <description>${escapeXml(site.description)}</description>`,
+    `    <title>${escapeXml(`${identity.name} — Writing`)}</title>`,
+    `    <link>${identity.url}/writing</link>`,
+    `    <description>${escapeXml(identity.description)}</description>`,
     '    <language>en</language>',
     ...(lastBuildDate ? [`    <lastBuildDate>${lastBuildDate}</lastBuildDate>`] : []),
-    `    <atom:link href="${site.url}/feed.xml" rel="self" type="application/rss+xml" />`,
+    `    <atom:link href="${identity.url}/feed.xml" rel="self" type="application/rss+xml" />`,
     items,
     '  </channel>',
     '</rss>',

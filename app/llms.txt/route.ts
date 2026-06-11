@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server'
-import { getCachedWorkEntries, getCachedPosts, getCachedProjects } from '@/lib/data'
-import { site } from '@/content/site'
+import { getCachedWorkEntries, getCachedPosts, getCachedProjects, getCachedSiteSettings } from '@/lib/data'
+import { buildIdentity } from '@/lib/site-identity'
 import { stack } from '@/content/stack'
 
 export async function GET() {
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   const [workEntries, posts, projects] = await Promise.all([
     getCachedWorkEntries().catch(() => []),
     getCachedPosts().catch(() => []),
@@ -11,28 +14,28 @@ export async function GET() {
   ])
 
   const lines: string[] = [
-    `# ${site.name}`,
-    `> ${site.role} based in ${site.location}. ${site.subheadline}`,
+    `# ${identity.name}`,
+    `> ${identity.role} based in ${identity.location}. ${identity.description}`,
     '',
-    `Contact: ${site.email}`,
+    `Contact: ${identity.email}`,
     '',
     '## Pages',
-    `- [About](${site.url}/): Introduction, career stats, work philosophy, and experience timeline.`,
-    `- [Work](${site.url}/work): Selected project case studies covering problem, approach, impact, and stack.`,
-    `- [Projects](${site.url}/projects): Side projects, Chrome extensions, mobile apps, and open-source contributions.`,
-    `- [Stack](${site.url}/stack): Full tool and technology breakdown with proficiency levels.`,
-    `- [Writing](${site.url}/writing): Articles on frontend engineering, architecture, and building at scale.`,
-    `- [Contact](${site.url}/contact): Enquiry form and direct contact details.`,
+    `- [About](${identity.url}/): Introduction, career stats, work philosophy, and experience timeline.`,
+    `- [Work](${identity.url}/work): Selected project case studies covering problem, approach, impact, and stack.`,
+    `- [Projects](${identity.url}/projects): Side projects, Chrome extensions, mobile apps, and open-source contributions.`,
+    `- [Stack](${identity.url}/stack): Full tool and technology breakdown with proficiency levels.`,
+    `- [Writing](${identity.url}/writing): Articles on frontend engineering, architecture, and building at scale.`,
+    `- [Contact](${identity.url}/contact): Enquiry form and direct contact details.`,
     '',
     '## Selected Work',
     ...workEntries.map(
-      (p) => `- [${p.title}](${site.url}/work/${p.slug}): ${p.description}`
+      (p) => `- [${p.title}](${identity.url}/work/${p.slug}): ${p.description}`
     ),
     '',
     '## Writing',
     ...posts.map(
       (p) =>
-        `- [${p.title}](${site.url}/writing/${p.slug})${p.excerpt ? `: ${p.excerpt}` : ''}`
+        `- [${p.title}](${identity.url}/writing/${p.slug})${p.excerpt ? `: ${p.excerpt}` : ''}`
     ),
     '',
     '## Projects',

@@ -2,7 +2,8 @@ import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
 import { readFile } from 'fs/promises'
 import path from 'path'
-import { site } from '@/content/site'
+import { getCachedSiteSettings } from '@/lib/data'
+import { buildIdentity } from '@/lib/site-identity'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,6 +33,9 @@ function titleFontSize(title: string): number {
 }
 
 export async function GET(req: NextRequest): Promise<Response> {
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   const { searchParams } = req.nextUrl
   const title = searchParams.get('title')
   const kind = searchParams.get('kind') ?? ''
@@ -178,7 +182,7 @@ export async function GET(req: NextRequest): Promise<Response> {
                 letterSpacing: '0.05em',
               }}
             >
-              {site.url.replace('https://', '')}
+              {identity.url.replace('https://', '')}
             </div>
           </div>
 
@@ -235,10 +239,10 @@ export async function GET(req: NextRequest): Promise<Response> {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={mark} width={26} height={34} alt="" />
                 <div style={{ display: 'flex', color: '#e8e8e5', fontSize: '19px', fontWeight: 700 }}>
-                  {site.name}
+                  {identity.name}
                 </div>
                 <div style={{ display: 'flex', color: '#5c5c59', fontSize: '19px' }}>·</div>
-                <div style={{ display: 'flex', color: '#9a9a96', fontSize: '17px' }}>{site.role}</div>
+                <div style={{ display: 'flex', color: '#9a9a96', fontSize: '17px' }}>{identity.role}</div>
               </div>
               <div
                 style={{
@@ -248,7 +252,7 @@ export async function GET(req: NextRequest): Promise<Response> {
                   fontFamily: '"JetBrains Mono"',
                 }}
               >
-                @{site.handle}
+                @{identity.handle}
               </div>
             </div>
           </div>

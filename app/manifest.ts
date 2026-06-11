@@ -1,11 +1,14 @@
 import type { MetadataRoute } from 'next'
-import { site } from '@/content/site'
+import { getCachedSiteSettings } from '@/lib/data'
+import { buildIdentity } from '@/lib/site-identity'
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
   return {
-    name: site.name,
-    short_name: 'The Falcon',
-    description: site.description,
+    name: identity.name,
+    short_name: identity.handle || identity.name,
+    description: identity.description,
     start_url: '/',
     display: 'standalone',
     background_color: '#0a0a0a',
