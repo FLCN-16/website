@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     ]
   },
   images: {
-    loaderFile: "./lib/cloudflare-image-loader.ts",
+    loaderFile: "./src/lib/cloudflare-image-loader.ts",
     remotePatterns: [
       {
         protocol: "https",
