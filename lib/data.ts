@@ -381,7 +381,19 @@ export interface RawSiteSettings {
   headline?: string | null
   subheadline?: string | null
   eyebrow?: string | null
-  stats?: { value: string; label: string }[] | null
+  stats?: Array<{ value: string; label: string }> | null
+  identity?: {
+    name?: string | null
+    handle?: string | null
+    role?: string | null
+    location?: string | null
+    timezone?: string | null
+    email?: string | null
+    siteUrl?: string | null
+    description?: string | null
+  } | null
+  socials?: Array<{ platform: string; url: string; label?: string | null }> | null
+  philosophy?: Array<{ title: string; body: string }> | null
 }
 
 export async function getCachedSiteSettings(): Promise<RawSiteSettings | null> {
