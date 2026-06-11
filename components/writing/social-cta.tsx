@@ -1,6 +1,8 @@
+"use client"
+
 import { HugeiconsIcon } from "@hugeicons/react"
 import { GithubIcon, Linkedin02Icon, InstagramIcon } from "@hugeicons/core-free-icons"
-import { site } from "@/content/site"
+import { useSiteIdentity } from "@/components/providers/site-identity-provider"
 import { OutboundLink } from "@/components/site/tracked-link"
 import { SubscribeButton } from "./subscribe-form"
 import { cn } from "@/lib/utils"
@@ -22,6 +24,7 @@ const SOCIAL_STYLES: Record<string, string> = {
 }
 
 export function WritingSocialCTA() {
+  const identity = useSiteIdentity()
   return (
     <div className="camera-frame border border-border/60 bg-transparent p-6 sm:p-8 md:p-12 text-foreground">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 md:gap-10">
@@ -59,7 +62,7 @@ export function WritingSocialCTA() {
             </div>
 
             <div className="flex flex-wrap justify-center gap-2">
-              {site.socials.map((social) => {
+              {identity.socials.map((social) => {
                 const icon = SOCIAL_ICONS[social.platform]
                 const style = SOCIAL_STYLES[social.platform]
                 if (!icon || !style) return null

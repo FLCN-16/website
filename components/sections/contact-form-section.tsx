@@ -7,7 +7,7 @@ import { toast } from "sonner"
 
 import { contactSchema, INQUIRY_OPTIONS, type ContactFormData } from "@/lib/schemas/contact"
 import { submitContact } from "@/actions/contact"
-import { site } from "@/content/site"
+import { useSiteIdentity } from "@/components/providers/site-identity-provider"
 import { trackEvent } from "@/lib/analytics"
 
 import { Button } from "@/components/ui/button"
@@ -25,14 +25,6 @@ import Link from "next/link"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { cn } from "@/lib/utils"
 
-const NODE_STATS = [
-  { label: "LOCATION", value: site.location },
-  { label: "TIMEZONE", value: site.timezone },
-  { label: "STATUS", value: site.status.label },
-  { label: "RESPONSE", value: "~24 hours" },
-  { label: "PREFERRED", value: "Email / This form" },
-] as const
-
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
@@ -41,8 +33,17 @@ function FieldError({ message }: { message?: string }) {
 }
 
 export function ContactFormSection() {
+  const identity = useSiteIdentity()
   const [isPending, setIsPending] = useState(false)
   const [formKey, setFormKey] = useState(0)
+
+  const NODE_STATS = [
+    { label: "LOCATION", value: identity.location },
+    { label: "TIMEZONE", value: identity.timezone },
+    { label: "STATUS", value: identity.status.label },
+    { label: "RESPONSE", value: "~24 hours" },
+    { label: "PREFERRED", value: "Email / This form" },
+  ] as const
 
   const {
     register,
@@ -136,10 +137,10 @@ export function ContactFormSection() {
                   Direct Email
                 </p>
                 <a
-                  href={`mailto:${site.email}`}
+                  href={`mailto:${identity.email}`}
                   className="text-foreground text-sm hover:text-primary transition-colors break-all"
                 >
-                  {site.email}
+                  {identity.email}
                 </a>
               </div>
             </div>

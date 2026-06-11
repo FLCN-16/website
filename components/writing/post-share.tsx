@@ -13,7 +13,7 @@ import {
   MailIcon,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
-import { site } from "@/content/site"
+import { useSiteIdentity } from "@/components/providers/site-identity-provider"
 
 interface PostShareProps {
   title: string
@@ -67,8 +67,9 @@ const btnBase =
   "inline-flex items-center gap-2 px-2.5 py-2 md:px-3.5 border border-border font-mono text-xs text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
 
 export function PostShare({ title, slug }: PostShareProps) {
+  const identity = useSiteIdentity()
   const [copied, setCopied] = useState(false)
-  const base = `${site.url}/writing/${slug}`
+  const base = `${identity.url}/writing/${slug}`
   const encodedTitle = encodeURIComponent(title)
 
   function copyLink() {
