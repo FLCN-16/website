@@ -3,7 +3,7 @@ import path from 'path'
 
 export default defineConfig({
   test: {
-    environment: 'node',
+    environment: process.env.VITEST_ENV === 'jsdom' ? 'jsdom' : 'node',
   },
   resolve: {
     alias: {
