@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>payload-portfolio — Upgrade Guide</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-brand: #6366f1;
+      --color-brand-light: #818cf8;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+    .sidebar-link {
+      @apply block px-3 py-1.5 text-sm rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors;
+    }
+    .sidebar-link.active { @apply text-white bg-zinc-800; }
+    .sidebar-group {
+      @apply text-xs font-semibold uppercase tracking-widest text-zinc-600 px-3 pt-5 pb-1.5;
+    }
+    pre {
+      @apply bg-zinc-900 border border-zinc-800 rounded-lg p-4 overflow-x-auto text-sm font-mono text-zinc-300 leading-relaxed;
+    }
+    code:not(pre code) {
+      @apply bg-zinc-800 text-indigo-300 rounded px-1.5 py-0.5 text-sm font-mono;
+    }
+    .step-num {
+      @apply flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white text-sm font-bold flex items-center justify-center;
+    }
+    .badge {
+      @apply inline-block text-xs font-semibold px-2 py-0.5 rounded-full;
+    }
+    .badge-green  { @apply bg-emerald-900/60 text-emerald-300 border border-emerald-800; }
+    .badge-yellow { @apply bg-yellow-900/60  text-yellow-300  border border-yellow-800; }
+    .badge-blue   { @apply bg-blue-900/60    text-blue-300    border border-blue-800; }
+    .badge-red    { @apply bg-red-900/60     text-red-300     border border-red-800; }
+    .badge-purple { @apply bg-purple-900/60  text-purple-300  border border-purple-800; }
+    .section-heading {
+      @apply text-2xl font-bold text-white mb-2 flex items-center gap-3;
+    }
+    .subsection-heading {
+      @apply text-lg font-semibold text-zinc-100 mt-8 mb-3;
+    }
+    .card {
+      @apply bg-zinc-900 border border-zinc-800 rounded-xl p-5;
+    }
+    .table-auto th { @apply text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 pb-2; }
+    .table-auto td { @apply py-2 align-top; }
+    .table-auto tr { @apply border-t border-zinc-800; }
+    .tip {
+      @apply flex gap-3 bg-indigo-950/50 border border-indigo-900 rounded-lg p-4 text-sm text-indigo-200;
+    }
+    .warn {
+      @apply flex gap-3 bg-yellow-950/50 border border-yellow-900 rounded-lg p-4 text-sm text-yellow-200;
+    }
+    .danger {
+      @apply flex gap-3 bg-red-950/50 border border-red-900 rounded-lg p-4 text-sm text-red-200;
+    }
+    .safe-row  { @apply bg-emerald-950/30 border-l-2 border-emerald-700; }
+    .keep-row  { @apply bg-yellow-950/30  border-l-2 border-yellow-700; }
+    .check-row { @apply bg-blue-950/30    border-l-2 border-blue-700; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-300 min-h-screen">
+
+  <!-- Top bar -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-14 bg-zinc-950/90 backdrop-blur border-b border-zinc-800 flex items-center px-6 gap-4">
+    <a href="index.html" class="text-zinc-500 hover:text-white transition-colors text-sm">payload-portfolio</a>
+    <span class="text-zinc-700">/</span>
+    <span class="text-white font-bold tracking-tight">Upgrade Guide</span>
+    <span class="badge badge-purple ml-1">v1.0.0+</span>
+  </header>
+
+  <div class="flex pt-14">
+
+    <!-- Sidebar -->
+    <aside class="hidden lg:flex flex-col fixed left-0 top-14 bottom-0 w-60 bg-zinc-950 border-r border-zinc-800 overflow-y-auto py-4 px-2">
+      <span class="sidebar-group">Before You Upgrade</span>
+      <a href="#overview"       class="sidebar-link">Overview</a>
+      <a href="#your-data"      class="sidebar-link">Your Data is Safe</a>
+      <a href="#what-to-keep"   class="sidebar-link">Files to Protect</a>
+
+      <span class="sidebar-group">Upgrade Methods</span>
+      <a href="#method-git"     class="sidebar-link">Method A — Git (recommended)</a>
+      <a href="#method-zip"     class="sidebar-link">Method B — ZIP download</a>
+
+      <span class="sidebar-group">After the Upgrade</span>
+      <a href="#post-install"   class="sidebar-link">Install &amp; Verify</a>
+      <a href="#breaking"       class="sidebar-link">Breaking Change Checklist</a>
+      <a href="#redeploy"       class="sidebar-link">Redeploy</a>
+
+      <span class="sidebar-group">Reference</span>
+      <a href="#file-map"       class="sidebar-link">Full File Map</a>
+      <a href="#faq"            class="sidebar-link">FAQ</a>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 lg:ml-60 px-6 md:px-12 py-10 max-w-4xl mx-auto lg:mx-0">
+
+      <!-- ── Overview ── -->
+      <section id="overview" class="mb-16">
+        <div class="mb-6">
+          <h1 class="text-4xl font-bold text-white mb-3">Upgrade Guide</h1>
+          <p class="text-zinc-400 text-lg leading-relaxed">How to apply a new version of payload-portfolio without losing your content or personalisation.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+          <div class="card">
+            <div class="text-2xl mb-2">🗄️</div>
+            <div class="text-sm font-semibold text-white mb-1">Content is untouched</div>
+            <div class="text-xs text-zinc-500">All your posts, work, and settings live in MongoDB — the upgrade never touches your database</div>
+          </div>
+          <div class="card">
+            <div class="text-2xl mb-2">🔐</div>
+            <div class="text-sm font-semibold text-white mb-1">One file to protect</div>
+            <div class="text-xs text-zinc-500"><code>src/content/stack.ts</code> is the only source file you edited — back it up before upgrading</div>
+          </div>
+          <div class="card">
+            <div class="text-2xl mb-2">⚡</div>
+            <div class="text-sm font-semibold text-white mb-1">~5 min process</div>
+            <div class="text-xs text-zinc-500">Pull changes, install deps, restore your stack file, redeploy</div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <span>💡</span>
+          <div>
+            <strong>Read the CHANGELOG first.</strong> Every release lists what changed, what's new, and any breaking changes that require manual steps. Open <code>CHANGELOG.md</code> in the root of the project before starting.
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Your data is safe ── -->
+      <section id="your-data" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Your Data is Safe</h2>
+        <p class="text-zinc-400 mb-6">Upgrading replaces source code files — it never touches your database or environment variables. Here's where each type of data lives:</p>
+
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead><tr>
+              <th class="w-48">Data</th>
+              <th class="w-32">Where it lives</th>
+              <th>Affected by upgrade?</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td class="text-white font-medium pr-4">Name, role, socials, philosophy</td>
+                <td><span class="badge badge-green">MongoDB</span></td>
+                <td class="text-zinc-400">No — stored in your database, never in source files</td>
+              </tr>
+              <tr>
+                <td class="text-white font-medium pr-4">Blog posts, work entries</td>
+                <td><span class="badge badge-green">MongoDB</span></td>
+                <td class="text-zinc-400">No — all CMS content lives in the database</td>
+              </tr>
+              <tr>
+                <td class="text-white font-medium pr-4">Uploaded images &amp; PDFs</td>
+                <td><span class="badge badge-green">Cloudflare R2</span></td>
+                <td class="text-zinc-400">No — stored in your R2 bucket, not the repo</td>
+              </tr>
+              <tr>
+                <td class="text-white font-medium pr-4">API keys &amp; secrets</td>
+                <td><span class="badge badge-blue">.env.local</span></td>
+                <td class="text-zinc-400">No — <code>.env.local</code> is git-ignored and never overwritten</td>
+              </tr>
+              <tr>
+                <td class="text-white font-medium pr-4">Your tech stack list</td>
+                <td><span class="badge badge-yellow">src/content/stack.ts</span></td>
+                <td class="text-zinc-400"><strong class="text-yellow-300">Yes — back this up before upgrading</strong></td>
+              </tr>
+              <tr>
+                <td class="text-white font-medium pr-4">Custom code changes</td>
+                <td><span class="badge badge-yellow">source files</span></td>
+                <td class="text-zinc-400">Yes — any custom edits you made to components will need re-applying if those files changed in the update</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Files to protect ── -->
+      <section id="what-to-keep" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Files to Protect</h2>
+        <p class="text-zinc-400 mb-6">Before copying any new files into your project, save copies of these:</p>
+
+        <div class="space-y-3 mb-8">
+
+          <div class="card keep-row">
+            <div class="flex items-center gap-3 mb-1">
+              <code>src/content/stack.ts</code>
+              <span class="badge badge-yellow">always back up</span>
+            </div>
+            <p class="text-sm text-zinc-400">The only source file you edited. Copy it somewhere safe before upgrading, then restore it after. Its format rarely changes between versions — but check the CHANGELOG to be sure.</p>
+          </div>
+
+          <div class="card keep-row">
+            <div class="flex items-center gap-3 mb-1">
+              <code>.env.local</code>
+              <span class="badge badge-yellow">always back up</span>
+            </div>
+            <p class="text-sm text-zinc-400">Your environment variables. This file is git-ignored and is never included in downloads, so it can't be overwritten — but keep a copy offsite just in case.</p>
+          </div>
+
+          <div class="card check-row">
+            <div class="flex items-center gap-3 mb-1">
+              <code>public/</code>
+              <span class="badge badge-blue">check for custom assets</span>
+            </div>
+            <p class="text-sm text-zinc-400">If you replaced the default favicon, avatar image, or added your own icons here, back those files up. Updates may ship new files in <code>public/</code> but won't delete existing ones (via git merge or careful ZIP copy).</p>
+          </div>
+
+          <div class="card check-row">
+            <div class="flex items-center gap-3 mb-1">
+              <code>src/app/globals.css</code>
+              <span class="badge badge-blue">check if you customised colours</span>
+            </div>
+            <p class="text-sm text-zinc-400">If you changed the colour palette or design tokens, note your changes before upgrading. This file may be updated in new releases.</p>
+          </div>
+
+          <div class="card safe-row">
+            <div class="flex items-center gap-3 mb-1">
+              <code>All other source files</code>
+              <span class="badge badge-green">safe to overwrite</span>
+            </div>
+            <p class="text-sm text-zinc-400">Components, pages, lib utilities, collections, globals, actions — these are all framework code maintained by updates. Unless you made custom edits to them, you can overwrite them freely.</p>
+          </div>
+
+        </div>
+
+        <div class="danger">
+          <span>⛔</span>
+          <div>Never overwrite <code>.env.local</code> with <code>.env.example</code> from the new release. <code>.env.example</code> only shows the variable names — it does not contain your values. Check if any new variables were added to <code>.env.example</code> and add only those to your existing <code>.env.local</code>.</div>
+        </div>
+      </section>
+
+      <!-- ── Method A: Git ── -->
+      <section id="method-git" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Method A — Git <span class="badge badge-green ml-2 text-base font-normal">recommended</span></h2>
+        <p class="text-zinc-400 mb-6">If you pushed the project to your own GitHub repository, this is the cleanest upgrade path. Git handles the diff and won't touch files it didn't change.</p>
+
+        <div class="space-y-6">
+
+          <div class="flex gap-4">
+            <div class="step-num">1</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Back up your stack file</div>
+              <pre>cp src/content/stack.ts stack.backup.ts</pre>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">2</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Add the upstream remote (first time only)</div>
+              <pre>git remote add upstream https://github.com/SELLER_REPO/payload-portfolio.git</pre>
+              <p class="text-sm text-zinc-500 mt-2">Replace the URL with the repository URL provided in your CodeCanyon download page. You only need to do this step once.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">3</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Fetch the new release</div>
+              <pre>git fetch upstream
+git log upstream/main --oneline -10</pre>
+              <p class="text-sm text-zinc-500 mt-2">Review the commits to understand what changed before merging.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">4</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Merge the update into your branch</div>
+              <pre>git merge upstream/main --no-commit</pre>
+              <p class="text-sm text-zinc-500 mt-2"><code>--no-commit</code> stages the changes but doesn't create the commit yet, giving you a chance to review the diff before finalising.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">5</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Resolve any conflicts</div>
+              <p class="text-sm text-zinc-400 mb-3">Most conflicts will be in <code>src/content/stack.ts</code> if you edited it. Accept your version of that file:</p>
+              <pre>git checkout --ours src/content/stack.ts
+git add src/content/stack.ts</pre>
+              <p class="text-sm text-zinc-500 mt-2">For any other conflicts, compare the diff carefully and decide whether to keep your changes or accept the update.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">6</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Commit the merge</div>
+              <pre>git commit -m "chore: upgrade to vX.Y.Z"</pre>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">7</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Check for new environment variables</div>
+              <p class="text-sm text-zinc-400 mb-2">Compare the new <code>.env.example</code> with your <code>.env.local</code>. If new variables were added, copy them to your <code>.env.local</code> and fill in the values.</p>
+              <pre>diff .env.example .env.local</pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Method B: ZIP ── -->
+      <section id="method-zip" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Method B — ZIP Download</h2>
+        <p class="text-zinc-400 mb-6">If you're not using git, follow these steps to apply the update manually.</p>
+
+        <div class="space-y-6">
+
+          <div class="flex gap-4">
+            <div class="step-num">1</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Back up your personalised files</div>
+              <p class="text-sm text-zinc-400 mb-2">Copy these somewhere outside the project folder before doing anything else:</p>
+              <ul class="text-sm text-zinc-400 space-y-1 list-disc list-inside ml-2">
+                <li><code>src/content/stack.ts</code> — your tech stack</li>
+                <li><code>.env.local</code> — your API keys and secrets</li>
+                <li>Any custom assets you added to <code>public/</code></li>
+                <li>Any custom code edits you made (note which files)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">2</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Download and unzip the new release</div>
+              <p class="text-sm text-zinc-400">Extract the new ZIP to a temporary folder — <strong>not</strong> inside your existing project.</p>
+              <pre>unzip payload-portfolio-vX.Y.Z.zip -d /tmp/payload-new</pre>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">3</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Read the CHANGELOG</div>
+              <p class="text-sm text-zinc-400">Open <code>/tmp/payload-new/CHANGELOG.md</code> and read the entries between your current version and the new one. Look for any <strong>Breaking Changes</strong> or migration notes before copying files.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">4</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Copy the source directories</div>
+              <p class="text-sm text-zinc-400 mb-2">Replace the following directories in your project with the ones from the new release:</p>
+              <pre>cp -r /tmp/payload-new/src/app        ./src/app
+cp -r /tmp/payload-new/src/components ./src/components
+cp -r /tmp/payload-new/src/lib        ./src/lib
+cp -r /tmp/payload-new/src/collections ./src/collections
+cp -r /tmp/payload-new/src/globals    ./src/globals
+cp -r /tmp/payload-new/src/actions   ./src/actions
+cp -r /tmp/payload-new/src/emails    ./src/emails
+cp -r /tmp/payload-new/src/features  ./src/features
+cp -r /tmp/payload-new/src/hooks     ./src/hooks
+cp -r /tmp/payload-new/src/payload.config.ts ./src/payload.config.ts</pre>
+              <div class="warn mt-3">
+                <span>⚠️</span>
+                <span>Do <strong>not</strong> copy <code>src/content/stack.ts</code> — this is your personalised file. Leave it as-is.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">5</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Copy the root config files</div>
+              <p class="text-sm text-zinc-400 mb-2">Replace these root-level files (they don't contain personal data):</p>
+              <pre>cp /tmp/payload-new/next.config.ts   ./next.config.ts
+cp /tmp/payload-new/tsconfig.json    ./tsconfig.json
+cp /tmp/payload-new/vitest.config.ts ./vitest.config.ts
+cp /tmp/payload-new/components.json  ./components.json</pre>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">6</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Check for new env variables</div>
+              <p class="text-sm text-zinc-400 mb-2">Compare the new example file with your live config and add any missing variables:</p>
+              <pre>diff /tmp/payload-new/.env.example .env.local</pre>
+              <p class="text-sm text-zinc-500 mt-2">Lines prefixed with <code>&lt;</code> are in the new example but not your file — add those variables to your <code>.env.local</code>.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">7</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Copy updated package.json</div>
+              <p class="text-sm text-zinc-400 mb-2">Replace <code>package.json</code> with the new version so updated dependencies are pulled in:</p>
+              <pre>cp /tmp/payload-new/package.json ./package.json</pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Post-install ── -->
+      <section id="post-install" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Install &amp; Verify</h2>
+        <p class="text-zinc-400 mb-6">Run these steps after applying either upgrade method.</p>
+
+        <div class="space-y-6">
+
+          <div class="flex gap-4">
+            <div class="step-num">1</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Install updated dependencies</div>
+              <pre>pnpm install</pre>
+              <p class="text-sm text-zinc-500 mt-2">New releases may add, remove, or upgrade npm packages. Always run this after upgrading.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">2</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Start the dev server and check for errors</div>
+              <pre>pnpm dev</pre>
+              <p class="text-sm text-zinc-400 mt-2">Open <code>http://localhost:3000</code> and click through the main pages. Open <code>http://localhost:3000/admin</code> and verify the admin panel loads correctly. Watch the terminal for any build errors.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">3</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Run the test suite</div>
+              <pre>pnpm test</pre>
+              <p class="text-sm text-zinc-400 mt-2">All tests should pass. A failing test after an upgrade usually means a breaking change in the CHANGELOG that requires a manual migration step.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">4</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Verify your stack file is intact</div>
+              <p class="text-sm text-zinc-400 mb-2">Open <code>src/content/stack.ts</code> and confirm your technologies are still there. Then visit <code>http://localhost:3000/stack</code> to check it renders correctly.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Breaking change checklist ── -->
+      <section id="breaking" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Breaking Change Checklist</h2>
+        <p class="text-zinc-400 mb-6">When the CHANGELOG lists a breaking change, look it up here for the migration steps.</p>
+
+        <div class="space-y-5">
+
+          <div class="card">
+            <div class="text-white font-semibold mb-2 flex items-center gap-2">
+              New environment variable required
+              <span class="badge badge-yellow">env change</span>
+            </div>
+            <p class="text-sm text-zinc-400 mb-2">Add the new variable to your <code>.env.local</code> and to your Vercel / hosting environment variables. The app will error on startup if a required variable is missing.</p>
+            <pre>grep 'NEW_VAR' .env.example    # confirm the variable name
+echo 'NEW_VAR=your_value' >> .env.local</pre>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-2 flex items-center gap-2">
+              Payload CMS collection schema changed
+              <span class="badge badge-purple">cms change</span>
+            </div>
+            <p class="text-sm text-zinc-400">Schema changes (new fields, renamed fields) are applied automatically when Payload starts — it reads the updated collection definitions and migrates the database. No manual SQL or migration scripts needed. Old data in removed fields is preserved in the database even if the field is no longer shown in the admin.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-2 flex items-center gap-2">
+              <code>src/content/stack.ts</code> type changed
+              <span class="badge badge-yellow">type change</span>
+            </div>
+            <p class="text-sm text-zinc-400 mb-2">Occasionally the shape of the stack data structure changes (e.g. a new field added to each item). The CHANGELOG will describe the change. Open your backup and the new <code>stack.ts</code> side-by-side and update your entries to match the new type. TypeScript will show a compile error pointing at the exact mismatch.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-2 flex items-center gap-2">
+              Major Next.js or Payload CMS version bump
+              <span class="badge badge-red">major version</span>
+            </div>
+            <p class="text-sm text-zinc-400">Major framework upgrades (e.g. Next.js 16 → 17 or Payload 3 → 4) are treated as major releases of payload-portfolio. These will always have a dedicated migration guide in the CHANGELOG with step-by-step instructions. Do not skip this guide — major versions frequently have breaking changes in the framework API itself.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Redeploy ── -->
+      <section id="redeploy" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Redeploy</h2>
+        <p class="text-zinc-400 mb-6">Once local verification passes, push and redeploy.</p>
+
+        <h3 class="subsection-heading mt-0">Vercel</h3>
+        <div class="space-y-4 mb-8">
+          <div class="flex gap-4">
+            <div class="step-num">1</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-1">Push to GitHub</div>
+              <pre>git push origin main</pre>
+              <p class="text-sm text-zinc-500 mt-2">If you're connected to Vercel via GitHub, pushing triggers an automatic redeploy. No manual action needed.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="step-num">2</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-1">Add any new env vars in Vercel</div>
+              <p class="text-sm text-zinc-400">If the CHANGELOG listed new required variables, add them to your Vercel project under <strong>Settings → Environment Variables</strong> before the new deployment goes live. The deployment will fail at runtime if a required variable is missing in production.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-heading">Self-Hosted (PM2)</h3>
+        <pre>git pull                 # pull the latest code (git method only)
+pnpm install             # install any new deps
+pnpm build               # build the new version
+pm2 reload flcn-website  # zero-downtime reload</pre>
+        <p class="text-sm text-zinc-500 mt-3">If you're using the ZIP method on a VPS, copy files and run <code>pnpm install && pnpm build</code> before reloading PM2.</p>
+      </section>
+
+      <!-- ── Full file map ── -->
+      <section id="file-map" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Full File Map</h2>
+        <p class="text-zinc-400 mb-6">Quick reference — what each file does and whether you should overwrite it during an upgrade.</p>
+
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead><tr>
+              <th class="w-64">File / Directory</th>
+              <th class="w-28">On upgrade</th>
+              <th>Reason</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/content/stack.ts</td>
+                <td><span class="badge badge-yellow">keep yours</span></td>
+                <td class="text-zinc-400">Contains your personalised tech stack list</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">.env.local</td>
+                <td><span class="badge badge-yellow">keep yours</span></td>
+                <td class="text-zinc-400">Your API keys — never in the repo, never overwritten</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">public/</td>
+                <td><span class="badge badge-blue">check first</span></td>
+                <td class="text-zinc-400">Back up any custom assets you added before overwriting</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/app/globals.css</td>
+                <td><span class="badge badge-blue">check first</span></td>
+                <td class="text-zinc-400">Back up colour token changes before overwriting</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/app/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Page routes and layouts — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/components/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">React components — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/lib/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Utility modules — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/collections/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">CMS collection schemas — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/globals/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">CMS global schemas — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/actions/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Server actions — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/emails/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Email templates — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">src/payload.config.ts</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">CMS config — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">next.config.ts</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Next.js config — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">tsconfig.json</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">TypeScript config — maintained by updates</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">package.json</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Updated dependency versions — always replace</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">.env.example</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Template only — use it to spot new variables, then discard</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">CHANGELOG.md</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Version history — always replace with the latest</td>
+              </tr>
+              <tr>
+                <td class="font-mono text-xs text-zinc-300 pr-4">buyer-guide/</td>
+                <td><span class="badge badge-green">overwrite</span></td>
+                <td class="text-zinc-400">Updated documentation — always replace</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── FAQ ── -->
+      <section id="faq" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">FAQ</h2>
+
+        <div class="space-y-4">
+          <div class="card">
+            <div class="text-white font-medium mb-1">Will upgrading delete my posts or work entries?</div>
+            <p class="text-sm text-zinc-400">No. All CMS content (posts, work, projects, timeline, site settings) lives in your MongoDB database. The upgrade only changes source code files. Your database is never touched.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-medium mb-1">I customised some components — will my changes be overwritten?</div>
+            <p class="text-sm text-zinc-400">If you edited files outside of <code>src/content/stack.ts</code>, those changes will be overwritten by a fresh file copy. Use the git method — it will show you a conflict diff for each file you changed, and you can selectively keep your edits.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-medium mb-1">The admin panel shows an error after upgrading</div>
+            <p class="text-sm text-zinc-400">Most likely cause: a new required environment variable was added and you haven't set it yet. Check the CHANGELOG for the new version, look for "new env var" entries, and add the value to <code>.env.local</code>. Also try clearing the <code>.next/</code> build cache: <code>rm -rf .next && pnpm dev</code>.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-medium mb-1">Tests are failing after upgrading</div>
+            <p class="text-sm text-zinc-400">Run <code>pnpm test</code> and read the failing test output. A test failure after an upgrade usually points to a breaking change that requires a migration step — find it in the CHANGELOG and follow the instructions.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-medium mb-1">The stack page is showing default entries, not mine</div>
+            <p class="text-sm text-zinc-400">You accidentally overwrote <code>src/content/stack.ts</code>. Restore it from your backup. If you didn't make a backup, check your git history: <code>git show HEAD~1:src/content/stack.ts &gt; src/content/stack.ts</code>.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-medium mb-1">How do I check which version I'm currently on?</div>
+            <p class="text-sm text-zinc-400">Open <code>package.json</code> and read the <code>"version"</code> field. You can also check <code>CHANGELOG.md</code> — the top entry is the currently installed version.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="border-t border-zinc-800 pt-8 pb-16 text-sm text-zinc-600">
+        <div class="flex flex-col md:flex-row justify-between gap-2">
+          <span>payload-portfolio — <a href="index.html" class="hover:text-zinc-400 transition-colors">Setup Guide</a> · Upgrade Guide</span>
+          <span>Built with Next.js 16 + Payload CMS 3</span>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Active link highlighting -->
+  <script>
+    const links = document.querySelectorAll('.sidebar-link');
+    const sections = document.querySelectorAll('section[id]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
