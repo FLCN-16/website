@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>payload-portfolio — Buyer Setup Guide</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-brand: #6366f1;
+      --color-brand-light: #818cf8;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    .sidebar-link {
+      @apply block px-3 py-1.5 text-sm rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors;
+    }
+    .sidebar-link.active {
+      @apply text-white bg-zinc-800;
+    }
+    .sidebar-group {
+      @apply text-xs font-semibold uppercase tracking-widest text-zinc-600 px-3 pt-5 pb-1.5;
+    }
+    pre {
+      @apply bg-zinc-900 border border-zinc-800 rounded-lg p-4 overflow-x-auto text-sm font-mono text-zinc-300 leading-relaxed;
+    }
+    code:not(pre code) {
+      @apply bg-zinc-800 text-indigo-300 rounded px-1.5 py-0.5 text-sm font-mono;
+    }
+    .step-num {
+      @apply flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white text-sm font-bold flex items-center justify-center;
+    }
+    .badge {
+      @apply inline-block text-xs font-semibold px-2 py-0.5 rounded-full;
+    }
+    .badge-green  { @apply bg-emerald-900/60 text-emerald-300 border border-emerald-800; }
+    .badge-yellow { @apply bg-yellow-900/60  text-yellow-300  border border-yellow-800; }
+    .badge-blue   { @apply bg-blue-900/60    text-blue-300    border border-blue-800; }
+    .badge-purple { @apply bg-purple-900/60  text-purple-300  border border-purple-800; }
+    .section-heading {
+      @apply text-2xl font-bold text-white mb-2 flex items-center gap-3;
+    }
+    .subsection-heading {
+      @apply text-lg font-semibold text-zinc-100 mt-8 mb-3;
+    }
+    .card {
+      @apply bg-zinc-900 border border-zinc-800 rounded-xl p-5;
+    }
+    .table-auto th { @apply text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 pb-2; }
+    .table-auto td { @apply py-2 align-top; }
+    .table-auto tr { @apply border-t border-zinc-800; }
+    .folder-tree {
+      @apply bg-zinc-900 border border-zinc-800 rounded-lg p-5 font-mono text-sm text-zinc-300 leading-7 overflow-x-auto;
+    }
+    .folder-tree .dir  { @apply text-indigo-400 font-semibold; }
+    .folder-tree .file { @apply text-zinc-400; }
+    .folder-tree .note { @apply text-zinc-600 italic; }
+    .tip {
+      @apply flex gap-3 bg-indigo-950/50 border border-indigo-900 rounded-lg p-4 text-sm text-indigo-200;
+    }
+    .warn {
+      @apply flex gap-3 bg-yellow-950/50 border border-yellow-900 rounded-lg p-4 text-sm text-yellow-200;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-300 min-h-screen">
+
+  <!-- Top bar -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-14 bg-zinc-950/90 backdrop-blur border-b border-zinc-800 flex items-center px-6 gap-4">
+    <span class="text-white font-bold tracking-tight">payload-portfolio</span>
+    <span class="badge badge-purple">v1.0.0</span>
+    <span class="text-zinc-600 mx-1">—</span>
+    <span class="text-zinc-400 text-sm">Buyer Setup Guide</span>
+  </header>
+
+  <div class="flex pt-14">
+
+    <!-- Sidebar -->
+    <aside class="hidden lg:flex flex-col fixed left-0 top-14 bottom-0 w-60 bg-zinc-950 border-r border-zinc-800 overflow-y-auto py-4 px-2">
+      <span class="sidebar-group">Getting Started</span>
+      <a href="#overview"      class="sidebar-link">Overview</a>
+      <a href="#prerequisites" class="sidebar-link">Prerequisites</a>
+      <a href="#installation"  class="sidebar-link">Installation</a>
+      <a href="#env-vars"      class="sidebar-link">Environment Variables</a>
+
+      <span class="sidebar-group">Project Structure</span>
+      <a href="#folder-structure" class="sidebar-link">Folder Structure</a>
+      <a href="#key-files"        class="sidebar-link">Key Files Explained</a>
+
+      <span class="sidebar-group">Personalisation</span>
+      <a href="#site-settings"   class="sidebar-link">Site Settings (CMS)</a>
+      <a href="#collections"     class="sidebar-link">CMS Collections</a>
+      <a href="#stack-file"      class="sidebar-link">Tech Stack File</a>
+      <a href="#theme"           class="sidebar-link">Fonts &amp; Theme</a>
+
+      <span class="sidebar-group">Features</span>
+      <a href="#pages"       class="sidebar-link">Pages &amp; Routes</a>
+      <a href="#email"       class="sidebar-link">Email Setup</a>
+      <a href="#seo"         class="sidebar-link">SEO &amp; OG Images</a>
+      <a href="#analytics"   class="sidebar-link">Analytics</a>
+      <a href="#media"       class="sidebar-link">Media &amp; Storage</a>
+
+      <span class="sidebar-group">Deployment</span>
+      <a href="#deploy-vercel"     class="sidebar-link">Deploy to Vercel</a>
+      <a href="#deploy-selfhosted" class="sidebar-link">Self-Hosted</a>
+
+      <span class="sidebar-group">Reference</span>
+      <a href="#admin-panel" class="sidebar-link">Admin Panel Tour</a>
+      <a href="#faq"         class="sidebar-link">FAQ</a>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 lg:ml-60 px-6 md:px-12 py-10 max-w-4xl mx-auto lg:mx-0">
+
+      <!-- ── Overview ── -->
+      <section id="overview" class="mb-16">
+        <div class="mb-6">
+          <h1 class="text-4xl font-bold text-white mb-3">Setup Guide</h1>
+          <p class="text-zinc-400 text-lg leading-relaxed">Everything you need to go from a fresh clone to a live, fully-personalised portfolio — without touching anything except a config file and the admin panel.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+          <div class="card">
+            <div class="text-2xl mb-2">⚡</div>
+            <div class="text-sm font-semibold text-white mb-1">~15 min setup</div>
+            <div class="text-xs text-zinc-500">From clone to running locally</div>
+          </div>
+          <div class="card">
+            <div class="text-2xl mb-2">🎛️</div>
+            <div class="text-sm font-semibold text-white mb-1">No code required</div>
+            <div class="text-xs text-zinc-500">All content managed via admin panel</div>
+          </div>
+          <div class="card">
+            <div class="text-2xl mb-2">🚀</div>
+            <div class="text-sm font-semibold text-white mb-1">One-click Vercel deploy</div>
+            <div class="text-xs text-zinc-500">Serverless, auto-scales, free tier available</div>
+          </div>
+        </div>
+
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Tech Stack</h2>
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead><tr>
+              <th class="w-40">Technology</th>
+              <th class="w-28">Version</th>
+              <th>Purpose</th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="text-white font-medium pr-4">Next.js</td><td><span class="badge badge-blue">16</span></td><td class="text-zinc-400">App Router, RSC, image optimisation, draft mode, ISR</td></tr>
+              <tr><td class="text-white font-medium pr-4">Payload CMS</td><td><span class="badge badge-blue">3</span></td><td class="text-zinc-400">Headless CMS, admin panel, REST API, live preview</td></tr>
+              <tr><td class="text-white font-medium pr-4">MongoDB</td><td><span class="badge badge-green">Atlas</span></td><td class="text-zinc-400">Database (free tier sufficient)</td></tr>
+              <tr><td class="text-white font-medium pr-4">Cloudflare R2</td><td><span class="badge badge-yellow">S3-compat</span></td><td class="text-zinc-400">Media and image storage</td></tr>
+              <tr><td class="text-white font-medium pr-4">Resend</td><td><span class="badge badge-green">optional</span></td><td class="text-zinc-400">Transactional email — contact form, newsletters</td></tr>
+              <tr><td class="text-white font-medium pr-4">Tailwind CSS</td><td><span class="badge badge-blue">4</span></td><td class="text-zinc-400">Utility-first styling</td></tr>
+              <tr><td class="text-white font-medium pr-4">TypeScript</td><td><span class="badge badge-blue">5</span></td><td class="text-zinc-400">End-to-end type safety</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Prerequisites ── -->
+      <section id="prerequisites" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Prerequisites</h2>
+        <p class="text-zinc-400 mb-6">You'll need accounts and tools ready before starting. All free tiers are sufficient for a personal portfolio.</p>
+
+        <div class="space-y-3">
+          <div class="card flex gap-4 items-start">
+            <span class="badge badge-blue mt-0.5">local</span>
+            <div>
+              <div class="text-white font-medium">Node.js 20+ (LTS)</div>
+              <div class="text-sm text-zinc-500">Check: <code>node -v</code> — install from <code>nodejs.org</code></div>
+            </div>
+          </div>
+          <div class="card flex gap-4 items-start">
+            <span class="badge badge-blue mt-0.5">local</span>
+            <div>
+              <div class="text-white font-medium">pnpm</div>
+              <div class="text-sm text-zinc-500">Install: <code>npm i -g pnpm</code></div>
+            </div>
+          </div>
+          <div class="card flex gap-4 items-start">
+            <span class="badge badge-green mt-0.5">free</span>
+            <div>
+              <div class="text-white font-medium">MongoDB Atlas</div>
+              <div class="text-sm text-zinc-500">Create a free M0 cluster at <code>mongodb.com/cloud/atlas</code>. You'll need the connection string.</div>
+            </div>
+          </div>
+          <div class="card flex gap-4 items-start">
+            <span class="badge badge-green mt-0.5">free</span>
+            <div>
+              <div class="text-white font-medium">Cloudflare R2</div>
+              <div class="text-sm text-zinc-500">10 GB/month free. Create a bucket and an R2 API token at <code>dash.cloudflare.com</code> → R2 → Manage API Tokens.</div>
+            </div>
+          </div>
+          <div class="card flex gap-4 items-start">
+            <span class="badge badge-yellow mt-0.5">optional</span>
+            <div>
+              <div class="text-white font-medium">Resend</div>
+              <div class="text-sm text-zinc-500">Required for contact form emails and newsletter broadcasts. 3,000 emails/month free at <code>resend.com</code>.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Installation ── -->
+      <section id="installation" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Installation</h2>
+
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="step-num">1</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Unzip and open the project</div>
+              <pre>unzip payload-portfolio.zip
+cd payload-portfolio</pre>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">2</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Install dependencies</div>
+              <pre>pnpm install</pre>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">3</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Copy the env template</div>
+              <pre>cp .env.example .env.local</pre>
+              <p class="text-sm text-zinc-500 mt-2">Open <code>.env.local</code> in your editor and fill in the values. See the <a href="#env-vars" class="text-indigo-400 hover:underline">Environment Variables</a> section below.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">4</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Start the development server</div>
+              <pre>pnpm dev</pre>
+              <p class="text-sm text-zinc-500 mt-2">The app runs on <code>http://localhost:3000</code>. The Payload admin panel is at <code>http://localhost:3000/admin</code>.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">5</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Create your admin account</div>
+              <p class="text-sm text-zinc-400 mb-3">On first visit to <code>/admin</code>, Payload will prompt you to create the first user. This is your admin account — use a strong password.</p>
+              <div class="tip">
+                <span>💡</span>
+                <span>The first user created becomes the super-admin. Subsequent users can be created in the <strong>Users</strong> collection inside the admin panel.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">6</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Fill in your identity</div>
+              <p class="text-sm text-zinc-400">In the admin panel, go to <strong>Globals → Site Settings</strong> and fill in the Identity, Social Links, and Engineering Philosophy sections. Your name and role will appear across the site immediately.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">7</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Populate your content</div>
+              <p class="text-sm text-zinc-400">Add entries to <strong>Timeline</strong> (career history), <strong>Work</strong> (case studies), <strong>Projects</strong> (side projects), <strong>Education</strong>, and <strong>Certifications</strong> via the admin panel.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">8</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-2">Edit your tech stack</div>
+              <p class="text-sm text-zinc-400 mb-2">The only file you need to edit in code is <code>content/stack.ts</code>. Open it and replace the entries with your own technologies and proficiency levels.</p>
+              <div class="warn">
+                <span>⚠️</span>
+                <span>This is the only source file buyers need to edit. Everything else is managed via the admin panel.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Env Vars ── -->
+      <section id="env-vars" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Environment Variables</h2>
+        <p class="text-zinc-400 mb-6">Copy <code>.env.example</code> to <code>.env.local</code> and fill in each value. Never commit <code>.env.local</code> to git.</p>
+
+        <h3 class="subsection-heading">Core (required)</h3>
+        <div class="overflow-x-auto mb-8">
+          <table class="table-auto w-full text-sm">
+            <thead><tr><th class="w-56">Variable</th><th>Description &amp; Where to Get It</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">PAYLOAD_SECRET</td>
+                <td class="text-zinc-400">Any long random string (32+ chars). Used to sign auth tokens.<br><span class="text-zinc-600">Generate: <code>openssl rand -base64 32</code></span></td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">MONGODB_URI</td>
+                <td class="text-zinc-400">MongoDB connection string.<br><span class="text-zinc-600">Atlas: Database → Connect → Drivers → copy the URI, replace &lt;password&gt;</span></td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">NEXT_PUBLIC_SITE_URL</td>
+                <td class="text-zinc-400">Your canonical site URL, e.g. <code>https://janedoe.dev</code>.<br><span class="text-zinc-600">Use <code>http://localhost:3000</code> during local development.</span></td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">PREVIEW_SECRET</td>
+                <td class="text-zinc-400">Any random string. Protects the draft-mode preview route.<br><span class="text-zinc-600">Generate: <code>openssl rand -base64 16</code></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-heading">Cloudflare R2 (required for media uploads)</h3>
+        <div class="overflow-x-auto mb-8">
+          <table class="table-auto w-full text-sm">
+            <thead><tr><th class="w-56">Variable</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">R2_ACCOUNT_ID</td>
+                <td class="text-zinc-400">Cloudflare Account ID — found in the right sidebar of any Cloudflare dashboard page.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">R2_ACCESS_KEY_ID</td>
+                <td class="text-zinc-400">R2 API Token → Access Key ID. Create under R2 → Manage R2 API Tokens.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">R2_SECRET_ACCESS_KEY</td>
+                <td class="text-zinc-400">R2 API Token Secret — shown once on creation. Copy it immediately.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">R2_BUCKET_NAME</td>
+                <td class="text-zinc-400">The name of your R2 bucket (e.g. <code>my-portfolio-media</code>).</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">R2_PUBLIC_URL</td>
+                <td class="text-zinc-400">Public CDN URL for your bucket (e.g. <code>https://pub-xxxx.r2.dev</code>). Enable public access in the bucket settings to get this URL.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">NEXT_PUBLIC_MEDIA_URL</td>
+                <td class="text-zinc-400">Same value as <code>R2_PUBLIC_URL</code>. Used client-side by the Next.js image loader.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-heading">Resend — Email (optional)</h3>
+        <p class="text-sm text-zinc-500 mb-4">Leave blank to disable the contact form email notifications and newsletter broadcasts. The contact form will still collect submissions in the database.</p>
+        <div class="overflow-x-auto mb-8">
+          <table class="table-auto w-full text-sm">
+            <thead><tr><th class="w-56">Variable</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">RESEND_API_KEY</td>
+                <td class="text-zinc-400">API key from resend.com → API Keys.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">RESEND_FROM_ADDRESS</td>
+                <td class="text-zinc-400">Sender address, e.g. <code>noreply@yourdomain.com</code>. Must be a verified domain in Resend.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">RESEND_FROM_NAME</td>
+                <td class="text-zinc-400">Sender display name shown in email clients.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">RESEND_TO</td>
+                <td class="text-zinc-400">Your email address — where contact form notifications are delivered.</td>
+              </tr>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">RESEND_SEGMENT_ID</td>
+                <td class="text-zinc-400">Resend Audience Segment ID used by the subscribe widget and post broadcast feature.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-heading">Analytics (optional)</h3>
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead><tr><th class="w-56">Variable</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="pr-4 font-mono text-indigo-300 text-xs">NEXT_PUBLIC_GTM_ID</td>
+                <td class="text-zinc-400">Google Tag Manager container ID (e.g. <code>GTM-XXXXXXX</code>). Leave blank to disable GTM entirely.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Folder Structure ── -->
+      <section id="folder-structure" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Folder Structure</h2>
+        <p class="text-zinc-400 mb-6">The project follows Next.js App Router conventions. Each row shows the path on the left and what it does on the right.</p>
+
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+          <!-- header row -->
+          <div class="grid grid-cols-[1fr_auto] gap-0 border-b border-zinc-800 px-4 py-2 bg-zinc-800/60">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Path</span>
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500 text-right">Description</span>
+          </div>
+
+          <div id="tree" class="divide-y divide-zinc-800/60 text-sm font-mono">
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Key Files ── -->
+      <section id="key-files" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Key Files Explained</h2>
+
+        <div class="space-y-5">
+          <div class="card">
+            <div class="flex items-center gap-2 mb-2">
+              <code>content/stack.ts</code>
+              <span class="badge badge-yellow">edit this</span>
+            </div>
+            <p class="text-sm text-zinc-400">The only source file buyers need to modify. It exports a structured list of your technologies grouped by discipline (Backend, Frontend, DevOps, etc.) with a maturity level for each. Open it and replace the entries with your own stack.</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center gap-2 mb-2">
+              <code>globals/SiteSettings.ts</code>
+              <span class="badge badge-purple">cms schema</span>
+            </div>
+            <p class="text-sm text-zinc-400">Defines the shape of the Site Settings global in the Payload admin. You never edit this file — you edit the data through the admin panel at <code>/admin → Globals → Site Settings</code>.</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center gap-2 mb-2">
+              <code>lib/site-identity.ts</code>
+            </div>
+            <p class="text-sm text-zinc-400">Defines the <code>SiteIdentity</code> type and <code>buildIdentity()</code> function. Merges CMS data with safe fallback defaults so the site renders correctly even if the admin hasn't been populated yet.</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center gap-2 mb-2">
+              <code>payload.config.ts</code>
+            </div>
+            <p class="text-sm text-zinc-400">Registers all Payload collections, globals, plugins (SEO, Search, Form Builder, MCP, S3 storage), and the email adapter. Modify with care — wrong changes here can break the admin panel.</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center gap-2 mb-2">
+              <code>lib/data.ts</code>
+            </div>
+            <p class="text-sm text-zinc-400">All cached data fetchers. Each function wraps a Payload REST call in <code>unstable_cache</code> with revalidation tags. This is why page loads are fast — content is cached and only re-fetched when you save in the admin.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Site Settings ── -->
+      <section id="site-settings" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Site Settings (CMS)</h2>
+        <p class="text-zinc-400 mb-6">All personal identity is managed here. Go to <strong>Globals → Site Settings</strong> in the admin panel.</p>
+
+        <div class="space-y-4">
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Identity</div>
+            <p class="text-sm text-zinc-400 mb-2">Your name, handle (Twitter/X username), role/title, location, timezone, email address, site URL, and meta description. These power the nav label, footer, page titles, Open Graph tags, and structured data.</p>
+            <div class="text-xs text-zinc-600">Fields: name · handle · role · location · timezone · email · siteUrl · description</div>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Social Links</div>
+            <p class="text-sm text-zinc-400 mb-2">Up to 6 social profiles. Each entry has a platform (GitHub, LinkedIn, Instagram, Twitter, YouTube), a URL, and an optional display label. These appear in the footer and the writing CTAs.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Engineering Philosophy</div>
+            <p class="text-sm text-zinc-400 mb-2">Up to 5 philosophy pillars shown on the homepage. Each pillar has a title and a body paragraph. The display number (01, 02, …) is derived from the array order automatically.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Hero Copy</div>
+            <p class="text-sm text-zinc-400">Eyebrow label, headline, and subheadline shown in the homepage hero section. Also the stats row (e.g. "5 years experience", "12 shipped products").</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Availability &amp; Résumé</div>
+            <p class="text-sm text-zinc-400">Toggle your hiring availability on/off with a custom status label. Upload your résumé PDF — it's stored in R2 and linked from the nav rail and mobile menu.</p>
+          </div>
+
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Maintenance Mode</div>
+            <p class="text-sm text-zinc-400">Toggle to redirect all public pages to a maintenance screen while you update the site. Flip it back off when you're done.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Collections ── -->
+      <section id="collections" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">CMS Collections</h2>
+        <p class="text-zinc-400 mb-6">All content is managed in the Payload admin panel. Here's what each collection is for.</p>
+
+        <div class="space-y-3">
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Work</span>
+            </div>
+            <div class="text-sm text-zinc-400">Professional case studies shown on the Work page and homepage. Each entry has a title, description, category, display order, tags, cover image, detailed briefing (problem → approach → impact → quote), and tech stack list.</div>
+          </div>
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Timeline</span>
+            </div>
+            <div class="text-sm text-zinc-400">Career history entries — company, role, start/end year, summary, and tags. Ordered by the <code>order</code> field.</div>
+          </div>
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Projects</span>
+            </div>
+            <div class="text-sm text-zinc-400">Side projects, open-source work, Chrome extensions, mobile apps. Includes live URL, repo URL, category, tags, highlights list, and featured flag.</div>
+          </div>
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Posts</span>
+            </div>
+            <div class="text-sm text-zinc-400">Blog articles with Lexical rich-text editor, code syntax highlighting, cover image, tags, featured flag, and draft/published status. Reading time is calculated automatically.</div>
+          </div>
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Education</span>
+            </div>
+            <div class="text-sm text-zinc-400">Degrees and educational qualifications — institution, degree, location, years, GPA, and completion status.</div>
+          </div>
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Certifications</span>
+            </div>
+            <div class="text-sm text-zinc-400">Professional certifications — name, issuer, year, and a link to the credential verification page.</div>
+          </div>
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Pages</span>
+            </div>
+            <div class="text-sm text-zinc-400">CMS-managed static pages using either a basic or legal template. Use this for Privacy Policy, Terms of Service, or any custom page you want to manage without code changes.</div>
+          </div>
+          <div class="card flex gap-4">
+            <div class="w-28 flex-shrink-0">
+              <span class="badge badge-blue">Media</span>
+            </div>
+            <div class="text-sm text-zinc-400">Images and files. Uploads are stored directly in your Cloudflare R2 bucket. Use the Media collection to upload cover images for posts and work entries.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Stack file ── -->
+      <section id="stack-file" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Tech Stack File</h2>
+        <p class="text-zinc-400 mb-4">Open <code>content/stack.ts</code> and replace the entries with your own technologies. This is the only TypeScript file you need to edit.</p>
+
+        <pre>// content/stack.ts — edit this file with your own stack
+
+export const stack: StackGroup[] = [
+  {
+    group: 'Backend',
+    items: [
+      { name: 'Node.js',    icon: 'nodejs',  level: 'expert'      },
+      { name: 'PostgreSQL', icon: 'postgres', level: 'proficient'  },
+      { name: 'Redis',      icon: 'redis',   level: 'familiar'    },
+    ],
+  },
+  {
+    group: 'Frontend',
+    items: [
+      { name: 'React',   icon: 'react',   level: 'expert'     },
+      { name: 'Next.js', icon: 'nextjs',  level: 'expert'     },
+    ],
+  },
+  // ... add more groups
+]</pre>
+
+        <p class="text-sm text-zinc-500 mt-3">Valid <code>level</code> values: <code>"expert"</code> · <code>"proficient"</code> · <code>"familiar"</code>. The icon name maps to an SVG in <code>public/icons/</code>.</p>
+      </section>
+
+      <!-- ── Theme ── -->
+      <section id="theme" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Fonts &amp; Theme</h2>
+
+        <h3 class="subsection-heading">Fonts</h3>
+        <p class="text-sm text-zinc-400 mb-4">Fonts are loaded from Google Fonts in <code>app/(site)/layout.tsx</code>. To change them, replace the <code>Inter</code> and <code>JetBrains_Mono</code> imports with any Google Font and update the <code>variable</code> CSS custom properties.</p>
+
+        <h3 class="subsection-heading">Colours &amp; Design Tokens</h3>
+        <p class="text-sm text-zinc-400 mb-4">Open <code>tailwind.config.ts</code> to change the colour palette. The site uses semantic tokens (<code>--background</code>, <code>--foreground</code>, <code>--primary</code>, <code>--muted</code>) defined in <code>app/globals.css</code> for both light and dark modes.</p>
+
+        <h3 class="subsection-heading">Dark / Light Mode</h3>
+        <p class="text-sm text-zinc-400">Handled automatically by <code>next-themes</code>. The toggle in the rail and mobile header switches between system, dark, and light. No configuration needed.</p>
+      </section>
+
+      <!-- ── Pages ── -->
+      <section id="pages" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Pages &amp; Routes</h2>
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead><tr><th class="w-44">Route</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/</td><td class="text-zinc-400">Homepage — hero, stats, featured work, projects, timeline, education, certifications, philosophy</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/work</td><td class="text-zinc-400">All professional case studies (Work collection)</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/work/[slug]</td><td class="text-zinc-400">Individual case study — full briefing, stack, and navigation</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/projects</td><td class="text-zinc-400">Side projects, Chrome extensions, mobile apps, OSS</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/stack</td><td class="text-zinc-400">Tech stack matrix from <code>content/stack.ts</code></td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/writing</td><td class="text-zinc-400">Blog listing with masonry grid, tag/year/read-time filters, search</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/writing/[slug]</td><td class="text-zinc-400">Blog post — rich text, TOC, progress bar, related posts, share links</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/contact</td><td class="text-zinc-400">Inquiry form — project, consulting, full-time, general</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/legal/[slug]</td><td class="text-zinc-400">CMS-managed legal pages (privacy, terms, cookies)</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/admin</td><td class="text-zinc-400">Payload CMS admin panel</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/feed.xml</td><td class="text-zinc-400">RSS feed</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/sitemap-index.xml</td><td class="text-zinc-400">Sitemap index linking to sub-sitemaps</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/robots.txt</td><td class="text-zinc-400">Search engine and AI bot directives</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/llms.txt</td><td class="text-zinc-400">Plain-text site summary for AI model context</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">/og</td><td class="text-zinc-400">Dynamic OG image endpoint</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Email ── -->
+      <section id="email" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Email Setup</h2>
+
+        <div class="space-y-5">
+          <div>
+            <h3 class="subsection-heading mt-0">1. Verify your domain in Resend</h3>
+            <p class="text-sm text-zinc-400">Log in to <code>resend.com</code> → Domains → Add Domain. Follow the DNS record instructions. Once verified, set <code>RESEND_FROM_ADDRESS</code> to an address on that domain.</p>
+          </div>
+
+          <div>
+            <h3 class="subsection-heading mt-0">2. Contact form</h3>
+            <p class="text-sm text-zinc-400">Set <code>RESEND_TO</code> to your personal email. When someone submits the contact form, you'll receive a notification email and they'll receive an auto-reply confirmation. Submissions are also stored in the <strong>Submissions</strong> collection in the admin.</p>
+          </div>
+
+          <div>
+            <h3 class="subsection-heading mt-0">3. Newsletter broadcasts</h3>
+            <p class="text-sm text-zinc-400 mb-3">When you publish a new post, a broadcast is automatically sent to your Resend subscriber list. To use this:</p>
+            <ol class="text-sm text-zinc-400 space-y-1 list-decimal list-inside ml-2">
+              <li>Create an Audience in Resend → Audiences</li>
+              <li>Copy the Audience ID to <code>RESEND_SEGMENT_ID</code></li>
+              <li>Publish a post in the admin — the broadcast fires via a Payload <code>afterChange</code> hook</li>
+              <li>Toggle the <strong>Skip newsletter</strong> field on a post to prevent broadcast for that specific post</li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 class="subsection-heading mt-0">4. Talent inquiry dialog</h3>
+            <p class="text-sm text-zinc-400">A dialog appears 15 seconds after a visitor loads any page, inviting recruiters to submit their opportunity. Submissions go to <code>RESEND_TO</code> with an optional job description attachment. You can enable/disable the form in the admin under <strong>Forms → talent-inquiry → Enabled</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SEO ── -->
+      <section id="seo" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">SEO &amp; OG Images</h2>
+
+        <div class="space-y-4">
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Metadata</div>
+            <p class="text-sm text-zinc-400">Every page generates metadata dynamically from CMS data — title, description, OpenGraph, and Twitter card tags. The base URL and author name come from Site Settings → Identity.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">OG Images</div>
+            <p class="text-sm text-zinc-400">A Next.js route at <code>/og</code> generates PNG images on-the-fly with the page title, optional kind label, and description. These are automatically used as <code>og:image</code> when no cover image is set on a post or work entry.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">JSON-LD Structured Data</div>
+            <p class="text-sm text-zinc-400">Person, WebSite, and BreadcrumbList schemas are injected as JSON-LD on relevant pages. Google uses this for rich results.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Sitemap</div>
+            <p class="text-sm text-zinc-400">A nested sitemap index at <code>/sitemap-index.xml</code> links to sub-sitemaps for static pages, writing, work, and CMS pages. All generated dynamically from the database.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Per-document SEO</div>
+            <p class="text-sm text-zinc-400">Posts, Work, Projects, and Pages each have a <strong>Meta</strong> tab in the admin for custom title, description, and cover image overrides.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Analytics ── -->
+      <section id="analytics" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Analytics</h2>
+        <p class="text-zinc-400 mb-4">Set <code>NEXT_PUBLIC_GTM_ID</code> to your GTM container ID to enable analytics. Leave it blank to disable GTM entirely — no scripts are loaded.</p>
+        <p class="text-zinc-400 mb-6">The following events are tracked automatically when GTM is active:</p>
+
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead><tr><th class="w-44">Event</th><th>Trigger</th></tr></thead>
+            <tbody>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">generate_lead</td><td class="text-zinc-400">Contact form or talent dialog submitted successfully</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">file_download</td><td class="text-zinc-400">Resume PDF downloaded from rail or mobile menu</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">outbound_link</td><td class="text-zinc-400">Click on an external link (social, project URL, etc.)</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">cta_click</td><td class="text-zinc-400">CTA button clicked with label and destination</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">dialog_impression</td><td class="text-zinc-400">Talent inquiry dialog shown to visitor</td></tr>
+              <tr><td class="font-mono text-indigo-300 text-xs pr-4">search</td><td class="text-zinc-400">Writing page search query submitted</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tip mt-6">
+          <span>💡</span>
+          <span>The cookie consent banner is pre-wired to Consent Mode v2. Visitors who decline analytics are excluded from GA4 measurement automatically — no extra setup required.</span>
+        </div>
+      </section>
+
+      <!-- ── Media ── -->
+      <section id="media" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Media &amp; Storage</h2>
+
+        <p class="text-zinc-400 mb-6">All media (images, PDFs) is stored in your Cloudflare R2 bucket. The R2 bucket must be set up with public access enabled so images can be served directly to visitors.</p>
+
+        <h3 class="subsection-heading mt-0">Enable public access on your R2 bucket</h3>
+        <ol class="text-sm text-zinc-400 space-y-2 list-decimal list-inside ml-2 mb-6">
+          <li>In the Cloudflare dashboard, go to R2 → your bucket → Settings</li>
+          <li>Under <strong>Public Access</strong>, click <strong>Allow Access</strong></li>
+          <li>Copy the public bucket URL (looks like <code>https://pub-xxxx.r2.dev</code>)</li>
+          <li>Set both <code>R2_PUBLIC_URL</code> and <code>NEXT_PUBLIC_MEDIA_URL</code> to that URL</li>
+        </ol>
+
+        <div class="warn">
+          <span>⚠️</span>
+          <span>If <code>NEXT_PUBLIC_MEDIA_URL</code> is not set, uploaded images will not display on the public site — only in the admin panel.</span>
+        </div>
+      </section>
+
+      <!-- ── Deploy Vercel ── -->
+      <section id="deploy-vercel" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Deploy to Vercel</h2>
+
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="step-num">1</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-1">Push to GitHub</div>
+              <pre>git init
+git add .
+git commit -m "initial"
+git remote add origin https://github.com/yourname/payload-portfolio.git
+git push -u origin main</pre>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">2</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-1">Import in Vercel</div>
+              <p class="text-sm text-zinc-400">Go to <code>vercel.com/new</code>, import your GitHub repository. Vercel auto-detects Next.js — no build settings needed.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">3</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-1">Add environment variables</div>
+              <p class="text-sm text-zinc-400">Under the project's <strong>Settings → Environment Variables</strong>, add all 16 variables from your <code>.env.local</code>. Make sure to set <code>NEXT_PUBLIC_SITE_URL</code> to your Vercel deployment URL (e.g. <code>https://yourname.vercel.app</code>).</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">4</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-1">Deploy</div>
+              <p class="text-sm text-zinc-400">Click <strong>Deploy</strong>. The build takes 1–2 minutes. Once done, your site is live and the admin panel is at <code>yoursite.vercel.app/admin</code>.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="step-num">5</div>
+            <div class="flex-1">
+              <div class="text-white font-medium mb-1">Add a custom domain (optional)</div>
+              <p class="text-sm text-zinc-400">Vercel Settings → Domains → Add. Point your domain's DNS to Vercel. Then update <code>NEXT_PUBLIC_SITE_URL</code> in Vercel's env vars to your custom domain and redeploy.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip mt-6">
+          <span>💡</span>
+          <span>The included <code>vercel.json</code> raises the serverless function timeout to 60 seconds to accommodate Payload's heavier admin API routes on cold starts.</span>
+        </div>
+      </section>
+
+      <!-- ── Self-hosted ── -->
+      <section id="deploy-selfhosted" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Self-Hosted Deployment</h2>
+        <p class="text-zinc-400 mb-4">Any Node.js 20+ host works. Build and start with:</p>
+
+        <pre>pnpm build
+pnpm start</pre>
+
+        <p class="text-sm text-zinc-400 mt-4 mb-6">A <code>ecosystem.config.js</code> (PM2) is included for process management on a VPS. Run with:</p>
+
+        <pre>npm i -g pm2
+pm2 start ecosystem.config.js</pre>
+
+        <p class="text-sm text-zinc-400 mt-4">Refer to the <a href="https://payloadcms.com/docs/production/deployment" class="text-indigo-400 hover:underline" target="_blank">Payload CMS deployment docs</a> for self-hosted configuration details.</p>
+      </section>
+
+      <!-- ── Admin Panel ── -->
+      <section id="admin-panel" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">Admin Panel Tour</h2>
+        <p class="text-zinc-400 mb-6">The admin panel is at <code>/admin</code>. Here's a quick orientation.</p>
+
+        <div class="space-y-4">
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Dashboard</div>
+            <p class="text-sm text-zinc-400">Custom widgets showing Content Overview (counts per collection), Recent Posts, and Recent Submissions. A quick health check at a glance.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Collections sidebar</div>
+            <p class="text-sm text-zinc-400">Collections are grouped: <strong>Portfolio</strong> (Work, Projects, Timeline, Education, Certifications) · <strong>Writing</strong> (Posts) · <strong>Site</strong> (Pages, Media, Submissions) · <strong>System</strong> (Users, Forms).</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Globals</div>
+            <p class="text-sm text-zinc-400">The <strong>Site Settings</strong> global is the main configuration screen — identity, socials, philosophy, hero copy, availability, and résumé upload.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Live Preview</div>
+            <p class="text-sm text-zinc-400">Posts and Pages have a <strong>Live Preview</strong> button. Click it to see your draft in a split-pane browser view before publishing. Breakpoints: mobile 375×667, tablet 768×1024, desktop 1440×900.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-semibold mb-1">Cache revalidation</div>
+            <p class="text-sm text-zinc-400">Saving any document in the admin automatically revalidates the relevant Next.js cache tags. The public site reflects changes within seconds — no manual redeploy required.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── FAQ ── -->
+      <section id="faq" class="mb-16">
+        <h2 class="section-heading border-t border-zinc-800 pt-8">FAQ</h2>
+
+        <div class="space-y-4">
+          <div class="card">
+            <div class="text-white font-medium mb-1">The admin panel shows a blank page</div>
+            <p class="text-sm text-zinc-400">Ensure <code>MONGODB_URI</code> is set correctly and your MongoDB Atlas cluster has the IP <code>0.0.0.0/0</code> in the Network Access allowlist (or your specific server IP).</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-medium mb-1">Images don't show up on the public site</div>
+            <p class="text-sm text-zinc-400">Check that <code>NEXT_PUBLIC_MEDIA_URL</code> is set and your R2 bucket has public access enabled. Also ensure the value doesn't have a trailing slash.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-medium mb-1">Contact form submissions aren't arriving by email</div>
+            <p class="text-sm text-zinc-400">Verify <code>RESEND_API_KEY</code>, <code>RESEND_FROM_ADDRESS</code>, and <code>RESEND_TO</code> are set. The from address must be on a domain verified in Resend. Check the Resend dashboard logs for delivery errors.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-medium mb-1">How do I add a new legal page?</div>
+            <p class="text-sm text-zinc-400">In the admin panel, go to <strong>Pages → Create New</strong>. Set the template to <strong>legal</strong>, add a slug (e.g. <code>cookie-policy</code>), and write your content. The page is live immediately at <code>/legal/cookie-policy</code>.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-medium mb-1">Can I add more social platforms?</div>
+            <p class="text-sm text-zinc-400">The Social Links field supports GitHub, LinkedIn, Instagram, Twitter/X, and YouTube. To add more platforms, edit the <code>options</code> array in the <code>socials</code> field inside <code>globals/SiteSettings.ts</code>.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-medium mb-1">How do I disable the talent inquiry popup?</div>
+            <p class="text-sm text-zinc-400">In the admin panel, go to <strong>Forms → talent-inquiry</strong> and toggle <strong>Enabled</strong> off. The dialog will stop appearing for visitors immediately.</p>
+          </div>
+          <div class="card">
+            <div class="text-white font-medium mb-1">The site shows "Your Name" instead of my name</div>
+            <p class="text-sm text-zinc-400">These are fallback defaults that display when the CMS hasn't been populated yet. Go to <strong>Globals → Site Settings → Identity</strong> and fill in your name, role, and other details.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="border-t border-zinc-800 pt-8 pb-16 text-sm text-zinc-600">
+        <div class="flex flex-col md:flex-row justify-between gap-2">
+          <span>payload-portfolio v1.0.0 — CodeCanyon Regular License</span>
+          <span>Built with Next.js 16 + Payload CMS 3</span>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Folder tree renderer -->
+  <script>
+    const TREE = [
+      // prefix, isDir, name, description, depth, isLast, editMe
+      { pre: '',         dir: true,  name: 'payload-portfolio/',     desc: 'Project root',                                          depth: 0, last: false },
+      { pre: '├── ',     dir: true,  name: 'actions/',               desc: 'Server actions — form submissions, subscriptions',      depth: 0, last: false },
+      { pre: '│   ├── ', dir: false, name: 'contact.ts',             desc: 'Contact form submission + email notification',         depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'subscribe.ts',           desc: 'Newsletter subscribe/unsubscribe action',              depth: 1, last: false },
+      { pre: '│   └── ', dir: false, name: 'talent-inquiry.ts',      desc: 'Talent dialog submission + email with attachment',     depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'app/',                   desc: 'Next.js App Router — all routes live here',            depth: 0, last: false },
+      { pre: '│   ├── ', dir: true,  name: '(site)/',                desc: 'Public portfolio routes — wrapped in site layout',     depth: 1, last: false },
+      { pre: '│   │   ├── ', dir: false, name: 'layout.tsx',         desc: 'Site shell — fonts, providers, SiteIdentityProvider', depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: false, name: 'page.tsx',           desc: 'Homepage',                                            depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'work/',              desc: '/work listing + /work/[slug] case study detail',       depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'writing/',           desc: '/writing listing + /writing/[slug] blog post',         depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'projects/',          desc: '/projects side-projects gallery',                      depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'stack/',             desc: '/stack tech-stack page',                               depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'contact/',           desc: '/contact inquiry form',                                depth: 2, last: false },
+      { pre: '│   │   └── ', dir: true,  name: 'legal/',             desc: '/legal/[slug] CMS-managed legal pages',                depth: 2, last: true  },
+      { pre: '│   │',    dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '│   ├── ', dir: true,  name: '(payload)/',             desc: 'Payload CMS admin panel — mounted at /admin',          depth: 1, last: false },
+      { pre: '│   │   ├── ', dir: true, name: 'admin/',              desc: 'Admin UI entry point + importMap',                     depth: 2, last: false },
+      { pre: '│   │   └── ', dir: true, name: 'api/',                desc: 'Payload REST API routes',                              depth: 2, last: true  },
+      { pre: '│   │',    dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '│   ├── ', dir: true,  name: 'og/',                    desc: 'Dynamic OG image generation (PNG)',                    depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'feed.xml/',              desc: 'RSS feed route handler',                               depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'sitemap-index.xml/',     desc: 'Sitemap index linking to sub-sitemaps',                depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'llms.txt/',              desc: 'AI-readable plain-text site summary',                  depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'maintenance/',           desc: 'Maintenance mode page and layout',                     depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'robots.ts',              desc: 'robots.txt generation (allows AI crawlers)',           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'manifest.ts',            desc: 'Web app manifest (PWA metadata)',                      depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'sitemap.ts',             desc: 'Dynamic sitemap (posts, work, pages)',                  depth: 1, last: false },
+      { pre: '│   └── ', dir: false, name: 'not-found.tsx',          desc: 'Global 404 page',                                      depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'collections/',           desc: 'Payload CMS collection schemas',                       depth: 0, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Posts.ts',               desc: 'Blog articles with Lexical editor and tags',           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Work.ts',                desc: 'Professional case studies',                            depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Projects.ts',            desc: 'Side projects and OSS contributions',                  depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Timeline.ts',            desc: 'Career history entries',                               depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Education.ts',           desc: 'Degrees and qualifications',                           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Certifications.ts',      desc: 'Professional certifications',                          depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Pages.ts',               desc: 'CMS-managed static pages (legal, basic)',              depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Media.ts',               desc: 'Image/file uploads → Cloudflare R2',                  depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Submissions.ts',         desc: 'Contact form and inquiry submissions',                  depth: 1, last: false },
+      { pre: '│   └── ', dir: false, name: 'Users.ts',               desc: 'Admin user accounts',                                  depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'components/',            desc: 'React components',                                     depth: 0, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'providers/',             desc: 'React context providers',                              depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'sections/',              desc: 'Page section components (Hero, Philosophy, etc.)',     depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'site/',                  desc: 'Shell components — Rail, Footer, MobileHeader, etc.', depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'writing/',               desc: 'Blog-specific components (TOC, PostShare, etc.)',      depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'anim/',                  desc: 'Animation wrappers — FadeRise, MaskReveal, CountUp',   depth: 1, last: false },
+      { pre: '│   └── ', dir: true,  name: 'ui/',                    desc: 'shadcn/ui primitives — Button, Badge, Dialog, etc.',   depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'content/',               desc: 'Static content files',                                 depth: 0, last: false },
+      { pre: '│   └── ', dir: false, name: 'stack.ts',               desc: '✏️  EDIT THIS — your tech stack list',                depth: 1, last: true,  edit: true },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'globals/',               desc: 'Payload CMS global schemas',                           depth: 0, last: false },
+      { pre: '│   └── ', dir: false, name: 'SiteSettings.ts',        desc: 'Identity, socials, philosophy, resume, availability', depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'lib/',                   desc: 'Shared utility modules',                               depth: 0, last: false },
+      { pre: '│   ├── ', dir: false, name: 'data.ts',                desc: 'Cached data fetchers (getCachedPosts, etc.)',          depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'site-identity.ts',       desc: 'SiteIdentity type + buildIdentity() helper',          depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'metadata.ts',            desc: 'createMetadata() and buildOgUrl() helpers',           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'structured-data.ts',     desc: 'JSON-LD schema builders (Person, WebSite, etc.)',      depth: 1, last: false },
+      { pre: '│   └── ', dir: true,  name: 'email/',                 desc: 'Email sending utilities',                              depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'emails/',                desc: 'React Email templates',                                depth: 0, last: false },
+      { pre: '├── ',     dir: true,  name: 'hooks/',                 desc: 'Payload lifecycle hooks (cache revalidation)',          depth: 0, last: false },
+      { pre: '├── ',     dir: true,  name: 'public/',                desc: 'Static assets — favicon, fonts, icons',                depth: 0, last: false },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: false, name: 'payload.config.ts',      desc: 'Payload CMS — collections, plugins, storage, email',  depth: 0, last: false },
+      { pre: '├── ',     dir: false, name: 'next.config.ts',         desc: 'Next.js configuration — image domains, headers',      depth: 0, last: false },
+      { pre: '├── ',     dir: false, name: 'tailwind.config.ts',     desc: 'Tailwind theme and design tokens',                     depth: 0, last: false },
+      { pre: '└── ',     dir: false, name: '.env.example',           desc: 'Environment variable template — copy to .env.local',  depth: 0, last: true  },
+    ];
+
+    const container = document.getElementById('tree');
+
+    TREE.forEach(row => {
+      const el = document.createElement('div');
+
+      if (row.spacer) {
+        el.className = 'px-4 py-0.5 text-zinc-700 font-mono text-sm select-none';
+        el.textContent = row.pre;
+        container.appendChild(el);
+        return;
+      }
+
+      el.className = 'flex items-baseline gap-0 px-4 py-1.5 hover:bg-zinc-800/40 transition-colors';
+
+      // Tree prefix
+      const pre = document.createElement('span');
+      pre.className = 'text-zinc-700 flex-shrink-0 select-none';
+      pre.textContent = row.pre;
+
+      // Name
+      const name = document.createElement('span');
+      name.className = row.dir
+        ? 'text-indigo-400 font-semibold flex-shrink-0'
+        : 'text-zinc-300 flex-shrink-0';
+      name.textContent = row.name;
+
+      // Edit badge
+      let editBadge = null;
+      if (row.edit) {
+        editBadge = document.createElement('span');
+        editBadge.className = 'ml-2 text-xs font-semibold px-1.5 py-0.5 rounded bg-amber-900/60 text-amber-300 border border-amber-800 flex-shrink-0';
+        editBadge.textContent = 'edit';
+      }
+
+      // Spacer dot leader
+      const dots = document.createElement('span');
+      dots.className = 'flex-1 mx-3 border-b border-dotted border-zinc-800 self-center';
+
+      // Description
+      const desc = document.createElement('span');
+      desc.className = 'text-zinc-500 text-xs text-right flex-shrink-0 max-w-xs';
+      desc.textContent = row.desc;
+
+      el.appendChild(pre);
+      el.appendChild(name);
+      if (editBadge) el.appendChild(editBadge);
+      el.appendChild(dots);
+      el.appendChild(desc);
+      container.appendChild(el);
+    });
+  </script>
+
+  <!-- Active link highlighting -->
+  <script>
+    const links = document.querySelectorAll('.sidebar-link');
+    const sections = document.querySelectorAll('section[id]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
