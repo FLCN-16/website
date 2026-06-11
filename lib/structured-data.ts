@@ -1,20 +1,19 @@
-import { site } from '@/content/site'
+import type { SiteIdentity } from '@/lib/site-identity'
 import { stack } from '@/content/stack'
 
-export const PERSON_ID = `${site.url}/#person`
-export const WEBSITE_ID = `${site.url}/#website`
-
 /** Compact Person reference for author/publisher fields on other schemas */
-export function personRef() {
+export function personRef(identity: SiteIdentity) {
+  const personId = `${identity.url}/#person`
   return {
     '@type': 'Person',
-    '@id': PERSON_ID,
-    name: site.name,
-    url: site.url,
+    '@id': personId,
+    name: identity.name,
+    url: identity.url,
   }
 }
 
-export function personSchema() {
+export function personSchema(identity: SiteIdentity) {
+  const personId = `${identity.url}/#person`
   const knowsAbout = [
     ...new Set(
       stack.disciplines.flatMap((d) =>
@@ -28,14 +27,14 @@ export function personSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    '@id': PERSON_ID,
-    name: site.name,
+    '@id': personId,
+    name: identity.name,
     alternateName: 'The Falcon',
-    url: site.url,
-    email: site.email,
-    jobTitle: site.role,
-    description: site.description,
-    sameAs: site.socials.map((s) => s.url),
+    url: identity.url,
+    email: identity.email,
+    jobTitle: identity.role,
+    description: identity.description,
+    sameAs: identity.socials.map((s) => s.url),
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Jalandhar',
@@ -46,21 +45,22 @@ export function personSchema() {
   }
 }
 
-export function websiteSchema() {
+export function websiteSchema(identity: SiteIdentity) {
+  const websiteId = `${identity.url}/#website`
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': WEBSITE_ID,
-    name: site.name,
+    '@id': websiteId,
+    name: identity.name,
     alternateName: 'The Falcon',
-    url: site.url,
-    description: site.description,
+    url: identity.url,
+    description: identity.description,
     inLanguage: 'en',
-    publisher: personRef(),
+    publisher: personRef(identity),
   }
 }
 
-export function breadcrumbSchema(items: { name: string; path?: string }[]) {
+export function breadcrumbSchema(identity: SiteIdentity, items: { name: string; path?: string }[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -68,7 +68,7 @@ export function breadcrumbSchema(items: { name: string; path?: string }[]) {
       '@type': 'ListItem',
       position: i + 1,
       name: item.name,
-      ...(item.path ? { item: `${site.url}${item.path}` } : {}),
+      ...(item.path ? { item: `${identity.url}${item.path}` } : {}),
     })),
   }
 }
