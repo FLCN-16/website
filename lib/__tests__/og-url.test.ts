@@ -1,42 +1,54 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { buildOgUrl, createMetadata, resolveMetaImage } from '../metadata'
+import type { SiteIdentity } from '../site-identity'
 
-// These tests fail until lib/metadata.ts exports buildOgUrl
-// and createMetadata defaults to it when no image is passed.
+const TEST_IDENTITY: SiteIdentity = {
+  name: 'Test User',
+  handle: 'testuser',
+  role: 'Developer',
+  location: 'Worldwide',
+  timezone: 'UTC',
+  email: 'test@example.com',
+  url: 'https://test.example.com',
+  description: 'Test site.',
+  socials: [],
+  resumeUrl: 'https://media.example.com/resume.pdf',
+  status: { available: false, label: 'NOT AVAILABLE' },
+}
 
 describe('buildOgUrl', () => {
   it('returns a URL pointing to /og with a title param', () => {
-    const url = buildOgUrl('Hello World')
+    const url = buildOgUrl('Hello World', TEST_IDENTITY)
     expect(url).toMatch(/\/og\?/)
     expect(new URL(url).searchParams.get('title')).toBe('Hello World')
   })
 
   it('includes kind when provided', () => {
-    const url = buildOgUrl('My Post', 'WRITING')
+    const url = buildOgUrl('My Post', TEST_IDENTITY, 'WRITING')
     expect(new URL(url).searchParams.get('kind')).toBe('WRITING')
   })
 
   it('omits kind when not provided', () => {
-    const url = buildOgUrl('My Post')
+    const url = buildOgUrl('My Post', TEST_IDENTITY)
     expect(url).not.toContain('kind=')
   })
 
   it('truncates desc to 160 characters', () => {
     const long = 'A'.repeat(200)
-    const url = buildOgUrl('Title', undefined, long)
+    const url = buildOgUrl('Title', TEST_IDENTITY, undefined, long)
     const desc = new URL(url).searchParams.get('desc')!
     expect(desc).toBe('A'.repeat(160))
   })
 
   it('omits desc when not provided', () => {
-    const url = buildOgUrl('Title')
+    const url = buildOgUrl('Title', TEST_IDENTITY)
     expect(url).not.toContain('desc=')
   })
 })
 
 describe('createMetadata — image fallback', () => {
   it('sets og:image to a /og URL when no image is passed', () => {
-    const meta = createMetadata({ title: 'Stack' })
+    const meta = createMetadata({ title: 'Stack', identity: TEST_IDENTITY })
     const images = (meta.openGraph as Record<string, unknown>)?.images as { url: string }[]
     expect(Array.isArray(images)).toBe(true)
     expect(images[0].url).toContain('/og?')
@@ -44,7 +56,7 @@ describe('createMetadata — image fallback', () => {
   })
 
   it('uses the provided image when passed, ignoring /og fallback', () => {
-    const meta = createMetadata({ title: 'Post', image: 'https://cdn.example.com/cover.jpg' })
+    const meta = createMetadata({ title: 'Post', image: 'https://cdn.example.com/cover.jpg', identity: TEST_IDENTITY })
     const images = (meta.openGraph as Record<string, unknown>)?.images as { url: string }[]
     expect(images[0].url).toBe('https://cdn.example.com/cover.jpg')
   })
@@ -53,6 +65,7 @@ describe('createMetadata — image fallback', () => {
     const meta = createMetadata({
       title: 'Post',
       image: { url: 'https://cdn.example.com/cover.jpg', width: 1200, height: 630, alt: 'Cover art' },
+      identity: TEST_IDENTITY,
     })
     const images = (meta.openGraph as Record<string, unknown>)?.images as Record<string, unknown>[]
     expect(images[0]).toEqual({ url: 'https://cdn.example.com/cover.jpg', width: 1200, height: 630, alt: 'Cover art' })

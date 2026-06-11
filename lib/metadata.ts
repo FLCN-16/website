@@ -1,16 +1,16 @@
 import type { Metadata } from "next"
-import { site } from "@/content/site"
+import type { SiteIdentity } from '@/lib/site-identity'
 import { buildCloudflareUrl } from "@/lib/cloudflare-image-loader"
 
 // Bump when the /og template design changes — busts year-long CDN/scraper caches
 const OG_VERSION = '2'
 
-export function buildOgUrl(title: string, kind?: string, desc?: string): string {
+export function buildOgUrl(title: string, identity: SiteIdentity, kind?: string, desc?: string): string {
   const params = new URLSearchParams({ title })
   if (kind) params.set('kind', kind)
   if (desc) params.set('desc', desc.slice(0, 160))
   params.set('v', OG_VERSION)
-  return `${site.url}/og?${params.toString()}`
+  return `${identity.url}/og?${params.toString()}`
 }
 
 export interface MetaImage {
@@ -62,6 +62,7 @@ export function createMetadata({
   absolute = false,
   kind,
   article,
+  identity,
 }: {
   title: string
   description?: string
@@ -74,56 +75,52 @@ export function createMetadata({
     modifiedTime?: string
     tags?: string[]
   }
+  identity: SiteIdentity
 }): Metadata {
-  const fullTitle = `${title} — ${site.name}`
+  const fullTitle = `${title} — ${identity.name}`
   const resolvedTitle = absolute ? ({ absolute: title } as Metadata["title"]) : title
   const metaImage = typeof image === 'string' ? { url: image } : image
-  const ogImage = metaImage?.url ?? buildOgUrl(title, kind, description)
-  // Generated OG images are always 1200x630; CMS-supplied images carry their own dimensions
+  const ogImage = metaImage?.url ?? buildOgUrl(title, identity, kind, description)
   const ogImageDescriptor = metaImage
     ? { url: ogImage, width: metaImage.width, height: metaImage.height, alt: metaImage.alt ?? title }
     : { url: ogImage, width: 1200, height: 630, alt: title }
 
   return {
-    metadataBase: new URL(site.url),
+    metadataBase: new URL(identity.url),
     title: resolvedTitle,
     description,
-    authors: [{ name: site.name, url: site.url }],
-    creator: site.name,
+    authors: [{ name: identity.name, url: identity.url }],
+    creator: identity.name,
     ...(article?.tags?.length ? { keywords: article.tags } : {}),
-    // Pages replace the layout's `alternates` wholesale (shallow merge), so re-declare the feed here
     alternates: {
-      ...(path ? { canonical: `${site.url}${path}` } : {}),
-      types: { "application/rss+xml": `${site.url}/feed.xml` },
+      ...(path ? { canonical: `${identity.url}${path}` } : {}),
+      types: { 'application/rss+xml': `${identity.url}/feed.xml` },
     },
     openGraph: {
       ...(article
         ? {
-            type: "article",
+            type: 'article',
             publishedTime: article.publishedTime,
             modifiedTime: article.modifiedTime,
-            authors: [site.url],
+            authors: [identity.url],
             tags: article.tags,
           }
-        : { type: "website" }),
-      locale: "en_US",
-      siteName: site.name,
-      ...(path ? { url: `${site.url}${path}` } : {}),
+        : { type: 'website' }),
+      locale: 'en_US',
+      siteName: identity.name,
+      ...(path ? { url: `${identity.url}${path}` } : {}),
       title: fullTitle,
       description,
       images: [ogImageDescriptor],
     },
     twitter: {
-      card: "summary_large_image",
-      site: `@${site.handle}`,
-      creator: `@${site.handle}`,
+      card: 'summary_large_image',
+      site: `@${identity.handle}`,
+      creator: `@${identity.handle}`,
       title: fullTitle,
       description,
       images: [ogImage],
     },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    robots: { index: true, follow: true },
   }
 }
