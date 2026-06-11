@@ -12,7 +12,9 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteFrame } from "@/components/site/site-frame";
 import { Toaster } from "@/components/ui/sonner";
-import { site } from "@/content/site";
+import { getCachedSiteSettings } from '@/lib/data'
+import { buildIdentity } from '@/lib/site-identity'
+import { SiteIdentityProvider } from '@/components/providers/site-identity-provider'
 import type { Form } from "@payloadcms/plugin-form-builder/types";
 import { ClientOverlays } from "@/components/site/client-overlays";
 import { JsonLd } from "@/components/structured-data/json-ld";
@@ -30,38 +32,39 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} — ${site.role}`,
-    template: `%s — ${site.name}`,
-  },
-  description: site.description,
-  authors: [{ name: site.name, url: site.url }],
-  creator: site.name,
-  alternates: {
-    types: {
-      "application/rss+xml": `${site.url}/feed.xml`,
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getCachedSiteSettings()
+  const id = buildIdentity(settings)
+  return {
+    metadataBase: new URL(id.url),
+    title: {
+      default: `${id.name} — ${id.role}`,
+      template: `%s — ${id.name}`,
     },
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    siteName: site.name,
-    title: `${site.name} — ${site.role}`,
-    description: site.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    creator: `@${site.handle}`,
-    title: `${site.name} — ${site.role}`,
-    description: site.description,
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+    description: id.description,
+    authors: [{ name: id.name, url: id.url }],
+    creator: id.name,
+    alternates: {
+      types: {
+        'application/rss+xml': `${id.url}/feed.xml`,
+      },
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      siteName: id.name,
+      title: `${id.name} — ${id.role}`,
+      description: id.description,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      creator: `@${id.handle}`,
+      title: `${id.name} — ${id.role}`,
+      description: id.description,
+    },
+    robots: { index: true, follow: true },
+  }
+}
 
 const getCachedTalentForm = unstable_cache(
   async () => {
@@ -79,6 +82,9 @@ const getCachedTalentForm = unstable_cache(
 )
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   let talentForm: Form | null = null
 
   try {
@@ -127,19 +133,21 @@ function gtag(){dataLayer.push(arguments);}
         )}
         <JsonLd data={websiteSchema()} />
         <NextTopLoader color="var(--primary)" height={3} showSpinner={false} />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ClientOverlays form={talentForm} />
-          <QueryProvider>
-            <SiteFrame>{children}</SiteFrame>
-          </QueryProvider>
-          <Toaster position="bottom-right" />
-          <CookieConsent />
-        </ThemeProvider>
+        <SiteIdentityProvider identity={identity}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ClientOverlays form={talentForm} />
+            <QueryProvider>
+              <SiteFrame>{children}</SiteFrame>
+            </QueryProvider>
+            <Toaster position="bottom-right" />
+            <CookieConsent />
+          </ThemeProvider>
+        </SiteIdentityProvider>
       </body>
     </html>
   )
