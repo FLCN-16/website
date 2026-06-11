@@ -3,7 +3,8 @@
 import { Resend } from "resend"
 import { getPayload } from "payload"
 import config from "@payload-config"
-import { site } from "@/content/site"
+import { getCachedSiteSettings } from "@/lib/data"
+import { buildIdentity } from "@/lib/site-identity"
 import { TalentInquiryNotification } from "@/emails/talent-inquiry-notification"
 
 export type TalentInquiryResult = { ok: boolean; error?: string }
@@ -21,6 +22,9 @@ export async function submitTalentInquiry(formData: FormData): Promise<TalentInq
 
   const pitchText = typeof pitch === "string" ? pitch.trim() : ""
   const file = jdFile instanceof File && jdFile.size > 0 ? jdFile : null
+
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
 
   try {
     const payload = await getPayload({ config })
@@ -53,7 +57,7 @@ export async function submitTalentInquiry(formData: FormData): Promise<TalentInq
 
     const resend = new Resend(process.env.RESEND_API_KEY)
     const from = process.env.RESEND_FROM ?? `Rishabh Kumar <hello@thefalcon.dev>`
-    const to = process.env.RESEND_TO ?? site.email
+    const to = process.env.RESEND_TO ?? identity.email
 
     let attachments: { filename: string; content: Buffer }[] | undefined
     if (file) {

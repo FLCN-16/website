@@ -6,7 +6,8 @@ import config from "@payload-config"
 import { contactSchema } from "@/lib/schemas/contact"
 import { ContactNotification } from "@/emails/contact-notification"
 import { ContactConfirmation } from "@/emails/contact-confirmation"
-import { site } from "@/content/site"
+import { getCachedSiteSettings } from "@/lib/data"
+import { buildIdentity } from "@/lib/site-identity"
 
 export type ContactResult = { ok: boolean; error?: string }
 
@@ -21,6 +22,9 @@ export async function submitContact(data: unknown): Promise<ContactResult> {
 
   // Silently succeed to fool bots
   if (_honeypot) return { ok: true }
+
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
 
   try {
     const payload = await getPayload({ config })
@@ -39,7 +43,7 @@ export async function submitContact(data: unknown): Promise<ContactResult> {
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const from = process.env.RESEND_FROM ?? `Rishabh Kumar <hello@thefalcon.dev>`
-  const ownerEmail = process.env.RESEND_TO ?? site.email
+  const ownerEmail = process.env.RESEND_TO ?? identity.email
   const inquiryLabel = inquiry.charAt(0).toUpperCase() + inquiry.slice(1)
 
   try {

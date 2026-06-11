@@ -5,7 +5,8 @@
 import { Resend } from "resend"
 import type { Payload } from "payload"
 import { mapPayloadPost, normalizeTags } from "@/lib/posts"
-import { site } from "@/content/site"
+import { getCachedSiteSettings } from "@/lib/data"
+import { buildIdentity } from "@/lib/site-identity"
 import { PostBroadcast } from "@/emails/post-broadcast"
 
 interface SendPostBroadcastArgs {
@@ -23,6 +24,9 @@ export async function sendPostBroadcast({ doc, payload }: SendPostBroadcastArgs)
       )
       return
     }
+
+    const settings = await getCachedSiteSettings().catch(() => null)
+    const identity = buildIdentity(settings)
 
     // Re-fetch the doc at depth:1 when the cover field isn't already populated
     // (afterChange may deliver the cover as a bare ID depending on save context).
@@ -55,7 +59,7 @@ export async function sendPostBroadcast({ doc, payload }: SendPostBroadcastArgs)
     const recent = recentRes.docs.map(mapPayloadPost)
 
     // Build URLs and sender identity
-    const siteUrl = site.url
+    const siteUrl = identity.url
     const postUrl = `${siteUrl}/writing/${hero.slug}`
     const writingIndexUrl = `${siteUrl}/writing`
     const fromName = process.env.RESEND_FROM_NAME ?? "The Falcon"
