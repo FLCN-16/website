@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { RECOVERY_LINKS } from "@/lib/navigation";
-import { site } from "@/content/site";
 
 interface ErrorStateProps {
   /** Large mono status code, e.g. "404" / "500". */
@@ -17,6 +16,8 @@ interface ErrorStateProps {
   showLinks?: boolean;
   /** Render name + role header (standalone pages without the rail). */
   showIdentity?: boolean;
+  /** Site name shown in the identity header when showIdentity is true. */
+  siteName?: string;
 }
 
 export function ErrorState({
@@ -28,6 +29,7 @@ export function ErrorState({
   actions,
   showLinks = false,
   showIdentity = false,
+  siteName = 'Portfolio',
 }: ErrorStateProps) {
   const dotClass = tone === "destructive" ? "text-destructive" : "text-muted-foreground";
 
@@ -35,8 +37,7 @@ export function ErrorState({
     <div className="w-full max-w-lg flex flex-col gap-6 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-500">
       {showIdentity && (
         <div className="flex flex-col gap-1">
-          <span className="font-mono text-sm font-medium text-foreground">{site.name}</span>
-          <span className="font-mono text-xs text-muted-foreground">{site.role}</span>
+          <span className="font-mono text-sm font-medium text-foreground">{siteName}</span>
         </div>
       )}
 

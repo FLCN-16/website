@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ErrorState } from "@/components/site/error-state";
 import { Button } from "@/components/ui/button";
-import { site } from "@/content/site";
+import { getCachedSiteSettings } from "@/lib/data";
+import { buildIdentity } from "@/lib/site-identity";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,12 +19,19 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: `Not Found — ${site.name}`,
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata() {
+  const settings = await getCachedSiteSettings().catch(() => null);
+  const identity = buildIdentity(settings);
+  return {
+    title: `Not Found — ${identity.name}`,
+    robots: { index: false, follow: false },
+  };
+}
 
-export default function NotFound() {
+export default async function NotFound() {
+  const settings = await getCachedSiteSettings().catch(() => null);
+  const identity = buildIdentity(settings);
+
   return (
     <html
       lang="en"
@@ -47,6 +54,7 @@ export default function NotFound() {
               message="The page you're looking for doesn't exist or has been moved."
               showIdentity
               showLinks
+              siteName={identity.name}
               actions={
                 <Button asChild>
                   <Link href="/">Back home</Link>
