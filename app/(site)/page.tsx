@@ -17,7 +17,6 @@ import { CtaBanner } from '@/components/sections/cta-banner'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { personSchema } from '@/lib/structured-data'
 import { buildIdentity } from '@/lib/site-identity'
-import { site } from '@/content/site'
 import { createMetadata } from '@/lib/metadata'
 import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, CertificationEntry } from '@/lib/types'
 
@@ -67,13 +66,13 @@ export default async function Home() {
     <>
       <JsonLd data={personSchema(identity)} />
       <Hero
-        eyebrow={cmsSettings?.eyebrow ?? site.eyebrow}
-        headline={cmsSettings?.headline ?? site.headline}
-        subheadline={cmsSettings?.subheadline ?? site.subheadline}
+        eyebrow={cmsSettings?.eyebrow ?? ''}
+        headline={cmsSettings?.headline ?? ''}
+        subheadline={cmsSettings?.subheadline ?? ''}
         status={cmsSettings?.availability
-          ? { available: cmsSettings.availability.available ?? site.status.available, label: cmsSettings.availability.label ?? site.status.label }
-          : site.status}
-        stats={cmsSettings?.stats ?? site.stats}
+          ? { available: cmsSettings.availability.available ?? false, label: cmsSettings.availability.label ?? '' }
+          : { available: false, label: '' }}
+        stats={cmsSettings?.stats ?? []}
         primaryCta={{ label: 'View My Work', href: '/work' }}
         secondaryCta={{ label: 'Get In Touch', href: '/contact' }}
       />
