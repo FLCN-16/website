@@ -394,85 +394,17 @@ cd payload-portfolio</pre>
       <!-- ── Folder Structure ── -->
       <section id="folder-structure" class="mb-16">
         <h2 class="section-heading border-t border-zinc-800 pt-8">Folder Structure</h2>
-        <p class="text-zinc-400 mb-6">The project follows Next.js App Router conventions. Here is the complete structure with explanations.</p>
+        <p class="text-zinc-400 mb-6">The project follows Next.js App Router conventions. Each row shows the path on the left and what it does on the right.</p>
 
-        <div class="folder-tree">
-<span class="dir">payload-portfolio/</span>
-├── <span class="dir">actions/</span>              <span class="note"># Server actions (form submissions, subscriptions)</span>
-│   ├── <span class="file">contact.ts</span>        <span class="note"># Contact form submission + email notify</span>
-│   ├── <span class="file">subscribe.ts</span>      <span class="note"># Newsletter subscribe action</span>
-│   └── <span class="file">talent-inquiry.ts</span> <span class="note"># Talent dialog submission + email</span>
-│
-├── <span class="dir">app/</span>                   <span class="note"># Next.js App Router</span>
-│   ├── <span class="dir">(site)/</span>            <span class="note"># Public portfolio routes (wrapped in site layout)</span>
-│   │   ├── <span class="file">layout.tsx</span>    <span class="note"># Site shell — fonts, providers, SiteIdentityProvider</span>
-│   │   ├── <span class="file">page.tsx</span>      <span class="note"># Homepage</span>
-│   │   ├── <span class="dir">work/</span>          <span class="note"># /work listing + /work/[slug] detail</span>
-│   │   ├── <span class="dir">projects/</span>      <span class="note"># /projects listing</span>
-│   │   ├── <span class="dir">writing/</span>       <span class="note"># /writing listing + /writing/[slug] post</span>
-│   │   ├── <span class="dir">stack/</span>         <span class="note"># /stack — tech stack page</span>
-│   │   ├── <span class="dir">contact/</span>       <span class="note"># /contact — inquiry form</span>
-│   │   └── <span class="dir">legal/</span>         <span class="note"># /legal/[slug] — CMS-managed legal pages</span>
-│   │
-│   ├── <span class="dir">(payload)/</span>         <span class="note"># Payload CMS admin panel (mounted at /admin)</span>
-│   │   ├── <span class="dir">admin/</span>         <span class="note"># Admin UI entry point + importMap</span>
-│   │   └── <span class="dir">api/</span>           <span class="note"># Payload REST API routes</span>
-│   │
-│   ├── <span class="dir">og/route.tsx</span>        <span class="note"># Dynamic OG image generation</span>
-│   ├── <span class="dir">feed.xml/</span>           <span class="note"># RSS feed route</span>
-│   ├── <span class="dir">sitemap-index.xml/</span>  <span class="note"># Sitemap index</span>
-│   ├── <span class="dir">llms.txt/</span>           <span class="note"># AI-readable site summary</span>
-│   ├── <span class="dir">maintenance/</span>        <span class="note"># Maintenance mode pages</span>
-│   ├── <span class="file">robots.ts</span>           <span class="note"># robots.txt generation</span>
-│   ├── <span class="file">manifest.ts</span>         <span class="note"># Web app manifest</span>
-│   ├── <span class="file">sitemap.ts</span>          <span class="note"># Dynamic sitemap</span>
-│   └── <span class="file">not-found.tsx</span>       <span class="note"># Global 404 page</span>
-│
-├── <span class="dir">collections/</span>           <span class="note"># Payload CMS collection definitions</span>
-│   ├── <span class="file">Posts.ts</span>            <span class="note"># Blog articles</span>
-│   ├── <span class="file">Work.ts</span>             <span class="note"># Case studies</span>
-│   ├── <span class="file">Projects.ts</span>         <span class="note"># Side projects</span>
-│   ├── <span class="file">Timeline.ts</span>         <span class="note"># Career history</span>
-│   ├── <span class="file">Education.ts</span>        <span class="note"># Education entries</span>
-│   ├── <span class="file">Certifications.ts</span>   <span class="note"># Professional certifications</span>
-│   ├── <span class="file">Pages.ts</span>            <span class="note"># CMS-managed static pages</span>
-│   ├── <span class="file">Media.ts</span>            <span class="note"># Image/file uploads → Cloudflare R2</span>
-│   ├── <span class="file">Submissions.ts</span>      <span class="note"># Form submission storage</span>
-│   └── <span class="file">Users.ts</span>            <span class="note"># Admin user accounts</span>
-│
-├── <span class="dir">components/</span>
-│   ├── <span class="dir">providers/</span>          <span class="note"># React context providers</span>
-│   │   └── <span class="file">site-identity-provider.tsx</span>  <span class="note"># Distributes CMS identity to client components</span>
-│   ├── <span class="dir">sections/</span>           <span class="note"># Page section components (Hero, Philosophy, etc.)</span>
-│   ├── <span class="dir">site/</span>               <span class="note"># Shell components (Rail, Footer, MobileHeader, etc.)</span>
-│   ├── <span class="dir">writing/</span>            <span class="note"># Blog-specific components</span>
-│   ├── <span class="dir">anim/</span>               <span class="note"># Animation wrappers (FadeRise, MaskReveal, CountUp)</span>
-│   └── <span class="dir">ui/</span>                 <span class="note"># shadcn/ui primitives (Button, Badge, Dialog, etc.)</span>
-│
-├── <span class="dir">content/</span>               <span class="note"># Static content files</span>
-│   └── <span class="file">stack.ts</span>            <span class="note"># ✏️  EDIT THIS — your tech stack list</span>
-│
-├── <span class="dir">emails/</span>                <span class="note"># React Email templates</span>
-│
-├── <span class="dir">globals/</span>               <span class="note"># Payload CMS global definitions</span>
-│   └── <span class="file">SiteSettings.ts</span>     <span class="note"># Identity, socials, philosophy, resume, availability</span>
-│
-├── <span class="dir">hooks/</span>                 <span class="note"># Payload lifecycle hooks (cache revalidation)</span>
-│
-├── <span class="dir">lib/</span>                   <span class="note"># Shared utilities</span>
-│   ├── <span class="file">data.ts</span>             <span class="note"># Cached data fetchers (getCachedPosts, etc.)</span>
-│   ├── <span class="file">metadata.ts</span>         <span class="note"># createMetadata() and buildOgUrl() helpers</span>
-│   ├── <span class="file">structured-data.ts</span>  <span class="note"># JSON-LD schema builders</span>
-│   ├── <span class="file">site-identity.ts</span>    <span class="note"># SiteIdentity type + buildIdentity() helper</span>
-│   └── <span class="dir">email/</span>              <span class="note"># Email sending utilities</span>
-│
-├── <span class="dir">public/</span>                <span class="note"># Static assets (favicon, fonts, og-fallback)</span>
-│
-├── <span class="file">payload.config.ts</span>      <span class="note"># Payload CMS configuration (collections, plugins, storage)</span>
-├── <span class="file">next.config.ts</span>         <span class="note"># Next.js configuration</span>
-├── <span class="file">tailwind.config.ts</span>     <span class="note"># Tailwind theme / design tokens</span>
-├── <span class="file">.env.example</span>           <span class="note"># Environment variable template</span>
-└── <span class="file">content/stack.ts</span>       <span class="note"># ✏️  Only source file you need to edit</span>
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+          <!-- header row -->
+          <div class="grid grid-cols-[1fr_auto] gap-0 border-b border-zinc-800 px-4 py-2 bg-zinc-800/60">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Path</span>
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500 text-right">Description</span>
+          </div>
+
+          <div id="tree" class="divide-y divide-zinc-800/60 text-sm font-mono">
+          </div>
         </div>
       </section>
 
@@ -940,6 +872,136 @@ pm2 start ecosystem.config.js</pre>
 
     </main>
   </div>
+
+  <!-- Folder tree renderer -->
+  <script>
+    const TREE = [
+      // prefix, isDir, name, description, depth, isLast, editMe
+      { pre: '',         dir: true,  name: 'payload-portfolio/',     desc: 'Project root',                                          depth: 0, last: false },
+      { pre: '├── ',     dir: true,  name: 'actions/',               desc: 'Server actions — form submissions, subscriptions',      depth: 0, last: false },
+      { pre: '│   ├── ', dir: false, name: 'contact.ts',             desc: 'Contact form submission + email notification',         depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'subscribe.ts',           desc: 'Newsletter subscribe/unsubscribe action',              depth: 1, last: false },
+      { pre: '│   └── ', dir: false, name: 'talent-inquiry.ts',      desc: 'Talent dialog submission + email with attachment',     depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'app/',                   desc: 'Next.js App Router — all routes live here',            depth: 0, last: false },
+      { pre: '│   ├── ', dir: true,  name: '(site)/',                desc: 'Public portfolio routes — wrapped in site layout',     depth: 1, last: false },
+      { pre: '│   │   ├── ', dir: false, name: 'layout.tsx',         desc: 'Site shell — fonts, providers, SiteIdentityProvider', depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: false, name: 'page.tsx',           desc: 'Homepage',                                            depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'work/',              desc: '/work listing + /work/[slug] case study detail',       depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'writing/',           desc: '/writing listing + /writing/[slug] blog post',         depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'projects/',          desc: '/projects side-projects gallery',                      depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'stack/',             desc: '/stack tech-stack page',                               depth: 2, last: false },
+      { pre: '│   │   ├── ', dir: true,  name: 'contact/',           desc: '/contact inquiry form',                                depth: 2, last: false },
+      { pre: '│   │   └── ', dir: true,  name: 'legal/',             desc: '/legal/[slug] CMS-managed legal pages',                depth: 2, last: true  },
+      { pre: '│   │',    dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '│   ├── ', dir: true,  name: '(payload)/',             desc: 'Payload CMS admin panel — mounted at /admin',          depth: 1, last: false },
+      { pre: '│   │   ├── ', dir: true, name: 'admin/',              desc: 'Admin UI entry point + importMap',                     depth: 2, last: false },
+      { pre: '│   │   └── ', dir: true, name: 'api/',                desc: 'Payload REST API routes',                              depth: 2, last: true  },
+      { pre: '│   │',    dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '│   ├── ', dir: true,  name: 'og/',                    desc: 'Dynamic OG image generation (PNG)',                    depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'feed.xml/',              desc: 'RSS feed route handler',                               depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'sitemap-index.xml/',     desc: 'Sitemap index linking to sub-sitemaps',                depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'llms.txt/',              desc: 'AI-readable plain-text site summary',                  depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'maintenance/',           desc: 'Maintenance mode page and layout',                     depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'robots.ts',              desc: 'robots.txt generation (allows AI crawlers)',           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'manifest.ts',            desc: 'Web app manifest (PWA metadata)',                      depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'sitemap.ts',             desc: 'Dynamic sitemap (posts, work, pages)',                  depth: 1, last: false },
+      { pre: '│   └── ', dir: false, name: 'not-found.tsx',          desc: 'Global 404 page',                                      depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'collections/',           desc: 'Payload CMS collection schemas',                       depth: 0, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Posts.ts',               desc: 'Blog articles with Lexical editor and tags',           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Work.ts',                desc: 'Professional case studies',                            depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Projects.ts',            desc: 'Side projects and OSS contributions',                  depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Timeline.ts',            desc: 'Career history entries',                               depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Education.ts',           desc: 'Degrees and qualifications',                           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Certifications.ts',      desc: 'Professional certifications',                          depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Pages.ts',               desc: 'CMS-managed static pages (legal, basic)',              depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Media.ts',               desc: 'Image/file uploads → Cloudflare R2',                  depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'Submissions.ts',         desc: 'Contact form and inquiry submissions',                  depth: 1, last: false },
+      { pre: '│   └── ', dir: false, name: 'Users.ts',               desc: 'Admin user accounts',                                  depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'components/',            desc: 'React components',                                     depth: 0, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'providers/',             desc: 'React context providers',                              depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'sections/',              desc: 'Page section components (Hero, Philosophy, etc.)',     depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'site/',                  desc: 'Shell components — Rail, Footer, MobileHeader, etc.', depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'writing/',               desc: 'Blog-specific components (TOC, PostShare, etc.)',      depth: 1, last: false },
+      { pre: '│   ├── ', dir: true,  name: 'anim/',                  desc: 'Animation wrappers — FadeRise, MaskReveal, CountUp',   depth: 1, last: false },
+      { pre: '│   └── ', dir: true,  name: 'ui/',                    desc: 'shadcn/ui primitives — Button, Badge, Dialog, etc.',   depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'content/',               desc: 'Static content files',                                 depth: 0, last: false },
+      { pre: '│   └── ', dir: false, name: 'stack.ts',               desc: '✏️  EDIT THIS — your tech stack list',                depth: 1, last: true,  edit: true },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'globals/',               desc: 'Payload CMS global schemas',                           depth: 0, last: false },
+      { pre: '│   └── ', dir: false, name: 'SiteSettings.ts',        desc: 'Identity, socials, philosophy, resume, availability', depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'lib/',                   desc: 'Shared utility modules',                               depth: 0, last: false },
+      { pre: '│   ├── ', dir: false, name: 'data.ts',                desc: 'Cached data fetchers (getCachedPosts, etc.)',          depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'site-identity.ts',       desc: 'SiteIdentity type + buildIdentity() helper',          depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'metadata.ts',            desc: 'createMetadata() and buildOgUrl() helpers',           depth: 1, last: false },
+      { pre: '│   ├── ', dir: false, name: 'structured-data.ts',     desc: 'JSON-LD schema builders (Person, WebSite, etc.)',      depth: 1, last: false },
+      { pre: '│   └── ', dir: true,  name: 'email/',                 desc: 'Email sending utilities',                              depth: 1, last: true  },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: true,  name: 'emails/',                desc: 'React Email templates',                                depth: 0, last: false },
+      { pre: '├── ',     dir: true,  name: 'hooks/',                 desc: 'Payload lifecycle hooks (cache revalidation)',          depth: 0, last: false },
+      { pre: '├── ',     dir: true,  name: 'public/',                desc: 'Static assets — favicon, fonts, icons',                depth: 0, last: false },
+      { pre: '│',        dir: null,  name: '',                       desc: '',                                                     depth: 0, last: false, spacer: true },
+      { pre: '├── ',     dir: false, name: 'payload.config.ts',      desc: 'Payload CMS — collections, plugins, storage, email',  depth: 0, last: false },
+      { pre: '├── ',     dir: false, name: 'next.config.ts',         desc: 'Next.js configuration — image domains, headers',      depth: 0, last: false },
+      { pre: '├── ',     dir: false, name: 'tailwind.config.ts',     desc: 'Tailwind theme and design tokens',                     depth: 0, last: false },
+      { pre: '└── ',     dir: false, name: '.env.example',           desc: 'Environment variable template — copy to .env.local',  depth: 0, last: true  },
+    ];
+
+    const container = document.getElementById('tree');
+
+    TREE.forEach(row => {
+      const el = document.createElement('div');
+
+      if (row.spacer) {
+        el.className = 'px-4 py-0.5 text-zinc-700 font-mono text-sm select-none';
+        el.textContent = row.pre;
+        container.appendChild(el);
+        return;
+      }
+
+      el.className = 'flex items-baseline gap-0 px-4 py-1.5 hover:bg-zinc-800/40 transition-colors';
+
+      // Tree prefix
+      const pre = document.createElement('span');
+      pre.className = 'text-zinc-700 flex-shrink-0 select-none';
+      pre.textContent = row.pre;
+
+      // Name
+      const name = document.createElement('span');
+      name.className = row.dir
+        ? 'text-indigo-400 font-semibold flex-shrink-0'
+        : 'text-zinc-300 flex-shrink-0';
+      name.textContent = row.name;
+
+      // Edit badge
+      let editBadge = null;
+      if (row.edit) {
+        editBadge = document.createElement('span');
+        editBadge.className = 'ml-2 text-xs font-semibold px-1.5 py-0.5 rounded bg-amber-900/60 text-amber-300 border border-amber-800 flex-shrink-0';
+        editBadge.textContent = 'edit';
+      }
+
+      // Spacer dot leader
+      const dots = document.createElement('span');
+      dots.className = 'flex-1 mx-3 border-b border-dotted border-zinc-800 self-center';
+
+      // Description
+      const desc = document.createElement('span');
+      desc.className = 'text-zinc-500 text-xs text-right flex-shrink-0 max-w-xs';
+      desc.textContent = row.desc;
+
+      el.appendChild(pre);
+      el.appendChild(name);
+      if (editBadge) el.appendChild(editBadge);
+      el.appendChild(dots);
+      el.appendChild(desc);
+      container.appendChild(el);
+    });
+  </script>
 
   <!-- Active link highlighting -->
   <script>
