@@ -5,7 +5,7 @@ import { CACHE_TAGS } from '@/lib/cache-tags'
 export const Education: CollectionConfig = {
   slug: 'education',
   admin: {
-    group: 'About',
+    group: 'Profile',
     useAsTitle: 'degree',
     defaultColumns: ['degree', 'institution', 'start', 'end', 'status', 'order'],
   },

@@ -11,6 +11,7 @@
     "test": "vitest run",
     "seed:content": "tsx src/scripts/seed-content.ts",
     "seed:talent-form": "tsx src/scripts/seed-talent-form.ts",
+    "seed:contact-form": "tsx src/scripts/seed-contact-form.ts",
     "doctor": "npx react-doctor@latest"
   },
   "dependencies": {

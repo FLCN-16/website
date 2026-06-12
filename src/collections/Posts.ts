@@ -8,7 +8,7 @@ import { generatePreviewUrl } from '@/lib/preview'
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
-    group: 'Writing',
+    group: 'Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'featured', 'publishedAt'],
     preview: (data) => generatePreviewUrl({

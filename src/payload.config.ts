@@ -13,7 +13,6 @@ import { mcpPlugin } from "@payloadcms/plugin-mcp";
 import { Users } from "./collections/Users";
 import { Posts } from "./collections/Posts";
 import { Media } from "./collections/Media";
-import { Submissions } from "./collections/Submissions";
 import { Work } from "./collections/Work";
 import { Projects } from "./collections/Projects";
 import { Timeline } from "./collections/Timeline";
@@ -76,7 +75,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Posts, Media, Submissions, Work, Projects, Timeline, Education, Certifications, Pages],
+  collections: [Users, Posts, Media, Work, Projects, Timeline, Education, Certifications, Pages],
   globals: [SiteSettings],
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || "",
@@ -132,9 +131,13 @@ export default buildConfig({
         work: 10,
         projects: 10,
       },
+      searchOverrides: {
+        admin: { group: 'Admin' },
+      },
     }),
     formBuilderPlugin({
       formOverrides: {
+        admin: { group: 'Admin' },
         fields: ({ defaultFields }) => [
           ...defaultFields,
           {
@@ -166,6 +169,9 @@ export default buildConfig({
         payment: false,
       },
       defaultToEmail: "hello@thefalcon.dev",
+      formSubmissionOverrides: {
+        admin: { group: 'Admin' },
+      },
     }),
     mcpPlugin({
       collections: {
