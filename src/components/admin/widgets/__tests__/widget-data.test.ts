@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildActivityData } from '../PostsActivity'
+import { groupByInquiry } from '../InquiryBreakdown'
 
 describe('buildActivityData', () => {
   it('returns 12 slots', () => {
@@ -31,5 +32,41 @@ describe('buildActivityData', () => {
     const docs: Array<{ publishedAt?: string | null }> = [{ publishedAt: null }, {}]
     const result = buildActivityData(docs, new Date('2026-06-12'))
     expect(result.every(m => m.count === 0)).toBe(true)
+  })
+})
+
+describe('groupByInquiry', () => {
+  it('returns empty array when no submissions', () => {
+    expect(groupByInquiry([])).toEqual([])
+  })
+
+  it('maps known inquiry keys to display labels', () => {
+    const docs = [
+      { submissionData: [{ field: 'inquiry', value: 'project' }] },
+      { submissionData: [{ field: 'inquiry', value: 'project' }] },
+      { submissionData: [{ field: 'inquiry', value: 'consulting' }] },
+    ]
+    const result = groupByInquiry(docs)
+    const project = result.find(r => r.type === 'New Project')
+    const consult = result.find(r => r.type === 'Consulting')
+    expect(project?.count).toBe(2)
+    expect(consult?.count).toBe(1)
+  })
+
+  it('sorts by count descending', () => {
+    const docs = [
+      { submissionData: [{ field: 'inquiry', value: 'other' }] },
+      { submissionData: [{ field: 'inquiry', value: 'project' }] },
+      { submissionData: [{ field: 'inquiry', value: 'project' }] },
+      { submissionData: [{ field: 'inquiry', value: 'project' }] },
+    ]
+    const result = groupByInquiry(docs)
+    expect(result[0].type).toBe('New Project')
+  })
+
+  it('falls back to raw key for unknown inquiry values', () => {
+    const docs = [{ submissionData: [{ field: 'inquiry', value: 'sponsorship' }] }]
+    const result = groupByInquiry(docs)
+    expect(result[0].type).toBe('sponsorship')
   })
 })
