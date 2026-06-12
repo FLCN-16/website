@@ -48,14 +48,6 @@ export const Posts: CollectionConfig = {
               relationTo: 'media',
             },
             {
-              name: 'tags',
-              type: 'text',
-              hasMany: true,
-              admin: {
-                description: 'Type a tag and press Enter to add it.',
-              },
-            },
-            {
               name: 'body',
               type: 'richText',
               editor: lexicalEditor({ features: ({ defaultFeatures }) => [...defaultFeatures, CodeHighlightFeature()] }),
@@ -72,6 +64,15 @@ export const Posts: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'URL-friendly identifier, e.g. my-post-title',
+      },
+    },
+    {
+      name: 'tags',
+      type: 'text',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Type a tag and press Enter to add it.',
       },
     },
     {
