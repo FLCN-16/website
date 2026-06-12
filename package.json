@@ -1,5 +1,5 @@
 {
-  "name": "flcn-website",
+  "name": "payload-portfolio",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "seed:content": "tsx scripts/seed-content.ts",
-    "seed:talent-form": "tsx scripts/seed-talent-form.ts",
+    "seed:content": "tsx src/scripts/seed-content.ts",
+    "seed:talent-form": "tsx src/scripts/seed-talent-form.ts",
     "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
@@ -66,12 +66,14 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.0",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^20.19.42",
     "@types/prismjs": "^1.26.6",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.2.9",
+    "jsdom": "^29.1.1",
     "react-doctor": "^0.4.2",
     "tailwindcss": "^4.3.0",
     "tsx": "^4.22.4",
