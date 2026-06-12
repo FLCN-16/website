@@ -47,6 +47,8 @@ payload-types.ts
 # agent / tooling artifacts (kept local, not committed)
 .superpowers/
 graphify-out/
-docs/
+docs/**
+!docs/superpowers/
+!docs/superpowers/**
 .plans/
 .react-doctor/
