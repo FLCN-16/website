@@ -70,7 +70,10 @@ export default async function Home() {
 
   return (
     <>
-      <JsonLd data={personSchema(identity)} />
+      <JsonLd data={personSchema(identity, {
+        currentJob: timelineItems[0] ?? null,
+        latestEducation: educationItems[0] ?? null,
+      })} />
       <SectionTracker
         sections={['hero', 'journey', 'philosophy', 'selected-work', 'projects', 'latest-writing', 'education', 'certifications', 'cta-banner']}
         page="/"
