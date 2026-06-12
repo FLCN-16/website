@@ -70,3 +70,40 @@ describe('groupByInquiry', () => {
     expect(result[0].type).toBe('sponsorship')
   })
 })
+
+import { countTagFrequency } from '../TagFrequency'
+
+describe('countTagFrequency', () => {
+  it('returns empty array for no posts', () => {
+    expect(countTagFrequency([])).toEqual([])
+  })
+
+  it('counts tags correctly', () => {
+    const docs = [
+      { tags: ['typescript', 'react'] },
+      { tags: ['typescript', 'nextjs'] },
+      { tags: ['react'] },
+    ]
+    const result = countTagFrequency(docs)
+    expect(result.find(t => t.tag === 'typescript')?.count).toBe(2)
+    expect(result.find(t => t.tag === 'react')?.count).toBe(2)
+    expect(result.find(t => t.tag === 'nextjs')?.count).toBe(1)
+  })
+
+  it('sorts by count descending', () => {
+    const result = countTagFrequency([{ tags: ['a'] }, { tags: ['b', 'b'] }])
+    expect(result[0].tag).toBe('b')
+  })
+
+  it('caps at 10 results', () => {
+    const docs = Array.from({ length: 15 }, (_, i) => ({ tags: [`tag-${i}`] }))
+    expect(countTagFrequency(docs)).toHaveLength(10)
+  })
+
+  it('skips empty tag strings', () => {
+    const docs = [{ tags: ['', 'valid', ''] }]
+    const result = countTagFrequency(docs)
+    expect(result).toHaveLength(1)
+    expect(result[0].tag).toBe('valid')
+  })
+})
