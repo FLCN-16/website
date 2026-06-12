@@ -6,6 +6,30 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.0] - 2026-06-12
+
+### Added
+
+- **Advanced GA4 analytics** — code-driven event tracking via Google Tag Manager:
+  - `section_view` — fires once per homepage section (hero, journey, philosophy, selected-work, projects, education, certifications, cta-banner) as it enters the viewport, using IntersectionObserver with a 0.3 threshold
+  - `post_read_milestone` — fires at 25 / 50 / 75 / 100 % scroll depth on every blog post, keyed by post slug; emitted from `ReadingProgress` component
+  - `SectionTracker` client component (`components/site/section-tracker.tsx`) — mounts on the homepage, fires `section_view` once per section per page load
+  - `scroll_depth` and `nav_click` event types defined then removed — handled via GTM to avoid double-counting; deploy code before publishing GTM tags
+- **Sitelinks Searchbox** — `SearchAction` JSON-LD added to the WebSite schema; writing page reads `?q=` from the URL on load so Google's deep-link resolves to filtered results
+- **Posts tags → admin sidebar** — tags field moved from the Content tab to the admin sidebar for faster access while editing
+
+### Changed
+
+- `ReadingProgress` component now accepts an optional `slug` prop; passes it through to `post_read_milestone` events
+- `WritingListClient` initialises search state from the `?q=` URL parameter on mount (wrapped in `<Suspense>` as required by Next.js for `useSearchParams`)
+- All homepage section components have a stable `id` attribute added to their root `<section>` element
+
+### Fixed
+
+- SiteSettings global was empty after static content files were deleted — populated via seed script with all identity, socials, philosophy pillars, headline, subheadline, eyebrow, stats, and availability data
+
+---
+
 ## [1.0.0] - 2026-06-11
 
 ### Added — CodeCanyon Productization
