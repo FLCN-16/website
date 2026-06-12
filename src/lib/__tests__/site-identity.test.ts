@@ -55,4 +55,29 @@ describe('buildIdentity', () => {
     const identity = buildIdentity(settings)
     expect(identity.socials[0].label).toBe('linkedin')
   })
+
+  it('maps new identity fields when present', () => {
+    const settings: RawSiteSettings = {
+      identity: {
+        name: 'Jane Smith',
+        alternateName: 'JD',
+        addressCity: 'Austin',
+        addressRegion: 'TX',
+        addressCountry: 'US',
+      },
+    }
+    const identity = buildIdentity(settings)
+    expect(identity.alternateName).toBe('JD')
+    expect(identity.addressCity).toBe('Austin')
+    expect(identity.addressRegion).toBe('TX')
+    expect(identity.addressCountry).toBe('US')
+  })
+
+  it('returns empty strings for new identity fields when not set', () => {
+    const identity = buildIdentity(null)
+    expect(identity.alternateName).toBe('')
+    expect(identity.addressCity).toBe('')
+    expect(identity.addressRegion).toBe('')
+    expect(identity.addressCountry).toBe('')
+  })
 })
