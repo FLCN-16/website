@@ -10,6 +10,10 @@ export type GTMEvent =
   | { event: 'popup_dismiss'; form_source: 'talent_dialog' }
   | { event: 'search'; search_term: string }
   | { event: 'filter_apply'; filter_type: string; filter_value: string }
+  | { event: 'scroll_depth'; depth: 25 | 50 | 75 | 100; page: string }
+  | { event: 'section_view'; section_id: string; page: string }
+  | { event: 'nav_click'; label: string; destination: string }
+  | { event: 'post_read_milestone'; slug: string; milestone: 25 | 50 | 75 | 100 }
 
 export function trackEvent(event: GTMEvent): void {
   sendGTMEvent(event)
