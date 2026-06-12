@@ -34,18 +34,8 @@ function getField(fields: SubmissionField[] | null | undefined, name: string) {
 }
 
 export default async function RecentSubmissions({ req }: Props) {
-  // Find the contact form first to scope submissions to it
-  const { docs: forms } = await req.payload.find({
-    collection: 'forms',
-    where: { slug: { equals: 'contact' } },
-    limit: 1,
-  })
-
-  const contactFormId = forms[0]?.id
-
   const { docs } = await req.payload.find({
     collection: 'form-submissions',
-    where: contactFormId ? { form: { equals: contactFormId } } : {},
     limit: 5,
     sort: '-createdAt',
     depth: 0,
@@ -76,9 +66,7 @@ export default async function RecentSubmissions({ req }: Props) {
                     <span className="flcn-list__title">
                       {name ?? '—'} · {email ?? '—'}
                     </span>
-                    <span className="flcn-list__meta">
-                      {formatDate(submission.createdAt)}
-                    </span>
+                    <span className="flcn-list__meta">{formatDate(submission.createdAt)}</span>
                   </span>
                   {inquiry && (
                     <span className="flcn-pill flcn-pill--neutral">
