@@ -18,6 +18,7 @@ export function crossedThresholds(
 export function useScrollDepth(thresholds: number[] = [...DEFAULT_THRESHOLDS]): void {
   const pathname = usePathname()
   const thresholdsRef = useRef(thresholds)
+  thresholdsRef.current = thresholds
 
   useEffect(() => {
     const fired = new Set<number>()
