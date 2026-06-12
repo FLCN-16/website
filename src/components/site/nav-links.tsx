@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react"
 import { gsap } from "gsap"
 import { NAV_LINKS, isNavLinkActive } from "@/lib/navigation"
 import { useReducedMotion } from "@/lib/reduced-motion"
+import { trackEvent } from "@/lib/analytics"
 
 interface NavLinksProps {
   onNavigate?: () => void
@@ -68,7 +69,10 @@ export function NavLinks({ onNavigate, mobile = false }: NavLinksProps) {
             key={href}
             href={href}
             ref={(el) => { linkRefs.current[i] = el }}
-            onClick={onNavigate}
+            onClick={() => {
+              trackEvent({ event: 'nav_click', label, destination: href })
+              onNavigate?.()
+            }}
             aria-current={isActive ? "page" : undefined}
             className={["group flex items-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm", mobile ? "py-3 pl-4" : "py-1 pl-3"].join(" ")}
           >
