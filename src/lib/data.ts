@@ -137,16 +137,16 @@ interface RawWorkDoc {
     quote?: string | null
   } | null
   stack?: Array<{ name?: string | null; role?: string | null }> | null
+  cover?: { url?: string | null; width?: number | null; height?: number | null; alt?: string | null } | null
   updatedAt?: string
-  // meta.image resolves to an object at depth=1 (single-doc fetches) or a string ID at depth=0 (getSitemapWork)
   meta?: {
     title?: string | null
     description?: string | null
-    image?: { url?: string | null } | string | null
+    // resolves to an object at depth=1, string ID at depth=0
+    image?: { url?: string | null; width?: number | null; height?: number | null; alt?: string | null } | string | null
   } | null
 }
 
-// depth=1 required to resolve meta.image for SEO; also resolves cover (not mapped here, acknowledged)
 export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
   const data = await restFetch<PayloadListResponse<RawWorkDoc>>(
     'work?where[status][equals]=published&sort=ord&limit=50&depth=1',
@@ -167,6 +167,7 @@ export async function getCachedWorkEntries(): Promise<WorkEntry[]> {
         quote: d.briefing?.quote ?? '',
       },
       stack: (d.stack ?? []).map((s) => ({ name: s.name ?? '', role: s.role ?? '' })),
+      cover: typeof d.cover === 'object' ? d.cover : null,
       meta: d.meta
         ? {
             title: d.meta.title,

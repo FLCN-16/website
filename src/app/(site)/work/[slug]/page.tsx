@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: WorkDetailProps): Promise<Met
       kind: 'WORK',
       title: project.meta?.title || project.title,
       description: project.meta?.description || project.description,
-      image: resolveMetaImage(project.meta?.image),
+      image: resolveMetaImage(project.meta?.image) ?? resolveMetaImage(project.cover),
       path: `/work/${slug}`,
       identity,
     })

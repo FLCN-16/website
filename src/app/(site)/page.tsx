@@ -5,6 +5,7 @@ import {
   getCachedEducation,
   getCachedCertifications,
   getCachedSiteSettings,
+  getCachedPosts,
 } from '@/lib/data'
 import { Hero } from '@/components/sections/hero'
 import { Journey } from '@/components/sections/journey'
@@ -19,7 +20,7 @@ import { SectionTracker } from '@/components/site/section-tracker'
 import { personSchema } from '@/lib/structured-data'
 import { buildIdentity } from '@/lib/site-identity'
 import { createMetadata } from '@/lib/metadata'
-import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, CertificationEntry } from '@/lib/types'
+import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, CertificationEntry, Post } from '@/lib/types'
 
 export const revalidate = false
 
@@ -41,8 +42,9 @@ export default async function Home() {
   let timelineItems: TimelineEntry[] = []
   let educationItems: EducationEntry[] = []
   let certificationItems: CertificationEntry[] = []
+  let recentPosts: Post[] = []
 
-  const [workResult, projectsResult, timelineResult, educationResult, certificationsResult, settingsResult] =
+  const [workResult, projectsResult, timelineResult, educationResult, certificationsResult, settingsResult, postsResult] =
     await Promise.allSettled([
       getCachedWorkEntries(),
       getCachedProjects(),
@@ -50,6 +52,7 @@ export default async function Home() {
       getCachedEducation(),
       getCachedCertifications(),
       getCachedSiteSettings(),
+      getCachedPosts(),
     ])
 
   if (workResult.status === 'fulfilled') workEntries = workResult.value
@@ -57,6 +60,7 @@ export default async function Home() {
   if (timelineResult.status === 'fulfilled') timelineItems = timelineResult.value
   if (educationResult.status === 'fulfilled') educationItems = educationResult.value
   if (certificationsResult.status === 'fulfilled') certificationItems = certificationsResult.value
+  if (postsResult.status === 'fulfilled') recentPosts = postsResult.value.slice(0, 3)
 
   const cmsSettings = settingsResult.status === 'fulfilled' ? settingsResult.value : null
   const identity = buildIdentity(cmsSettings)
@@ -67,7 +71,7 @@ export default async function Home() {
     <>
       <JsonLd data={personSchema(identity)} />
       <SectionTracker
-        sections={['hero', 'journey', 'philosophy', 'selected-work', 'projects', 'education', 'certifications', 'cta-banner']}
+        sections={['hero', 'journey', 'philosophy', 'selected-work', 'projects', 'latest-writing', 'education', 'certifications', 'cta-banner']}
         page="/"
       />
       <Hero
@@ -92,6 +96,52 @@ export default async function Home() {
       <SelectedWork projects={workEntries.slice(0, 3)} showViewAll />
       {featuredProjects.length > 0 && (
         <ProjectsGrid projects={featuredProjects} showViewAll />
+      )}
+      {recentPosts.length > 0 && (
+        <section id="latest-writing" className="py-16 border-t border-border">
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-2">
+                Latest Writing
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+                From the blog.
+              </h2>
+            </div>
+            <a
+              href="/writing"
+              className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+            >
+              All articles →
+            </a>
+          </div>
+          <ul className="divide-y divide-border">
+            {recentPosts.map((post) => (
+              <li key={post.id}>
+                <a
+                  href={`/writing/${post.slug}`}
+                  className="flex items-start justify-between gap-4 py-4 group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                      {post.title}
+                    </p>
+                    {post.excerpt && (
+                      <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">
+                        {post.excerpt}
+                      </p>
+                    )}
+                  </div>
+                  {post.readingTime && (
+                    <span className="font-mono text-xs text-muted-foreground shrink-0 pt-0.5">
+                      {post.readingTime} min
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
       <Education items={educationItems} />
       <Certifications items={certificationItems} />
