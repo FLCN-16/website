@@ -23,7 +23,8 @@ export function PostsActivityChart({ data }: { data: MonthData[] }) {
     const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`)
 
     const x = d3.scaleBand().domain(data.map(d => d.month)).range([0, W]).padding(0.3)
-    const y = d3.scaleLinear().domain([0, d3.max(data, d => d.count) ?? 1]).nice().range([H, 0])
+    const maxCount = d3.max(data, d => d.count) ?? 1
+    const y = d3.scaleLinear().domain([0, maxCount]).nice().range([H, 0])
 
     // Dashed grid lines
     g.append('g')
@@ -62,7 +63,7 @@ export function PostsActivityChart({ data }: { data: MonthData[] }) {
 
     // Y axis
     g.append('g')
-      .call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('d')))
+      .call(d3.axisLeft(y).ticks(Math.min(4, maxCount)).tickFormat(d3.format('d')))
       .call(g => g.select('.domain').remove())
       .call(g => g.selectAll('.tick line').remove())
       .call(g => g.selectAll('text').attr('fill', textColor).style('font-size', '11px'))

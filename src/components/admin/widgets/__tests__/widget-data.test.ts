@@ -28,8 +28,8 @@ describe('buildActivityData', () => {
   })
 
   it('ignores posts with null publishedAt', () => {
-    const docs = [{ publishedAt: null }, { publishedAt: undefined }]
-    const result = buildActivityData(docs as never, new Date('2026-06-12'))
+    const docs: Array<{ publishedAt?: string | null }> = [{ publishedAt: null }, {}]
+    const result = buildActivityData(docs, new Date('2026-06-12'))
     expect(result.every(m => m.count === 0)).toBe(true)
   })
 })

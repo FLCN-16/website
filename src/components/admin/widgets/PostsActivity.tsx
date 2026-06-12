@@ -8,7 +8,7 @@ export type MonthData = { month: string; count: number }
 type Props = { req: PayloadRequest }
 
 export function buildActivityData(
-  docs: Array<{ publishedAt?: string | null }>,
+  docs: Array<{ publishedAt?: string | null | undefined }>,
   now: Date,
 ): MonthData[] {
   const slots: MonthData[] = Array.from({ length: 12 }, (_, i) => {
@@ -36,8 +36,8 @@ export default async function PostsActivity({ req }: Props) {
 
   const twelveMonthsAgo = new Date()
   twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 11)
-  twelveMonthsAgo.setDate(1)
-  twelveMonthsAgo.setHours(0, 0, 0, 0)
+  twelveMonthsAgo.setUTCDate(1)
+  twelveMonthsAgo.setUTCHours(0, 0, 0, 0)
 
   const { docs } = await payload.find({
     collection: 'posts',
