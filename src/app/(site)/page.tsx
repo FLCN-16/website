@@ -15,6 +15,7 @@ import { Education } from '@/components/sections/education'
 import { Certifications } from '@/components/sections/certifications'
 import { CtaBanner } from '@/components/sections/cta-banner'
 import { JsonLd } from '@/components/structured-data/json-ld'
+import { SectionTracker } from '@/components/site/section-tracker'
 import { personSchema } from '@/lib/structured-data'
 import { buildIdentity } from '@/lib/site-identity'
 import { createMetadata } from '@/lib/metadata'
@@ -65,6 +66,10 @@ export default async function Home() {
   return (
     <>
       <JsonLd data={personSchema(identity)} />
+      <SectionTracker
+        sections={['hero', 'journey', 'philosophy', 'selected-work', 'projects', 'education', 'certifications', 'cta-banner']}
+        page="/"
+      />
       <Hero
         eyebrow={cmsSettings?.eyebrow ?? ''}
         headline={cmsSettings?.headline ?? ''}

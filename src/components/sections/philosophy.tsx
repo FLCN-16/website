@@ -8,7 +8,7 @@ interface PhilosophyProps {
 
 export function Philosophy({ eyebrow, heading, pillars }: PhilosophyProps) {
   return (
-    <section className="py-16 md:py-20 lg:py-24">
+    <section id="philosophy" className="py-16 md:py-20 lg:py-24">
       <FadeRise>
         {/* Section header */}
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-2">

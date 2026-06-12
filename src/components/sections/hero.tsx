@@ -57,7 +57,7 @@ export function Hero({
   secondaryCta,
 }: HeroProps) {
   return (
-    <section className="pt-6 pb-16 md:pt-8 md:pb-20 lg:pb-24">
+    <section id="hero" className="pt-6 pb-16 md:pt-8 md:pb-20 lg:pb-24">
       <FadeRise>
         {/* Top bar — eyebrow + status */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-border">
