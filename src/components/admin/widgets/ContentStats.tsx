@@ -17,7 +17,7 @@ export default async function ContentStats({ req }: Props) {
     payload.count({ collection: 'work' }),
     payload.count({ collection: 'pages' }),
     payload.count({ collection: 'media' }),
-    payload.count({ collection: 'submissions' }),
+    payload.count({ collection: 'form-submissions' }),
   ])
 
   const stats = [
@@ -31,7 +31,7 @@ export default async function ContentStats({ req }: Props) {
     { label: 'Work', count: work.totalDocs, href: '/admin/collections/work' },
     { label: 'Pages', count: pages.totalDocs, href: '/admin/collections/pages' },
     { label: 'Media', count: media.totalDocs, href: '/admin/collections/media' },
-    { label: 'Inquiries', count: submissions.totalDocs, href: '/admin/collections/submissions' },
+    { label: 'Inquiries', count: submissions.totalDocs, href: '/admin/collections/form-submissions' },
   ]
 
   return (

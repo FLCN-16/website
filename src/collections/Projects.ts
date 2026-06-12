@@ -5,7 +5,7 @@ import { CACHE_TAGS } from '@/lib/cache-tags'
 export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
-    group: 'Portfolio',
+    group: 'Profile',
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'featured', 'status'],
   },

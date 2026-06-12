@@ -3,12 +3,11 @@ import Link from 'next/link'
 import type { PayloadRequest } from 'payload'
 import './widgets.css'
 
+type SubmissionField = { field?: string | null; value?: string | null }
+
 type SubmissionRow = {
   id: string
-  name: string
-  email: string
-  inquiry?: string | null
-  submittedAt?: string | null
+  submissionData?: SubmissionField[] | null
   createdAt?: string | null
 }
 
@@ -30,13 +29,26 @@ const formatDate = (value?: string | null) => {
   return dateFormatter.format(new Date(value))
 }
 
+function getField(fields: SubmissionField[] | null | undefined, name: string) {
+  return fields?.find((f) => f.field === name)?.value ?? null
+}
+
 export default async function RecentSubmissions({ req }: Props) {
+  // Find the contact form first to scope submissions to it
+  const { docs: forms } = await req.payload.find({
+    collection: 'forms',
+    where: { slug: { equals: 'contact' } },
+    limit: 1,
+  })
+
+  const contactFormId = forms[0]?.id
+
   const { docs } = await req.payload.find({
-    collection: 'submissions',
+    collection: 'form-submissions',
+    where: contactFormId ? { form: { equals: contactFormId } } : {},
     limit: 5,
     sort: '-createdAt',
     depth: 0,
-    select: { name: true, email: true, inquiry: true, submittedAt: true, createdAt: true },
   })
 
   const submissions = docs as SubmissionRow[]
@@ -45,7 +57,7 @@ export default async function RecentSubmissions({ req }: Props) {
     <div className="flcn-widget">
       <div className="flcn-widget__header">
         <h3 className="flcn-widget__title">Recent Inquiries</h3>
-        <Link className="flcn-widget__action" href="/admin/collections/submissions">
+        <Link className="flcn-widget__action" href="/admin/collections/form-submissions">
           View all
         </Link>
       </div>
@@ -53,25 +65,30 @@ export default async function RecentSubmissions({ req }: Props) {
         <p className="flcn-widget__empty">No inquiries yet.</p>
       ) : (
         <ul className="flcn-list">
-          {submissions.map((submission) => (
-            <li key={submission.id} className="flcn-list__item">
-              <Link className="flcn-list__link" href={`/admin/collections/submissions/${submission.id}`}>
-                <span className="flcn-list__main">
-                  <span className="flcn-list__title">
-                    {submission.name} · {submission.email}
+          {submissions.map((submission) => {
+            const name = getField(submission.submissionData, 'name')
+            const email = getField(submission.submissionData, 'email')
+            const inquiry = getField(submission.submissionData, 'inquiry')
+            return (
+              <li key={submission.id} className="flcn-list__item">
+                <Link className="flcn-list__link" href={`/admin/collections/form-submissions/${submission.id}`}>
+                  <span className="flcn-list__main">
+                    <span className="flcn-list__title">
+                      {name ?? '—'} · {email ?? '—'}
+                    </span>
+                    <span className="flcn-list__meta">
+                      {formatDate(submission.createdAt)}
+                    </span>
                   </span>
-                  <span className="flcn-list__meta">
-                    {formatDate(submission.submittedAt ?? submission.createdAt)}
-                  </span>
-                </span>
-                {submission.inquiry && (
-                  <span className="flcn-pill flcn-pill--neutral">
-                    {INQUIRY_LABELS[submission.inquiry] ?? submission.inquiry}
-                  </span>
-                )}
-              </Link>
-            </li>
-          ))}
+                  {inquiry && (
+                    <span className="flcn-pill flcn-pill--neutral">
+                      {INQUIRY_LABELS[inquiry] ?? inquiry}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            )
+          })}
         </ul>
       )}
     </div>

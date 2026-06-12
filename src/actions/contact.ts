@@ -28,10 +28,21 @@ export async function submitContact(data: unknown): Promise<ContactResult> {
 
   try {
     const payload = await getPayload({ config })
-    await payload.create({
-      collection: "submissions",
-      data: { name, email, inquiry, message, submittedAt: new Date().toISOString() },
-    })
+    const { docs } = await payload.find({ collection: 'forms', where: { slug: { equals: 'contact' } }, limit: 1 })
+    if (docs[0]) {
+      await payload.create({
+        collection: 'form-submissions',
+        data: {
+          form: docs[0].id,
+          submissionData: [
+            { field: 'name', value: name },
+            { field: 'email', value: email },
+            { field: 'inquiry', value: inquiry },
+            { field: 'message', value: message },
+          ],
+        },
+      })
+    }
   } catch (err) {
     console.error("[contact] Failed to save submission to Payload:", err)
   }
