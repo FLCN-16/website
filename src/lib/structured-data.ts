@@ -12,7 +12,13 @@ export function personRef(identity: SiteIdentity) {
   }
 }
 
-export function personSchema(identity: SiteIdentity) {
+export function personSchema(
+  identity: SiteIdentity,
+  collections?: {
+    currentJob?: { company: string } | null
+    latestEducation?: { institution: string } | null
+  }
+) {
   const personId = `${identity.url}/#person`
   const knowsAbout = [
     ...new Set(
@@ -24,23 +30,35 @@ export function personSchema(identity: SiteIdentity) {
     ),
   ]
 
+  const hasAddress = identity.addressCity || identity.addressRegion || identity.addressCountry
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
     '@id': personId,
     name: identity.name,
-    alternateName: 'The Falcon',
+    ...(identity.alternateName ? { alternateName: identity.alternateName } : {}),
     url: identity.url,
     email: identity.email,
     jobTitle: identity.role,
     description: identity.description,
     sameAs: identity.socials.map((s) => s.url),
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Jalandhar',
-      addressRegion: 'Punjab',
-      addressCountry: 'IN',
-    },
+    ...(hasAddress
+      ? {
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: identity.addressCity,
+            addressRegion: identity.addressRegion,
+            addressCountry: identity.addressCountry,
+          },
+        }
+      : {}),
+    ...(collections?.currentJob
+      ? { worksFor: { '@type': 'Organization', name: collections.currentJob.company } }
+      : {}),
+    ...(collections?.latestEducation
+      ? { alumniOf: { '@type': 'EducationalOrganization', name: collections.latestEducation.institution } }
+      : {}),
     knowsAbout,
   }
 }
@@ -52,7 +70,7 @@ export function websiteSchema(identity: SiteIdentity) {
     '@type': 'WebSite',
     '@id': websiteId,
     name: identity.name,
-    alternateName: 'The Falcon',
+    ...(identity.alternateName ? { alternateName: identity.alternateName } : {}),
     url: identity.url,
     description: identity.description,
     inLanguage: 'en',
