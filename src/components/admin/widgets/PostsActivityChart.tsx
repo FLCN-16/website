@@ -12,29 +12,30 @@ export function PostsActivityChart({ data }: { data: MonthData[] }) {
     svg.selectAll('*').remove()
 
     const cs = getComputedStyle(document.documentElement)
-    const textColor = cs.getPropertyValue('--theme-elevation-600').trim() || '#888'
-    const barColor = cs.getPropertyValue('--theme-elevation-400').trim() || '#999'
+    const textColor = cs.getPropertyValue('--theme-elevation-500').trim() || '#888'
     const gridColor = cs.getPropertyValue('--theme-elevation-100').trim() || '#eee'
 
-    const margin = { top: 10, right: 12, bottom: 36, left: 28 }
+    const margin = { top: 12, right: 12, bottom: 36, left: 28 }
     const W = Math.max(ref.current.clientWidth, 320) - margin.left - margin.right
-    const H = 180 - margin.top - margin.bottom
+    const H = 160 - margin.top - margin.bottom
 
     const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`)
 
-    const x = d3.scaleBand().domain(data.map(d => d.month)).range([0, W]).padding(0.3)
-    const maxCount = d3.max(data, d => d.count) ?? 1
+    const today = new Date()
+    const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`
+
+    const x = d3.scaleBand().domain(data.map(d => d.month)).range([0, W]).padding(0.35)
+    const maxCount = Math.max(d3.max(data, d => d.count) ?? 1, 1)
     const y = d3.scaleLinear().domain([0, maxCount]).nice().range([H, 0])
 
-    // Dashed grid lines
+    // Grid lines
     g.append('g')
       .call(d3.axisLeft(y).tickSize(-W).tickFormat(() => '').ticks(4))
-      .call(g => g.select('.domain').remove())
-      .call(g =>
-        g
-          .selectAll('.tick line')
+      .call(grp => grp.select('.domain').remove())
+      .call(grp =>
+        grp.selectAll('.tick line')
           .attr('stroke', gridColor)
-          .attr('stroke-dasharray', '2,3'),
+          .attr('stroke-dasharray', '3,3'),
       )
 
     // Bars
@@ -44,30 +45,40 @@ export function PostsActivityChart({ data }: { data: MonthData[] }) {
       .attr('x', d => x(d.month)!)
       .attr('y', d => y(d.count))
       .attr('width', x.bandwidth())
-      .attr('height', d => H - y(d.count))
-      .attr('fill', barColor)
-      .attr('rx', 2)
+      .attr('height', d => Math.max(H - y(d.count), d.count > 0 ? 2 : 0))
+      .attr('fill', d => d.month === currentMonth ? '#818cf8' : '#6366f1')
+      .attr('opacity', d => d.month === currentMonth ? 1 : 0.7)
+      .attr('rx', 3)
 
-    // X axis — abbreviated month name
+    // X axis — show year suffix on January ticks
     g.append('g')
       .attr('transform', `translate(0,${H})`)
       .call(
         d3.axisBottom(x).tickFormat(raw => {
           const [yr, mo] = (raw as string).split('-')
-          return new Date(+yr, +mo - 1).toLocaleString('default', { month: 'short' })
+          const d = new Date(+yr, +mo - 1)
+          const label = d.toLocaleString('default', { month: 'short' })
+          return +mo === 1 ? `${label} '${yr.slice(2)}` : label
         }),
       )
-      .call(g => g.select('.domain').remove())
-      .call(g => g.selectAll('.tick line').remove())
-      .call(g => g.selectAll('text').attr('fill', textColor).style('font-size', '11px'))
+      .call(grp => grp.select('.domain').remove())
+      .call(grp => grp.selectAll('.tick line').remove())
+      .call(grp =>
+        grp.selectAll('text')
+          .attr('fill', (_, i) => {
+            const m = data[i]?.month
+            return m === currentMonth ? '#818cf8' : textColor
+          })
+          .style('font-size', '11px'),
+      )
 
     // Y axis
     g.append('g')
       .call(d3.axisLeft(y).ticks(Math.min(4, maxCount)).tickFormat(d3.format('d')))
-      .call(g => g.select('.domain').remove())
-      .call(g => g.selectAll('.tick line').remove())
-      .call(g => g.selectAll('text').attr('fill', textColor).style('font-size', '11px'))
+      .call(grp => grp.select('.domain').remove())
+      .call(grp => grp.selectAll('.tick line').remove())
+      .call(grp => grp.selectAll('text').attr('fill', textColor).style('font-size', '11px'))
   }, [data])
 
-  return <svg ref={ref} className="flcn-chart" style={{ width: '100%', height: 180 }} />
+  return <svg ref={ref} className="flcn-chart" style={{ width: '100%', height: 160 }} />
 }

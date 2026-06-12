@@ -61,6 +61,7 @@ export function createMetadata({
   path,
   absolute = false,
   kind,
+  type,
   article,
   identity,
 }: {
@@ -70,6 +71,7 @@ export function createMetadata({
   path?: string
   absolute?: boolean
   kind?: string
+  type?: 'article' | 'website'
   article?: {
     publishedTime?: string
     modifiedTime?: string
@@ -77,7 +79,7 @@ export function createMetadata({
   }
   identity: SiteIdentity
 }): Metadata {
-  const fullTitle = `${title} — ${identity.name}`
+  const fullTitle = title.endsWith(` — ${identity.name}`) ? title : `${title} — ${identity.name}`
   const resolvedTitle = absolute ? ({ absolute: title } as Metadata["title"]) : title
   const metaImage = typeof image === 'string' ? { url: image } : image
   const ogImage = metaImage?.url ?? buildOgUrl(title, identity, kind, description)
@@ -102,10 +104,10 @@ export function createMetadata({
             type: 'article',
             publishedTime: article.publishedTime,
             modifiedTime: article.modifiedTime,
-            authors: [identity.url],
+            authors: [identity.name],
             tags: article.tags,
           }
-        : { type: 'website' }),
+        : { type: type ?? 'website' }),
       locale: 'en_US',
       siteName: identity.name,
       ...(path ? { url: `${identity.url}${path}` } : {}),

@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: WorkDetailProps): Promise<Met
     const identity = buildIdentity(settings)
     return createMetadata({
       kind: 'WORK',
+      type: 'article',
       title: project.meta?.title || project.title,
       description: project.meta?.description || project.description,
       image: resolveMetaImage(project.meta?.image) ?? resolveMetaImage(project.cover),

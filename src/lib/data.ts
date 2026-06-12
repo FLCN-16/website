@@ -504,6 +504,10 @@ export interface RawSiteSettings {
     email?: string | null
     siteUrl?: string | null
     description?: string | null
+    alternateName?: string | null
+    addressCity?: string | null
+    addressRegion?: string | null
+    addressCountry?: string | null
   } | null
   socials?: Array<{ platform: string; url: string; label?: string | null }> | null
   philosophy?: Array<{ title: string; body: string }> | null

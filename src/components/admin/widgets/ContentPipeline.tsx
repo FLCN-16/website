@@ -41,12 +41,11 @@ export default async function ContentPipeline({ req }: Props) {
       <div className="flcn-pipeline__legend">
         {data.map(item => (
           <div key={item.label} className="flcn-pipeline__legend-item">
-            <span
-              className={`flcn-pipeline__dot flcn-pipeline__dot--${item.label.toLowerCase()}`}
-            />
-            <span>
-              {item.label}: {item.count}
+            <span className="flcn-pipeline__legend-left">
+              <span className={`flcn-pipeline__dot flcn-pipeline__dot--${item.label.toLowerCase()}`} />
+              {item.label}
             </span>
+            <span className="flcn-pipeline__legend-count">{item.count}</span>
           </div>
         ))}
       </div>

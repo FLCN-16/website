@@ -9,6 +9,10 @@ export interface SiteIdentity {
   email: string
   url: string
   description: string
+  alternateName: string
+  addressCity: string
+  addressRegion: string
+  addressCountry: string
   socials: Array<{ platform: string; url: string; label: string }>
   resumeUrl: string | null
   status: { available: boolean; label: string }
@@ -26,6 +30,10 @@ export function buildIdentity(settings: RawSiteSettings | null): SiteIdentity {
     email: settings?.identity?.email ?? 'hello@example.com',
     url: settings?.identity?.siteUrl ?? FALLBACK_URL,
     description: settings?.identity?.description ?? 'A personal portfolio and blog.',
+    alternateName: settings?.identity?.alternateName ?? '',
+    addressCity: settings?.identity?.addressCity ?? '',
+    addressRegion: settings?.identity?.addressRegion ?? '',
+    addressCountry: settings?.identity?.addressCountry ?? '',
     socials:
       settings?.socials?.map((s) => ({
         platform: s.platform,
