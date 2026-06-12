@@ -1,12 +1,10 @@
 import { Rail } from "@/components/site/rail";
 import { MobileHeader } from "@/components/site/mobile-header";
 import { Footer } from "@/components/site/footer";
-import { ScrollDepthTracker } from "@/components/site/scroll-depth-tracker";
 
 export function SiteFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
-      <ScrollDepthTracker />
       <Rail />
       <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px]">
         <MobileHeader />
