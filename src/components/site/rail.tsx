@@ -41,20 +41,22 @@ export function Rail() {
       <div className="mt-auto flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <a
-            href={resumeUrl}
-            download
-            onClick={() => trackEvent({ event: 'file_download', file_name: resumeUrl.split('/').pop() ?? 'resume', location: 'rail' })}
-            className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
-          >
-            <HugeiconsIcon
-              icon={Download01Icon}
-              size={12}
-              strokeWidth={1.5}
-              className="motion-safe:transition-transform motion-safe:group-hover:translate-y-0.5"
-            />
-            RÉSUMÉ.PDF
-          </a>
+          {resumeUrl && (
+            <a
+              href={resumeUrl}
+              download
+              onClick={() => trackEvent({ event: 'file_download', file_name: resumeUrl.split('/').pop() ?? 'resume', location: 'rail' })}
+              className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+            >
+              <HugeiconsIcon
+                icon={Download01Icon}
+                size={12}
+                strokeWidth={1.5}
+                className="motion-safe:transition-transform motion-safe:group-hover:translate-y-0.5"
+              />
+              RÉSUMÉ.PDF
+            </a>
+          )}
         </div>
         <span className="font-mono text-xs text-muted-foreground">
           {locationLine}
