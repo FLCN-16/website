@@ -95,7 +95,7 @@ export function WritingPost({
 
   return (
     <>
-      <ReadingProgress />
+      <ReadingProgress slug={slug} />
 
       <article className="py-16 md:py-24 max-w-6xl">
         {/* Back link */}
