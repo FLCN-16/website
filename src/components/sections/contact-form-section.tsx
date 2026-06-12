@@ -56,9 +56,10 @@ export function ContactFormSection() {
   })
 
   const messageValue = useWatch({ control, name: "message" }) ?? ""
-  const tokenCount = Math.round(messageValue.length / 4)
-  const ctxPct = tokenCount > 0 ? (tokenCount / 200_000 * 100).toFixed(3) : "0.000"
   const CHAR_MAX = 2000
+  const TOKEN_MAX = Math.round(CHAR_MAX / 4)
+  const tokenCount = Math.round(messageValue.length / 4)
+  const ctxPct = tokenCount > 0 ? (tokenCount / TOKEN_MAX * 100).toFixed(1) : "0.0"
 
   async function onSubmit(data: ContactFormData) {
     setIsPending(true)
@@ -240,9 +241,9 @@ export function ContactFormSection() {
                 <FieldError message={errors.message?.message} />
                 <p className={cn(
                   "font-mono text-[10px] tabular-nums ml-auto",
-                  tokenCount >= CHAR_MAX / 4 ? "text-destructive" : tokenCount > CHAR_MAX / 4 * 0.9 ? "text-amber-500" : "text-muted-foreground/50"
+                  tokenCount >= TOKEN_MAX ? "text-destructive" : tokenCount > TOKEN_MAX * 0.9 ? "text-amber-500" : "text-muted-foreground/50"
                 )}>
-                  ~{tokenCount} tok · {ctxPct}% of 200k ctx
+                  ~{tokenCount} tok · {ctxPct}% of {TOKEN_MAX} tok
                 </p>
               </div>
             </div>
