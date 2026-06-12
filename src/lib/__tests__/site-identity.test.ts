@@ -35,9 +35,16 @@ describe('buildIdentity', () => {
     expect(identity.status.label).toBe('OPEN TO ROLES')
   })
 
-  it('derives resumeUrl from NEXT_PUBLIC_MEDIA_URL env var', () => {
-    process.env.NEXT_PUBLIC_MEDIA_URL = 'https://media.example.dev'
+  it('returns null resumeUrl when no resume is uploaded', () => {
     const identity = buildIdentity(null)
+    expect(identity.resumeUrl).toBeNull()
+  })
+
+  it('uses the uploaded resume URL from settings', () => {
+    const settings: RawSiteSettings = {
+      resume: { url: 'https://media.example.dev/resume.pdf', filename: 'resume.pdf' },
+    }
+    const identity = buildIdentity(settings)
     expect(identity.resumeUrl).toBe('https://media.example.dev/resume.pdf')
   })
 

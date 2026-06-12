@@ -10,7 +10,7 @@ export interface SiteIdentity {
   url: string
   description: string
   socials: Array<{ platform: string; url: string; label: string }>
-  resumeUrl: string
+  resumeUrl: string | null
   status: { available: boolean; label: string }
 }
 
@@ -32,7 +32,7 @@ export function buildIdentity(settings: RawSiteSettings | null): SiteIdentity {
         url: s.url,
         label: s.label ?? s.platform,
       })) ?? [],
-    resumeUrl: `${process.env.NEXT_PUBLIC_MEDIA_URL ?? ''}/resume.pdf`,
+    resumeUrl: settings?.resume?.url ?? null,
     status: {
       available: settings?.availability?.available ?? false,
       label: settings?.availability?.label ?? 'OPEN TO ROLES',

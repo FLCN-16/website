@@ -507,12 +507,13 @@ export interface RawSiteSettings {
   } | null
   socials?: Array<{ platform: string; url: string; label?: string | null }> | null
   philosophy?: Array<{ title: string; body: string }> | null
+  resume?: { url?: string | null; filename?: string | null } | null
 }
 
 const _getCachedSiteSettings = unstable_cache(
   async (): Promise<RawSiteSettings | null> => {
     const payload = await getPayloadClient()
-    const result = await payload.findGlobal({ slug: 'site-settings', depth: 0 })
+    const result = await payload.findGlobal({ slug: 'site-settings', depth: 1 })
     return result as unknown as RawSiteSettings
   },
   ['site-settings'],
