@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import dynamic from "next/dynamic"
 import { PostRow } from "@/components/writing/post-row"
@@ -87,7 +88,8 @@ function groupByYear(posts: Post[]): Array<{ year: string; posts: Post[] }> {
 }
 
 export function WritingListClient({ initialPosts, featuredPosts, allTags }: WritingListClientProps) {
-  const [search, setSearch] = useState("")
+  const searchParams = useSearchParams()
+  const [search, setSearch] = useState(searchParams.get('q') ?? "")
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [selectedReadingTime, setSelectedReadingTime] = useState<ReadingTime | null>(null)
   const [sort, setSort] = useState<SortOption>("newest")

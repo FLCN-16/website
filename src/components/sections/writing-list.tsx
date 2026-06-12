@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { WritingListClient } from "./writing-list-client"
 import type { Post } from "@/lib/types"
@@ -36,7 +37,9 @@ export function WritingList({ posts, featuredPosts }: WritingListProps) {
             </p>
           </div>
         </div>
-        <WritingListClient initialPosts={posts} featuredPosts={featuredPosts} allTags={allTags} />
+        <Suspense>
+          <WritingListClient initialPosts={posts} featuredPosts={featuredPosts} allTags={allTags} />
+        </Suspense>
       </FadeRise>
     </section>
   )

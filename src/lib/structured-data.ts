@@ -57,6 +57,14 @@ export function websiteSchema(identity: SiteIdentity) {
     description: identity.description,
     inLanguage: 'en',
     publisher: personRef(identity),
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${identity.url}/writing?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   }
 }
 
