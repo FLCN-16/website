@@ -33,6 +33,10 @@ import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc056
 import { default as default_f31393aa1c6d62557e401b45f2773c67 } from '../../../components/admin/widgets/ContentStats'
 import { default as default_dd880fde73bf28bd3e5b8d06ad6f6a1f } from '../../../components/admin/widgets/RecentPosts'
 import { default as default_272d715bf8813b2a1d18b0ce6252ba18 } from '../../../components/admin/widgets/RecentSubmissions'
+import { default as default_6b27946b993c7366f0e82f94b30f6d76 } from '../../../components/admin/widgets/PostsActivity'
+import { default as default_53dd845b0edc9747dd7973332cda7002 } from '../../../components/admin/widgets/ContentPipeline'
+import { default as default_f73ec9d0517f377faea55a16796f6941 } from '../../../components/admin/widgets/InquiryBreakdown'
+import { default as default_d0dacedf4abef33f83ef90bebe69bd82 } from '../../../components/admin/widgets/TagFrequency'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -72,5 +76,9 @@ export const importMap = {
   "/components/admin/widgets/ContentStats#default": default_f31393aa1c6d62557e401b45f2773c67,
   "/components/admin/widgets/RecentPosts#default": default_dd880fde73bf28bd3e5b8d06ad6f6a1f,
   "/components/admin/widgets/RecentSubmissions#default": default_272d715bf8813b2a1d18b0ce6252ba18,
+  "/components/admin/widgets/PostsActivity#default": default_6b27946b993c7366f0e82f94b30f6d76,
+  "/components/admin/widgets/ContentPipeline#default": default_53dd845b0edc9747dd7973332cda7002,
+  "/components/admin/widgets/InquiryBreakdown#default": default_f73ec9d0517f377faea55a16796f6941,
+  "/components/admin/widgets/TagFrequency#default": default_d0dacedf4abef33f83ef90bebe69bd82,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
