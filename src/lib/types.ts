@@ -13,10 +13,11 @@ export interface WorkEntry {
     quote: string
   }
   stack: { name: string; role: string }[]
+  cover?: { url?: string | null; width?: number | null; height?: number | null; alt?: string | null } | null
   meta?: {
     title?: string | null
     description?: string | null
-    image?: { url?: string | null } | null
+    image?: { url?: string | null; width?: number | null; height?: number | null; alt?: string | null } | null
   } | null
 }
 
