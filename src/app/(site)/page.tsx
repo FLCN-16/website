@@ -20,6 +20,7 @@ import { SectionTracker } from '@/components/site/section-tracker'
 import { personSchema } from '@/lib/structured-data'
 import { buildIdentity } from '@/lib/site-identity'
 import { createMetadata } from '@/lib/metadata'
+import { PostRow } from '@/components/writing/post-row'
 import type { WorkEntry, ProjectEntry, TimelineEntry, EducationEntry, CertificationEntry, Post } from '@/lib/types'
 
 export const revalidate = false
@@ -115,32 +116,11 @@ export default async function Home() {
               All articles →
             </a>
           </div>
-          <ul className="divide-y divide-border">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
             {recentPosts.map((post) => (
-              <li key={post.id}>
-                <a
-                  href={`/writing/${post.slug}`}
-                  className="flex items-start justify-between gap-4 py-4 group"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground group-hover:text-primary transition-colors truncate">
-                      {post.title}
-                    </p>
-                    {post.excerpt && (
-                      <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">
-                        {post.excerpt}
-                      </p>
-                    )}
-                  </div>
-                  {post.readingTime && (
-                    <span className="font-mono text-xs text-muted-foreground shrink-0 pt-0.5">
-                      {post.readingTime} min
-                    </span>
-                  )}
-                </a>
-              </li>
+              <PostRow key={post.id} post={post} />
             ))}
-          </ul>
+          </div>
         </section>
       )}
       <Education items={educationItems} />
