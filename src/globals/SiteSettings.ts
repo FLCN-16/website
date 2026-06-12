@@ -164,6 +164,30 @@ export const SiteSettings: GlobalConfig = {
             rows: 3,
           },
         },
+        {
+          name: 'alternateName',
+          type: 'text',
+          label: 'Brand / Alias',
+          admin: { description: 'e.g. The Falcon — used in schema.org as alternateName. Leave blank to omit.' },
+        },
+        {
+          name: 'addressCity',
+          type: 'text',
+          label: 'City',
+          admin: { description: 'e.g. San Francisco — used in schema.org structured data' },
+        },
+        {
+          name: 'addressRegion',
+          type: 'text',
+          label: 'State / Region',
+          admin: { description: 'e.g. CA or Punjab — used in schema.org structured data' },
+        },
+        {
+          name: 'addressCountry',
+          type: 'text',
+          label: 'Country Code',
+          admin: { description: 'ISO 2-letter code, e.g. US or IN — used in schema.org structured data' },
+        },
       ],
     },
 
