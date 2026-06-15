@@ -90,7 +90,9 @@ function groupByYear(posts: Post[]): Array<{ year: string; posts: Post[] }> {
 export function WritingListClient({ initialPosts, featuredPosts, allTags }: WritingListClientProps) {
   const searchParams = useSearchParams()
   const [search, setSearch] = useState(searchParams.get('q') ?? "")
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    searchParams.getAll('tag')
+  )
   const [selectedReadingTime, setSelectedReadingTime] = useState<ReadingTime | null>(null)
   const [sort, setSort] = useState<SortOption>("newest")
 
