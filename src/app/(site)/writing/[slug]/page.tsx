@@ -77,18 +77,19 @@ export default async function PostPage({ params }: PostPageProps) {
 
   if (!post) notFound()
 
-  const settings = await getCachedSiteSettings().catch(() => null)
+  const tags = normalizeTags(post.tags)
+
+  const [settings, relatedPosts, adjacent] = await Promise.all([
+    getCachedSiteSettings().catch(() => null),
+    getCachedRelatedPosts(slug, tags),
+    getCachedAdjacentPosts(slug),
+  ])
+
   const identity = buildIdentity(settings)
 
   const coverResolved = resolvePostCover(post.cover)
 
   const postUrl = `${identity.url}/writing/${slug}`
-  const tags = normalizeTags(post.tags)
-
-  const [relatedPosts, adjacent] = await Promise.all([
-    getCachedRelatedPosts(slug, tags),
-    getCachedAdjacentPosts(slug),
-  ])
 
   const authorProps = {
     name: identity.name,

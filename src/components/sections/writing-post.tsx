@@ -87,7 +87,7 @@ function CoverMeta({
         )}
         {authorName && (
           <span className="font-mono text-xs text-muted-foreground">
-            By <a href="/" className="hover:text-foreground transition-colors">{authorName}</a>
+            By <Link href="/" className="hover:text-foreground transition-colors">{authorName}</Link>
           </span>
         )}
       </div>
@@ -199,7 +199,7 @@ export function WritingPost({
               )}
               {author?.name && (
                 <span className="font-mono text-xs text-muted-foreground">
-                  By <a href="/" className="hover:text-foreground transition-colors">{author.name}</a>
+                  By <Link href="/" className="hover:text-foreground transition-colors">{author.name}</Link>
                 </span>
               )}
             </div>
@@ -252,11 +252,7 @@ export function WritingPost({
         <RelatedPosts posts={relatedPosts ?? []} />
 
         {/* Author bio */}
-        {author && (
-          <div className="mt-12">
-            <AuthorBio {...author} />
-          </div>
-        )}
+        {author && <AuthorBio {...author} />}
 
         {/* Subscribe + social CTA */}
         <div className="mt-16 border-t border-border pt-16">
