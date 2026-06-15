@@ -7,6 +7,8 @@ interface RelatedPostsProps {
 }
 
 export function RelatedPosts({ posts }: RelatedPostsProps) {
+  if (posts.length === 0) return null
+
   return (
     <div className="mt-16">
       <Separator className="mb-8" />

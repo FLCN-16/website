@@ -64,8 +64,13 @@ export function PostCard({ post, className }: PostCardProps) {
           </div>
         )}
 
-        <h3 className="font-sans text-sm font-semibold tracking-tight leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-200">
-          {post.title}
+        <h3 className="font-sans text-sm font-semibold tracking-tight leading-snug line-clamp-2">
+          <Link
+            href={`/writing/${post.slug}`}
+            className="hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+          >
+            {post.title}
+          </Link>
         </h3>
 
         <div className="flex items-center gap-1.5 pt-2 border-t border-border/60 mt-auto">

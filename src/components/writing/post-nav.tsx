@@ -17,7 +17,7 @@ export function PostNav({ prev, next }: PostNavProps) {
       {prev ? (
         <Link
           href={`/writing/${prev.slug}`}
-          className="group flex flex-col gap-1.5 text-left"
+          className="group flex flex-col gap-1.5 text-left rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground">
             ← Older
@@ -34,7 +34,7 @@ export function PostNav({ prev, next }: PostNavProps) {
       {next ? (
         <Link
           href={`/writing/${next.slug}`}
-          className="group flex flex-col gap-1.5 text-right"
+          className="group flex flex-col gap-1.5 text-right rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground">
             Newer →
