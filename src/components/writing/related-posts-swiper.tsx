@@ -1,75 +1,24 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { useQuery } from "@tanstack/react-query"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { A11y, Keyboard } from "swiper/modules"
 import type { Swiper as SwiperType } from "swiper"
 import { PostCard } from "./post-card"
 import type { Post } from "@/lib/types"
-import { normalizeTags } from "@/lib/posts"
 import "swiper/css"
 
 interface RelatedPostsSwiperProps {
-  currentSlug: string
-  tags: string[]
+  posts: Post[]
 }
 
-async function fetchRelatedPosts(slug: string, tags: string[]): Promise<Post[]> {
-  const params = new URLSearchParams({
-    "where[and][0][status][equals]": "published",
-    "where[and][1][slug][not_equals]": slug,
-    "sort": "-publishedAt",
-    "limit": "9",
-    "depth": "1",
-  })
-  if (tags.length > 0) {
-    params.set("where[and][2][tags][in]", tags.join(","))
-  }
-  const res = await fetch(`/api/posts?${params}`)
-  if (!res.ok) throw new Error("Failed to fetch related posts")
-  const data = await res.json()
-  // normalize both tag shapes — old docs may not be migrated yet
-  return (data.docs as Post[]).map((d) => ({ ...d, tags: normalizeTags(d.tags) }))
-}
-
-function SkeletonCard() {
-  return (
-    <div className="border border-border overflow-hidden animate-pulse">
-      <div className="aspect-[16/9] bg-muted" />
-      <div className="p-4 flex flex-col gap-2">
-        <div className="h-2.5 w-16 bg-muted rounded" />
-        <div className="h-4 w-full bg-muted rounded" />
-        <div className="h-4 w-3/4 bg-muted rounded" />
-        <div className="h-2.5 w-24 bg-muted rounded mt-2 pt-2 border-t border-border/60" />
-      </div>
-    </div>
-  )
-}
-
-export function RelatedPostsSwiper({ currentSlug, tags }: RelatedPostsSwiperProps) {
+export function RelatedPostsSwiper({ posts }: RelatedPostsSwiperProps) {
   const swiperRef = useRef<SwiperType | null>(null)
   const [current, setCurrent] = useState(0)
   const [isBeginning, setIsBeginning] = useState(true)
   const [isEnd, setIsEnd] = useState(false)
 
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ["related-posts", currentSlug, tags],
-    queryFn: () => fetchRelatedPosts(currentSlug, tags),
-    staleTime: 60_000,
-  })
-
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <SkeletonCard />
-        <SkeletonCard />
-        <SkeletonCard />
-      </div>
-    )
-  }
-
-  if (!posts || posts.length === 0) return null
+  if (posts.length === 0) return null
 
   function updateNavState(swiper: SwiperType) {
     setIsBeginning(swiper.isBeginning)
