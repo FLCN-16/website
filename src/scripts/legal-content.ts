@@ -124,15 +124,15 @@ Contact form and hiring inquiry data is kept for as long as needed to handle the
 
 **Your rights in the EEA and UK (GDPR / UK GDPR)**
 
-You have the right to access your personal data; to have it corrected or erased; to restrict or object to its processing; to receive it in a portable format; and to withdraw consent at any time without affecting processing that happened before withdrawal. To exercise any of these rights, email hello@thefalcon.dev. You also have the right to lodge a complaint with your local data protection supervisory authority.
+You have the right to access your personal data; to have it corrected or erased; to restrict or object to its processing; to receive it in a portable format; and to withdraw consent at any time without affecting processing that happened before withdrawal. To exercise any of these rights, use the Data Subject Request form at thefalcon.dev/legal/data-request, or email hello@thefalcon.dev as a fallback. You also have the right to lodge a complaint with your local data protection supervisory authority.
 
 **Your rights in India (DPDP Act, 2023)**
 
-You have the right to access a summary of the personal data processed about you, to correction and erasure, to grievance redressal, and to nominate another individual to exercise your rights on your behalf in case of death or incapacity. Requests and grievances sent to hello@thefalcon.dev will be addressed promptly.
+You have the right to access a summary of the personal data processed about you, to correction and erasure, to grievance redressal, and to nominate another individual to exercise your rights on your behalf in case of death or incapacity. Use the Data Subject Request form at thefalcon.dev/legal/data-request, or email hello@thefalcon.dev directly — requests will be addressed promptly.
 
 **Your rights in California (CCPA / CPRA)**
 
-California residents have the right to know what personal information is collected, to access and delete it, to correct it, and to opt out of its sale or sharing. This Site does not sell personal information and does not share it for cross-context behavioural advertising. You will not be discriminated against for exercising any of these rights. Requests: hello@thefalcon.dev.
+California residents have the right to know what personal information is collected, to access and delete it, to correct it, and to opt out of its sale or sharing. This Site does not sell personal information and does not share it for cross-context behavioural advertising. You will not be discriminated against for exercising any of these rights. Use the Data Subject Request form at thefalcon.dev/legal/data-request, or email hello@thefalcon.dev.
 
 **Children**
 
@@ -253,5 +253,46 @@ You can change or withdraw your consent at any time by clicking "Cookie settings
 **Contact**
 
 Questions about this policy: hello@thefalcon.dev.`,
+  },
+  {
+    title: "Data Subject Request",
+    slug: "data-request",
+    template: "legal" as const,
+    lastUpdated: "2026-06-15T00:00:00.000Z",
+    bodyText: `This page lets you exercise your data-subject rights under the General Data Protection Regulation (GDPR / UK GDPR), India's Digital Personal Data Protection Act (DPDP Act, 2023), the California Consumer Privacy Act (CCPA / CPRA), and any other applicable privacy law. Use the form below to submit a request — you will receive an email confirmation, and a response within 30 days as required by GDPR Art. 12.
+
+**Your rights**
+
+**Access (Art. 15)** — You may request confirmation of whether we process your personal data and, if so, a copy of that data together with information about how it is processed.
+
+**Rectification (Art. 16)** — You may request correction of inaccurate or incomplete personal data held about you.
+
+**Erasure (Art. 17)** — You may request deletion of your personal data where it is no longer necessary for the purposes it was collected, where you withdraw consent (if consent was the basis), where you object and there are no overriding legitimate grounds, or where the data has been unlawfully processed.
+
+**Restriction of processing (Art. 18)** — You may request that processing of your data is restricted — for example while the accuracy of data is contested, or while an objection is pending.
+
+**Data portability (Art. 20)** — Where processing is based on your consent or a contract, you may request your personal data in a structured, commonly used, machine-readable format, and have it transmitted to another controller where technically feasible.
+
+**Right to object (Art. 21)** — You may object at any time to processing of your personal data that is based on legitimate interests, including profiling based on those interests. We will stop processing unless we can demonstrate compelling legitimate grounds that override your interests, or the processing is for the establishment, exercise, or defence of legal claims.
+
+**Withdraw consent (Art. 7)** — Where processing is based on consent, you may withdraw that consent at any time. Withdrawal does not affect the lawfulness of processing that took place before withdrawal.
+
+**Automated decision-making / other (Art. 22)** — You may request not to be subject to a decision based solely on automated processing that produces significant effects. You may also use this option for any other privacy-related request not covered above.
+
+**Before you submit**
+
+Please describe your request in as much detail as possible — including the email address you used when interacting with the site and approximate dates. This helps us locate your data accurately and respond faster. We may need to verify your identity before fulfilling a request; if so, we will contact you to confirm a few details.
+
+**After you submit**
+
+You will receive an email acknowledgement at the address you provide. We aim to respond fully within 30 days. If your request is complex or numerous, we may extend this period by a further two months, in which case we will notify you within the initial 30 days.
+
+**Supervisory authority**
+
+If you are in the EEA or UK and are not satisfied with our response, you have the right to lodge a complaint with your local data protection supervisory authority — for example the Information Commissioner's Office (ICO) in the UK, or the relevant national authority in your EU member state.
+
+**Contact**
+
+For urgent matters or if you prefer to request by email: hello@thefalcon.dev.`,
   },
 ]

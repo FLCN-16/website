@@ -1,8 +1,8 @@
 import { sendGTMEvent } from '@next/third-parties/google'
 
 export type GTMEvent =
-  | { event: 'generate_lead'; form_source: 'contact' | 'talent_dialog'; inquiry_type?: string }
-  | { event: 'form_error'; form_source: 'contact' | 'talent_dialog'; error_message: string }
+  | { event: 'generate_lead'; form_source: 'contact' | 'talent_dialog' | 'data_request'; inquiry_type?: string; request_type?: string }
+  | { event: 'form_error'; form_source: 'contact' | 'talent_dialog' | 'data_request'; error_message: string }
   | { event: 'file_download'; file_name: string; location: 'rail' | 'mobile_menu' }
   | { event: 'cta_click'; cta_label: string; cta_location: string; destination: string }
   | { event: 'outbound_click'; link_url: string; link_domain: string; context: string }

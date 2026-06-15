@@ -50,6 +50,7 @@ export function Footer() {
             <Link href="/legal/privacy" className={LINK_CLASS}>Privacy</Link>
             <Link href="/legal/terms" className={LINK_CLASS}>Terms</Link>
             <Link href="/legal/cookies" className={LINK_CLASS}>Cookies</Link>
+            <Link href="/legal/data-request" className={LINK_CLASS}>Data Request</Link>
             <CookieSettingsButton className={LINK_CLASS} />
           </div>
         </div>
