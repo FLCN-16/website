@@ -21,7 +21,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import type { PostCover, Post } from "@/lib/types";
+import type { PostCover } from "@/lib/types";
 
 interface WritingPostProps {
   slug: string;
@@ -34,7 +34,6 @@ interface WritingPostProps {
   /** The rich-text body, rendered on the server (keeps PrismJS off the client). */
   children: ReactNode;
   cover?: PostCover | null;
-  relatedPosts?: Post[];
   prev?: { slug: string; title: string } | null;
   next?: { slug: string; title: string } | null;
   author?: {
@@ -118,7 +117,6 @@ export function WritingPost({
   headings,
   children,
   cover,
-  relatedPosts,
   prev,
   next,
   author,
@@ -249,7 +247,7 @@ export function WritingPost({
         {(prev || next) && <PostNav prev={prev ?? null} next={next ?? null} />}
 
         {/* Related posts */}
-        <RelatedPosts posts={relatedPosts ?? []} />
+        <RelatedPosts currentSlug={slug} tags={tags ?? []} />
 
         {/* Author bio */}
         {author && <AuthorBio {...author} />}

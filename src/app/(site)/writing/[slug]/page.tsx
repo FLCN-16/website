@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getCachedPost, getPreviewPost, getCachedSiteSettings, getCachedRelatedPosts, getCachedAdjacentPosts } from '@/lib/data'
+import { getCachedPost, getPreviewPost, getCachedSiteSettings, getCachedAdjacentPosts } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
 import { richTextConverters } from '@/components/writing/richtext-converters'
 import { extractHeadings } from '@/lib/lexical-headings'
@@ -79,9 +79,8 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const tags = normalizeTags(post.tags)
 
-  const [settings, relatedPosts, adjacent] = await Promise.all([
+  const [settings, adjacent] = await Promise.all([
     getCachedSiteSettings().catch(() => null),
-    getCachedRelatedPosts(slug, tags),
     getCachedAdjacentPosts(slug),
   ])
 
@@ -135,7 +134,6 @@ export default async function PostPage({ params }: PostPageProps) {
         tags={tags}
         headings={extractHeadings(post.body)}
         cover={coverResolved}
-        relatedPosts={relatedPosts}
         prev={adjacent.prev}
         next={adjacent.next}
         author={authorProps}

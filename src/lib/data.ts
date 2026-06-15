@@ -43,6 +43,18 @@ const _getCachedPosts = unstable_cache(
       sort: '-publishedAt',
       limit: 50,
       depth: 1,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        cover: true,
+        publishedAt: true,
+        readingTime: true,
+        tags: true,
+        featured: true,
+        status: true,
+      },
     })
     return result.docs.map((d) => mapPayloadPost(d as unknown as RawPostDoc))
   },
@@ -88,6 +100,18 @@ const _getCachedRelatedPosts = unstable_cache(
         sort: '-publishedAt',
         limit: 6,
         depth: 1,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          cover: true,
+          publishedAt: true,
+          readingTime: true,
+          tags: true,
+          featured: true,
+          status: true,
+        },
       })
       const docs = result.docs.map((d) => mapPayloadPost(d as unknown as RawPostDoc))
       if (docs.length >= 6) return docs
@@ -135,6 +159,18 @@ async function _fetchRecentPosts(excludeSlug: string, excludeSlugs?: Set<string>
     sort: '-publishedAt',
     limit: 6,
     depth: 1,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      cover: true,
+      publishedAt: true,
+      readingTime: true,
+      tags: true,
+      featured: true,
+      status: true,
+    },
   })
   const all = result.docs.map((d) => mapPayloadPost(d as unknown as RawPostDoc))
   if (!excludeSlugs) return all.slice(0, 6)
