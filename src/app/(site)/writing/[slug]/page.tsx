@@ -90,13 +90,6 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const postUrl = `${identity.url}/writing/${slug}`
 
-  const authorProps = {
-    name: identity.name,
-    role: identity.role,
-    description: identity.description,
-    socials: identity.socials,
-  }
-
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -136,7 +129,6 @@ export default async function PostPage({ params }: PostPageProps) {
         cover={coverResolved}
         prev={adjacent.prev}
         next={adjacent.next}
-        author={authorProps}
       >
         <RichText
           data={post.body as Parameters<typeof RichText>[0]['data']}

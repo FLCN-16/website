@@ -12,7 +12,6 @@ import { RelatedPosts } from "@/components/writing/related-posts";
 import { WritingSocialCTA } from "@/components/writing/social-cta";
 import { PostShare } from "@/components/writing/post-share";
 import { PostNav } from "@/components/writing/post-nav";
-import { AuthorBio } from "@/components/writing/author-bio";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -36,12 +35,6 @@ interface WritingPostProps {
   cover?: PostCover | null;
   prev?: { slug: string; title: string } | null;
   next?: { slug: string; title: string } | null;
-  author?: {
-    name: string;
-    role: string;
-    description: string;
-    socials: Array<{ platform: string; url: string; label: string }>;
-  };
 }
 
 function formatDate(iso?: string) {
@@ -61,14 +54,12 @@ function CoverMeta({
   readingTime,
   title,
   tags,
-  authorName,
   titleAs: TitleTag = "h1",
 }: {
   publishedAt?: string;
   readingTime?: number;
   title: string;
   tags?: string[];
-  authorName?: string;
   titleAs?: "h1" | "p";
 }) {
   return (
@@ -82,11 +73,6 @@ function CoverMeta({
         {readingTime && (
           <span className="font-mono text-xs text-muted-foreground">
             {readingTime} min read
-          </span>
-        )}
-        {authorName && (
-          <span className="font-mono text-xs text-muted-foreground">
-            By <Link href="/" className="hover:text-foreground transition-colors">{authorName}</Link>
           </span>
         )}
       </div>
@@ -119,7 +105,6 @@ export function WritingPost({
   cover,
   prev,
   next,
-  author,
 }: WritingPostProps) {
   const showToc = headings.length >= 3;
 
@@ -165,7 +150,6 @@ export function WritingPost({
                   readingTime={readingTime}
                   title={title}
                   tags={tags}
-                  authorName={author?.name}
                   titleAs="p"
                 />
               </div>
@@ -177,7 +161,6 @@ export function WritingPost({
                 readingTime={readingTime}
                 title={title}
                 tags={tags}
-                authorName={author?.name}
               />
             </div>
           </div>
@@ -193,11 +176,6 @@ export function WritingPost({
               {readingTime && (
                 <span className="font-mono text-xs text-muted-foreground">
                   {readingTime} min read
-                </span>
-              )}
-              {author?.name && (
-                <span className="font-mono text-xs text-muted-foreground">
-                  By <Link href="/" className="hover:text-foreground transition-colors">{author.name}</Link>
                 </span>
               )}
             </div>
@@ -248,9 +226,6 @@ export function WritingPost({
 
         {/* Related posts */}
         <RelatedPosts currentSlug={slug} tags={tags ?? []} />
-
-        {/* Author bio */}
-        {author && <AuthorBio {...author} />}
 
         {/* Subscribe + social CTA */}
         <div className="mt-16 border-t border-border pt-16">
