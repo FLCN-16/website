@@ -18,6 +18,12 @@ interface PostPageProps {
   params: Promise<{ slug: string }>
 }
 
+// force-dynamic is required to correctly return HTTP 404 for unknown slugs.
+// Without it, Next.js 16 commits a 200 status before notFound() can run on
+// SSG routes that import client components (see vercel/next.js #75543 and related).
+// The data layer (getCachedPost via unstable_cache) is still cached, so only
+// the React render happens per request — latency impact is minimal.
+export const dynamic = 'force-dynamic'
 export const revalidate = false
 export const dynamicParams = true
 
@@ -39,7 +45,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       draft ? getPreviewPost(slug) : getCachedPost(slug),
       getCachedSiteSettings(),
     ])
-    if (!post) return { title: 'Not Found' }
+    if (!post) notFound()
     const identity = buildIdentity(settings)
     return createMetadata({
       kind: 'WRITING',
