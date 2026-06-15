@@ -3,6 +3,15 @@ import { withPayload } from "@payloadcms/next/withPayload";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["194.36.85.25"],
+  async redirects() {
+    return [
+      {
+        source: "/writing/chatgpt-dreaming-v3-agent-memory",
+        destination: "/writing/chatgpt-dreaming-v3-agent-memory-lessons",
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     return [
       { source: "/sitemap.xml", destination: "/sitemap-index.xml" },
