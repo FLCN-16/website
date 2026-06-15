@@ -11,6 +11,16 @@ import { ReadingProgress } from "@/components/writing/reading-progress";
 import { RelatedPosts } from "@/components/writing/related-posts";
 import { WritingSocialCTA } from "@/components/writing/social-cta";
 import { PostShare } from "@/components/writing/post-share";
+import { PostNav } from "@/components/writing/post-nav";
+import { AuthorBio } from "@/components/writing/author-bio";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import type { PostCover, Post } from "@/lib/types";
 
 interface WritingPostProps {
@@ -25,6 +35,14 @@ interface WritingPostProps {
   children: ReactNode;
   cover?: PostCover | null;
   relatedPosts?: Post[];
+  prev?: { slug: string; title: string } | null;
+  next?: { slug: string; title: string } | null;
+  author?: {
+    name: string;
+    role: string;
+    description: string;
+    socials: Array<{ platform: string; url: string; label: string }>;
+  };
 }
 
 function formatDate(iso?: string) {
@@ -44,12 +62,14 @@ function CoverMeta({
   readingTime,
   title,
   tags,
+  authorName,
   titleAs: TitleTag = "h1",
 }: {
   publishedAt?: string;
   readingTime?: number;
   title: string;
   tags?: string[];
+  authorName?: string;
   titleAs?: "h1" | "p";
 }) {
   return (
@@ -63,6 +83,11 @@ function CoverMeta({
         {readingTime && (
           <span className="font-mono text-xs text-muted-foreground">
             {readingTime} min read
+          </span>
+        )}
+        {authorName && (
+          <span className="font-mono text-xs text-muted-foreground">
+            By <a href="/" className="hover:text-foreground transition-colors">{authorName}</a>
           </span>
         )}
       </div>
@@ -94,6 +119,9 @@ export function WritingPost({
   children,
   cover,
   relatedPosts,
+  prev,
+  next,
+  author,
 }: WritingPostProps) {
   const showToc = headings.length >= 3;
 
@@ -101,14 +129,23 @@ export function WritingPost({
     <>
       <ReadingProgress slug={slug} />
 
-      <article className="py-16 md:py-24 max-w-6xl">
-        {/* Back link */}
-        <Link
-          href="/writing"
-          className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors mb-10 inline-block"
-        >
-          ← Writing
-        </Link>
+      <article className="pt-8 pb-16 md:pt-10 md:pb-24 max-w-6xl">
+        {/* Breadcrumbs */}
+        <Breadcrumb className="mb-8">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/writing">Writing</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         {/* Cover hero — text overlay on md+, stacked (image then content) on mobile */}
         {cover ? (
@@ -130,6 +167,7 @@ export function WritingPost({
                   readingTime={readingTime}
                   title={title}
                   tags={tags}
+                  authorName={author?.name}
                   titleAs="p"
                 />
               </div>
@@ -141,6 +179,7 @@ export function WritingPost({
                 readingTime={readingTime}
                 title={title}
                 tags={tags}
+                authorName={author?.name}
               />
             </div>
           </div>
@@ -156,6 +195,11 @@ export function WritingPost({
               {readingTime && (
                 <span className="font-mono text-xs text-muted-foreground">
                   {readingTime} min read
+                </span>
+              )}
+              {author?.name && (
+                <span className="font-mono text-xs text-muted-foreground">
+                  By <a href="/" className="hover:text-foreground transition-colors">{author.name}</a>
                 </span>
               )}
             </div>
@@ -201,8 +245,18 @@ export function WritingPost({
         {/* Share */}
         <PostShare title={title} slug={slug} />
 
+        {/* Prev / next */}
+        {(prev || next) && <PostNav prev={prev ?? null} next={next ?? null} />}
+
         {/* Related posts */}
         <RelatedPosts posts={relatedPosts ?? []} />
+
+        {/* Author bio */}
+        {author && (
+          <div className="mt-12">
+            <AuthorBio {...author} />
+          </div>
+        )}
 
         {/* Subscribe + social CTA */}
         <div className="mt-16 border-t border-border pt-16">

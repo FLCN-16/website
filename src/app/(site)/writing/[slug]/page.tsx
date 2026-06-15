@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getCachedPost, getPreviewPost, getCachedSiteSettings } from '@/lib/data'
+import { getCachedPost, getPreviewPost, getCachedSiteSettings, getCachedRelatedPosts, getCachedAdjacentPosts } from '@/lib/data'
 import { WritingPost } from '@/components/sections/writing-post'
 import { richTextConverters } from '@/components/writing/richtext-converters'
 import { extractHeadings } from '@/lib/lexical-headings'
@@ -85,6 +85,18 @@ export default async function PostPage({ params }: PostPageProps) {
   const postUrl = `${identity.url}/writing/${slug}`
   const tags = normalizeTags(post.tags)
 
+  const [relatedPosts, adjacent] = await Promise.all([
+    getCachedRelatedPosts(slug, tags),
+    getCachedAdjacentPosts(slug),
+  ])
+
+  const authorProps = {
+    name: identity.name,
+    role: identity.role,
+    description: identity.description,
+    socials: identity.socials,
+  }
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -122,6 +134,10 @@ export default async function PostPage({ params }: PostPageProps) {
         tags={tags}
         headings={extractHeadings(post.body)}
         cover={coverResolved}
+        relatedPosts={relatedPosts}
+        prev={adjacent.prev}
+        next={adjacent.next}
+        author={authorProps}
       >
         <RichText
           data={post.body as Parameters<typeof RichText>[0]['data']}
