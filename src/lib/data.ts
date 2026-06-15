@@ -100,7 +100,7 @@ const _getCachedRelatedPosts = unstable_cache(
 
     return _fetchRecentPosts(postSlug)
   },
-  ['related-posts', postSlug, ...tags],
+  ['related-posts'],
   { tags: [CACHE_TAGS.posts], revalidate: false }
 )
 
