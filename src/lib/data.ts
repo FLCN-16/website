@@ -43,6 +43,18 @@ const _getCachedPosts = unstable_cache(
       sort: '-publishedAt',
       limit: 50,
       depth: 1,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        cover: true,
+        publishedAt: true,
+        readingTime: true,
+        tags: true,
+        featured: true,
+        status: true,
+      },
     })
     return result.docs.map((d) => mapPayloadPost(d as unknown as RawPostDoc))
   },
@@ -71,36 +83,70 @@ const _getCachedPost = unstable_cache(
 
 export const getCachedPost = (slug: string) => _getCachedPost(slug)
 
+const _getCachedRelatedPosts = unstable_cache(
+  async (postSlug: string, tags: string[]): Promise<Post[]> => {
+    const payload = await getPayloadClient()
+
+    if (tags.length) {
+      const result = await payload.find({
+        collection: 'posts',
+        where: {
+          and: [
+            { status: { equals: 'published' } },
+            { slug: { not_equals: postSlug } },
+            { tags: { in: tags } },
+          ],
+        } as Where,
+        sort: '-publishedAt',
+        limit: 6,
+        depth: 1,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          cover: true,
+          publishedAt: true,
+          readingTime: true,
+          tags: true,
+          featured: true,
+          status: true,
+        },
+      })
+      const docs = result.docs.map((d) => mapPayloadPost(d as unknown as RawPostDoc))
+      if (docs.length >= 6) return docs
+
+      const existing = new Set(docs.map((d) => d.slug))
+      existing.add(postSlug)
+      const recent = await _fetchRecentPosts(postSlug, existing)
+      return [...docs, ...recent].slice(0, 6)
+    }
+
+    return _fetchRecentPosts(postSlug)
+  },
+  ['related-posts'],
+  { tags: [CACHE_TAGS.posts], revalidate: false }
+)
+
 export async function getCachedRelatedPosts(
   postSlug: string,
   tags: string[]
 ): Promise<Post[]> {
-  const payload = await getPayloadClient()
+  const sortedTags = [...tags].sort()
+  return _getCachedRelatedPosts(postSlug, sortedTags)
+}
 
-  if (tags.length) {
-    const result = await payload.find({
-      collection: 'posts',
-      where: {
-        and: [
-          { status: { equals: 'published' } },
-          { slug: { not_equals: postSlug } },
-          { tags: { in: tags } },
-        ],
-      } as Where,
-      sort: '-publishedAt',
-      limit: 3,
-      depth: 1,
-    })
-    const docs = result.docs.map((d) => mapPayloadPost(d as unknown as RawPostDoc))
-    if (docs.length >= 3) return docs
-
-    const existing = new Set(docs.map((d) => d.slug))
-    existing.add(postSlug)
-    const recent = await _fetchRecentPosts(postSlug, existing)
-    return [...docs, ...recent].slice(0, 3)
-  }
-
-  return _fetchRecentPosts(postSlug)
+export async function getCachedAdjacentPosts(
+  slug: string
+): Promise<{ prev: Post | null; next: Post | null }> {
+  const posts = await getCachedPosts()
+  const idx = posts.findIndex((p) => p.slug === slug)
+  if (idx === -1) return { prev: null, next: null }
+  // posts are sorted -publishedAt (newest first)
+  // "next" = newer = lower index; "prev" = older = higher index
+  const next = idx > 0 ? posts[idx - 1] : null
+  const prev = idx < posts.length - 1 ? posts[idx + 1] : null
+  return { prev, next }
 }
 
 async function _fetchRecentPosts(excludeSlug: string, excludeSlugs?: Set<string>): Promise<Post[]> {
@@ -113,10 +159,22 @@ async function _fetchRecentPosts(excludeSlug: string, excludeSlugs?: Set<string>
     sort: '-publishedAt',
     limit: 6,
     depth: 1,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      cover: true,
+      publishedAt: true,
+      readingTime: true,
+      tags: true,
+      featured: true,
+      status: true,
+    },
   })
   const all = result.docs.map((d) => mapPayloadPost(d as unknown as RawPostDoc))
-  if (!excludeSlugs) return all.slice(0, 3)
-  return all.filter((p) => !excludeSlugs.has(p.slug)).slice(0, 3)
+  if (!excludeSlugs) return all.slice(0, 6)
+  return all.filter((p) => !excludeSlugs.has(p.slug)).slice(0, 6)
 }
 
 const _getSitemapPosts = unstable_cache(

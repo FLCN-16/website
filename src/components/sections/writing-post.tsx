@@ -11,6 +11,15 @@ import { ReadingProgress } from "@/components/writing/reading-progress";
 import { RelatedPosts } from "@/components/writing/related-posts";
 import { WritingSocialCTA } from "@/components/writing/social-cta";
 import { PostShare } from "@/components/writing/post-share";
+import { PostNav } from "@/components/writing/post-nav";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import type { PostCover } from "@/lib/types";
 
 interface WritingPostProps {
@@ -24,6 +33,8 @@ interface WritingPostProps {
   /** The rich-text body, rendered on the server (keeps PrismJS off the client). */
   children: ReactNode;
   cover?: PostCover | null;
+  prev?: { slug: string; title: string } | null;
+  next?: { slug: string; title: string } | null;
 }
 
 function formatDate(iso?: string) {
@@ -71,9 +82,11 @@ function CoverMeta({
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="font-mono text-xs">
-              {tag}
-            </Badge>
+            <Link key={tag} href={`/writing?tag=${encodeURIComponent(tag)}`}>
+              <Badge variant="secondary" className="font-mono text-xs hover:opacity-80 transition-opacity cursor-pointer">
+                {tag}
+              </Badge>
+            </Link>
           ))}
         </div>
       )}
@@ -90,6 +103,8 @@ export function WritingPost({
   headings,
   children,
   cover,
+  prev,
+  next,
 }: WritingPostProps) {
   const showToc = headings.length >= 3;
 
@@ -97,14 +112,23 @@ export function WritingPost({
     <>
       <ReadingProgress slug={slug} />
 
-      <article className="py-16 md:py-24 max-w-6xl">
-        {/* Back link */}
-        <Link
-          href="/writing"
-          className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors mb-10 inline-block"
-        >
-          ← Writing
-        </Link>
+      <article className="pt-8 pb-16 md:pt-10 md:pb-24 max-w-6xl">
+        {/* Breadcrumbs */}
+        <Breadcrumb className="mb-8">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/writing">Writing</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         {/* Cover hero — text overlay on md+, stacked (image then content) on mobile */}
         {cover ? (
@@ -161,9 +185,11 @@ export function WritingPost({
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mb-10">
                 {tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="font-mono text-xs">
-                    {tag}
-                  </Badge>
+                  <Link key={tag} href={`/writing?tag=${encodeURIComponent(tag)}`}>
+                    <Badge variant="secondary" className="font-mono text-xs hover:opacity-80 transition-opacity cursor-pointer">
+                      {tag}
+                    </Badge>
+                  </Link>
                 ))}
               </div>
             )}
@@ -194,6 +220,9 @@ export function WritingPost({
 
         {/* Share */}
         <PostShare title={title} slug={slug} />
+
+        {/* Prev / next */}
+        {(prev || next) && <PostNav prev={prev ?? null} next={next ?? null} />}
 
         {/* Related posts */}
         <RelatedPosts currentSlug={slug} tags={tags ?? []} />

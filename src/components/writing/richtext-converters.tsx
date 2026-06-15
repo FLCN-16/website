@@ -205,6 +205,8 @@ export const richTextConverters: JSXConvertersFunction = ({ defaultConverters })
             alt={alt}
             width={doc.width}
             height={doc.height}
+            loading="lazy"
+            decoding="async"
             className="w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
           />
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/20 rounded-lg">

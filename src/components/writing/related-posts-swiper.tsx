@@ -22,6 +22,15 @@ async function fetchRelatedPosts(slug: string, tags: string[]): Promise<Post[]> 
     "sort": "-publishedAt",
     "limit": "9",
     "depth": "1",
+    // Field selection — exclude body (Lexical AST) and other heavy fields
+    "select[id]": "true",
+    "select[title]": "true",
+    "select[slug]": "true",
+    "select[excerpt]": "true",
+    "select[cover]": "true",
+    "select[publishedAt]": "true",
+    "select[readingTime]": "true",
+    "select[tags]": "true",
   })
   if (tags.length > 0) {
     params.set("where[and][2][tags][in]", tags.join(","))
@@ -29,7 +38,6 @@ async function fetchRelatedPosts(slug: string, tags: string[]): Promise<Post[]> 
   const res = await fetch(`/api/posts?${params}`)
   if (!res.ok) throw new Error("Failed to fetch related posts")
   const data = await res.json()
-  // normalize both tag shapes — old docs may not be migrated yet
   return (data.docs as Post[]).map((d) => ({ ...d, tags: normalizeTags(d.tags) }))
 }
 

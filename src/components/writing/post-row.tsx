@@ -19,13 +19,20 @@ interface PostRowProps {
 
 export function PostRow({ post, className }: PostRowProps) {
   return (
-    <Link
-      href={`/writing/${post.slug}`}
+    <div
       className={cn(
-        "group flex flex-col border border-border overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
+        "group relative flex flex-col border border-border overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
         className,
       )}
     >
+      {/* Invisible full-card link (z-0) — aria-hidden; h3 heading provides the accessible name */}
+      <Link
+        href={`/writing/${post.slug}`}
+        aria-hidden="true"
+        tabIndex={-1}
+        className="absolute inset-0 z-0"
+      />
+
       {/* Cover image */}
       <div className="relative aspect-[16/9] bg-muted overflow-hidden shrink-0">
         {post.cover ? (
@@ -44,20 +51,26 @@ export function PostRow({ post, className }: PostRowProps) {
       {/* Text content */}
       <div className="flex flex-col gap-1.5 min-w-0 flex-1 p-4">
         {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-0.5">
+          <div className="relative z-10 flex flex-wrap gap-2 mb-0.5">
             {post.tags.slice(0, 2).map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70"
+                href={`/writing?tag=${encodeURIComponent(tag)}`}
+                className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70 hover:text-muted-foreground transition-colors rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
         )}
 
-        <h3 className="font-sans text-base font-semibold tracking-tight leading-snug group-hover:text-primary transition-colors duration-200 line-clamp-2">
-          {post.title}
+        <h3 className="font-sans text-base font-semibold tracking-tight leading-snug line-clamp-2">
+          <Link
+            href={`/writing/${post.slug}`}
+            className="hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+          >
+            {post.title}
+          </Link>
         </h3>
 
         {post.excerpt && (
@@ -80,6 +93,6 @@ export function PostRow({ post, className }: PostRowProps) {
           )}
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
