@@ -72,7 +72,7 @@ export default async function DataRequestPage() {
             Last updated {lastUpdated}
           </p>
         )}
-        {page?.body && (
+        {page?.body != null && (
           <RichText
             data={page.body as Parameters<typeof RichText>[0]['data']}
             converters={richTextConverters}
