@@ -115,40 +115,16 @@ export function StackMatrix({ disciplines }: StackMatrixProps) {
           <div
             key={discipline.name}
             className="stack-card relative overflow-hidden p-4"
-            style={{
-              background: "linear-gradient(145deg, rgba(0,0,0,0.45) 0%, rgba(10,10,15,0.25) 50%, rgba(0,0,0,0.4) 100%)",
-              backdropFilter: "blur(8px) saturate(160%) brightness(0.75)",
-              WebkitBackdropFilter: "blur(8px) saturate(160%) brightness(0.75)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              boxShadow: [
-                "0 0 0 1px rgba(0,0,0,0.5)",
-                "0 8px 32px rgba(0,0,0,0.6)",
-                "0 24px 64px rgba(0,0,0,0.4)",
-                "0 0 80px rgba(0,0,0,0.3)",
-                "inset 0 1px 0 rgba(255,255,255,0.1)",
-                "inset 0 -1px 0 rgba(0,0,0,0.4)",
-                "inset 1px 0 0 rgba(255,255,255,0.04)",
-              ].join(", "),
-            }}
           >
             {/* Top specular edge */}
-            <div
-              className="glass-specular pointer-events-none absolute inset-x-0 top-0 h-[1px]"
-              style={{ background: "linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.18) 40%, rgba(255,255,255,0.28) 55%, rgba(255,255,255,0.12) 75%, transparent 95%)" }}
-            />
+            <div className="glass-specular pointer-events-none absolute inset-x-0 top-0 h-[1px]" />
             {/* Shimmer sweep */}
             <div
               className="glass-shimmer pointer-events-none absolute inset-0"
-              style={{
-                background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.04) 50%, transparent 65%)",
-                transform: "translateX(-100%)",
-              }}
+              style={{ transform: "translateX(-100%)" }}
             />
-            {/* Bottom dark vignette */}
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
-              style={{ background: "linear-gradient(to top, rgba(0,0,0,0.35), transparent)" }}
-            />
+            {/* Bottom vignette */}
+            <div className="glass-vignette pointer-events-none absolute inset-x-0 bottom-0 h-1/2" />
             <p className="relative font-mono text-xs uppercase tracking-widest text-muted-foreground mb-3">
               {discipline.name}
             </p>
@@ -158,7 +134,7 @@ export function StackMatrix({ disciplines }: StackMatrixProps) {
                   key={`${discipline.name}-${tool.name}`}
                   className={cn(
                     "flex items-center justify-between py-2",
-                    toolIndex !== discipline.tools.length - 1 && "border-b border-white/8"
+                    toolIndex !== discipline.tools.length - 1 && "border-b border-border"
                   )}
                 >
                   <span className="font-mono text-xs">{tool.name}</span>
