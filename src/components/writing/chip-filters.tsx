@@ -242,6 +242,31 @@ export function ChipFilters({
 
       {/* Chips row — always rendered so reading-time chips are always visible */}
       <div className="flex flex-wrap gap-2 items-center">
+        {/* Tag chips — selected first, then top tags up to 8 total */}
+        {allTags.length > 0 && (() => {
+          const selected = allTags.filter((t) => selectedTags.includes(t))
+          const unselected = allTags.filter((t) => !selectedTags.includes(t))
+          const visible = [...selected, ...unselected].slice(0, Math.max(8, selected.length))
+          return visible.map((tag) => {
+            const active = selectedTags.includes(tag)
+            return (
+              <button
+                type="button"
+                key={tag}
+                onClick={() => onTagToggle(tag)}
+                className={cn(
+                  "rounded-full border px-2.5 py-1 font-mono text-xs transition-colors",
+                  active
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {tag}
+              </button>
+            )
+          })
+        })()}
+
         {/* Reading time chips */}
         {READING_TIME_OPTIONS.map(({ value, label, sub }) => {
           const active = selectedReadingTime === value

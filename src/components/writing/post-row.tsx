@@ -25,11 +25,12 @@ export function PostRow({ post, className }: PostRowProps) {
         className,
       )}
     >
-      {/* Invisible full-card link (z-0) */}
+      {/* Invisible full-card link (z-0) — aria-hidden; h3 heading provides the accessible name */}
       <Link
         href={`/writing/${post.slug}`}
+        aria-hidden="true"
+        tabIndex={-1}
         className="absolute inset-0 z-0"
-        aria-label={post.title}
       />
 
       {/* Cover image */}
@@ -55,7 +56,7 @@ export function PostRow({ post, className }: PostRowProps) {
               <Link
                 key={tag}
                 href={`/writing?tag=${encodeURIComponent(tag)}`}
-                className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70 hover:text-muted-foreground transition-colors"
+                className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70 hover:text-muted-foreground transition-colors rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 {tag}
               </Link>
