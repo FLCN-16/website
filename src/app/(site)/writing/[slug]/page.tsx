@@ -124,6 +124,7 @@ export default async function PostPage({ params }: PostPageProps) {
         title={post.title}
         publishedAt={post.publishedAt ?? undefined}
         readingTime={post.readingTime ?? undefined}
+        author={identity.name}
         tags={tags}
         headings={extractHeadings(post.body)}
         cover={coverResolved}

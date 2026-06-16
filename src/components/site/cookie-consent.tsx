@@ -183,16 +183,18 @@ export function CookieConsent() {
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           {!customizing && (
-            <Button variant="ghost" size="sm" onClick={handleCustomize}>
-              Customize
-            </Button>
+            <>
+              <Button variant="ghost" size="sm" onClick={handleCustomize}>
+                Customize
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleRejectAll}>
+                Reject All
+              </Button>
+              <Button size="sm" onClick={handleAcceptAll}>
+                Accept All
+              </Button>
+            </>
           )}
-          <Button variant="outline" size="sm" onClick={handleRejectAll}>
-            Reject All
-          </Button>
-          <Button size="sm" onClick={handleAcceptAll}>
-            Accept All
-          </Button>
         </div>
       </div>
 
@@ -204,8 +206,18 @@ export function CookieConsent() {
             !reducedMotion && 'animate-in fade-in-0 slide-in-from-bottom-2 duration-200',
           )}
         >
+          {/* Top actions */}
+          <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
+            <Button variant="ghost" size="sm" onClick={handleRejectAll}>
+              Reject All
+            </Button>
+            <Button size="sm" onClick={handleAcceptAll}>
+              Accept All
+            </Button>
+          </div>
+
           {/* Necessary — always on */}
-          <div className="flex items-start justify-between gap-4 py-2">
+          <div className="flex items-start justify-between gap-4 border-t border-border/50 py-2">
             <div>
               <p className="text-sm font-medium leading-none">Necessary</p>
               <p className="mt-1 text-xs text-muted-foreground">
