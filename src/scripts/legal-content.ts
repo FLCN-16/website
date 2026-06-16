@@ -213,7 +213,7 @@ Questions about these Terms: hello@thefalcon.dev.`,
     title: "Cookie Policy",
     slug: "cookies",
     template: "legal" as const,
-    lastUpdated: "2026-06-10T00:00:00.000Z",
+    lastUpdated: "2026-06-16T00:00:00.000Z",
     bodyText: `This Cookie Policy explains what is stored in your browser when you use thefalcon.dev (the "Site") and how you can control it. It supplements the Privacy Policy at thefalcon.dev/legal/privacy.
 
 **What cookies and local storage are**
@@ -230,25 +230,39 @@ These items are required for the Site to function and do not need consent. None 
 
 **talent_popup_seen** (localStorage) — remembers that the hiring popup has already been shown so it is not shown repeatedly. Kept until you clear your browser data.
 
-**flcn-consent-v1** (localStorage) — records your cookie-consent choice and when you made it, so you are not asked again on every visit. Kept until you clear your browser data or change your choice.
+**flcn-consent-v2** (localStorage) — records your cookie-consent choices (Functional, Analytics, Marketing) and when you made them, so you are not asked again on every visit. Kept until you clear your browser data or change your choices.
 
-**Analytics storage (requires your consent)**
+**flcn-consent-required** (cookie, JS-readable) — set by the server on each page load to indicate whether your region legally requires the consent banner to appear. Contains only "1" or "0". Expires after 180 days and is refreshed on each visit.
 
-With your consent, Google Tag Manager loads Google Analytics 4, which sets cookies such as:
+**Optional storage categories**
+
+The consent banner lets you control three categories of optional storage. In regions where consent is required (EU/EEA, UK, Switzerland) all three default to off; elsewhere, Functional and Analytics default to on (opt-out model) while Marketing remains off.
+
+**Functional**
+
+Enables storage that improves your experience but is not strictly required — for example, saving preferences beyond the current session. Grants the functionality_storage and personalization_storage Consent Mode signals.
+
+**Analytics**
+
+With your consent, Google Tag Manager loads Google Analytics 4, which sets the following cookies:
 
 **_ga** — distinguishes visitors. Expires after 2 years.
 
 **_ga_(container id)** — keeps session state for this Site's Analytics property. Expires after 2 years.
 
-These cookies are set by Google LLC. Details: policies.google.com/technologies/cookies.
+These cookies are set by Google LLC. Details: policies.google.com/technologies/cookies. Grants the analytics_storage Consent Mode signal.
+
+**Marketing**
+
+Enables advertising signals used for personalised campaigns. When enabled, grants the ad_storage, ad_user_data, and ad_personalization Consent Mode signals. The Site does not currently run advertising campaigns, but the toggle is provided to future-proof Google Consent Mode v2 compliance.
 
 **How consent works on this Site**
 
-The Site uses Google Consent Mode v2. By default, all analytics and advertising storage is set to "denied": no analytics cookies are set and no identifiers are collected. If you click Accept in the consent banner, consent is updated to "granted" and the cookies above are enabled. Advertising-related signals (ad storage, ad user data, ad personalisation) are never enabled, regardless of your choice. If you click Decline or ignore the banner, consent stays denied; Google may still receive basic, cookieless pings that contain no identifiers and are not used to profile you.
+The Site uses Google Consent Mode v2. In regions that legally require consent (EU/EEA, UK, Switzerland), the banner appears automatically with all optional categories turned off by default. Clicking Accept All grants all three categories. Clicking Reject All denies all three. Clicking Customize expands the banner to reveal per-category toggles (Functional, Analytics, Marketing) so you can choose exactly what to enable, then Save Choices applies your selection. Outside consent-required regions, Analytics and Functional are granted by default (opt-out model) and the banner is hidden, though you can still open it at any time via the Cookie settings link in the footer.
 
 **Changing your mind**
 
-You can change or withdraw your consent at any time by clicking "Cookie settings" in the Site footer, which reopens the consent banner. Withdrawing consent stops analytics cookies from that point on; existing cookies can be deleted through your browser settings, which also let you block cookies entirely.
+You can change or withdraw your consent at any time by clicking "Cookie settings" in the Site footer, which reopens the consent panel with your current choices preselected. Withdrawing consent stops optional cookies from being set from that point on; existing cookies can be deleted through your browser settings, which also let you block cookies entirely.
 
 **Contact**
 

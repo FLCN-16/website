@@ -6,6 +6,46 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.2.0] - 2026-06-16
+
+### Added
+
+- **Granular cookie consent with geo-gating** — rebuilt consent system:
+  - Four-category schema: Necessary (always on), Functional, Analytics, Marketing — stored in `flcn-consent-v2` (localStorage)
+  - Inline "Customize" panel expands the banner to reveal per-category `Switch` toggles; actions are **Accept All / Reject All / Save Choices**
+  - Banner auto-shows only in consent-required regions (EU/EEA, UK, Switzerland — 31 countries); opt-out model (Analytics + Functional on by default) everywhere else
+  - Geo-gate implemented via `flcn-consent-required` middleware cookie set in `proxy.ts` — avoids opt-ing the entire `(site)` route tree into dynamic rendering
+  - Google Consent Mode v2 hybrid: region-scoped `gtag('consent','default', { region: [...] })` for tag defaults (resolved server-side by Google, no cache impact) + client-side cookie read for banner visibility
+  - All 7 Consent Mode v2 signals wired: `ad_storage` / `ad_user_data` / `ad_personalization` (Marketing), `analytics_storage` (Analytics), `functionality_storage` / `personalization_storage` (Functional), `security_storage` (always granted)
+  - v1→v2 migration shim in `readConsent()` and the inline layout script — returning users keep their analytics choice without re-seeing the banner
+  - Anonymous/Tor traffic (`XX`, `T1`, `A1`, `ZZ` geo codes) treated as consent-required (fail-safe)
+  - `src/lib/consent-regions.ts` — single source of truth for the country list, imported by both Edge middleware and the server layout
+- **Blog post page enhancements:**
+  - PostNav (previous / next post links) at the bottom of each post
+  - Related posts swiper populated from matching tags
+  - Breadcrumb navigation on post detail pages
+  - Loading skeleton for the post route
+  - Tag chips on post cards and post detail link to the filtered `/writing` listing
+  - Tag chips added to the writing listing filter bar
+- `getCachedRelatedPosts` and `getCachedAdjacentPosts` data fetchers with proper cache keys
+
+### Changed
+
+- Cookie Policy (CMS + `src/scripts/legal-content.ts`) updated to reflect new consent schema: four categories described, `flcn-consent-required` cookie disclosed, "How consent works" rewritten to explain the Customize flow, false "Advertising-related signals are never enabled" claim removed
+- Related posts fetched client-side to exclude the heavy `body` field from listing queries
+- `WritingListClient` uses a lazy `useState` initializer for URL-seeded search state (avoids re-running URL parse on every render)
+
+### Fixed
+
+- `isConsentRequiredCountry()` now correctly treats anonymous geo codes (`XX` etc.) as consent-required — previously returned `false` for these codes
+- Keyboard navigation on post cards (regression from writing UI refactor)
+- Systemic soft-404 on `/writing` listing; redirect added for renamed post slug
+- Lazy-load applied to in-body images in richtext converter (was eager-loading all post body images)
+- `_getCachedRelatedPosts` cache key now includes `postSlug` and `tags` to prevent cross-post cache collisions
+- Toggle state consolidated into a single `useState<Record<CategoryId, boolean>>` record (fixes fragile per-field dispatch pattern)
+
+---
+
 ## [1.1.0] - 2026-06-12
 
 ### Added
