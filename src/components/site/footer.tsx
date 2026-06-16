@@ -26,9 +26,9 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border px-6 py-8 md:px-12">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-5">
         {/* Row 1: copyright + location */}
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+        <div className="flex flex-col gap-1 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-6">
           <span className="font-mono text-xs uppercase text-muted-foreground">
             © {year} {copyrightDomain}
           </span>
@@ -38,7 +38,7 @@ export function Footer() {
         </div>
 
         {/* Row 2: nav + legal */}
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+        <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-6">
           <div className="flex flex-wrap items-center gap-4">
             {NAV_LINKS.map(({ label, href }) => (
               <Link key={href} href={href} className={LINK_CLASS}>
