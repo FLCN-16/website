@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
@@ -37,19 +37,24 @@ function readConsentRequiredCookie(): boolean {
 
 // ─── Category metadata ────────────────────────────────────────────────────────
 
-const CATEGORIES = [
+type CategoryId = 'functional' | 'analytics' | 'marketing'
+type Toggles = Record<CategoryId, boolean>
+
+const DEFAULT_TOGGLES: Toggles = { functional: false, analytics: false, marketing: false }
+
+const CATEGORIES: Array<{ id: CategoryId; label: string; description: string }> = [
   {
-    id: 'functional' as const,
+    id: 'functional',
     label: 'Functional',
     description: 'Preferences like language and theme that improve your experience.',
   },
   {
-    id: 'analytics' as const,
+    id: 'analytics',
     label: 'Analytics',
     description: 'Google Analytics — helps understand how the site is used.',
   },
   {
-    id: 'marketing' as const,
+    id: 'marketing',
     label: 'Marketing',
     description: 'Advertising cookies for personalised campaigns.',
   },
@@ -63,21 +68,19 @@ export function CookieConsent() {
   const [forcedOpen,  setForcedOpen]  = useState(false)
   const [dismissed,   setDismissed]   = useState(false)
   const [customizing, setCustomizing] = useState(false)
-
-  // Per-category toggle state; initialized from stored consent when banner opens.
-  const [functional, setFunctional] = useState(false)
-  const [analytics,  setAnalytics]  = useState(false)
-  const [marketing,  setMarketing]  = useState(false)
+  const [toggles,     setToggles]     = useState<Toggles>(DEFAULT_TOGGLES)
 
   const regionRef = useRef<HTMLDivElement>(null)
 
   // Sync toggle state from stored consent (or safe defaults).
-  const syncToggles = () => {
+  const syncToggles = useCallback(() => {
     const stored = readConsent()
-    setFunctional(stored?.functional ?? false)
-    setAnalytics(stored?.analytics  ?? false)
-    setMarketing(stored?.marketing  ?? false)
-  }
+    setToggles({
+      functional: stored?.functional ?? false,
+      analytics:  stored?.analytics  ?? false,
+      marketing:  stored?.marketing  ?? false,
+    })
+  }, []) // setToggles is stable; readConsent reads from localStorage directly
 
   // Listen for "Cookie settings" event dispatched by the footer button.
   useEffect(() => {
@@ -87,7 +90,7 @@ export function CookieConsent() {
     }
     window.addEventListener(CONSENT_SETTINGS_EVENT, reopen)
     return () => window.removeEventListener(CONSENT_SETTINGS_EVENT, reopen)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [syncToggles])
 
   // Focus the banner when reopened via settings event.
   useEffect(() => {
@@ -130,7 +133,7 @@ export function CookieConsent() {
   }
 
   const handleSaveChoices = () => {
-    saveConsent({ functional, analytics, marketing })
+    saveConsent(toggles)
     setForcedOpen(false)
     setCustomizing(false)
     setDismissed(true)
@@ -215,32 +218,24 @@ export function CookieConsent() {
           </div>
 
           {/* Configurable categories */}
-          {CATEGORIES.map(({ id, label, description }) => {
-            const checked = id === 'functional' ? functional
-                          : id === 'analytics'  ? analytics
-                          : marketing
-            const setChecked = id === 'functional' ? setFunctional
-                             : id === 'analytics'  ? setAnalytics
-                             : setMarketing
-            return (
-              <div
-                key={id}
-                className="flex items-start justify-between gap-4 border-t border-border/50 py-2"
-              >
-                <label htmlFor={`cookie-${id}`} className="cursor-pointer">
-                  <p className="text-sm font-medium leading-none">{label}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{description}</p>
-                </label>
-                <Switch
-                  id={`cookie-${id}`}
-                  size="sm"
-                  checked={checked}
-                  onCheckedChange={setChecked}
-                  className="shrink-0 mt-0.5"
-                />
-              </div>
-            )
-          })}
+          {CATEGORIES.map(({ id, label, description }) => (
+            <div
+              key={id}
+              className="flex items-start justify-between gap-4 border-t border-border/50 py-2"
+            >
+              <label htmlFor={`cookie-${id}`} className="cursor-pointer">
+                <p className="text-sm font-medium leading-none">{label}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+              </label>
+              <Switch
+                id={`cookie-${id}`}
+                size="sm"
+                checked={toggles[id]}
+                onCheckedChange={(v) => setToggles(prev => ({ ...prev, [id]: v }))}
+                className="shrink-0 mt-0.5"
+              />
+            </div>
+          ))}
 
           {/* Save / bulk actions */}
           <div className="mt-4 flex flex-wrap items-center justify-end gap-2">

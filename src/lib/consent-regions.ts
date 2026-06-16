@@ -9,11 +9,17 @@ export const CONSENT_REQUIRED_COUNTRIES = [
   'GB', 'CH',
 ] as const
 
+// Placeholder codes emitted by geo providers for Tor/anonymous/unresolvable traffic.
+// Vercel documents 'XX' for unresolvable IPs; MaxMind uses 'T1', 'A1', 'ZZ'.
+const ANONYMOUS_CODES = new Set(['XX', 'T1', 'A1', 'ZZ'])
+
 /**
  * Returns true if the country code requires cookie consent (GDPR / ePrivacy / FADP).
- * Treats unknown / null / empty codes as required (fail-safe default).
+ * Treats null/empty and anonymous-traffic placeholder codes as required (fail-safe).
  */
 export function isConsentRequiredCountry(code: string | null | undefined): boolean {
   if (!code) return true
-  return (CONSENT_REQUIRED_COUNTRIES as readonly string[]).includes(code.toUpperCase())
+  const upper = code.toUpperCase()
+  if (ANONYMOUS_CODES.has(upper)) return true
+  return (CONSENT_REQUIRED_COUNTRIES as readonly string[]).includes(upper)
 }
