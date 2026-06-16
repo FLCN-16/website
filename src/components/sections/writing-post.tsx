@@ -27,6 +27,7 @@ interface WritingPostProps {
   title: string;
   publishedAt?: string;
   readingTime?: number;
+  author?: string;
   tags?: string[];
   /** Section headings for the table of contents, extracted server-side. */
   headings: Heading[];
@@ -52,12 +53,14 @@ function formatDate(iso?: string) {
 function CoverMeta({
   publishedAt,
   readingTime,
+  author,
   title,
   tags,
   titleAs: TitleTag = "h1",
 }: {
   publishedAt?: string;
   readingTime?: number;
+  author?: string;
   title: string;
   tags?: string[];
   titleAs?: "h1" | "p";
@@ -73,6 +76,11 @@ function CoverMeta({
         {readingTime && (
           <span className="font-mono text-xs text-muted-foreground">
             {readingTime} min read
+          </span>
+        )}
+        {author && (
+          <span className="font-mono text-xs text-muted-foreground">
+            by {author}
           </span>
         )}
       </div>
@@ -99,6 +107,7 @@ export function WritingPost({
   title,
   publishedAt,
   readingTime,
+  author,
   tags,
   headings,
   children,
@@ -148,6 +157,7 @@ export function WritingPost({
                 <CoverMeta
                   publishedAt={publishedAt}
                   readingTime={readingTime}
+                  author={author}
                   title={title}
                   tags={tags}
                   titleAs="p"
@@ -159,6 +169,7 @@ export function WritingPost({
               <CoverMeta
                 publishedAt={publishedAt}
                 readingTime={readingTime}
+                author={author}
                 title={title}
                 tags={tags}
               />
@@ -176,6 +187,11 @@ export function WritingPost({
               {readingTime && (
                 <span className="font-mono text-xs text-muted-foreground">
                   {readingTime} min read
+                </span>
+              )}
+              {author && (
+                <span className="font-mono text-xs text-muted-foreground">
+                  by {author}
                 </span>
               )}
             </div>
