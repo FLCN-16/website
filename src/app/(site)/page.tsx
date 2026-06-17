@@ -17,7 +17,7 @@ import { Certifications } from '@/components/sections/certifications'
 import { CtaBanner } from '@/components/sections/cta-banner'
 import { JsonLd } from '@/components/structured-data/json-ld'
 import { SectionTracker } from '@/components/site/section-tracker'
-import { personSchema } from '@/lib/structured-data'
+import { graph, personNode, profilePageNode, webPageNode } from '@/lib/structured-data'
 import { buildIdentity } from '@/lib/site-identity'
 import { createMetadata } from '@/lib/metadata'
 import { PostRow } from '@/components/writing/post-row'
@@ -70,10 +70,19 @@ export default async function Home() {
 
   return (
     <>
-      <JsonLd data={personSchema(identity, {
-        currentJob: timelineItems[0] ?? null,
-        latestEducation: educationItems[0] ?? null,
-      })} />
+      <JsonLd data={graph([
+        personNode(identity, {
+          currentJob: timelineItems[0] ?? null,
+          latestEducation: educationItems[0] ?? null,
+          credentials: certificationItems,
+        }),
+        profilePageNode(identity),
+        webPageNode(identity, {
+          path: '/',
+          name: `${identity.name} — ${identity.role}`,
+          description: identity.description,
+        }),
+      ])} />
       <SectionTracker
         sections={['hero', 'journey', 'philosophy', 'selected-work', 'projects', 'latest-writing', 'education', 'certifications', 'cta-banner']}
         page="/"
