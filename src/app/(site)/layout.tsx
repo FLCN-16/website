@@ -19,7 +19,7 @@ import { SiteIdentityProvider } from '@/components/providers/site-identity-provi
 import type { Form } from "@payloadcms/plugin-form-builder/types";
 import { ClientOverlays } from "@/components/site/client-overlays";
 import { JsonLd } from "@/components/structured-data/json-ld";
-import { graph, organizationNode, websiteNode } from "@/lib/structured-data";
+import { graph, organizationNode, websiteNode, personRef } from "@/lib/structured-data";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -180,7 +180,7 @@ function gtag(){dataLayer.push(arguments);}
             }}
           />
         )}
-        <JsonLd data={graph([organizationNode(identity), websiteNode(identity)])} />
+        <JsonLd data={graph([organizationNode(identity), websiteNode(identity), personRef(identity)])} />
         <NextTopLoader color="var(--primary)" height={3} showSpinner={false} />
         <SiteIdentityProvider identity={identity}>
           <ThemeProvider
