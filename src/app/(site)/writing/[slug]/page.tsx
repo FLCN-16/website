@@ -7,7 +7,7 @@ import { WritingPost } from '@/components/sections/writing-post'
 import { richTextConverters } from '@/components/writing/richtext-converters'
 import { extractHeadings } from '@/lib/lexical-headings'
 import { JsonLd } from '@/components/structured-data/json-ld'
-import { breadcrumbSchema, personRef } from '@/lib/structured-data'
+import { graph, blogPostingNode, webPageNode, breadcrumbNode } from '@/lib/structured-data'
 import { createMetadata, resolveMetaImage } from '@/lib/metadata'
 import { normalizeTags, resolvePostCover } from '@/lib/posts'
 import { getPayloadClient } from '@/lib/payload'
@@ -88,34 +88,36 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const coverResolved = resolvePostCover(post.cover)
 
-  const postUrl = `${identity.url}/writing/${slug}`
+  const imageUrl = coverResolved?.url ?? undefined
 
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: (post.meta?.description || post.excerpt) ?? undefined,
-    author: personRef(identity),
-    publisher: personRef(identity),
-    url: postUrl,
-    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
-    inLanguage: 'en',
-    ...(tags.length ? { keywords: tags.join(', ') } : {}),
-    ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
-    dateModified: post.updatedAt,
-    ...(coverResolved?.url ? { image: coverResolved.url } : {}),
-  }
-
-  const breadcrumbs = breadcrumbSchema(identity, [
-    { name: 'Home', path: '/' },
-    { name: 'Writing', path: '/writing' },
-    { name: post.title },
-  ])
+  const crumbId = `${identity.url}/writing/${slug}#breadcrumb`
 
   return (
     <>
-      <JsonLd data={articleSchema} />
-      <JsonLd data={breadcrumbs} />
+      <JsonLd data={graph([
+        blogPostingNode(identity, {
+          title: post.title,
+          slug,
+          excerpt: post.excerpt,
+          meta: post.meta,
+          cover: coverResolved ? { url: coverResolved.url } : null,
+          tags: tags,
+          publishedAt: post.publishedAt ?? undefined,
+          updatedAt: post.updatedAt,
+        }),
+        webPageNode(identity, {
+          path: `/writing/${slug}`,
+          name: post.title,
+          description: (post.meta?.description || post.excerpt) ?? undefined,
+          imageUrl,
+          breadcrumbId: crumbId,
+        }),
+        breadcrumbNode(identity, [
+          { name: 'Home', path: '/' },
+          { name: 'Writing', path: '/writing' },
+          { name: post.title },
+        ], `/writing/${slug}`),
+      ])} />
       {draft && (
         <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}

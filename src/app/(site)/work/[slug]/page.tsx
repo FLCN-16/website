@@ -5,7 +5,7 @@ import { getCachedWorkEntries, getCachedSiteSettings } from '@/lib/data'
 import { ProjectBriefing } from '@/components/sections/project-briefing'
 import { createMetadata, resolveMetaImage } from '@/lib/metadata'
 import { JsonLd } from '@/components/structured-data/json-ld'
-import { breadcrumbSchema, personRef } from '@/lib/structured-data'
+import { graph, creativeWorkNode, webPageNode, breadcrumbNode } from '@/lib/structured-data'
 import { buildIdentity } from '@/lib/site-identity'
 import type { WorkEntry } from '@/lib/types'
 
@@ -75,27 +75,32 @@ export default async function WorkDetail({ params }: WorkDetailProps) {
   const settings = await getCachedSiteSettings().catch(() => null)
   const identity = buildIdentity(settings)
 
-  const workSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
-    name: project.title,
-    description: project.meta?.description || project.description,
-    url: `${identity.url}/work/${slug}`,
-    author: personRef(identity),
-    inLanguage: 'en',
-    ...(project.tags.length ? { keywords: project.tags.join(', ') } : {}),
-  }
-
-  const breadcrumbs = breadcrumbSchema(identity, [
-    { name: 'Home', path: '/' },
-    { name: 'Work', path: '/work' },
-    { name: project.title },
-  ])
+  const imageUrl = project.meta?.image?.url || project.cover?.url || undefined
 
   return (
     <>
-      <JsonLd data={workSchema} />
-      <JsonLd data={breadcrumbs} />
+      <JsonLd data={graph([
+        creativeWorkNode(identity, {
+          title: project.title,
+          slug,
+          description: project.description,
+          meta: project.meta,
+          cover: project.cover,
+          tags: project.tags,
+        }),
+        webPageNode(identity, {
+          path: `/work/${slug}`,
+          name: project.title,
+          description: project.meta?.description || project.description || undefined,
+          imageUrl,
+          breadcrumbId: `${identity.url}/work/${slug}#breadcrumb`,
+        }),
+        breadcrumbNode(identity, [
+          { name: 'Home', path: '/' },
+          { name: 'Work', path: '/work' },
+          { name: project.title },
+        ], `/work/${slug}`),
+      ])} />
       <ProjectBriefing project={project} prevProject={prevProject} nextProject={nextProject} />
     </>
   )
