@@ -316,7 +316,7 @@ export function collectionPageNode(identity: SiteIdentity, opts: CollectionPageO
     ...(opts.items.length > 0
       ? {
           hasPart: opts.items.map((item) => ({
-            '@type': 'CreativeWork',
+            '@type': opts.type === 'Blog' ? 'Article' : 'CreativeWork',
             name: item.name,
             url: item.url,
             ...(item.description ? { description: item.description } : {}),
