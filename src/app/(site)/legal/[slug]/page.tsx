@@ -8,6 +8,8 @@ import { buildIdentity } from '@/lib/site-identity'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSaveClient } from '@/components/refresh-route-on-save'
 import { richTextConverters } from '@/components/writing/richtext-converters'
+import { JsonLd } from '@/components/structured-data/json-ld'
+import { graph, webPageNode, breadcrumbNode } from '@/lib/structured-data'
 
 export const revalidate = false
 export const dynamicParams = true
@@ -73,8 +75,24 @@ export default async function LegalPage({ params }: LegalPageProps) {
       })
     : null
 
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   return (
     <>
+      <JsonLd data={graph([
+        webPageNode(identity, {
+          path: `/legal/${slug}`,
+          name: page.title ?? slug,
+          description: page.meta?.description ?? undefined,
+          breadcrumbId: `${identity.url}/legal/${slug}#breadcrumb`,
+        }),
+        breadcrumbNode(identity, [
+          { name: 'Home', path: '/' },
+          { name: 'Legal', path: '/legal' },
+          { name: page.title ?? slug },
+        ], `/legal/${slug}`),
+      ])} />
       {draft && (
         <RefreshRouteOnSaveClient serverURL={process.env.NEXT_PUBLIC_SITE_URL ?? ''} />
       )}

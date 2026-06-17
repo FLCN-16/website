@@ -2,6 +2,8 @@ import { getCachedWorkEntries, getCachedSiteSettings } from '@/lib/data'
 import { SelectedWork } from '@/components/sections/selected-work'
 import { createMetadata } from '@/lib/metadata'
 import { buildIdentity } from '@/lib/site-identity'
+import { JsonLd } from '@/components/structured-data/json-ld'
+import { graph, collectionPageNode, breadcrumbNode } from '@/lib/structured-data'
 import type { WorkEntry } from '@/lib/types'
 
 export const revalidate = false
@@ -27,8 +29,29 @@ export default async function WorkIndex() {
     // Payload not available — show empty state
   }
 
+  const settings = await getCachedSiteSettings().catch(() => null)
+  const identity = buildIdentity(settings)
+
   return (
     <>
+      <JsonLd data={graph([
+        collectionPageNode(identity, {
+          path: '/work',
+          name: 'Work',
+          description: 'Selected projects from 9+ years of full-stack engineering.',
+          items: projects.map((p, i) => ({
+            name: p.title,
+            url: `${identity.url}/work/${p.slug}`,
+            description: p.description ?? undefined,
+            imageUrl: p.cover?.url ?? undefined,
+            position: i + 1,
+          })),
+        }),
+        breadcrumbNode(identity, [
+          { name: 'Home', path: '/' },
+          { name: 'Work', path: '/work' },
+        ], '/work'),
+      ])} />
       <div className="pt-6 pb-10">
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-3">
           Selected Work
