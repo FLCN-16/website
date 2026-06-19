@@ -164,13 +164,17 @@ export function FeaturedCard({ post, wide = false, className }: FeaturedCardProp
               Featured
             </p>
           </div>
-          <h2 className="font-sans text-2xl md:text-3xl font-bold tracking-tight leading-tight group-hover:text-primary transition-colors duration-200 line-clamp-2">
-            {post.title}
-          </h2>
+          <div>
+            <h2 className="font-sans text-2xl md:text-3xl font-bold tracking-tight leading-tight group-hover:text-primary transition-colors duration-200 line-clamp-2">
+              {post.title}
+            </h2>
+          </div>
           {post.excerpt && (
-            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-              {post.excerpt}
-            </p>
+            <div>
+              <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                {post.excerpt}
+              </p>
+            </div>
           )}
           <div className="flex items-center gap-1.5 pt-4 border-t border-border/60">
             <span className="font-mono text-xs text-muted-foreground">
