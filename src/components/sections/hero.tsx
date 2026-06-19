@@ -1,9 +1,29 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { TrackedLink } from "@/components/site/tracked-link"
 import { FadeRise } from "@/components/anim/fade-rise"
 import { MaskReveal } from "@/components/anim/mask-reveal"
 import { CountUp } from "@/components/anim/count-up"
 import { cn } from "@/lib/utils"
+
+export function parseAccentLine(text: string): Array<{ text: string; accent: boolean }> {
+  const parts: Array<{ text: string; accent: boolean }> = []
+  const regex = /\*\*(.+?)\*\*/g
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ text: text.slice(lastIndex, match.index), accent: false })
+    }
+    parts.push({ text: match[1], accent: true })
+    lastIndex = regex.lastIndex
+  }
+  if (lastIndex < text.length) {
+    parts.push({ text: text.slice(lastIndex), accent: false })
+  }
+  return parts
+}
 
 interface StatCellProps {
   stat: { value: string; label: string }
@@ -57,8 +77,18 @@ export function Hero({
   secondaryCta,
 }: HeroProps) {
   return (
-    <section id="hero" className="pt-6 pb-16 md:pt-8 md:pb-20 lg:pb-24">
-      <FadeRise>
+    <section id="hero" className="relative overflow-hidden pt-6 pb-16 md:pt-8 md:pb-20 lg:pb-24">
+      {/* Dot grid background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'radial-gradient(circle, color-mix(in oklch, var(--foreground) 8%, transparent) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 40%, transparent 100%)',
+          maskImage: 'linear-gradient(to bottom, black 0%, black 40%, transparent 100%)',
+        }}
+      />
+      <FadeRise className="relative z-10">
         {/* Top bar — eyebrow + status */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-border">
           <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
@@ -76,11 +106,19 @@ export function Hero({
         <div className="mt-8 md:mt-10">
           <MaskReveal
             as="h1"
-            className="text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight leading-[1.1] text-balance"
+            className="text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-[1.1] text-balance"
           >
-            {headline.split("\n").map((line) => (
-              <span key={line} className="block overflow-hidden">
-                <span className="mask-line block">{line}</span>
+            {headline.split("\n").map((line, i) => (
+              <span key={`${i}-${line}`} className="block overflow-hidden">
+                <span className="mask-line block">
+                  {parseAccentLine(line).map((seg, i) =>
+                    seg.accent ? (
+                      <span key={i} className="text-primary">{seg.text}</span>
+                    ) : (
+                      seg.text
+                    )
+                  )}
+                </span>
               </span>
             ))}
           </MaskReveal>

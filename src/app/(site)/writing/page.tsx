@@ -21,15 +21,11 @@ export async function generateMetadata() {
 }
 
 export default async function WritingIndex() {
-  let posts: Post[] = []
+  const [posts, settings] = await Promise.all([
+    getCachedPosts().catch(() => [] as Post[]),
+    getCachedSiteSettings().catch(() => null),
+  ])
 
-  try {
-    posts = await getCachedPosts()
-  } catch {
-    // Payload not available — show empty state
-  }
-
-  const settings = await getCachedSiteSettings().catch(() => null)
   const identity = buildIdentity(settings)
   const featuredPosts = pickFeatured(posts)
 

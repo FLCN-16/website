@@ -64,10 +64,10 @@ export function PostRow({ post, className }: PostRowProps) {
           </div>
         )}
 
-        <h3 className="font-sans text-base font-semibold tracking-tight leading-snug line-clamp-2">
+        <h3 className="font-sans text-base font-semibold tracking-tight leading-snug">
           <Link
             href={`/writing/${post.slug}`}
-            className="hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+            className="block line-clamp-2 hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
           >
             {post.title}
           </Link>
