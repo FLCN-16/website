@@ -59,8 +59,12 @@ export default async function LegalPage({ params }: LegalPageProps) {
   const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
 
   let page: Awaited<ReturnType<typeof getCachedLegalPage>> | undefined
+  let settings: Awaited<ReturnType<typeof getCachedSiteSettings>> | null = null
   try {
-    page = draft ? await getPreviewPage(slug, 'legal') : await getCachedLegalPage(slug)
+    ;[page, settings] = await Promise.all([
+      draft ? getPreviewPage(slug, 'legal') : getCachedLegalPage(slug),
+      getCachedSiteSettings().catch(() => null),
+    ])
   } catch {
     // Payload unavailable — fall through to notFound below
   }
@@ -75,7 +79,6 @@ export default async function LegalPage({ params }: LegalPageProps) {
       })
     : null
 
-  const settings = await getCachedSiteSettings().catch(() => null)
   const identity = buildIdentity(settings)
 
   return (

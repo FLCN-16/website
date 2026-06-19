@@ -55,24 +55,23 @@ export default async function WorkDetail({ params }: WorkDetailProps) {
   let prevProject: Pick<WorkEntry, 'slug' | 'title'> | null = null
   let nextProject: Pick<WorkEntry, 'slug' | 'title'> | null = null
 
-  try {
-    const all = await getCachedWorkEntries()
-    const idx = all.findIndex((p) => p.slug === slug)
-    if (idx !== -1) {
-      project = all[idx]
-      prevProject = idx > 0 ? { slug: all[idx - 1].slug, title: all[idx - 1].title } : null
-      nextProject =
-        idx < all.length - 1
-          ? { slug: all[idx + 1].slug, title: all[idx + 1].title }
-          : null
-    }
-  } catch {
-    // Payload not available
+  const [allEntries, settings] = await Promise.all([
+    getCachedWorkEntries().catch((): WorkEntry[] => []),
+    getCachedSiteSettings().catch(() => null),
+  ])
+
+  const idx = allEntries.findIndex((p) => p.slug === slug)
+  if (idx !== -1) {
+    project = allEntries[idx]
+    prevProject = idx > 0 ? { slug: allEntries[idx - 1].slug, title: allEntries[idx - 1].title } : null
+    nextProject =
+      idx < allEntries.length - 1
+        ? { slug: allEntries[idx + 1].slug, title: allEntries[idx + 1].title }
+        : null
   }
 
   if (!project) notFound()
 
-  const settings = await getCachedSiteSettings().catch(() => null)
   const identity = buildIdentity(settings)
 
   const imageUrl = project.meta?.image?.url || project.cover?.url || undefined

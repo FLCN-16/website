@@ -4,14 +4,13 @@ import { buildIdentity } from '@/lib/site-identity'
 import { stack } from '@/content/stack'
 
 export async function GET() {
-  const settings = await getCachedSiteSettings().catch(() => null)
-  const identity = buildIdentity(settings)
-
-  const [workEntries, posts, projects] = await Promise.all([
+  const [settings, workEntries, posts, projects] = await Promise.all([
+    getCachedSiteSettings().catch(() => null),
     getCachedWorkEntries().catch(() => []),
     getCachedPosts().catch(() => []),
     getCachedProjects().catch(() => []),
   ])
+  const identity = buildIdentity(settings)
 
   const lines: string[] = [
     `# ${identity.name}`,
@@ -57,6 +56,9 @@ export async function GET() {
   ]
 
   return new NextResponse(lines.join('\n'), {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=3600',
+    },
   })
 }

@@ -12,10 +12,11 @@ function escapeXml(value: string): string {
 }
 
 export async function GET() {
-  const settings = await getCachedSiteSettings().catch(() => null)
+  const [settings, posts] = await Promise.all([
+    getCachedSiteSettings().catch(() => null),
+    getCachedPosts().catch(() => []),
+  ])
   const identity = buildIdentity(settings)
-
-  const posts = await getCachedPosts().catch(() => [])
 
   const items = posts
     .map((post) => {
@@ -55,6 +56,9 @@ export async function GET() {
   ].join('\n')
 
   return new NextResponse(xml, {
-    headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' },
+    headers: {
+      'Content-Type': 'application/rss+xml; charset=utf-8',
+      'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=3600',
+    },
   })
 }
