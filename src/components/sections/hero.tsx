@@ -5,6 +5,24 @@ import { MaskReveal } from "@/components/anim/mask-reveal"
 import { CountUp } from "@/components/anim/count-up"
 import { cn } from "@/lib/utils"
 
+export function parseAccentLine(text: string): Array<{ text: string; accent: boolean }> {
+  const parts: Array<{ text: string; accent: boolean }> = []
+  const regex = /\*\*(.+?)\*\*/g
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ text: text.slice(lastIndex, match.index), accent: false })
+    }
+    parts.push({ text: match[1], accent: true })
+    lastIndex = regex.lastIndex
+  }
+  if (lastIndex < text.length) {
+    parts.push({ text: text.slice(lastIndex), accent: false })
+  }
+  return parts
+}
+
 interface StatCellProps {
   stat: { value: string; label: string }
   index: number
