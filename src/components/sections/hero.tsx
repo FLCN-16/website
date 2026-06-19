@@ -80,7 +80,7 @@ export function Hero({
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
-          backgroundImage: 'radial-gradient(circle, hsl(var(--foreground) / 0.08) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, color-mix(in oklch, var(--foreground) 8%, transparent) 1px, transparent 1px)',
           backgroundSize: '28px 28px',
           WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 40%, transparent 100%)',
           maskImage: 'linear-gradient(to bottom, black 0%, black 40%, transparent 100%)',
@@ -106,8 +106,8 @@ export function Hero({
             as="h1"
             className="text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-[1.1] text-balance"
           >
-            {headline.split("\n").map((line) => (
-              <span key={line} className="block overflow-hidden">
+            {headline.split("\n").map((line, i) => (
+              <span key={`${i}-${line}`} className="block overflow-hidden">
                 <span className="mask-line block">
                   {parseAccentLine(line).map((seg, i) =>
                     seg.accent ? (
