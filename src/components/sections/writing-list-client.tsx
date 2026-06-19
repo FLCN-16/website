@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useMemo, useEffect } from "react"
+import { useState, useCallback, useMemo, useEffect, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import dynamic from "next/dynamic"
@@ -8,6 +8,9 @@ import { PostRow } from "@/components/writing/post-row"
 import { ChipFilters, type SortOption, type ReadingTime } from "@/components/writing/chip-filters"
 import type { Post } from "@/lib/types"
 import { trackEvent } from "@/lib/analytics"
+
+const INITIAL_COUNT = 9
+const PAGE_SIZE = 6
 
 const FeaturedSwiper = dynamic(
   () => import("@/components/writing/featured-swiper").then((m) => ({ default: m.FeaturedSwiper })),
@@ -95,6 +98,8 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
   )
   const [selectedReadingTime, setSelectedReadingTime] = useState<ReadingTime | null>(null)
   const [sort, setSort] = useState<SortOption>("newest")
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT)
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   const serverTag = selectedTags.length === 1 ? selectedTags[0] : ""
   const isServerFiltering = search.length > 0 || serverTag.length > 0
@@ -124,10 +129,27 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
     ? sorted.filter((p) => !featuredIds.has(p.id))
     : sorted
 
+  const visiblePosts = rowPosts.slice(0, visibleCount)
+  const hasMore = visibleCount < rowPosts.length
+
+  const sentinelRef = useCallback((node: HTMLDivElement | null) => {
+    if (observerRef.current) observerRef.current.disconnect()
+    if (!node) return
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((v) => v + PAGE_SIZE)
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    observerRef.current.observe(node)
+  }, [])
+
   const isFiltering = search.length > 0 || selectedTags.length > 0 || selectedReadingTime !== null
   const grouped = useMemo(
-    () => (isFiltering || sort !== "newest" ? null : groupByYear(rowPosts)),
-    [rowPosts, isFiltering, sort],
+    () => (isFiltering || sort !== "newest" ? null : groupByYear(visiblePosts)),
+    [visiblePosts, isFiltering, sort],
   )
 
   const activeFilterCount =
@@ -145,6 +167,7 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
     setSelectedTags([])
     setSelectedReadingTime(null)
     setSort("newest")
+    setVisibleCount(INITIAL_COUNT)
   }, [])
 
   const handleReadingTimeSelect = useCallback((value: ReadingTime | null) => {
@@ -218,11 +241,13 @@ export function WritingListClient({ initialPosts, featuredPosts, allTags }: Writ
         ) : (
           /* Flat list when filtering or sorting differently */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-            {rowPosts.map((post) => (
+            {visiblePosts.map((post) => (
               <PostRow key={post.id} post={post} />
             ))}
           </div>
         )}
+
+        {hasMore && <div ref={sentinelRef} className="h-px" />}
       </div>
 
     </div>
