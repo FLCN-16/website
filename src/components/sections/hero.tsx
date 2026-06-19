@@ -104,11 +104,19 @@ export function Hero({
         <div className="mt-8 md:mt-10">
           <MaskReveal
             as="h1"
-            className="text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight leading-[1.1] text-balance"
+            className="text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-[1.1] text-balance"
           >
             {headline.split("\n").map((line) => (
               <span key={line} className="block overflow-hidden">
-                <span className="mask-line block">{line}</span>
+                <span className="mask-line block">
+                  {parseAccentLine(line).map((seg, i) =>
+                    seg.accent ? (
+                      <span key={i} className="text-primary">{seg.text}</span>
+                    ) : (
+                      seg.text
+                    )
+                  )}
+                </span>
               </span>
             ))}
           </MaskReveal>
