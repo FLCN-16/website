@@ -6,6 +6,37 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.3.0] - 2026-06-19
+
+### Fixed
+
+- **Featured card line-clamp** — `line-clamp-2` (title) and `line-clamp-3` (excerpt) now render correctly on the no-cover featured card variant; both elements were direct flex children, causing browser blockification to override the `-webkit-box` display required by line-clamp. Wrapped each in a `<div>` to absorb the flex-item role.
+- **Featured card excerpt on cover overlay** — `line-clamp-3` on the cover-image overlay excerpt was broken at `md+` because `hidden md:block` and `line-clamp-3` shared the same element; `display: block` overwrote `display: -webkit-box`. Split into a wrapper `<div className="hidden md:block">` and an inner `<p className="line-clamp-3">`.
+- **React code-quality diagnostics** (6 issues resolved via React Doctor scan):
+  - `parseAccentLine` helper extracted from `hero.tsx` into `src/lib/parse-accent-line.ts` to satisfy `only-export-components` and preserve Fast Refresh
+  - `SiteIdentityProvider` upgraded from `useContext` to React 19 `use()` hook
+  - Array index key collision in hero accent segments replaced with stable `${segIdx}-${seg.text}` key
+  - `section-tracker.tsx` empty `useEffect` deps array documented with `oxlint-disable-next-line` and justification (intentionally mount-only; re-subscribing would double-count `section_view` analytics events)
+  - `notFound()` in `writing/[slug]/page.tsx` `generateMetadata` moved outside the `try/catch` block so it is not swallowed (fixes `nextjs-no-redirect-in-try-catch`)
+  - `<a href="/writing">` on the homepage replaced with `<Link>` (fixes `nextjs-no-a-element`)
+
+### Performance
+
+- **Parallelized data fetches** — eight routes that awaited Payload queries sequentially now use `Promise.all`; page render time drops from the sum of all queries to the slowest single query on cold cache:
+  - `/work`, `/projects` — work entries + site settings
+  - `/work/[slug]` — all work entries + site settings
+  - `/page/[slug]` — page content + site settings
+  - `/legal/[slug]` — legal page content + site settings
+  - `feed.xml` — site settings + posts
+  - `sitemap-index.xml` — site settings inside existing `Promise.all`
+  - `llms.txt` — site settings inside existing `Promise.all`
+- **HTTP CDN caching headers** added to three high-traffic public routes:
+  - `feed.xml`, `sitemap-index.xml`, `llms.txt` — `Cache-Control: public, s-maxage=900, stale-while-revalidate=3600`
+  - `/fonts/:path*` — `Cache-Control: public, max-age=31536000, immutable` (via `next.config.ts` `headers()`)
+- **Media CDN preconnect** — `<link rel="preconnect">` and `<link rel="dns-prefetch">` for the Cloudflare R2 media host injected in the site layout, shaving one round-trip from every above-fold image request
+
+---
+
 ## [1.2.0] - 2026-06-16
 
 ### Added

@@ -14,6 +14,18 @@ A production-ready personal portfolio and blog template built with Next.js 16 (A
 | Tailwind CSS 4 | Utility-first styling |
 | TypeScript | Type safety throughout |
 
+## Performance
+
+Out of the box the template is optimized for fast cold-start rendering and low CDN miss rates:
+
+| Optimization | Detail |
+|---|---|
+| Parallelized data fetches | Multi-query pages call Payload concurrently via `Promise.all` — render time equals the slowest query, not the sum |
+| CDN caching headers | RSS feed, sitemap, and `llms.txt` emit `s-maxage=900, stale-while-revalidate=3600`; font assets emit `max-age=31536000, immutable` |
+| Media CDN preconnect | `<link rel="preconnect">` for your Cloudflare R2 host is injected automatically, cutting one RTT from above-fold image requests |
+| On-demand cache revalidation | Payload `afterChange`/`afterDelete` hooks call `revalidateTag` — pages update within seconds of a CMS save, with no full-rebuild needed |
+| React Server Components | All data fetching runs on the server; zero client-side waterfalls for initial page load |
+
 ## Prerequisites
 
 - **Node.js** 20+ (LTS recommended)
