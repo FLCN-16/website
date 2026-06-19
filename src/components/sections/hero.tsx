@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { TrackedLink } from "@/components/site/tracked-link"
 import { FadeRise } from "@/components/anim/fade-rise"

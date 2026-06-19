@@ -94,6 +94,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <html
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       {process.env.NEXT_PUBLIC_GTM_ID && (
