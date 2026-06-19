@@ -20,11 +20,7 @@ export function FeaturedSwiper({ posts }: FeaturedSwiperProps) {
   if (posts.length === 1) return <FeaturedCard post={posts[0]} wide />
 
   return (
-    <div
-      className="space-y-3 w-full min-w-0"
-      onMouseEnter={() => swiperRef.current?.autoplay.pause()}
-      onMouseLeave={() => swiperRef.current?.autoplay.resume()}
-    >
+    <div className="space-y-3 w-full min-w-0">
       <Swiper
         modules={[A11y, Keyboard, Autoplay]}
         keyboard={{ enabled: true }}
