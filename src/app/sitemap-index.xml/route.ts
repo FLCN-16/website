@@ -14,14 +14,13 @@ function maxDate(dates: (string | null)[]): string | null {
 }
 
 export async function GET() {
-  const settings = await getCachedSiteSettings().catch(() => null)
-  const identity = buildIdentity(settings)
-
-  const [posts, work, pages] = await Promise.all([
+  const [settings, posts, work, pages] = await Promise.all([
+    getCachedSiteSettings().catch(() => null),
     getSitemapPosts(),
     getSitemapWork(),
     getSitemapPages(),
   ])
+  const identity = buildIdentity(settings)
 
   const writingLastmod = maxDate(posts.map((p) => p.publishedAt ?? p.updatedAt))
   const workLastmod = maxDate(work.map((w) => w.updatedAt))
@@ -46,6 +45,9 @@ export async function GET() {
   ].join('\n')
 
   return new NextResponse(xml, {
-    headers: { 'Content-Type': 'application/xml; charset=utf-8' },
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=3600',
+    },
   })
 }

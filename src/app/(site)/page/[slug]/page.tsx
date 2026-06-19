@@ -58,15 +58,17 @@ export default async function BasicPage({ params }: BasicPageProps) {
   const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
 
   let page: Awaited<ReturnType<typeof getCachedBasicPage>> | undefined
+  let settings: Awaited<ReturnType<typeof getCachedSiteSettings>> | null = null
   try {
-    page = draft ? await getPreviewPage(slug, 'basic') : await getCachedBasicPage(slug)
+    ;[page, settings] = await Promise.all([
+      draft ? getPreviewPage(slug, 'basic') : getCachedBasicPage(slug),
+      getCachedSiteSettings().catch(() => null),
+    ])
   } catch {
     // Payload unavailable — fall through to notFound below
   }
 
   if (!page) notFound()
-
-  const settings = await getCachedSiteSettings().catch(() => null)
   const identity = buildIdentity(settings)
 
   return (
