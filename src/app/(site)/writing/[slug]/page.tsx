@@ -40,29 +40,31 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const [{ slug }, { isEnabled: draft }] = await Promise.all([params, draftMode()])
+  let post: Awaited<ReturnType<typeof getCachedPost>> | undefined
+  let settings: Awaited<ReturnType<typeof getCachedSiteSettings>>
   try {
-    const [post, settings] = await Promise.all([
+    ;[post, settings] = await Promise.all([
       draft ? getPreviewPost(slug) : getCachedPost(slug),
       getCachedSiteSettings(),
     ])
-    if (!post) notFound()
-    const identity = buildIdentity(settings)
-    return createMetadata({
-      kind: 'WRITING',
-      title: post.meta?.title || post.title,
-      description: (post.meta?.description || post.excerpt) ?? undefined,
-      image: resolveMetaImage(post.meta?.image),
-      path: `/writing/${slug}`,
-      article: {
-        publishedTime: post.publishedAt ?? undefined,
-        modifiedTime: post.updatedAt,
-        tags: normalizeTags(post.tags),
-      },
-      identity,
-    })
   } catch {
     return { title: slug }
   }
+  if (!post) notFound()
+  const identity = buildIdentity(settings)
+  return createMetadata({
+    kind: 'WRITING',
+    title: post.meta?.title || post.title,
+    description: (post.meta?.description || post.excerpt) ?? undefined,
+    image: resolveMetaImage(post.meta?.image),
+    path: `/writing/${slug}`,
+    article: {
+      publishedTime: post.publishedAt ?? undefined,
+      modifiedTime: post.updatedAt,
+      tags: normalizeTags(post.tags),
+    },
+    identity,
+  })
 }
 
 export default async function PostPage({ params }: PostPageProps) {

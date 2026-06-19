@@ -33,7 +33,8 @@ export function SectionTracker({ sections, page = '/' }: SectionTrackerProps) {
     }
 
     return () => observer.disconnect()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // oxlint-disable-next-line react-doctor/exhaustive-deps -- intentionally mount-only; re-subscribing resets the remaining Set and would double-count section_view events
+  }, [])
 
   return null
 }
