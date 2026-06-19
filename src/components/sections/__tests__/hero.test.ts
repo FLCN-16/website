@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseAccentLine } from '../hero'
+import { parseAccentLine } from '@/lib/parse-accent-line'
 
 describe('parseAccentLine', () => {
   it('returns a single plain segment when there are no markers', () => {

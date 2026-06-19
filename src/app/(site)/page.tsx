@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import {
   getCachedWorkEntries,
   getCachedProjects,
@@ -121,12 +122,12 @@ export default async function Home() {
                 From the blog.
               </h2>
             </div>
-            <a
+            <Link
               href="/writing"
               className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
             >
               All articles →
-            </a>
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
             {recentPosts.map((post) => (
