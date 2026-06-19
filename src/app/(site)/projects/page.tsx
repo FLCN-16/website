@@ -21,15 +21,10 @@ export async function generateMetadata() {
 }
 
 export default async function ProjectsIndex() {
-  let projects: ProjectEntry[] = []
-
-  try {
-    projects = await getCachedProjects()
-  } catch {
-    // Payload not available — show empty state
-  }
-
-  const settings = await getCachedSiteSettings().catch(() => null)
+  const [projects, settings] = await Promise.all([
+    getCachedProjects().catch((): ProjectEntry[] => []),
+    getCachedSiteSettings().catch(() => null),
+  ])
   const identity = buildIdentity(settings)
 
   return (

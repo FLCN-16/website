@@ -21,15 +21,10 @@ export async function generateMetadata() {
 }
 
 export default async function WorkIndex() {
-  let projects: WorkEntry[] = []
-
-  try {
-    projects = await getCachedWorkEntries()
-  } catch {
-    // Payload not available — show empty state
-  }
-
-  const settings = await getCachedSiteSettings().catch(() => null)
+  const [projects, settings] = await Promise.all([
+    getCachedWorkEntries().catch((): WorkEntry[] => []),
+    getCachedSiteSettings().catch(() => null),
+  ])
   const identity = buildIdentity(settings)
 
   return (

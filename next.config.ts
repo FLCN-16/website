@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
       { source: "/sitemap.xml", destination: "/sitemap-index.xml" },
     ]
   },
+  async headers() {
+    return [
+      {
+        source: '/fonts/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+    ]
+  },
   images: {
     loaderFile: "./src/lib/cloudflare-image-loader.ts",
     remotePatterns: [

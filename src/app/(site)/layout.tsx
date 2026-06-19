@@ -90,6 +90,8 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   const identity = buildIdentity(settings)
 
+  const mediaCdnHost = process.env.NEXT_PUBLIC_MEDIA_URL ?? 'https://media.thefalcon.dev'
+
   return (
     <html
       lang="en"
@@ -97,6 +99,11 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
+      <head>
+        {/* Preconnect to Cloudflare R2 media CDN — shaves RTT from every image request */}
+        <link rel="preconnect" href={mediaCdnHost} />
+        <link rel="dns-prefetch" href={mediaCdnHost} />
+      </head>
       {process.env.NEXT_PUBLIC_GTM_ID && (
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
       )}
