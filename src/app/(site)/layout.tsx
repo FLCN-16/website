@@ -83,16 +83,12 @@ const getCachedTalentForm = unstable_cache(
 )
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getCachedSiteSettings().catch(() => null)
+  const [settings, talentForm] = await Promise.all([
+    getCachedSiteSettings().catch(() => null),
+    getCachedTalentForm().catch(() => null),
+  ])
+
   const identity = buildIdentity(settings)
-
-  let talentForm: Form | null = null
-
-  try {
-    talentForm = await getCachedTalentForm()
-  } catch {
-    // CMS unreachable — proceed without dialog
-  }
 
   return (
     <html
