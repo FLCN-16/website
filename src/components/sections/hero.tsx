@@ -75,8 +75,18 @@ export function Hero({
   secondaryCta,
 }: HeroProps) {
   return (
-    <section id="hero" className="pt-6 pb-16 md:pt-8 md:pb-20 lg:pb-24">
-      <FadeRise>
+    <section id="hero" className="relative overflow-hidden pt-6 pb-16 md:pt-8 md:pb-20 lg:pb-24">
+      {/* Dot grid background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'radial-gradient(circle, hsl(var(--foreground) / 0.08) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 40%, transparent 100%)',
+          maskImage: 'linear-gradient(to bottom, black 0%, black 40%, transparent 100%)',
+        }}
+      />
+      <FadeRise className="relative z-10">
         {/* Top bar — eyebrow + status */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-border">
           <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
