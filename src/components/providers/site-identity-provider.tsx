@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext } from 'react'
+import { createContext, use } from 'react'
 import type { SiteIdentity } from '@/lib/site-identity'
 
 const SiteIdentityContext = createContext<SiteIdentity | null>(null)
@@ -15,7 +15,7 @@ export function SiteIdentityProvider({
 }
 
 export function useSiteIdentity(): SiteIdentity {
-  const ctx = useContext(SiteIdentityContext)
+  const ctx = use(SiteIdentityContext)
   if (!ctx) throw new Error('useSiteIdentity must be used within SiteIdentityProvider')
   return ctx
 }
