@@ -13,3 +13,8 @@ export function isNavLinkActive(href: string, pathname: string): boolean {
   if (href === "/") return pathname === "/"
   return pathname === href || pathname.startsWith(href + "/")
 }
+
+/** True for an individual article page (/writing/<slug>) — not the /writing list. */
+export function isWritingDetailRoute(pathname: string): boolean {
+  return /^\/writing\/[^/]+$/.test(pathname)
+}
