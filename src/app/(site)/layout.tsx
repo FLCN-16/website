@@ -103,7 +103,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         {/* Preconnect to Cloudflare R2 media CDN — shaves RTT from every image request */}
         <link rel="preconnect" href={mediaCdnHost} />
         <link rel="dns-prefetch" href={mediaCdnHost} />
-        <meta name="google-adsense-account" content="ca-pub-4802471144833327">
       </head>
       {process.env.NEXT_PUBLIC_GTM_ID && (
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
