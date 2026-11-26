@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { trackEvent } from '@/lib/analytics'
 
 interface SectionTrackerProps {
@@ -9,7 +9,9 @@ interface SectionTrackerProps {
 }
 
 export function SectionTracker({ sections, page = '/' }: SectionTrackerProps) {
+  const initialProps = useRef({ sections, page })
   useEffect(() => {
+    const { sections, page } = initialProps.current
     const remaining = new Set(sections)
 
     const observer = new IntersectionObserver(
@@ -33,7 +35,6 @@ export function SectionTracker({ sections, page = '/' }: SectionTrackerProps) {
     }
 
     return () => observer.disconnect()
-  // oxlint-disable-next-line react-doctor/exhaustive-deps -- intentionally mount-only; re-subscribing resets the remaining Set and would double-count section_view events
   }, [])
 
   return null

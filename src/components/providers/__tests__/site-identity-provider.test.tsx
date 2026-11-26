@@ -7,6 +7,10 @@ import type { SiteIdentity } from '@/lib/site-identity'
 const mockIdentity: SiteIdentity = {
   name: 'Test User',
   handle: 'testuser',
+  alternateName: 'Test',
+  addressCity: 'Test City',
+  addressRegion: '',
+  addressCountry: '',
   role: 'Engineer',
   location: 'Test City',
   timezone: 'UTC',

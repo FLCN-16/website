@@ -9,7 +9,7 @@ import {
   Preview,
   Section,
   Text,
-} from "@react-email/components"
+} from "react-email"
 
 // ─── light-mode tokens (dark overrides live in the <style> block) ─────────────
 const L = {

@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useRef } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import type { Post } from "@/lib/types"
@@ -95,6 +96,7 @@ export function ChipFilters({
   onSortChange,
   onClearAll,
 }: ChipFiltersProps) {
+  const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [dropdown, dispatch] = useReducer(dropdownReducer, initialDropdown)
@@ -150,7 +152,7 @@ export function ChipFilters({
     } else if (e.key === "Enter" && dropdown.activeIndex >= 0) {
       e.preventDefault()
       const post = dropdown.results[dropdown.activeIndex]
-      if (post) window.location.href = `/writing/${post.slug}`
+      if (post) router.push(`/writing/${post.slug}`)
     }
   }
 
