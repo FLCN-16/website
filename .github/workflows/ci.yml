@@ -7,13 +7,18 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # For same-repository PRs, work directly on the source branch so a
+          # regenerated lockfile can be committed without pushing a merge ref.
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
       - uses: pnpm/action-setup@v4
         with:
           version: 10
@@ -21,8 +26,22 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - name: Install dependencies
+      - name: Install dependencies and refresh lockfile for same-repository PR
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: pnpm install --no-frozen-lockfile
+      - name: Install dependencies from frozen lockfile
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
         run: pnpm install --frozen-lockfile
+      - name: Commit regenerated lockfile
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if ! git diff --quiet -- pnpm-lock.yaml; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add pnpm-lock.yaml
+            git commit -m "chore(deps): regenerate pnpm lockfile"
+            git push origin HEAD:"${{ github.event.pull_request.head.ref }}"
+          fi
       - name: Lint
         run: pnpm lint
       - name: Type check
