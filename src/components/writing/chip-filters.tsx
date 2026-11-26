@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useReducer, useRef } from "react"
+import { useEffect, useMemo, useReducer, useRef, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -100,6 +101,7 @@ export function ChipFilters({
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [dropdown, dispatch] = useReducer(dropdownReducer, initialDropdown)
+  const selectedTagSet = useMemo(() => new Set(selectedTags), [selectedTags])
 
   // Cmd/Ctrl+S focuses the input
   useEffect(() => {
@@ -113,20 +115,32 @@ export function ChipFilters({
     return () => window.removeEventListener("keydown", handler)
   }, [])
 
-  // Debounce search → fetch dropdown results
+  // Debounce the search term; React Query owns the request lifecycle.
+  const [debouncedSearch, setDebouncedSearch] = useState(search.trim())
   useEffect(() => {
-    const delay = search.trim() ? 300 : 0
-    const timer = setTimeout(async () => {
-      if (!search.trim()) {
-        dispatch({ type: "SEARCH_CLEAR" })
-        return
-      }
-      dispatch({ type: "SEARCH_START" })
-      const results = await fetchDropdownResults(search.trim())
-      dispatch({ type: "SEARCH_DONE", results })
-    }, delay)
+    const timer = setTimeout(() => setDebouncedSearch(search.trim()), search.trim() ? 300 : 0)
     return () => clearTimeout(timer)
   }, [search])
+
+  const {
+    data: searchResults = [],
+    isFetching: isSearchFetching,
+  } = useQuery({
+    queryKey: ["writing-search", debouncedSearch],
+    queryFn: () => fetchDropdownResults(debouncedSearch),
+    enabled: Boolean(debouncedSearch),
+    staleTime: 30_000,
+  })
+
+  useEffect(() => {
+    if (!debouncedSearch) {
+      dispatch({ type: "SEARCH_CLEAR" })
+    } else if (isSearchFetching) {
+      dispatch({ type: "SEARCH_START" })
+    } else {
+      dispatch({ type: "SEARCH_DONE", results: searchResults })
+    }
+  }, [debouncedSearch, isSearchFetching, searchResults])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -220,6 +234,7 @@ export function ChipFilters({
 
         {/* Sort */}
         <select
+          aria-label="Sort articles"
           value={sort}
           onChange={(e) => onSortChange(e.target.value as SortOption)}
           className="ml-auto font-mono text-xs bg-transparent border border-border rounded-full px-3 py-1.5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
@@ -246,11 +261,11 @@ export function ChipFilters({
       <div className="flex flex-wrap gap-2 items-center">
         {/* Tag chips — selected first, then top tags up to 8 total */}
         {allTags.length > 0 && (() => {
-          const selected = allTags.filter((t) => selectedTags.includes(t))
-          const unselected = allTags.filter((t) => !selectedTags.includes(t))
+          const selected = allTags.filter((t) => selectedTagSet.has(t))
+          const unselected = allTags.filter((t) => !selectedTagSet.has(t))
           const visible = [...selected, ...unselected].slice(0, Math.max(8, selected.length))
           return visible.map((tag) => {
-            const active = selectedTags.includes(tag)
+            const active = selectedTagSet.has(tag)
             return (
               <button
                 type="button"
