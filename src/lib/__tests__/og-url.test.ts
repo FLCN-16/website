@@ -5,6 +5,10 @@ import type { SiteIdentity } from '../site-identity'
 const TEST_IDENTITY: SiteIdentity = {
   name: 'Test User',
   handle: 'testuser',
+  alternateName: 'Test',
+  addressCity: 'Test City',
+  addressRegion: '',
+  addressCountry: '',
   role: 'Developer',
   location: 'Worldwide',
   timezone: 'UTC',
