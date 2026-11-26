@@ -116,7 +116,7 @@ export function ChipFilters({
   }, [])
 
   // Debounce the search term; React Query owns the request lifecycle.
-  const [debouncedSearch, setDebouncedSearch] = useState(search.trim())
+  const [debouncedSearch, setDebouncedSearch] = useState(() => search.trim())
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search.trim()), search.trim() ? 300 : 0)
     return () => clearTimeout(timer)
