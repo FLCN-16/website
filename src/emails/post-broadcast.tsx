@@ -129,164 +129,52 @@ export function PostBroadcast({
             overflow: "hidden",
           }}
         >
-          {/* ── HEADER ──────────────────────────────────────────────────── */}
-          <Section style={{ backgroundColor: L.headerBar, padding: "20px 28px" }}>
-            <Heading
-              style={{
-                color: "#ffffff",
-                fontFamily: MONO,
-                fontSize: "13px",
-                fontWeight: "600",
-                margin: 0,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-              }}
-            >
-              THEFALCON.DEV
-            </Heading>
-          </Section>
+          <BroadcastHeader />
 
-          {/* ── EYEBROW ─────────────────────────────────────────────────── */}
-          <Section style={{ padding: "28px 28px 0" }}>
-            <Text
-              className="text-muted"
-              style={{
-                fontFamily: MONO,
-                fontSize: "11px",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: L.muted,
-                margin: 0,
-              }}
-            >
-              New writing
-            </Text>
-          </Section>
+          <BroadcastEyebrow />
 
-          {/* ── HERO CARD ───────────────────────────────────────────────── */}
-          <Section style={{ padding: "16px 28px 8px" }}>
-            <a
-              href={postUrl}
-              className="hero-card"
-              style={{
-                display: "block",
-                textDecoration: "none",
-                border: `1px solid ${L.border}`,
-                overflow: "hidden",
-              }}
-            >
-              {cover && (
-                <Img
-                  src={cover.url}
-                  alt={cover.alt ?? title}
-                  width="544"
-                  className="cover-img"
-                  style={{
-                    width: "100%",
-                    display: "block",
-                    borderBottom: `1px solid ${L.border}`,
-                  }}
-                />
-              )}
+          <BroadcastHero title={title} cover={cover} tag={tag} postUrl={postUrl} heroMeta={heroMeta} />
 
-              <div
-                className="card-body"
-                style={{ padding: "20px", backgroundColor: L.bg }}
-              >
-                {tag && (
-                  <div style={{ marginBottom: "12px" }}>
-                    <span
-                      className="tag-chip"
-                      style={{
-                        display: "inline-block",
-                        fontFamily: MONO,
-                        fontSize: "11px",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.06em",
-                        color: L.accent,
-                        backgroundColor: L.chipBg,
-                        padding: "4px 10px",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  </div>
-                )}
+          <BroadcastCTA postUrl={postUrl} />
 
+          <BroadcastRecentPosts recent={recent} siteUrl={siteUrl} />
+
+          <BroadcastMore writingIndexUrl={writingIndexUrl} hasRecent={recent.length > 0} />
+
+          <BroadcastFooter siteUrl={siteUrl} />
+
+        </Container>
+      </Body>
+    </Html>
+  )
+}
+
+
+function BroadcastHeader() {
+  return (
+              {/* ── HEADER ──────────────────────────────────────────────────── */}
+              <Section style={{ backgroundColor: L.headerBar, padding: "20px 28px" }}>
                 <Heading
-                  className="card-title"
                   style={{
-                    fontFamily: SANS,
-                    fontSize: "22px",
-                    fontWeight: "700",
-                    lineHeight: "1.25",
-                    color: L.text,
-                    margin: "0 0 10px",
+                    color: "#ffffff",
+                    fontFamily: MONO,
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    margin: 0,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
                   }}
                 >
-                  {title}
+                  THEFALCON.DEV
                 </Heading>
+              </Section>
+  )
+}
 
-                {excerpt && (
-                  <Text
-                    className="text-muted"
-                    style={{
-                      fontFamily: SANS,
-                      fontSize: "15px",
-                      lineHeight: "1.65",
-                      color: L.muted,
-                      margin: "0 0 14px",
-                    }}
-                  >
-                    {excerpt}
-                  </Text>
-                )}
-
-                {heroMeta && (
-                  <Text
-                    className="text-muted"
-                    style={{
-                      fontFamily: MONO,
-                      fontSize: "12px",
-                      color: L.muted,
-                      margin: 0,
-                    }}
-                  >
-                    {heroMeta}
-                  </Text>
-                )}
-              </div>
-            </a>
-          </Section>
-
-          {/* ── CTA BUTTON ──────────────────────────────────────────────── */}
-          <Section style={{ padding: "12px 28px 28px" }}>
-            <a
-              href={postUrl}
-              className="btn-cta"
-              style={{
-                display: "inline-block",
-                backgroundColor: L.accent,
-                color: "#ffffff",
-                fontFamily: SANS,
-                fontSize: "14px",
-                fontWeight: "600",
-                textDecoration: "none",
-                padding: "11px 22px",
-              }}
-            >
-              Read article →
-            </a>
-          </Section>
-
-          {/* ── RECENT POSTS ────────────────────────────────────────────── */}
-          {recent.length > 0 && (
-            <>
-              <Hr
-                className="hr-divider"
-                style={{ borderTop: `1px solid ${L.border}`, margin: "0 28px" }}
-              />
-              <Section style={{ padding: "24px 28px 4px" }}>
+function BroadcastEyebrow() {
+  return (
+              {/* ── EYEBROW ─────────────────────────────────────────────────── */}
+              <Section style={{ padding: "28px 28px 0" }}>
                 <Text
                   className="text-muted"
                   style={{
@@ -295,123 +183,279 @@ export function PostBroadcast({
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
                     color: L.muted,
-                    margin: "0 0 4px",
+                    margin: 0,
                   }}
                 >
-                  Recent posts
+                  New writing
                 </Text>
               </Section>
+  )
+}
 
-              {recent.map((p) => {
-                const meta = postMeta(p.publishedAt, p.readingTime)
-                return (
-                  <Section key={p.slug} style={{ padding: "0 28px" }}>
-                    <a
-                      href={`${siteUrl}/writing/${p.slug}`}
-                      className="recent-row"
+function BroadcastHero({ title, cover, tag, postUrl, heroMeta }: Pick<PostBroadcastProps, "title" | "cover" | "tag" | "postUrl"> & { heroMeta: string | null }) {
+  return (
+              {/* ── HERO CARD ───────────────────────────────────────────────── */}
+              <Section style={{ padding: "16px 28px 8px" }}>
+                <a
+                  href={postUrl}
+                  className="hero-card"
+                  style={{
+                    display: "block",
+                    textDecoration: "none",
+                    border: `1px solid ${L.border}`,
+                    overflow: "hidden",
+                  }}
+                >
+                  {cover && (
+                    <Img
+                      src={cover.url}
+                      alt={cover.alt ?? title}
+                      width="544"
+                      className="cover-img"
                       style={{
+                        width: "100%",
                         display: "block",
-                        textDecoration: "none",
-                        padding: "13px 0",
                         borderBottom: `1px solid ${L.border}`,
                       }}
+                    />
+                  )}
+    
+                  <div
+                    className="card-body"
+                    style={{ padding: "20px", backgroundColor: L.bg }}
+                  >
+                    {tag && (
+                      <div style={{ marginBottom: "12px" }}>
+                        <span
+                          className="tag-chip"
+                          style={{
+                            display: "inline-block",
+                            fontFamily: MONO,
+                            fontSize: "11px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.06em",
+                            color: L.accent,
+                            backgroundColor: L.chipBg,
+                            padding: "4px 10px",
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      </div>
+                    )}
+    
+                    <Heading
+                      className="card-title"
+                      style={{
+                        fontFamily: SANS,
+                        fontSize: "22px",
+                        fontWeight: "700",
+                        lineHeight: "1.25",
+                        color: L.text,
+                        margin: "0 0 10px",
+                      }}
                     >
+                      {title}
+                    </Heading>
+    
+                    {excerpt && (
                       <Text
-                        className="recent-title"
+                        className="text-muted"
                         style={{
                           fontFamily: SANS,
                           fontSize: "15px",
-                          fontWeight: "600",
-                          color: L.text,
-                          margin: "0 0 3px",
+                          lineHeight: "1.65",
+                          color: L.muted,
+                          margin: "0 0 14px",
                         }}
                       >
-                        {p.title}
+                        {excerpt}
                       </Text>
-                      {meta && (
-                        <Text
-                          className="text-muted"
+                    )}
+    
+                    {heroMeta && (
+                      <Text
+                        className="text-muted"
+                        style={{
+                          fontFamily: MONO,
+                          fontSize: "12px",
+                          color: L.muted,
+                          margin: 0,
+                        }}
+                      >
+                        {heroMeta}
+                      </Text>
+                    )}
+                  </div>
+                </a>
+              </Section>
+  )
+}
+
+function BroadcastCTA({ postUrl }: Pick<PostBroadcastProps, "postUrl">) {
+  return (
+              {/* ── CTA BUTTON ──────────────────────────────────────────────── */}
+              <Section style={{ padding: "12px 28px 28px" }}>
+                <a
+                  href={postUrl}
+                  className="btn-cta"
+                  style={{
+                    display: "inline-block",
+                    backgroundColor: L.accent,
+                    color: "#ffffff",
+                    fontFamily: SANS,
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    textDecoration: "none",
+                    padding: "11px 22px",
+                  }}
+                >
+                  Read article →
+                </a>
+              </Section>
+  )
+}
+
+function BroadcastRecentPosts({ recent, siteUrl }: Pick<PostBroadcastProps, "recent" | "siteUrl">) {
+  return (
+              {/* ── RECENT POSTS ────────────────────────────────────────────── */}
+              {recent.length > 0 && (
+                <>
+                  <Hr
+                    className="hr-divider"
+                    style={{ borderTop: `1px solid ${L.border}`, margin: "0 28px" }}
+                  />
+                  <Section style={{ padding: "24px 28px 4px" }}>
+                    <Text
+                      className="text-muted"
+                      style={{
+                        fontFamily: MONO,
+                        fontSize: "11px",
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: L.muted,
+                        margin: "0 0 4px",
+                      }}
+                    >
+                      Recent posts
+                    </Text>
+                  </Section>
+    
+                  {recent.map((p) => {
+                    const meta = postMeta(p.publishedAt, p.readingTime)
+                    return (
+                      <Section key={p.slug} style={{ padding: "0 28px" }}>
+                        <a
+                          href={`${siteUrl}/writing/${p.slug}`}
+                          className="recent-row"
                           style={{
-                            fontFamily: MONO,
-                            fontSize: "12px",
-                            color: L.muted,
-                            margin: 0,
+                            display: "block",
+                            textDecoration: "none",
+                            padding: "13px 0",
+                            borderBottom: `1px solid ${L.border}`,
                           }}
                         >
-                          {meta}
-                        </Text>
-                      )}
-                    </a>
-                  </Section>
-                )
-              })}
-            </>
-          )}
+                          <Text
+                            className="recent-title"
+                            style={{
+                              fontFamily: SANS,
+                              fontSize: "15px",
+                              fontWeight: "600",
+                              color: L.text,
+                              margin: "0 0 3px",
+                            }}
+                          >
+                            {p.title}
+                          </Text>
+                          {meta && (
+                            <Text
+                              className="text-muted"
+                              style={{
+                                fontFamily: MONO,
+                                fontSize: "12px",
+                                color: L.muted,
+                                margin: 0,
+                              }}
+                            >
+                              {meta}
+                            </Text>
+                          )}
+                        </a>
+                      </Section>
+                    )
+                  })}
+                </>
+              )}
+  )
+}
 
-          {/* ── MORE WRITINGS ───────────────────────────────────────────── */}
-          <Section style={{ padding: recent.length > 0 ? "20px 28px 28px" : "4px 28px 28px" }}>
-            <a
-              href={writingIndexUrl}
-              className="more-link"
-              style={{
-                fontFamily: SANS,
-                fontSize: "14px",
-                fontWeight: "600",
-                color: L.accent,
-                textDecoration: "none",
-              }}
-            >
-              More writings →
-            </a>
-          </Section>
+function BroadcastMore({ writingIndexUrl, hasRecent }: Pick<PostBroadcastProps, "writingIndexUrl"> & { hasRecent: boolean }) {
+  return (
+              {/* ── MORE WRITINGS ───────────────────────────────────────────── */}
+              <Section style={{ padding: hasRecent ? "20px 28px 28px" : "4px 28px 28px" }}>
+                <a
+                  href={writingIndexUrl}
+                  className="more-link"
+                  style={{
+                    fontFamily: SANS,
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: L.accent,
+                    textDecoration: "none",
+                  }}
+                >
+                  More writings →
+                </a>
+              </Section>
+  )
+}
 
-          {/* ── FOOTER ──────────────────────────────────────────────────── */}
-          <Section
-            className="footer-wrap"
-            style={{ borderTop: `1px solid ${L.border}`, padding: "16px 28px" }}
-          >
-            <Text
-              className="footer-domain"
-              style={{
-                fontFamily: MONO,
-                fontSize: "12px",
-                color: L.subdued,
-                margin: "0 0 6px",
-              }}
-            >
-              thefalcon.dev · Jalandhar, India
-            </Text>
-            <Text
-              className="text-muted"
-              style={{
-                fontFamily: SANS,
-                fontSize: "12px",
-                color: L.muted,
-                margin: 0,
-                lineHeight: "1.6",
-              }}
-            >
-              You received this because you subscribed at{" "}
-              <a
-                href={siteUrl}
-                className="footer-link"
-                style={{ color: L.muted, textDecoration: "underline" }}
+function BroadcastFooter({ siteUrl }: Pick<PostBroadcastProps, "siteUrl">) {
+  return (
+              {/* ── FOOTER ──────────────────────────────────────────────────── */}
+              <Section
+                className="footer-wrap"
+                style={{ borderTop: `1px solid ${L.border}`, padding: "16px 28px" }}
               >
-                thefalcon.dev
-              </a>
-              .{" "}
-              <a
-                href="{{{RESEND_UNSUBSCRIBE_URL}}}"
-                className="footer-link"
-                style={{ color: L.muted, textDecoration: "underline" }}
-              >
-                Unsubscribe
-              </a>
-            </Text>
-          </Section>
-        </Container>
-      </Body>
-    </Html>
+                <Text
+                  className="footer-domain"
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: "12px",
+                    color: L.subdued,
+                    margin: "0 0 6px",
+                  }}
+                >
+                  thefalcon.dev · Jalandhar, India
+                </Text>
+                <Text
+                  className="text-muted"
+                  style={{
+                    fontFamily: SANS,
+                    fontSize: "12px",
+                    color: L.muted,
+                    margin: 0,
+                    lineHeight: "1.6",
+                  }}
+                >
+                  You received this because you subscribed at{" "}
+                  <a
+                    href={siteUrl}
+                    className="footer-link"
+                    style={{ color: L.muted, textDecoration: "underline" }}
+                  >
+                    thefalcon.dev
+                  </a>
+                  .{" "}
+                  <a
+                    href="{{{RESEND_UNSUBSCRIBE_URL}}}"
+                    className="footer-link"
+                    style={{ color: L.muted, textDecoration: "underline" }}
+                  >
+                    Unsubscribe
+                  </a>
+                </Text>
+              </Section>
   )
 }
 
