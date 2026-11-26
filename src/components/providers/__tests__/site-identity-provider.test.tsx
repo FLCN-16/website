@@ -13,6 +13,10 @@ const mockIdentity: SiteIdentity = {
   email: 'test@example.com',
   url: 'https://example.com',
   description: 'Test description',
+  alternateName: '',
+  addressCity: '',
+  addressRegion: '',
+  addressCountry: '',
   socials: [],
   resumeUrl: 'https://example.com/resume.pdf',
   status: {
