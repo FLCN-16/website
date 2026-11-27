@@ -192,7 +192,7 @@ function BroadcastEyebrow() {
   )
 }
 
-function BroadcastHero({ title, cover, tag, postUrl, heroMeta }: Pick<PostBroadcastProps, "title" | "excerpt" | "cover" | "tag" | "postUrl"> & { heroMeta: string | null }) {
+function BroadcastHero({ title, excerpt, cover, tag, postUrl, heroMeta }: Pick<PostBroadcastProps, "title" | "excerpt" | "cover" | "tag" | "postUrl"> & { heroMeta: string | null }) {
   return (
 
               <Section style={{ padding: "16px 28px 8px" }}>
