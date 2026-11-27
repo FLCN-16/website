@@ -133,7 +133,7 @@ export function PostBroadcast({
 
           <BroadcastEyebrow />
 
-          <BroadcastHero title={title} cover={cover} tag={tag} postUrl={postUrl} heroMeta={heroMeta} />
+          <BroadcastHero title={title} excerpt={excerpt} cover={cover} tag={tag} postUrl={postUrl} heroMeta={heroMeta} />
 
           <BroadcastCTA postUrl={postUrl} />
 
@@ -192,7 +192,7 @@ function BroadcastEyebrow() {
   )
 }
 
-function BroadcastHero({ title, cover, tag, postUrl, heroMeta }: Pick<PostBroadcastProps, "title" | "cover" | "tag" | "postUrl"> & { heroMeta: string | null }) {
+function BroadcastHero({ title, cover, tag, postUrl, heroMeta }: Pick<PostBroadcastProps, "title" | "excerpt" | "cover" | "tag" | "postUrl"> & { heroMeta: string | null }) {
   return (
 
               <Section style={{ padding: "16px 28px 8px" }}>
