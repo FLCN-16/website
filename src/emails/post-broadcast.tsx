@@ -318,8 +318,8 @@ function BroadcastCTA({ postUrl }: Pick<PostBroadcastProps, "postUrl">) {
 
 function BroadcastRecentPosts({ recent, siteUrl }: Pick<PostBroadcastProps, "recent" | "siteUrl">) {
   return (
-
-              {recent.length > 0 && (
+    <>
+      {recent.length > 0 && (
                 <>
                   <Hr
                     className="hr-divider"
@@ -386,6 +386,7 @@ function BroadcastRecentPosts({ recent, siteUrl }: Pick<PostBroadcastProps, "rec
                   })}
                 </>
               )}
+    </>
   )
 }
 
