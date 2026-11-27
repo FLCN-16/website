@@ -152,7 +152,7 @@ export function PostBroadcast({
 
 function BroadcastHeader() {
   return (
-              {/* ── HEADER ──────────────────────────────────────────────────── */}
+
               <Section style={{ backgroundColor: L.headerBar, padding: "20px 28px" }}>
                 <Heading
                   style={{
@@ -173,7 +173,7 @@ function BroadcastHeader() {
 
 function BroadcastEyebrow() {
   return (
-              {/* ── EYEBROW ─────────────────────────────────────────────────── */}
+
               <Section style={{ padding: "28px 28px 0" }}>
                 <Text
                   className="text-muted"
@@ -194,7 +194,7 @@ function BroadcastEyebrow() {
 
 function BroadcastHero({ title, cover, tag, postUrl, heroMeta }: Pick<PostBroadcastProps, "title" | "cover" | "tag" | "postUrl"> & { heroMeta: string | null }) {
   return (
-              {/* ── HERO CARD ───────────────────────────────────────────────── */}
+
               <Section style={{ padding: "16px 28px 8px" }}>
                 <a
                   href={postUrl}
@@ -294,7 +294,7 @@ function BroadcastHero({ title, cover, tag, postUrl, heroMeta }: Pick<PostBroadc
 
 function BroadcastCTA({ postUrl }: Pick<PostBroadcastProps, "postUrl">) {
   return (
-              {/* ── CTA BUTTON ──────────────────────────────────────────────── */}
+
               <Section style={{ padding: "12px 28px 28px" }}>
                 <a
                   href={postUrl}
@@ -318,7 +318,7 @@ function BroadcastCTA({ postUrl }: Pick<PostBroadcastProps, "postUrl">) {
 
 function BroadcastRecentPosts({ recent, siteUrl }: Pick<PostBroadcastProps, "recent" | "siteUrl">) {
   return (
-              {/* ── RECENT POSTS ────────────────────────────────────────────── */}
+
               {recent.length > 0 && (
                 <>
                   <Hr
@@ -391,7 +391,7 @@ function BroadcastRecentPosts({ recent, siteUrl }: Pick<PostBroadcastProps, "rec
 
 function BroadcastMore({ writingIndexUrl, hasRecent }: Pick<PostBroadcastProps, "writingIndexUrl"> & { hasRecent: boolean }) {
   return (
-              {/* ── MORE WRITINGS ───────────────────────────────────────────── */}
+
               <Section style={{ padding: hasRecent ? "20px 28px 28px" : "4px 28px 28px" }}>
                 <a
                   href={writingIndexUrl}
@@ -412,7 +412,7 @@ function BroadcastMore({ writingIndexUrl, hasRecent }: Pick<PostBroadcastProps, 
 
 function BroadcastFooter({ siteUrl }: Pick<PostBroadcastProps, "siteUrl">) {
   return (
-              {/* ── FOOTER ──────────────────────────────────────────────────── */}
+
               <Section
                 className="footer-wrap"
                 style={{ borderTop: `1px solid ${L.border}`, padding: "16px 28px" }}
